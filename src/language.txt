@@ -1,0 +1,39 @@
+[enu default]
+
+SKILL_VERYHARD  = "Man and a Half!";
+
+TAG_FIST        = "Fists";
+TAG_CHAINSAW    = "Chainsaw";
+TAG_PISTOL      = "Pistol";
+TAG_SHOTGUN     = "Combat Shotgun";
+TAG_SSG         = "Super Shotgun";
+TAG_HEAVY       = "Heavy Assault Rifle";
+TAG_CHAINGUN    = "Chaingun";
+TAG_ROCKET      = "Rocket Launcher";
+TAG_PLASMA      = "Plasma Rifle";
+TAG_GAUSS       = "Gauss Cannon";
+TAG_BFG         = "BFG 9000";
+
+GOTFIST         = "You got the twin birth-mounted meat-pounders!";
+GOTCHAINSAW     = "You got the chainsaw! Rip and tear!";
+GOTPISTOL       = "You got the pea shooter! Pew pew!";
+GOTSHOTGUN      = "You got the combat shotgun!";
+GOTSSG          = "You got the super shotgun! You feel mighty!";
+GOTHEAVY        = "You got the heavy assault rifle!";
+GOTCHAINGUN     = "You got the chaingun! The hell with respect!";
+GOTROCKET       = "You got the rocket launcher!";
+GOTPLASMA       = "You got the plasma rifle!";
+GOTGAUSS        = "You got the gauss cannon!";
+GOTBFG          = "You got the BFG 9000! Hail to the chief!";
+
+OB_MPFIST       = "%o was clocked out by %k's bare fists.";
+OB_MPCHAINSAW   = "%o was gloriously eviscerated by %k's chainsaw.";
+OB_MPPISTOL     = "%o was pew-pew'd to death by %k's pistol.";
+OB_MPSHOTGUN    = "%o was picked off by %k's combat shotgun.";
+OB_MPSSG        = "%o was splattered by %k's super shotgun.";
+OB_MPHEAVY      = "%o was riddled by %k's heavy assault rifle.";
+OB_MPCHAINGUN   = "%o was pincushioned by %k's chaingun.";
+OB_MPROCKET     = "%o was splashed by %k's rocket.";
+OB_MPPLASMA     = "%o was cooked by %k's plasma rifle.";
+OB_MPGAUSS      = "%o was structurally inverted by %k's gauss cannon";
+OB_MPBFG        = "%o was bye-bye'd by %k's BFG.";

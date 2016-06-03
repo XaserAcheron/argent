@@ -1,0 +1,128 @@
+weapons/dryfire            "sounds/weapons/dryfire.flac"
+weapons/swap1              "sounds/weapons/swap1.flac"
+weapons/swap2              "sounds/weapons/swap2.flac"
+weapons/swap3              "sounds/weapons/swap3.flac"
+weapons/swap4              "sounds/weapons/swap4.flac"
+weapons/swap5              "sounds/weapons/swap5.flac"
+$random weapons/swap { weapons/swap1 weapons/swap2 weapons/swap3 weapons/swap4 weapons/swap5 }
+
+weapons/pistol/fire1       "sounds/weapons/pistol/fire1.flac"
+weapons/pistol/fire2       "sounds/weapons/pistol/fire2.flac"
+weapons/pistol/fire3       "sounds/weapons/pistol/fire3.flac"
+weapons/pistol/charge      "sounds/weapons/pistol/charge.flac"
+weapons/pistol/hum         "sounds/weapons/pistol/hum.flac"
+weapons/pistol/altfire     "sounds/weapons/pistol/altfire.flac"
+$random weapons/pistol/fire { weapons/pistol/fire1 weapons/pistol/fire2 weapons/pistol/fire3 }
+
+weapons/shotgun/fire1      "sounds/weapons/shotgun/fire1.flac"
+weapons/shotgun/fire2      "sounds/weapons/shotgun/fire2.flac"
+weapons/shotgun/fire3      "sounds/weapons/shotgun/fire3.flac"
+weapons/shotgun/mod1swap   "sounds/weapons/shotgun/mod1swap.flac"
+weapons/shotgun/mod1up     "sounds/weapons/shotgun/mod1up.flac"
+weapons/shotgun/mod1fire   "sounds/weapons/shotgun/mod1fire.flac"
+weapons/shotgun/mod2swap   "sounds/weapons/shotgun/mod2swap.flac"
+weapons/shotgun/mod2up     "sounds/weapons/shotgun/mod2up.flac"
+weapons/shotgun/mod2fire   "sounds/weapons/shotgun/mod2fire.flac"
+$random weapons/shotgun/fire    { weapons/shotgun/fire1 weapons/shotgun/fire2 weapons/shotgun/fire3 }
+
+weapons/ssg/fire1          "sounds/weapons/ssg/fire1.flac"
+weapons/ssg/fire2          "sounds/weapons/ssg/fire2.flac"
+weapons/ssg/aimup          "sounds/weapons/ssg/aimup.flac"
+weapons/ssg/aimdown        "sounds/weapons/ssg/aimdown.flac"
+$random weapons/ssg/fire    { weapons/ssg/fire1 weapons/ssg/fire2 }
+
+weapons/heavy/fire1        "sounds/weapons/heavy/fire1.flac"
+weapons/heavy/fire2        "sounds/weapons/heavy/fire2.flac"
+weapons/heavy/fire3        "sounds/weapons/heavy/fire3.flac"
+weapons/heavy/fire4        "sounds/weapons/heavy/fire4.flac"
+weapons/heavy/fire5        "sounds/weapons/heavy/fire5.flac"
+weapons/heavy/altfire1     "sounds/weapons/heavy/altfire1.flac"
+weapons/heavy/altfire2     "sounds/weapons/heavy/altfire2.flac"
+weapons/heavy/missile1     "sounds/weapons/heavy/missile1.flac"
+weapons/heavy/missile2     "sounds/weapons/heavy/missile2.flac"
+weapons/heavy/missile3     "sounds/weapons/heavy/missile3.flac"
+weapons/heavy/missile4     "sounds/weapons/heavy/missile4.flac"
+weapons/heavy/missile5     "sounds/weapons/heavy/missile5.flac"
+weapons/heavy/explode1     "sounds/weapons/heavy/explode1.flac"
+weapons/heavy/explode2     "sounds/weapons/heavy/explode2.flac"
+weapons/heavy/explode3     "sounds/weapons/heavy/explode3.flac"
+weapons/heavy/explode4     "sounds/weapons/heavy/explode4.flac"
+weapons/heavy/mod1swap     "sounds/weapons/heavy/mod1swap.flac"
+weapons/heavy/mod1up       "sounds/weapons/heavy/mod1up.flac"
+weapons/heavy/mod1down     "sounds/weapons/heavy/mod1down.flac"
+weapons/heavy/mod2swap     "sounds/weapons/heavy/mod2swap.flac"
+weapons/heavy/mod2up       "sounds/weapons/heavy/mod2up.flac"
+weapons/heavy/mod2down     "sounds/weapons/heavy/mod2down.flac"
+$random weapons/heavy/fire    { weapons/heavy/fire1    weapons/heavy/fire2    weapons/heavy/fire3    weapons/heavy/fire4    weapons/heavy/fire5    }
+$random weapons/heavy/altfire { weapons/heavy/altfire1 weapons/heavy/altfire2 }
+$random weapons/heavy/missile { weapons/heavy/missile1 weapons/heavy/missile2 weapons/heavy/missile3 weapons/heavy/missile4 weapons/heavy/missile5 }
+$random weapons/heavy/explode { weapons/heavy/explode1 weapons/heavy/explode2 weapons/heavy/explode3 weapons/heavy/explode4 }
+
+weapons/chaingun/fire1     "sounds/weapons/chaingun/fire1.flac"
+weapons/chaingun/fire2     "sounds/weapons/chaingun/fire2.flac"
+weapons/chaingun/fire3     "sounds/weapons/chaingun/fire3.flac"
+weapons/chaingun/spinup    "sounds/weapons/chaingun/spinup.flac"
+weapons/chaingun/spinloop  "sounds/weapons/chaingun/spinloop.flac"
+weapons/chaingun/spindown  "sounds/weapons/chaingun/spindown.flac"
+weapons/chaingun/mod1swap  "sounds/weapons/chaingun/mod1swap.flac"
+weapons/chaingun/mod2swap  "sounds/weapons/chaingun/mod2swap.flac"
+weapons/chaingun/mod2up    "sounds/weapons/chaingun/mod2up.flac"
+weapons/chaingun/mod2down  "sounds/weapons/chaingun/mod2down.flac"
+weapons/chaingun/mod2fire  "sounds/weapons/chaingun/mod2fire.flac"
+weapons/chaingun/mod2loop  "sounds/weapons/chaingun/mod2loop.flac"
+$random weapons/chaingun/fire { weapons/chaingun/fire1 weapons/chaingun/fire2 weapons/chaingun/fire3 }
+
+weapons/rocket/fire1       "sounds/weapons/rocket/fire1.flac"
+weapons/rocket/fire2       "sounds/weapons/rocket/fire2.flac"
+weapons/rocket/fire3       "sounds/weapons/rocket/fire3.flac"
+weapons/rocket/explode1    "sounds/weapons/rocket/explode1.flac"
+weapons/rocket/explode2    "sounds/weapons/rocket/explode2.flac"
+weapons/rocket/explode3    "sounds/weapons/rocket/explode3.flac"
+weapons/rocket/mod1swap    "sounds/weapons/rocket/mod1swap.flac"
+weapons/rocket/mod2swap    "sounds/weapons/rocket/mod2swap.flac"
+$random weapons/rocket/fire    { weapons/rocket/fire1    weapons/rocket/fire2    weapons/rocket/fire3    }
+$random weapons/rocket/explode { weapons/rocket/explode1 weapons/rocket/explode2 weapons/rocket/explode3 }
+
+weapons/plasma/fire1       "sounds/weapons/plasma/fire1.flac"
+weapons/plasma/fire2       "sounds/weapons/plasma/fire2.flac"
+weapons/plasma/fire3       "sounds/weapons/plasma/fire3.flac"
+weapons/plasma/fire4       "sounds/weapons/plasma/fire4.flac"
+weapons/plasma/altfire1    "sounds/weapons/plasma/altfire1.flac"
+weapons/plasma/altfire2    "sounds/weapons/plasma/altfire2.flac"
+weapons/plasma/altfire3    "sounds/weapons/plasma/altfire4.flac"
+weapons/plasma/altfire4    "sounds/weapons/plasma/altfire3.flac"
+weapons/plasma/mod1swap    "sounds/weapons/plasma/mod1swap.flac"
+weapons/plasma/mod1ready   "sounds/weapons/plasma/mod2ready.flac"
+weapons/plasma/mod1fire    "sounds/weapons/plasma/mod1fire.flac"
+weapons/plasma/mod2swap    "sounds/weapons/plasma/mod2swap.flac"
+weapons/plasma/mod2ready   "sounds/weapons/plasma/mod2ready.flac"
+weapons/plasma/mod2fire    "sounds/weapons/plasma/mod2fire.flac"
+$random weapons/plasma/fire    { weapons/plasma/fire1    weapons/plasma/fire2    weapons/plasma/fire3    weapons/plasma/fire4    }
+$random weapons/plasma/altfire { weapons/plasma/altfire1 weapons/plasma/altfire2 weapons/plasma/altfire3 weapons/plasma/altfire4 }
+
+weapons/gauss/equip        "sounds/weapons/gauss/equip.flac"
+weapons/gauss/fire         "sounds/weapons/gauss/fire.flac"
+weapons/gauss/impact       "sounds/weapons/gauss/impact.flac"
+weapons/gauss/mod1swap     "sounds/weapons/gauss/mod1swap.flac"
+weapons/gauss/mod1charge   "sounds/weapons/gauss/mod1charge.flac"
+weapons/gauss/mod1hum      "sounds/weapons/gauss/mod1hum.flac"
+weapons/gauss/mod1fire     "sounds/weapons/gauss/mod1fire.flac"
+weapons/gauss/mod2swap     "sounds/weapons/gauss/mod2swap.flac"
+weapons/gauss/mod2charge   "sounds/weapons/gauss/mod2charge.flac"
+weapons/gauss/mod2hum      "sounds/weapons/gauss/mod2hum.flac"
+weapons/gauss/mod2fire     "sounds/weapons/gauss/mod2fire.flac"
+
+weapons/bfg/equip          "sounds/weapons/gauss/equip.flac"
+weapons/bfg/fire           "sounds/weapons/bfg/fire.flac"
+weapons/bfg/explode        "sounds/weapons/bfg/explode.flac"
+
+enemies/gibbitude          DSSLOP
+
+effects/impact1            "sounds/effects/impact1.flac"
+effects/impact2            "sounds/effects/impact2.flac"
+effects/impact3            "sounds/effects/impact3.flac"
+effects/impact4            "sounds/effects/impact4.flac"
+effects/impact5            "sounds/effects/impact5.flac"
+effects/impact6            "sounds/effects/impact6.flac"
+$random effects/impact { effects/impact1 effects/impact2 effects/impact3 effects/impact4 effects/impact5 effects/impact6 }
+$volume effects/impact 0.5

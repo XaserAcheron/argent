@@ -1,0 +1,10 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Miscellaneous Other Stuff
+//
+// --------------------------------------------------------------------------
+
+ACTOR ArgBarrel : ExplosiveBarrel replaces ExplosiveBarrel
+{
+	+EXTREMEDEATH
+}

@@ -1,0 +1,43 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Fist
+//
+// --------------------------------------------------------------------------
+
+ACTOR ArgFist : ArgWeapon replaces Fist
+{
+	Weapon.UpSound ""
+	Weapon.SelectionOrder 11
+	Inventory.PickupMessage "$GOTFIST"
+	Obituary "$OB_MPFIST"
+	Tag "$TAG_FIST"
+	DamageType "ArgFist"
+	
+	+WEAPON.WIMPY_WEAPON
+	+WEAPON.MELEEWEAPON
+	
+	// [TODO] make a real version of this O:
+	
+	States
+	{
+	Spawn:
+		PUNG A -1
+		Stop
+	Ready:
+		PUNG A 1 A_WeaponReady
+		Loop
+	Select:
+		PUNG A 0
+		Goto SelectLoop
+	Deselect:
+		PUNG A 0
+		Goto DeselectLoop
+	Fire:
+		PUNG B 4
+		PUNG C 4 A_Punch
+		PUNG D 5
+		PUNG C 4
+		PUNG B 5 A_ReFire
+		Goto Ready
+	}
+}

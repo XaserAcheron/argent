@@ -1,0 +1,36 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Basic Actors
+//
+// --------------------------------------------------------------------------
+
+ACTOR ArgTrail
+{
+	-RANDOMIZE
+	+NOBLOCKMONST
+	+NOTELEPORT
+	+FORCEXYBILLBOARD
+	+NOBLOCKMAP
+	+NOGRAVITY
+	+THRUACTORS
+}
+
+ACTOR ArgDrop : ArgTrail
+{
+	Projectile
+	-NOGRAVITY
+	Damage 0
+	Speed 0
+}
+
+ACTOR ArgPuff
+{
+	+NOGRAVITY
+	+PUFFGETSOWNER
+	+PUFFONACTORS
+}
+
+ACTOR ArgToken : Inventory
+{
+	+INVENTORY.UNDROPPABLE
+}

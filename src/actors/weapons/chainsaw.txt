@@ -1,0 +1,41 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Chainsaw
+//
+// --------------------------------------------------------------------------
+
+ACTOR ArgChainsaw : ArgWeapon replaces Chainsaw
+{
+	Weapon.Kickback 0
+	Weapon.UpSound "weapons/sawup"
+	Weapon.ReadySound "weapons/sawidle"
+	Weapon.SelectionOrder 10
+	Inventory.PickupMessage "$GOTCHAINSAW"
+	Obituary "$OB_MPCHAINSAW"
+	Tag "$TAG_CHAINSAW"
+	DamageType "ArgChainsaw"
+	
+	+WEAPON.MELEEWEAPON
+	
+	// [TODO] make a real version of this O:
+	
+	States
+	{
+	Spawn:
+		CSAW A -1
+		Stop
+	Ready:
+		SAWG CCCCDDDD 1 A_WeaponReady
+		Loop
+	Select:
+		SAWG C 0
+		Goto SelectLoop
+	Deselect:
+		SAWG C 0
+		Goto DeselectLoop
+	Fire:
+		SAWG AB 4 A_Saw
+		SAWG B 0 A_ReFire
+		Goto Ready
+	}
+}

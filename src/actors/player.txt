@@ -1,0 +1,22 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Player Definition
+//
+// --------------------------------------------------------------------------
+
+ACTOR ArgPlayer : DoomPlayer
+{
+	Player.DisplayName "Doom Marine"
+	Player.StartItem "ArgPistol"
+	Player.StartItem "ArgFist"
+	Player.StartItem "Clip", 50
+	Player.WeaponSlot 1, ArgFist, ArgChainsaw
+	Player.WeaponSlot 2, ArgPistol
+	Player.WeaponSlot 3, ArgShotgun, ArgSuperShotgun
+	Player.WeaponSlot 4, ArgHeavyAR, ArgChaingun
+	Player.WeaponSlot 5, ArgRocketLauncher
+	Player.WeaponSlot 6, ArgPlasmaRifle, ArgGaussCannon
+	Player.WeaponSlot 7, ArgBFG9000
+	
+	DamageFactor "ArgPlayerRocket", 0.5
+}

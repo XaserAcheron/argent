@@ -1,0 +1,38 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Base Weapon
+//
+// --------------------------------------------------------------------------
+
+ACTOR ArgWeapon : DoomWeapon
+{
+	Weapon.UpSound   "weapons/swap"
+	Weapon.BobStyle  "InverseSmooth"
+	Weapon.BobSpeed  2.00
+	Weapon.BobRangeX 0.75
+	Weapon.BobRangeY 0.50
+	Weapon.SelectionOrder 9999999
+	Scale 0.75
+	States
+	{
+	Spawn:
+		TNT1 A 1
+		Stop
+	Ready:
+		TNT1 A 1 A_WeaponReady
+		Loop
+	Select:
+	SelectLoop:
+		"####" "#" 0 A_Raise
+		"####" "#" 1 A_Raise
+		Loop
+	Deselect:
+	DeselectLoop:
+		"####" "#" 0 A_Lower
+		"####" "#" 1 A_Lower
+		Loop
+	Fire:
+		TNT1 A 1
+		Goto Ready
+	}
+}

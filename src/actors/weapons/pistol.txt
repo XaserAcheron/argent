@@ -1,0 +1,49 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Pistol
+//
+// --------------------------------------------------------------------------
+
+ACTOR ArgPistol : ArgWeapon replaces Pistol
+{
+	Weapon.SelectionOrder 8
+	Inventory.PickupMessage "$GOTPISTOL"
+	Tag "$TAG_PISTOL"
+	DamageType "ArgPistol"
+	
+	+WEAPON.NOAUTOFIRE
+	+WEAPON.WIMPY_WEAPON
+	
+	States
+	{
+	Spawn:
+		PISP A -1
+		Stop
+	Ready:
+		PISG A 1 A_WeaponReady
+		Loop
+	Select:
+		PISG A 0
+		Goto SelectLoop
+	Deselect:
+		PISG A 0
+		Goto DeselectLoop
+	Fire:
+		PISF A 1 Bright {
+			A_GunFlash;
+			A_FireBullets(4, 2, 1, 5, "ArgBulletPuff");
+			A_PlaySound("weapons/pistol/fire", CHAN_AUTO);
+			A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH);
+		}
+		PISF B 1   A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH) 
+		PISF C 1 { A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH); A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25)); }
+		PISF C 1 { A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH); A_WeaponOffset(2.0 + frandom( 0.00, 1.00), 37.0 + frandom( 0.00, 1.00)); }
+		PISF B 1 { A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH); A_WeaponOffset(3.0 + frandom( 0.00, 1.00), 40.0 + frandom( 0.00, 2.00)); }
+		PISF B 1 { A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH); A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 38.0 + frandom(-0.25, 0.25)); }
+		PISG A 1   A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH)
+		Goto Ready
+	Flash:
+		TNT1 A 2 Bright A_Light1
+		Goto LightDone
+	}
+}

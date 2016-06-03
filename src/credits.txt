@@ -1,0 +1,20 @@
+ARGENT credits:
+
+Code and Shenanigans:
+	- Xaser (I AM A XASER)
+
+Sprites:
+	- Neccronixis (badass nu-DOOM weapon sprite conversions)
+	- Xaser (gibs, misc edits)
+	- Rogue Entertainment (blood spray)
+	- ??? (puff sprites)
+	- ??? (puff smoke)
+	- ??? (floor blood splatter)
+
+Sounds
+	- id software (taken straight from the game, oh no)
+
+Misc:
+	- some mobile phone background from somewhere I can't seem to locate
+	(titlepic/interpic background) -- if anyone has any info on this one,
+	lemme know!

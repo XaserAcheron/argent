@@ -1,0 +1,100 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: BFG9000
+//
+// --------------------------------------------------------------------------
+
+ACTOR ArgBFG9000 : ArgWeapon replaces BFG9000
+{
+	Weapon.UpSound "weapons/bfg/equip"
+	Weapon.SelectionOrder 1
+	Weapon.AmmoUse 40
+	Weapon.AmmoGive 40
+	Weapon.AmmoType "Cell" // [TODO] give this its own ammotype
+	Inventory.PickupMessage "$GOTBFG"
+	Tag "$TAG_BFG"
+	
+	States
+	{
+	Spawn:
+		BFGP A -1
+		Stop
+	Ready:
+		BFGG A 1 Bright A_WeaponReady
+		Loop
+	Select:
+		BFGG A 0 Bright
+		Goto SelectLoop
+	Deselect:
+		BFGG A 0 Bright
+		Goto DeselectLoop
+	Fire:
+		BFGG A 1 Bright A_PlaySound("weapons/bfg/fire", CHAN_AUTO)
+		BFGG B 1 Bright   A_WeaponOffset(frandom(-0.1, 0.1), frandom(-0.1, 0.1) + 32)
+		BFGG C 1 Bright   A_WeaponOffset(frandom(-0.1, 0.1), frandom(-0.1, 0.1) + 32) 
+		BFGG D 1 Bright   A_WeaponOffset(frandom(-0.2, 0.2), frandom(-0.2, 0.2) + 32)
+		BFGG C 1 Bright   A_WeaponOffset(frandom(-0.2, 0.2), frandom(-0.2, 0.2) + 32) 
+		BFGG D 1 Bright   A_WeaponOffset(frandom(-0.3, 0.3), frandom(-0.3, 0.3) + 32) 
+		BFGG E 1 Bright   A_WeaponOffset(frandom(-0.3, 0.3), frandom(-0.3, 0.3) + 32) 
+		BFGG F 1 Bright   A_WeaponOffset(frandom(-0.4, 0.4), frandom(-0.4, 0.4) + 32) 
+		BFGG G 1 Bright { A_WeaponOffset(frandom(-0.4, 0.4), frandom(-0.4, 0.4) + 32); A_GunFlash; }
+		BFGG H 1 Bright   A_WeaponOffset(frandom(-0.5, 0.5), frandom(-0.5, 0.5) + 32)
+		BFGG I 1 Bright   A_WeaponOffset(frandom(-0.5, 0.5), frandom(-0.5, 0.5) + 32) 
+		BFGG J 1 Bright   A_WeaponOffset(frandom(-0.6, 0.6), frandom(-0.6, 0.6) + 32) 
+		BFGG I 1 Bright   A_WeaponOffset(frandom(-0.6, 0.6), frandom(-0.6, 0.6) + 32) 
+		BFGG J 1 Bright   A_WeaponOffset(frandom(-0.7, 0.7), frandom(-0.7, 0.7) + 32) 
+		BFGG K 1 Bright   A_WeaponOffset(frandom(-0.8, 0.8), frandom(-0.8, 0.8) + 32) 
+		BFGG L 1 Bright   A_WeaponOffset(frandom(-0.9, 0.9), frandom(-0.9, 0.9) + 32) 
+		BFGF A 1 Bright   A_WeaponOffset(frandom(-1.0, 1.0), frandom(-1.0, 1.0) + 32) 
+		BFGF B 1 Bright   A_WeaponOffset(0, 32)
+		BFGF C 0 Bright {
+		   
+			A_FireCustomMissile("ArgThatDamnDragonAteMyBalls", 0, 1);
+			return A_Jump(64, "Fire2");
+		}
+		BFGF C 1 Bright
+		BFGF D 1 Bright
+		Goto FireEnd
+	Fire2: 
+		BFGA A 1 Bright
+		BFGA B 1 Bright
+	FireEnd: 
+		BFGF EFGHIJKLMN 1 Bright
+		BFGG A 8 Bright
+		Goto Ready
+	Flash:
+		TNT1 A 4 Bright A_Light1
+		TNT1 A 2 Bright A_Light2
+		TNT1 A 1 Bright A_Light(-2)
+		TNT1 A 1 Bright A_Light2
+		TNT1 A 1 Bright A_Light(3)
+		TNT1 A 1 Bright A_Light(-1)
+		TNT1 A 2 Bright A_Light(4)
+		TNT1 A 2 Bright A_Light(-2)
+		TNT1 A 2 Bright A_Light(3)
+		TNT1 A 2 Bright A_Light(2)
+		TNT1 A 2 Bright A_Light(1)
+		Goto LightDone
+	}
+}
+
+ACTOR ArgThatDamnDragonAteMyBalls : BFGBall
+{
+	+EXTREMEDEATH
+	Scale 0.66
+	DeathSound "weapons/bfg/explode"
+	Decal "BFGScorch"
+	DamageType "ArgBFG9000"
+	States
+	{
+	Spawn:
+		BFS1 AB 4 Bright
+		Loop
+	Death:
+		BFE1 A 4 Bright A_SetScale(1.0)
+		BFE1 B 4 Bright
+		BFE1 C 4 Bright A_BFGSpray
+		BFE1 DEF 4 Bright
+		Stop
+	}
+}

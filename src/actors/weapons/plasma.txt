@@ -1,0 +1,66 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Plasma Rifle
+//
+// --------------------------------------------------------------------------
+
+ACTOR ArgPlasmaRifle : ArgWeapon replaces PlasmaRifle
+{
+	Weapon.SelectionOrder 5
+	Weapon.AmmoUse 1
+	Weapon.AmmoGive 40
+	Weapon.AmmoType "Cell"
+	Inventory.PickupMessage "$GOTPLASMA"
+	Tag "$TAG_PLASMA"
+	
+	States
+	{
+	Spawn:
+		PLSP A -1
+		Stop
+	Ready:
+		PLSG A 1 A_WeaponReady
+		Loop
+	Select:
+		PLSG A 0
+		Goto SelectLoop
+	Deselect:
+		PLSG A 0
+		Goto DeselectLoop
+	Fire:
+		PLSF A 1 Bright {
+			A_GunFlash;
+			A_FireCustomMissile("ArgPlasma", 0, 1, 6.0 + frandom(-2.00, 2.00), frandom(-2.00, 2.00));
+			A_PlaySound("weapons/plasma/fire", CHAN_5);
+			A_WeaponOffset(0.0, 32.0);
+		}
+		PLSF B 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
+		PLSG A 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50))
+		Goto Ready
+	Flash:
+		TNT1 A 2 Bright A_Light2
+		TNT1 A 1 Bright A_Light1
+		Goto LightDone
+	}
+}
+
+ACTOR ArgPlasma : PlasmaBall
+{
+	Radius 8
+	Height 8
+	Damage 5
+	Scale 0.75
+	Speed 50
+	SeeSound ""
+	Decal "PlasmaScorchLower"
+	DamageType "ArgPlasma"
+	States
+	{
+	Spawn:
+		PLSS AB 3 Bright
+		Loop
+	Death:
+		PLSE ABCDE 2 Bright
+		Stop
+	}
+}
