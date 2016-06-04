@@ -52,6 +52,7 @@ ACTOR ArgPlasma : PlasmaBall
 	Scale 0.75
 	Speed 50
 	SeeSound ""
+	DeathSound "weapons/plasma/explode"
 	Decal "PlasmaScorchLower"
 	DamageType "ArgPlasma"
 	States
