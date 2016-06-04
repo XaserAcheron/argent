@@ -8,6 +8,9 @@ ACTOR ArgZombieman : Zombieman replaces Zombieman
 {
 	States
 	{
+	Death:
+		"####" "#" 0 A_JumpIf(CallACS("GetCVAR_alwaysgib"), "XDeath")
+		Goto Super::Death
 	XDeath:
 		POSS M 3
 		"####" "#" 0 A_Jump(256,1,2,3)
@@ -27,6 +30,9 @@ ACTOR ArgShotgunGuy : ShotgunGuy replaces ShotgunGuy
 {
 	States
 	{
+	Death:
+		"####" "#" 0 A_JumpIf(CallACS("GetCVAR_alwaysgib"), "XDeath")
+		Goto Super::Death
 	XDeath:
 		SPOS M 3
 		"####" "#" 0 A_Jump(256,1,2,3)
@@ -46,6 +52,9 @@ ACTOR ArgChaingunGuy : ChaingunGuy replaces ChaingunGuy
 {
 	States
 	{
+	Death:
+		"####" "#" 0 A_JumpIf(CallACS("GetCVAR_alwaysgib"), "XDeath")
+		Goto Super::Death
 	XDeath:
 		CPOS O 3 
 		"####" "#" 0 A_Jump(256,1,2,3)
@@ -65,6 +74,9 @@ ACTOR ArgImp : DoomImp replaces DoomImp
 {
 	States
 	{
+	Death:
+		"####" "#" 0 A_JumpIf(CallACS("GetCVAR_alwaysgib"), "XDeath")
+		Goto Super::Death
 	XDeath:
 		TROO N 3
 		"####" "#" 0 A_Jump(256,1,2,3)
@@ -85,6 +97,9 @@ ACTOR ArgDemon : Demon replaces Demon
 {
 	States
 	{
+	Death:
+		"####" "#" 0 A_JumpIf(CallACS("GetCVAR_alwaysgib"), "XDeath")
+		Goto Super::Death
 	XDeath:
 		SARG O 3
 		"####" "#" 0 A_Jump(256,1,2,3)
@@ -141,6 +156,9 @@ ACTOR ArgCaco : Cacodemon replaces Cacodemon
 	Bloodcolor "Blue"
 	States
 	{
+	Death:
+		"####" "#" 0 A_JumpIf(CallACS("GetCVAR_alwaysgib"), "XDeath")
+		Goto Super::Death
 	XDeath:
 		HEAD M 3 A_NoGravity
 		"####" "#" 0 A_Jump(256,1,2,3)
@@ -163,6 +181,9 @@ ACTOR ArgKnight : HellKnight replaces HellKnight
 	Bloodcolor "00 A0 00"
 	States
 	{
+	Death:
+		"####" "#" 0 A_JumpIf(CallACS("GetCVAR_alwaysgib"), "XDeath")
+		Goto Super::Death
 	XDeath:
 		BOS2 P 3
 		"####" "#" 0 A_Jump(256,1,2,3)
@@ -183,6 +204,9 @@ ACTOR ArgBaron : BaronOfHell replaces BaronOfHell
 	Bloodcolor "00 A0 00"
 	States
 	{
+	Death:
+		"####" "#" 0 A_JumpIf(CallACS("GetCVAR_alwaysgib"), "XDeath")
+		Goto Super::Death
 	XDeath:
 		BOSS P 3
 		"####" "#" 0 A_Jump(256,1,2,3)
@@ -202,6 +226,9 @@ ACTOR ArgRevenant : Revenant replaces Revenant
 {
 	States
 	{
+	Death:
+		"####" "#" 0 A_JumpIf(CallACS("GetCVAR_alwaysgib"), "XDeath")
+		Goto Super::Death
 	XDeath:
 		SKEL R 3
 		"####" "#" 0 A_Jump(256,1,2,3)
@@ -222,6 +249,9 @@ ACTOR ArgMancubus : Fatso replaces Fatso
 {
 	States
 	{
+	Death:
+		"####" "#" 0 A_JumpIf(CallACS("GetCVAR_alwaysgib"), "XDeath")
+		Goto Super::Death
 	XDeath:
 		FATG A 3
 		FATG B 3 A_Scream
@@ -285,6 +315,9 @@ ACTOR ArgVile : Archvile replaces Archvile
 {
 	States
 	{
+	Death:
+		"####" "#" 0 A_JumpIf(CallACS("GetCVAR_alwaysgib"), "XDeath")
+		Goto Super::Death
 	XDeath:
 		VILG A 3
 		"####" "#" 0 A_Jump(256,1,2,3)
@@ -364,6 +397,9 @@ ACTOR ArgNazi : WolfensteinSS replaces WolfensteinSS
 {
 	States
 	{
+	Death:
+		"####" "#" 0 A_JumpIf(CallACS("GetCVAR_alwaysgib"), "XDeath")
+		Goto Super::Death
 	XDeath:
 		SSWV N 3 
 		"####" "#" 0 A_Jump(256,1,2,3)
