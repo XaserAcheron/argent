@@ -26,6 +26,7 @@ ACTOR ArgChaingun : ArgWeapon
 		CHGG A 0
 		Goto SelectLoop
 	Deselect:
+		CHGG A 0 A_StopSound(CHAN_WEAPON)
 		CHGG A 0 A_TakeInventory("ArgChaingunToken", 5)
 		Goto DeselectLoop
 	Fire:
