@@ -1,0 +1,10 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: ACS Lib of Spectacular Scriptage
+//
+// --------------------------------------------------------------------------
+
+#include "zcommon.acs"
+
+// [XA] Yurck, hardcodes. Hopefully the GetCVAR non-action-function request goes through...
+script "GetCVAR_alwaysgib" (void) { SetResultValue(GetCvar("arg_alwaysgib")); }

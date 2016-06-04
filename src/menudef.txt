@@ -1,0 +1,30 @@
+DefaultListMenu
+{
+	Font "BigFont", "White"
+	Selector "M_SKULL1", -24, -6
+	Linespacing 16
+}
+
+ListMenu "MainMenu"
+{
+	StaticPatch 94, 2, "M_DOOM"
+	Position 88, 80
+
+	TextItem "New Game"   , "n", "PlayerclassMenu"
+	TextItem "Mod Options", "a", "ArgentMenu"
+	TextItem "Options"    , "o", "OptionsMenu"
+	TextItem "Load Game"  , "l", "LoadGameMenu"
+	TextItem "Save Game"  , "s", "SaveGameMenu"
+	TextItem "Quit Game"  , "q", "QuitMenu"
+}
+
+OptionMenu "ArgentMenu"
+{
+	Title       "ARGENT Options"
+	StaticText 	""
+	StaticText 	"ARGENT Settings"              , 1
+	Option      "Monsters Always Gib"          , "arg_alwaysgib", "YesNo"
+	StaticText 	""
+	StaticText 	"ARGENT Controls"              , 1
+	Control		"Switch Weapon Mod"            , "+reload"
+}
