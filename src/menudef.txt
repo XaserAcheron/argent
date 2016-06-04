@@ -1,21 +1,21 @@
 DefaultListMenu
 {
 	Font "BigFont", "White"
-	Selector "M_SKULL1", -32, -5
+	Selector "M_SKULL1", -24, -6
 	Linespacing 16
 }
 
 ListMenu "MainMenu"
 {
 	StaticPatch 94, 2, "M_DOOM"
-	Position 97, 80
+	Position 88, 80
 
-	TextItem "New Game", "n", "PlayerclassMenu"
+	TextItem "New Game"   , "n", "PlayerclassMenu"
 	TextItem "Mod Options", "a", "ArgentMenu"
-	TextItem "Options","o", "OptionsMenu"
-	TextItem "Load Game", "l", "LoadGameMenu"
-	TextItem "Save Game", "s", "SaveGameMenu"
-	TextItem "Quit Game", "q", "QuitMenu"
+	TextItem "Options"    , "o", "OptionsMenu"
+	TextItem "Load Game"  , "l", "LoadGameMenu"
+	TextItem "Save Game"  , "s", "SaveGameMenu"
+	TextItem "Quit Game"  , "q", "QuitMenu"
 }
 
 OptionMenu "ArgentMenu"
