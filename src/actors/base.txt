@@ -15,6 +15,11 @@ ACTOR ArgTrail
 	+THRUACTORS
 }
 
+ACTOR ArgTrailNoPhysics
+{
+	+NOINTERACTION
+}
+
 ACTOR ArgDrop : ArgTrail
 {
 	Projectile
