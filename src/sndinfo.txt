@@ -120,6 +120,7 @@ weapons/gauss/mod2fire     "sounds/weapons/gauss/mod2fire.flac"
 weapons/bfg/equip          "sounds/weapons/gauss/equip.flac"
 weapons/bfg/fire           "sounds/weapons/bfg/fire.flac"
 weapons/bfg/explode        "sounds/weapons/bfg/explode.flac"
+$rolloff weapons/bfg/explode 400 2400
 
 enemies/gibbitude          DSSLOP
 
