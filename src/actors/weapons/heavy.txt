@@ -4,7 +4,7 @@
 //
 // --------------------------------------------------------------------------
 
-ACTOR ArgHeavyAR : ArgWeapon replaces Chaingun
+ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 {
 	Weapon.SelectionOrder 6
 	Weapon.AmmoUse 1
@@ -20,29 +20,55 @@ ACTOR ArgHeavyAR : ArgWeapon replaces Chaingun
 		HARP A -1
 		Stop
 	Ready:
-		HARG A 1 A_WeaponReady
-		Loop
-	Select:
+		HARG A 0
+		Goto Super::Ready
+		
+	/* Unmodded + Primary */
+	
+	Mod0Select:
 		HARG A 0
 		Goto SelectLoop
-	Deselect:
+	Mod0Ready:
 		HARG A 0
-		Goto DeselectLoop
-	Fire:
-		HARG B 1 Bright {
+		Goto ReadyLoop
+	Mod0Fire:
+	Mod1Fire:
+	Mod2Fire:
+		"####" B 1 Bright {
 			A_GunFlash;
 			A_FireBullets(2.0, 1.0, -1, 7, "ArgBulletPuff");
 			A_PlaySound("weapons/heavy/fire", CHAN_AUTO);
 		}
-		HARG C 1 Bright A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
-		HARG D 1 Bright A_WeaponOffset(3.0 + frandom(-0.25, 0.25), 34.0 + frandom(-0.25, 0.25))
-		HARG A 1        A_WeaponOffset(2.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
-		HARG A 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
-		HARG A 0 A_Refire
+		"####" C 1 Bright A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
+		"####" D 1 Bright A_WeaponOffset(3.0 + frandom(-0.25, 0.25), 34.0 + frandom(-0.25, 0.25))
+		"####" A 1        A_WeaponOffset(2.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
+		"####" A 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		"####" A 0 A_Refire
 		Goto Ready
 	Flash:
 		TNT1 A 1 Bright A_Light2
 		TNT1 A 1 Bright A_Light1
 		Goto LightDone
+		
+	/* Mod 1: Micro Missiles */
+		
+	Mod1Select:
+		HA1G A 0
+		Goto SelectLoop
+	Mod1Ready:
+		HA1G A 0
+		Goto ReadyLoop
+		
+	/* Mod 2: Tactical Scope */
+	
+	Mod2Select:
+		HA2G A 0
+		Goto SelectLoop
+	Mod2Ready:
+		HA2G A 0
+		Goto ReadyLoop
 	}
 }
+ACTOR ArgHeavyARModSelected : ArgModToken {}
+ACTOR ArgHeavyARMod1Enabled : ArgToken    {}
+ACTOR ArgHeavyARMod2Enabled : ArgToken    {}

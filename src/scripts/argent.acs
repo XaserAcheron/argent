@@ -6,5 +6,45 @@
 
 #include "zcommon.acs"
 
+/*
+ * Swaps the player's active weapon mod. This script just swaps the tokens;
+ * the base ArgWeaponMod definition handles the state jumps and the initiation
+ * of the swap animation.
+ */
+script "SwapMod" (void) {
+	// Get the classes of the weapon tokens to figure out which
+	// mod is selected (and whether or not each mod has actually
+	// been picked up).
+	str weapon = GetWeapon();
+	str modSelectedToken = StrParam(s:weapon, s:"ModSelected");
+	str mod1EnabledToken = StrParam(s:weapon, s:"Mod1Enabled");
+	str mod2EnabledToken = StrParam(s:weapon, s:"Mod2Enabled");
+	
+	// determine which mod is actually selected
+	int modSelected = CheckInventory(modSelectedToken);
+	int mod1Enabled = CheckInventory(mod1EnabledToken);
+	int mod2Enabled = CheckInventory(mod2EnabledToken);
+	
+	// swap to weapon 2 if 1 is selected; else switch to 1.
+	// [TODO] add 'enabled' logic here.
+	int modToSelect = 1;
+	if (modSelected == 1) {
+		modToSelect = 2;
+	}
+	
+	// Do the mod swap, assuming we have a valid one to swap to.
+	if(modToSelect > 0) {
+		TakeInventory(modSelectedToken, 2);
+		GiveInventory(modSelectedToken, modToSelect);
+	}
+}
+
+/*
+ * Checks if the specified mod is currently selected. Used for state jumps.
+ */
+script "ModSelected" (int mod) {
+	SetResultValue(CheckInventory(StrParam(s:GetWeapon(), s:"ModSelected")) == mod);
+}
+
 // [XA] Yurck, hardcodes. Hopefully the GetCVAR non-action-function request goes through...
 script "GetCVAR_alwaysgib" (void) { SetResultValue(GetCvar("arg_alwaysgib")); }
