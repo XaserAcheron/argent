@@ -36,6 +36,10 @@ script "SwapMod" (void) {
 	if(modToSelect > 0) {
 		TakeInventory(modSelectedToken, 2);
 		GiveInventory(modSelectedToken, modToSelect);
+		SetResultValue(true);
+	}
+	else {
+		SetResultValue(false);
 	}
 }
 
