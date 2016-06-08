@@ -12,6 +12,7 @@
  * of the swap animation.
  */
 script "SwapMod" (void) {
+
 	// Get the classes of the weapon tokens to figure out which
 	// mod is selected (and whether or not each mod has actually
 	// been picked up).
@@ -48,6 +49,28 @@ script "SwapMod" (void) {
  */
 script "ModSelected" (int mod) {
 	SetResultValue(CheckInventory(StrParam(s:GetWeapon(), s:"ModSelected")) == mod);
+}
+
+/*
+ * Start mod cooldown phase. This is done in a script so there
+ * aren't a zillion ACS_NamedExecutes done in a 1-tic loop constantly.
+ */
+script "StartModCooldown" (void) {
+	str weapon = GetWeapon();
+	str modCooldownToken = StrParam(s:weapon, s:"ModCooldown");
+	while(CheckInventory(modCooldownToken) > 0) {
+		TakeInventory(modCooldownToken, 1);
+		delay(1);
+	}
+}
+
+/*
+ * Checks if mod cooldown is complete.
+ */
+script "CheckModCooldown" (void) {
+	str weapon = GetWeapon();
+	str modCooldownToken = StrParam(s:weapon, s:"ModCooldown");
+	SetResultValue(CheckInventory(modCooldownToken) == 0);
 }
 
 /*

@@ -66,7 +66,7 @@ ACTOR ArgModWeapon : ArgWeapon
 	Mod2Select:
 		Goto SelectLoop
 		
-	/* Fire Mod-Jump */
+	/* Fire Mod-Jump -- or not, I guess */
 	
 	Fire:
 //		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 1), "Mod1Fire")
@@ -125,8 +125,8 @@ ACTOR ArgModWeapon : ArgWeapon
 	/* Mod Firing. Maximum Dangertime. */
 	
 	AltFire:
-		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 1), "Mod1Up")
-		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 2), "Mod2Up")
+		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 1) && CallACS("CheckModCooldown"), "Mod1Up")
+		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 2) && CallACS("CheckModCooldown"), "Mod2Up")
 		Goto DontFire
 	AltHold:
 		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 1), "Mod1Hold")
@@ -144,6 +144,9 @@ ACTOR ArgModWeapon : ArgWeapon
 	Mod2Down:
 	DontFire:
 		"####" "#" 1 A_WeaponReady(WRF_NOFIRE)
+		Goto Ready
+	Cooldown:
+		"####" "#" 0 ACS_NamedExecuteAlways("StartModCooldown")
 		Goto Ready
 	}
 }
