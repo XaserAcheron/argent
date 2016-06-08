@@ -4,14 +4,17 @@
 //
 // --------------------------------------------------------------------------
 
-ACTOR ArgHeavyAR : ArgWeapon replaces Chaingun
+ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 {
 	Weapon.SelectionOrder 6
-	Weapon.AmmoUse 1
-	Weapon.AmmoGive 20
-	Weapon.AmmoType "Clip"
+	Weapon.AmmoUse   1
+	Weapon.AmmoUse2  2
+	Weapon.AmmoGive  20
+	Weapon.AmmoType  "Clip"
+	Weapon.AmmoType2 "Clip"
 	Inventory.PickupMessage "$GOTHEAVY"
 	Tag "$TAG_HEAVY"
+	Obituary "$OB_MPHEAVY"
 	DamageType "ArgHeavyAR"
 
 	States
@@ -20,35 +23,215 @@ ACTOR ArgHeavyAR : ArgWeapon replaces Chaingun
 		HARP A -1
 		Stop
 	Ready:
-		HARG A 1 A_WeaponReady
-		Loop
-	Select:
+		HARG A 0
+		Goto Super::Ready
+		
+	/* Unmodded + Primary */
+	
+	Mod0Select:
 		HARG A 0
 		Goto SelectLoop
-	Deselect:
+	Mod0Swap:
+		HA0G A 0
+		Goto ModSwapUp
+	Mod0Ready:
 		HARG A 0
-		Goto DeselectLoop
-	Fire:
-		HARG A 0 Bright {
+		Goto ReadyLoop
+	Mod0Fire:
+	Mod1Fire:
+	Mod2Fire:
+		"####" B 1 Bright {
 			A_GunFlash;
 			A_FireBullets(2.0, 1.0, -1, 7, "ArgBulletPuff");
 			A_PlaySound("weapons/heavy/fire", CHAN_AUTO);
-			return A_Jump(128, "Fire2");
 		}
-		HARF A 1 Bright 
-		Goto FireEnd
-	Fire2:
-		HARF B 1 Bright 
-	FireEnd:
-		HARG B 1 A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
-		HARG A 1 A_WeaponOffset(3.0 + frandom(-0.25, 0.25), 34.0 + frandom(-0.25, 0.25))
-		HARG B 1 A_WeaponOffset(2.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
-		HARG A 1 A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
-		HARG A 0 A_Refire
+		"####" C 1 Bright A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
+		"####" D 1 Bright A_WeaponOffset(3.0 + frandom(-0.25, 0.25), 34.0 + frandom(-0.25, 0.25))
+		"####" A 1        A_WeaponOffset(2.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
+		"####" A 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		"####" A 0 A_Refire
 		Goto Ready
 	Flash:
 		TNT1 A 1 Bright A_Light2
 		TNT1 A 1 Bright A_Light1
 		Goto LightDone
+		
+	/* Mod 1: Micro Missiles */
+		
+	Mod1Select:
+		HA1G A 0
+		Goto SelectLoop
+	Mod1Swap:
+		HA1S A 1 A_PlaySound("weapons/heavy/mod1swap", CHAN_AUTO)
+		HA1S BCD 1
+		HA1S E 2
+		HA1S F 8
+		HA1S GHIJK 1
+		HA1S K 7
+		HA1S LMN 2
+	Mod1Ready:
+		HA1G A 0
+		Goto ReadyLoop
+	Mod1Up:
+		HA1M A 1 A_PlaySound("weapons/heavy/mod1up", CHAN_AUTO)
+		HA1M BCDE 1
+		HA1M G 0
+	Mod1Hold:
+		"####" "#" 1 A_JumpIf(CallACS("SynthFire"), "Mod1Fire")
+		"####" "#" 0 A_Refire
+	Mod1Down:
+		HA1M E 1 A_PlaySound("weapons/heavy/mod1down", CHAN_AUTO)
+		HA1M DCBA 1
+		Goto Cooldown
+	Mod1Fire:
+		HA1N A 0 Bright {
+			// [TODO] check for ammo here
+			A_FireCustomMissile("ArgMicroMissile", 0, 1, 4, 4);
+			A_PlaySound("weapons/heavy/missile", CHAN_AUTO);
+			// [XA] i really wonder if I can make this jump sequence suck less.
+			if(CountInv("ArgHeavyARModCooldown") >= 75) { return state("Mod1Anim6"); }
+			if(CountInv("ArgHeavyARModCooldown") >= 60) { return state("Mod1Anim5"); }
+			if(CountInv("ArgHeavyARModCooldown") >= 45) { return state("Mod1Anim4"); }
+			if(CountInv("ArgHeavyARModCooldown") >= 30) { return state("Mod1Anim3"); }
+			if(CountInv("ArgHeavyARModCooldown") >= 15) { return state("Mod1Anim2"); }
+			return state("");
+		}
+	Mod1Anim1:
+		HA1N A 1 Bright
+		HA1N B 1 Bright A_WeaponOffset(3.0 + frandom(-0.25, 0.25), 34.0 + frandom(-0.25, 0.25))
+		HA1N C 1        A_WeaponOffset(2.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
+		HA1N C 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		HA1N C 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		Goto Mod1AnimEnd
+	Mod1Anim2:
+		HA1N D 1 Bright
+		HA1N E 1 Bright A_WeaponOffset(3.0 + frandom(-0.25, 0.25), 34.0 + frandom(-0.25, 0.25))
+		HA1N F 1        A_WeaponOffset(2.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
+		HA1N F 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		HA1N F 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		Goto Mod1AnimEnd
+	Mod1Anim3:
+		HA1N G 1 Bright
+		HA1N H 1 Bright A_WeaponOffset(3.0 + frandom(-0.25, 0.25), 34.0 + frandom(-0.25, 0.25))
+		HA1N I 1        A_WeaponOffset(2.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
+		HA1N I 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		HA1N I 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		Goto Mod1AnimEnd
+	Mod1Anim4:
+		HA1N J 1 Bright
+		HA1N K 1 Bright A_WeaponOffset(3.0 + frandom(-0.25, 0.25), 34.0 + frandom(-0.25, 0.25))
+		HA1N L 1        A_WeaponOffset(2.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
+		HA1N L 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		HA1N L 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		Goto Mod1AnimEnd
+	Mod1Anim5:
+		HA1N M 1 Bright
+		HA1N N 1 Bright A_WeaponOffset(3.0 + frandom(-0.25, 0.25), 34.0 + frandom(-0.25, 0.25))
+		HA1N O 1        A_WeaponOffset(2.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
+		HA1N O 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		HA1N O 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		Goto Mod1AnimEnd
+	Mod1Anim6:
+		HA1N P 1 Bright
+		HA1N Q 1 Bright A_WeaponOffset(3.0 + frandom(-0.25, 0.25), 34.0 + frandom(-0.25, 0.25))
+		HA1M F 1        A_WeaponOffset(2.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
+		HA1M F 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+		HA1M F 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25))
+	Mod1AnimEnd:
+		"####" "#" 0 {
+			A_GiveInventory("ArgHeavyARModCooldown", 15);
+			if(CountInv(ArgHeavyARModCooldown) <= 75) {
+				return A_Refire;
+			}
+			return;
+		}
+		Goto Mod1Down
+		
+	/* Mod 2: Tactical Scope */
+	
+	Mod2Select:
+		HA2G A 0
+		Goto SelectLoop
+	Mod2Swap:
+		HA0G A 1 A_PlaySound("weapons/heavy/mod2swap", CHAN_AUTO)
+		HA2S ABCD 1
+		HA2S E 2
+		HA2S F 9
+		HA2S G 2
+		HA2S H 11
+		HA2S HIJKLMN 1
+	Mod2Ready:
+		HA2G A 0
+		Goto ReadyLoop
+	}
+}
+ACTOR ArgHeavyARModSelected : ArgModToken {}
+ACTOR ArgHeavyARMod1Enabled : ArgToken    {}
+ACTOR ArgHeavyARMod2Enabled : ArgToken    {}
+ACTOR ArgHeavyARModCooldown : ArgToken    { Inventory.MaxAmount 90 }
+
+ACTOR ArgMicroMissile
+{    
+	Radius 8
+	Height 16
+	Speed 30
+	Damage 2
+	Scale 0.33
+	Projectile
+	DamageType "ArgHeavyARMissile"
+	DeathSound "weapons/heavy/explode"
+	Decal "PlasmaScorchLower"
+	
+	+BLOODSPLATTER
+	+SEEKERMISSILE
+	+EXTREMEDEATH
+
+	States
+	{
+	Spawn:
+		HMIS A 1 Bright // this is some crazy-arse code, but it's how El Zee did it in the ROTT TC, so...
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); A_SeekerMissile( 5, 20, 0, 50, 5); A_ChangeVelocity (5.0, frandom(-2.5, 2.5), frandom(-1.0, 1.0), 1); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); A_SeekerMissile( 5, 20, 0, 50, 5); A_ChangeVelocity (5.0, frandom(-2.5, 2.5), frandom(-2.0, 2.0), 1); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); A_SeekerMissile( 5, 20, 0, 50, 5); A_ChangeVelocity (5.0, frandom(-2.5, 2.5), frandom(-2.5, 2.5), 1); }
+	Flight:
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); A_SeekerMissile( 5, 20, 0, 50, 5); A_ChangeVelocity (5.0, frandom(-2.5, 2.5), frandom(-2.5, 2.5), 1); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); A_SeekerMissile(10, 20, 0, 50, 5); }
+		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
+		Loop
+	Death:
+		REXP A 2 Bright {
+			A_SetScale(0.5);
+			A_SetTranslucent(0.75);
+			A_Explode(50, 64);
+		}
+		REXP B 2 Bright
+		REXP C 2 Bright A_SetTranslucent(0.7)
+		REXP D 2 Bright A_SetTranslucent(0.6)
+		REXP E 2 Bright A_SetTranslucent(0.5)
+		REXP F 2 Bright A_SetTranslucent(0.4)
+		Stop
+	}
+}
+
+ACTOR ArgMicroMissileTrail : ArgTrail
+{
+	RenderStyle Add
+	Alpha 0.5
+	Scale 0.15
+	States
+	{
+	Spawn:
+		RTRL HHACEG 1 Bright
+		Stop
 	}
 }
