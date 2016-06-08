@@ -50,5 +50,21 @@ script "ModSelected" (int mod) {
 	SetResultValue(CheckInventory(StrParam(s:GetWeapon(), s:"ModSelected")) == mod);
 }
 
+/*
+ * Simplified SynthFire: Primary
+ */
+script "SynthFire" (void)
+{
+	SetResultValue(GetPlayerInput(-1, INPUT_BUTTONS) & BT_ATTACK);
+}
+
+/*
+ * Simplified SynthFire: Alternate
+ */
+script "SynthAltFire" (void)
+{
+	SetResultValue(GetPlayerInput(-1, INPUT_BUTTONS) & BT_ALTATTACK);
+}
+
 // [XA] Yurck, hardcodes. Hopefully the GetCVAR non-action-function request goes through...
 script "GetCVAR_alwaysgib" (void) { SetResultValue(GetCvar("arg_alwaysgib")); }

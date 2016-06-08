@@ -69,12 +69,12 @@ ACTOR ArgModWeapon : ArgWeapon
 	/* Fire Mod-Jump */
 	
 	Fire:
-		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 1), "Mod1Fire")
-		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 2), "Mod2Fire")
+//		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 1), "Mod1Fire")
+//		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 2), "Mod2Fire")
 		"####" "#" 0 A_Jump(256, "Mod0Fire")
 	Mod0Fire:
-	Mod1Fire:
-	Mod2Fire:
+//	Mod1Fire:
+//	Mod2Fire:
 		"####" "#" 1
 		Goto Ready
 		
@@ -120,6 +120,30 @@ ACTOR ArgModWeapon : ArgWeapon
 	DontSwap:
 		// placeholder in case it's undefined oh no
 		"####" "#" 1 A_WeaponReady
+		Goto Ready
+		
+	/* Mod Firing. Maximum Dangertime. */
+	
+	AltFire:
+		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 1), "Mod1Up")
+		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 2), "Mod2Up")
+		Goto DontFire
+	AltHold:
+		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 1), "Mod1Hold")
+		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 2), "Mod2Hold")
+		Goto DontFire
+	ModDown:
+		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 1), "Mod1Down")
+		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 2), "Mod2Down")
+		Goto DontFire
+	Mod1Up:
+	Mod2Up:
+	Mod1Hold:
+	Mod2Hold:
+	Mod1Down:
+	Mod2Down:
+	DontFire:
+		"####" "#" 1 A_WeaponReady(WRF_NOFIRE)
 		Goto Ready
 	}
 }
