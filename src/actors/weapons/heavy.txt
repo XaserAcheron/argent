@@ -189,7 +189,7 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 		HSCP A 1 A_ZoomFactor(1.90)
 		HSCP A 1 A_ZoomFactor(1.95)
 		HSCP A 3 A_ZoomFactor(2.00)
-		HSCP A 0 A_Refire
+		HA2G A 0 A_Refire
 		Goto Mod2Down
 	}
 }
