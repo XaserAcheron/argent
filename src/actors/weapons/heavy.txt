@@ -7,11 +7,11 @@
 ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 {
 	Weapon.SelectionOrder 6
-	Weapon.AmmoUse   1
-	Weapon.AmmoUse2  2
-	Weapon.AmmoGive  20
-	Weapon.AmmoType  "Clip"
-	Weapon.AmmoType2 "Clip"
+	Weapon.AmmoUse 1
+	const int Mod1AmmoUse = 3;
+	const int Mod2AmmoUse = 2;
+	Weapon.AmmoGive 20
+	Weapon.AmmoType "Clip"
 	Inventory.PickupMessage "$GOTHEAVY"
 	Tag "$TAG_HEAVY"
 	Obituary "$OB_MPHEAVY"
@@ -71,7 +71,11 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 		HA1G A 0
 		Goto ReadyLoop
 	Mod1Up:
-		HA1M A 1 A_PlaySound("weapons/heavy/mod1up", CHAN_AUTO)
+		HA1M A 1 {
+			if(CountInv("Clip") < Mod1AmmoUse) { return state("Ready"); }
+			A_PlaySound("weapons/heavy/mod1up", CHAN_AUTO);
+			return state(0);
+		}
 		HA1M BCDE 1
 		HA1M G 0
 	Mod1Hold:
@@ -83,9 +87,11 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 		Goto Cooldown
 	Mod1Fire:
 		HA1N A 0 Bright {
-			// [TODO] check for ammo here
-			A_FireCustomMissile("ArgMicroMissile", 0, 1, 4, 4);
+			if(CountInv("Clip") < Mod1AmmoUse) { return state("Mod1Down"); }
+			A_TakeInventory("Clip", Mod1AmmoUse, TIF_NOTAKEINFINITE);
+			A_FireCustomMissile("ArgMicroMissile", 0, 0, 4, 4);
 			A_PlaySound("weapons/heavy/missile", CHAN_AUTO);
+			
 			// [XA] i really wonder if I can make this jump sequence suck less.
 			if(CountInv("ArgHeavyARModCooldown") >= 75) { return state("Mod1Anim6"); }
 			if(CountInv("ArgHeavyARModCooldown") >= 60) { return state("Mod1Anim5"); }
@@ -163,8 +169,10 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 		Goto ReadyLoop
 	Mod2Up:
 		HSCP A 1 {
+			if(CountInv("Clip") < Mod2AmmoUse) { return state("Ready"); }
 			A_PlaySound("weapons/heavy/mod2up", CHAN_AUTO);
 			A_ZoomFactor(2.0);
+			return state(0);
 		}
 		HSCP AAAA 1
 		HSCP A 0
@@ -180,10 +188,13 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 		Goto Ready
 	Mod2Fire:
 		HSCP A 1 {
+			if(CountInv("Clip") < Mod2AmmoUse) { return state("Mod2Down"); }
+			A_TakeInventory("Clip", Mod2AmmoUse, TIF_NOTAKEINFINITE);
 			A_GunFlash;
 			A_FireBullets(0, 0, 1, 14, "ArgBulletPuff");
 			A_PlaySound("weapons/heavy/altfire", CHAN_AUTO);
 			A_ZoomFactor(1.80);
+			return state(0);
 		}
 		HSCP A 1 A_ZoomFactor(1.85)
 		HSCP A 1 A_ZoomFactor(1.90)
