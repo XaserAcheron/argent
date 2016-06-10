@@ -12,9 +12,9 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 	const int Mod2AmmoUse = 2;
 	Weapon.AmmoGive 20
 	Weapon.AmmoType "Clip"
-	Inventory.PickupMessage "$GOTHEAVY"
-	Tag "$TAG_HEAVY"
-	Obituary "$OB_MPHEAVY"
+	Inventory.PickupMessage "$ARG_GOT_HEAVY"
+	Tag "$ARG_TAG_HEAVY"
+	Obituary "$ARG_OB_HEAVY"
 	DamageType "ArgHeavyAR"
 
 	States

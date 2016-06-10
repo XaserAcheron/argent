@@ -10,8 +10,8 @@ ACTOR ArgRocketLauncher : ArgWeapon replaces RocketLauncher
 	Weapon.AmmoUse 1
 	Weapon.AmmoGive 2
 	Weapon.AmmoType "RocketAmmo"
-	Inventory.PickupMessage "$GOTROCKET"
-	Tag "$TAG_ROCKET"
+	Inventory.PickupMessage "$ARG_GOT_ROCKET"
+	Tag "$ARG_TAG_ROCKET"
 	
 	States
 	{
@@ -75,6 +75,7 @@ ACTOR ArgRocket : FastProjectile
 	MissileHeight 13
 	Decal "Scorch"
 	DamageType "ArgRocketLauncher"
+	Obituary "$ARG_OB_ROCKET"
 	
 	+EXTREMEDEATH
 	

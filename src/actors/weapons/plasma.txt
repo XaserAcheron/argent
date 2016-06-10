@@ -10,8 +10,8 @@ ACTOR ArgPlasmaRifle : ArgWeapon replaces PlasmaRifle
 	Weapon.AmmoUse 1
 	Weapon.AmmoGive 40
 	Weapon.AmmoType "Cell"
-	Inventory.PickupMessage "$GOTPLASMA"
-	Tag "$TAG_PLASMA"
+	Inventory.PickupMessage "$ARG_GOT_PLASMA"
+	Tag "$ARG_TAG_PLASMA"
 	
 	States
 	{
@@ -55,6 +55,7 @@ ACTOR ArgPlasma : PlasmaBall
 	DeathSound "weapons/plasma/explode"
 	Decal "PlasmaScorchLower"
 	DamageType "ArgPlasma"
+	Obituary "$ARG_OB_PLASMA"
 	States
 	{
 	Spawn:

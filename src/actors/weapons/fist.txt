@@ -8,9 +8,9 @@ ACTOR ArgFist : ArgWeapon replaces Fist
 {
 	Weapon.UpSound ""
 	Weapon.SelectionOrder 11
-	Inventory.PickupMessage "$GOTFIST"
-	Obituary "$OB_MPFIST"
-	Tag "$TAG_FIST"
+	Inventory.PickupMessage "$ARG_GOT_FIST"
+	Obituary "$ARG_OB_FIST"
+	Tag "$ARG_TAG_FIST"
 	DamageType "ArgFist"
 	
 	+WEAPON.WIMPY_WEAPON

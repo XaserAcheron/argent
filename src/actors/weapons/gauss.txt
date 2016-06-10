@@ -11,8 +11,9 @@ ACTOR ArgGaussCannon : ArgWeapon
 	Weapon.AmmoUse 20
 	Weapon.AmmoGive 40
 	Weapon.AmmoType "Cell"
-	Inventory.PickupMessage "$GOTGAUSS"
-	Tag "$TAG_GAUSS"
+	Inventory.PickupMessage "$ARG_GOT_GAUSS"
+	Tag "$ARG_TAG_GAUSS"
+	Obituary "$ARG_OB_GAUSS"
 	Decal "Scorch" // need to put this on the weapon since it doesn't work on rail puffs; dammit Xaser D:
 	
 	States

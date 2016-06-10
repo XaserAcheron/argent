@@ -10,8 +10,9 @@ ACTOR ArgShotgun : ArgWeapon replaces Shotgun
 	Weapon.AmmoUse 1
 	Weapon.AmmoGive 8
 	Weapon.AmmoType "Shell"
-	Inventory.PickupMessage "$GOTSHOTGUN"
-	Tag "$TAG_SHOTGUN"
+	Inventory.PickupMessage "$ARG_GOT_SHOTGUN"
+	Tag "$ARG_TAG_SHOTGUN"
+	Obituary "$ARG_OB_SHOTGUN"
 	DamageType "ArgShotgun"
 
 	States

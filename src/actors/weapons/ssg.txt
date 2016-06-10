@@ -10,8 +10,9 @@ ACTOR ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 	Weapon.AmmoUse 2
 	Weapon.AmmoGive 8
 	Weapon.AmmoType "Shell"
-	Inventory.PickupMessage "$GOTSSG"
-	Tag "$TAG_SSG"
+	Inventory.PickupMessage "$ARG_GOT_SSG"
+	Tag "$ARG_TAG_SSG"
+	Obituary "$ARG_OB_SSG"
 	DamageType "ArgSuperShotgun"
 
 	States

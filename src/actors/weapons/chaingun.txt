@@ -10,8 +10,9 @@ ACTOR ArgChaingun : ArgWeapon
 	Weapon.AmmoUse 1
 	Weapon.AmmoGive 20
 	Weapon.AmmoType "Clip"
-	Inventory.PickupMessage "$GOTCHAINGUN"
-	Tag "$TAG_CHAINGUN"
+	Inventory.PickupMessage "$ARG_GOT_CHAINGUN"
+	Tag "$ARG_TAG_CHAINGUN"
+	Obituary "$ARG_OB_CHAINGUN"
 	DamageType "ArgChaingun"
 
 	States

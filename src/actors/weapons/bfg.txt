@@ -11,8 +11,8 @@ ACTOR ArgBFG9000 : ArgWeapon replaces BFG9000
 	Weapon.AmmoUse 40
 	Weapon.AmmoGive 40
 	Weapon.AmmoType "Cell" // [TODO] give this its own ammotype
-	Inventory.PickupMessage "$GOTBFG"
-	Tag "$TAG_BFG"
+	Inventory.PickupMessage "$ARG_GOT_BFG"
+	Tag "$ARG_TAG_BFG"
 	
 	States
 	{
@@ -85,6 +85,7 @@ ACTOR ArgThatDamnDragonAteMyBalls : BFGBall
 	DeathSound "weapons/bfg/explode"
 	Decal "BFGLightning"
 	DamageType "ArgBFG9000"
+	Obituary "$ARG_OB_BFG"
 	States
 	{
 	Spawn:

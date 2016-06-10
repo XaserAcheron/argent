@@ -10,9 +10,9 @@ ACTOR ArgChainsaw : ArgWeapon replaces Chainsaw
 	Weapon.UpSound "weapons/sawup"
 	Weapon.ReadySound "weapons/sawidle"
 	Weapon.SelectionOrder 10
-	Inventory.PickupMessage "$GOTCHAINSAW"
-	Obituary "$OB_MPCHAINSAW"
-	Tag "$TAG_CHAINSAW"
+	Inventory.PickupMessage "$ARG_GOT_CHAINSAW"
+	Obituary "$ARG_OB_CHAINSAW"
+	Tag "$ARG_TAG_CHAINSAW"
 	DamageType "ArgChainsaw"
 	
 	+WEAPON.MELEEWEAPON

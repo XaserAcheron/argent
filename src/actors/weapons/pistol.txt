@@ -7,8 +7,9 @@
 ACTOR ArgPistol : ArgWeapon replaces Pistol
 {
 	Weapon.SelectionOrder 8
-	Inventory.PickupMessage "$GOTPISTOL"
-	Tag "$TAG_PISTOL"
+	Inventory.PickupMessage "$ARG_GOT_PISTOL"
+	Tag "$ARG_TAG_PISTOL"
+	Obituary "$ARG_OB_PISTOL"
 	DamageType "ArgPistol"
 	
 	+WEAPON.NOAUTOFIRE
