@@ -264,7 +264,7 @@ ACTOR ArgMancubus : Fatso replaces Fatso
 		FATG E 3
 		FATG F 3 A_NoBlocking
 		FATG GHI 3
-		FATG J -1
+		FATG J -1 A_BossDeath
 		Stop
 	}
 }
@@ -285,7 +285,7 @@ ACTOR ArgArachnotron : Arachnotron replaces Arachnotron
 		BSPI L 4
 		BSPI M 4 A_NoBlocking
 		BSPI NO 4
-		BSPI P -1
+		BSPI P -1 A_BossDeath
 		Stop
 	}
 }
