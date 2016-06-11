@@ -34,7 +34,7 @@ ACTOR ArgPistol : ArgWeapon replaces Pistol
 			A_GunFlash;
 			A_FireBullets(1.5, 1, 1, 5, "ArgPistolPuff");
 			A_PlaySound("weapons/pistol/fire", CHAN_AUTO);
-			A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH);
+			A_WeaponReady(WRF_NOFIRE);
 		}
 		PISF B 1   A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH) 
 		PISF C 1 { A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH); A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25)); }
