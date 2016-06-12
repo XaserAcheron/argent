@@ -37,3 +37,8 @@ ARG_OB_ROCKET    = "%o was splashed by %k's rocket.";
 ARG_OB_PLASMA    = "%o was cooked by %k's plasma rifle.";
 ARG_OB_GAUSS     = "%o was structurally inverted by %k's gauss cannon";
 ARG_OB_BFG       = "%o was bye-bye'd by %k's BFG.";
+
+ARG_GOT_BERSERK = "Berserk! Who's a man and a half?";
+ARG_GOT_HASTE   = "Haste!";
+ARG_GOT_QUAD    = "Quad Damage!";
+ARG_GOT_REGEN   = "Regeneration!";

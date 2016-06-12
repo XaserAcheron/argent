@@ -133,3 +133,8 @@ effects/impact5            "sounds/effects/impact5.flac"
 effects/impact6            "sounds/effects/impact6.flac"
 $random effects/impact { effects/impact1 effects/impact2 effects/impact3 effects/impact4 effects/impact5 effects/impact6 }
 $volume effects/impact 0.5
+
+items/pickup/weapon        dswpnup
+items/pickup/powerup       dsgetpow
+items/pickup/ammo          dsitemup
+items/pickup/key           dsitemup 

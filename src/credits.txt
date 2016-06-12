@@ -5,6 +5,7 @@ Code and Shenanigans:
 
 Sprites:
 	- Neccronixis (badass nu-DOOM weapon sprite conversions)
+	- PillowBlaster (powerups n' pickups)
 	- Xaser (gibs, misc edits)
 	- Rogue Entertainment (blood spray)
 	- ??? (puff sprites)
