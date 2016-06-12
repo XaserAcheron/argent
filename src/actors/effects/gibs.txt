@@ -20,6 +20,7 @@ ACTOR ArgGibSmall
 	-NOBLOCKMAP
 	+THRUACTORS
 	+FORCEXYBILLBOARD
+	DeathSound "effects/splash"
 	States
 	{
 	Spawn:
@@ -75,7 +76,7 @@ ACTOR ArgGibSmear : ArgBloodTrail
 
 ACTOR ArgGibLarge : ArgGibSmall
 {
-	DeathSound "effects/gibs"
+	DeathSound "effects/gore"
 	States
 	{
 	Spawn:

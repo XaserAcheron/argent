@@ -134,6 +134,47 @@ effects/impact6            "sounds/effects/impact6.flac"
 $random effects/impact { effects/impact1 effects/impact2 effects/impact3 effects/impact4 effects/impact5 effects/impact6 }
 $volume effects/impact 0.5
 
+effects/blood1             "sounds/effects/blood1.flac"
+effects/blood2             "sounds/effects/blood2.flac"
+effects/blood3             "sounds/effects/blood3.flac"
+effects/blood4             "sounds/effects/blood4.flac"
+$random effects/blood { effects/blood1 effects/blood2 effects/blood3 effects/blood4 }
+$volume effects/blood 0.5
+
+effects/blood1             "sounds/effects/blood1.flac"
+effects/blood2             "sounds/effects/blood2.flac"
+effects/blood3             "sounds/effects/blood3.flac"
+effects/blood4             "sounds/effects/blood4.flac"
+$random effects/blood { effects/blood1 effects/blood2 effects/blood3 effects/blood4 }
+$volume effects/blood 0.5
+
+effects/gore1              "sounds/effects/gore1.flac"
+effects/gore2              "sounds/effects/gore2.flac"
+effects/gore3              "sounds/effects/gore3.flac"
+effects/gore4              "sounds/effects/gore4.flac"
+effects/gore5              "sounds/effects/gore5.flac"
+effects/gore6              "sounds/effects/gore6.flac"
+effects/gore7              "sounds/effects/gore7.flac"
+$random effects/gore { effects/gore1 effects/gore2 effects/gore3 effects/gore4 effects/gore5 effects/gore6 effects/gore7 }
+$volume effects/gore 0.5
+
+effects/gibs1              "sounds/effects/gibs1.flac"
+effects/gibs2              "sounds/effects/gibs2.flac"
+effects/gibs3              "sounds/effects/gibs3.flac"
+effects/gibs4              "sounds/effects/gibs4.flac"
+$random effects/gibs { effects/gibs1 effects/gibs2 effects/gibs3 effects/gibs4 }
+$volume effects/gibs 0.33
+
+effects/splat1             "sounds/effects/splat1.flac"
+effects/splat2             "sounds/effects/splat2.flac"
+$random effects/splat { effects/splat1 effects/splat2 }
+
+effects/splash1            "sounds/effects/splash1.flac"
+effects/splash2            "sounds/effects/splash2.flac"
+effects/splash3            "sounds/effects/splash3.flac"
+$random effects/splash { effects/splash1 effects/splash2 effects/splash3 }
+$volume effects/splash 0.25
+
 items/pickup/weapon        dswpnup
 items/pickup/powerup       dsgetpow
 items/pickup/ammo          dsitemup

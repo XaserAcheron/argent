@@ -15,7 +15,7 @@ ACTOR ArgZombieman : Zombieman replaces Zombieman
 		POSS M 3
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		POSS N 3 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -37,7 +37,7 @@ ACTOR ArgShotgunGuy : ShotgunGuy replaces ShotgunGuy
 		SPOS M 3
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		SPOS N 3 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -59,7 +59,7 @@ ACTOR ArgChaingunGuy : ChaingunGuy replaces ChaingunGuy
 		CPOS O 3 
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		CPOS P 3 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -81,7 +81,7 @@ ACTOR ArgImp : DoomImp replaces DoomImp
 		TROO N 3
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		TROO O 3 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -104,7 +104,7 @@ ACTOR ArgDemon : Demon replaces Demon
 		SARG O 3
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#######" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		SARG P 3 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "###" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -138,7 +138,7 @@ ACTOR ArgSoul : LostSoul replaces LostSoul
 		SKUL F 3 BRIGHT
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),16+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		SKUL G 3 BRIGHT A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),16+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -163,7 +163,7 @@ ACTOR ArgCaco : Cacodemon replaces Cacodemon
 		HEAD M 3 A_NoGravity
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, SXF_USEBLOODCOLOR,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		HEAD N 3 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-4,4),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, SXF_USEBLOODCOLOR,0)
@@ -188,7 +188,7 @@ ACTOR ArgKnight : HellKnight replaces HellKnight
 		BOS2 P 3
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, SXF_USEBLOODCOLOR,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		BOS2 Q 3 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, SXF_USEBLOODCOLOR,0)
@@ -211,7 +211,7 @@ ACTOR ArgBaron : BaronOfHell replaces BaronOfHell
 		BOSS P 3
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, SXF_USEBLOODCOLOR,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		BOSS Q 3 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, SXF_USEBLOODCOLOR,0)
@@ -233,7 +233,7 @@ ACTOR ArgRevenant : Revenant replaces Revenant
 		SKEL R 3
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		SKEL S 3 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -257,7 +257,7 @@ ACTOR ArgMancubus : Fatso replaces Fatso
 		FATG B 3 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		FATG C 3
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -278,7 +278,7 @@ ACTOR ArgArachnotron : Arachnotron replaces Arachnotron
 		BSPI J 20 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		BSPI K 4
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -301,7 +301,7 @@ ACTOR ArgElemental : PainElemental replaces PainElemental
 		PAIN JK 8 BRIGHT
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		PAIN L 8 BRIGHT A_PainDie
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-4,4),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -322,7 +322,7 @@ ACTOR ArgVile : Archvile replaces Archvile
 		VILG A 3
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		VILG B 3 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -344,14 +344,14 @@ ACTOR ArgCyberDAMN : Cyberdemon replaces Cyberdemon
 		CYBR H 5
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "################" 0 A_SpawnItemEx("ArgGibSmall",frandom(-20,20),frandom(-20,20),64+frandom(-8,8),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		CYBR I 5 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-16,16),frandom(-16,16),64+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
 		CYBR JK 5
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "################" 0 A_SpawnItemEx("ArgGibSmall",frandom(-20,20),frandom(-20,20),64+frandom(-8,8),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		CYBR L 5
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-16,16),frandom(-16,16),64+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -375,14 +375,14 @@ ACTOR ArgSPIDARS_AAAH_KILL_IT_WITH_FIRE : SpiderMastermind replaces SpiderMaster
 		SPID LM 5
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "################" 0 A_SpawnItemEx("ArgGibSmall",frandom(-48,48),frandom(-48,48),32+frandom(-8,8),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		SPID N 5
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-32,32),frandom(-32,32),32+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
 		SPID O 5
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "################" 0 A_SpawnItemEx("ArgGibSmall",frandom(-48,48),frandom(-48,48),32+frandom(-8,8),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		SPID P 5
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-32,32),frandom(-32,32),32+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
@@ -404,7 +404,7 @@ ACTOR ArgNazi : WolfensteinSS replaces WolfensteinSS
 		SSWV N 3 
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 A_PlaySound("enemies/gibbitude", CHAN_AUTO)
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
 		SSWV O 3 A_Scream
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
