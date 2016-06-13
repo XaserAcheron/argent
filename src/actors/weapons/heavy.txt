@@ -220,12 +220,15 @@ ACTOR ArgMicroMissile
 	Scale 0.33
 	Projectile
 	DamageType "ArgHeavyARMissile"
-	DeathSound "weapons/heavy/explode"
 	Decal "PlasmaScorchLower"
 	
 	+BLOODSPLATTER
 	+SEEKERMISSILE
 	+EXTREMEDEATH
+	
+	var int user_hitx;
+	var int user_hity;
+	var int user_hitz;
 
 	States
 	{
@@ -249,11 +252,28 @@ ACTOR ArgMicroMissile
 		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); A_SeekerMissile(10, 20, 0, 50, 5); }
 		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
 		Loop
+	XDeath:
+		HMIS A 0 Bright A_SeekerMissile(90, 90, SMF_LOOK, 256, 1)
+		Goto Stick
 	Death:
+		HMIS A 0 Bright {
+			A_ClearTarget;
+			A_SpawnItemEx("ArgBulletPuff");
+		}
+	Stick:
+		HMIS A 0 Bright {
+			A_SetUserVar("user_hitx", CallACS("GetTracerX"));
+			A_SetUserVar("user_hity", CallACS("GetTracerY"));
+			A_SetUserVar("user_hitz", CallACS("GetTracerZ"));
+		}
+		HMIS AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 1 Bright A_Warp(AAPTR_TRACER, user_hitx, user_hity, user_hitz, 0, WARPF_ABSOLUTEOFFSET|WARPF_USECALLERANGLE|WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE)
+	Explode:
 		REXP A 2 Bright {
+			A_Stop;
 			A_SetScale(0.5);
 			A_SetTranslucent(0.75);
 			A_Explode(50, 64);
+			A_PlaySound("weapons/heavy/explode", CHAN_VOICE);
 		}
 		REXP B 2 Bright
 		REXP C 2 Bright A_SetTranslucent(0.7)

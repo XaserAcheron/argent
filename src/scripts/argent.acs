@@ -89,5 +89,27 @@ script "SynthAltFire" (void)
 	SetResultValue(GetPlayerInput(-1, INPUT_BUTTONS) & BT_ALTATTACK);
 }
 
+/*
+ * GetTracer functions for sticky missiles
+ */
+script "GetTracerX" (void) {
+	int projX = GetActorX(0);
+	SetActivator(0, AAPTR_TRACER);
+	int targX = GetActorX(0);
+	SetResultValue(((projX - targX) * 3 / 4) >> 16);
+}
+script "GetTracerY" (void) {
+	int projY = GetActorY(0);
+	SetActivator(0, AAPTR_TRACER);
+	int targY = GetActorY(0);
+	SetResultValue(((projY - targY) * 3 / 4) >> 16);
+}
+script "GetTracerZ" (void) {
+	int projZ = GetActorZ(0);
+	SetActivator(0, AAPTR_TRACER);
+	int targZ = GetActorZ(0);
+	SetResultValue(((projZ - targZ) * 3 / 4) >> 16);
+}
+
 // [XA] Yurck, hardcodes. Hopefully the GetCVAR non-action-function request goes through...
 script "GetCVAR_alwaysgib" (void) { SetResultValue(GetCvar("arg_alwaysgib")); }
