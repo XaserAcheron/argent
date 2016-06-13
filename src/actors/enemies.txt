@@ -21,6 +21,7 @@ ACTOR ArgZombieman : Zombieman replaces Zombieman
 		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
 		POSS O 3 A_NoBlocking
 		POSS PQRST 3
+	Death.Massacre:
 		POSS U -1
 		Stop
 	}
@@ -43,6 +44,7 @@ ACTOR ArgShotgunGuy : ShotgunGuy replaces ShotgunGuy
 		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
 		SPOS O 3 A_NoBlocking
 		SPOS PQRST 3
+	Death.Massacre:
 		SPOS U -1
 		Stop
 	}
@@ -65,6 +67,7 @@ ACTOR ArgChaingunGuy : ChaingunGuy replaces ChaingunGuy
 		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
 		CPOS Q 3 A_NoBlocking
 		CPOS RS 3
+	Death.Massacre:
 		CPOS T -1
 		Stop
 	}
@@ -88,6 +91,7 @@ ACTOR ArgImp : DoomImp replaces DoomImp
 		TROO P 3
 		TROO Q 3 A_NoBlocking
 		TROO RST 3
+	Death.Massacre:
 		TROO U -1
 		Stop
 	}
@@ -110,6 +114,7 @@ ACTOR ArgDemon : Demon replaces Demon
 		"####" "###" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
 		"####" "#" 3 A_NoBlocking
 		SARG QRSTUV 3
+	Death.Massacre:
 		SARG W -1
 		Stop
 	}
@@ -146,6 +151,7 @@ ACTOR ArgSoul : LostSoul replaces LostSoul
 		SKUL H 3 BRIGHT
 		SKUL I 3 BRIGHT A_NoBlocking
 		SKUL J 3
+	Death.Massacre:
 		SKUL K 3
 		Stop
 	}
@@ -171,7 +177,9 @@ ACTOR ArgCaco : Cacodemon replaces Cacodemon
 		HEAD OP 3
 		HEAD Q 2 A_Gravity
 		HEAD RSTUVW 2
-		HEAD X -1 A_PlaySound("misc/gibslop")
+		HEAD X 0 A_PlaySound("effects/gore")
+	Death.Massacre:
+		HEAD X -1
 		Stop
 	}
 }
@@ -194,6 +202,7 @@ ACTOR ArgKnight : HellKnight replaces HellKnight
 		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, SXF_USEBLOODCOLOR,0)
 		"####" "#" 3 A_NoBlocking
 		BOS2 RSTU 3
+	Death.Massacre:
 		BOS2 V -1
 		Stop
 	}
@@ -217,6 +226,7 @@ ACTOR ArgBaron : BaronOfHell replaces BaronOfHell
 		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, SXF_USEBLOODCOLOR,0)
 		"####" "#" 3 A_NoBlocking
 		BOSS RSTU 3
+	Death.Massacre:
 		BOSS V -1 A_BossDeath
 		Stop
 	}
@@ -240,6 +250,7 @@ ACTOR ArgRevenant : Revenant replaces Revenant
 		SKEL T 3
 		SKEL U 3 A_NoBlocking
 		SKEL VWX 3
+	Death.Massacre:
 		SKEL Y -1
 		Stop
 	}
@@ -264,6 +275,7 @@ ACTOR ArgMancubus : Fatso replaces Fatso
 		FATG E 3
 		FATG F 3 A_NoBlocking
 		FATG GHI 3
+	Death.Massacre:
 		FATG J -1 A_BossDeath
 		Stop
 	}
@@ -285,6 +297,7 @@ ACTOR ArgArachnotron : Arachnotron replaces Arachnotron
 		BSPI L 4
 		BSPI M 4 A_NoBlocking
 		BSPI NO 4
+	Death.Massacre:
 		BSPI P -1 A_BossDeath
 		Stop
 	}
@@ -306,6 +319,7 @@ ACTOR ArgElemental : PainElemental replaces PainElemental
 		"####" "#" 0 A_Jump(256,1,2,3)
 		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-4,4),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
 		"####" "#" 3 A_NoBlocking
+	Death.Massacre:
 		PAIN M 8 BRIGHT
 		Stop
 	}
@@ -329,6 +343,7 @@ ACTOR ArgVile : Archvile replaces Archvile
 		VILG C 3
 		VILG D 3 A_NoBlocking
 		VILG EFGH 3
+	Death.Massacre:
 		VILG I -1
 		Stop
 	}
@@ -358,6 +373,7 @@ ACTOR ArgCyberDAMN : Cyberdemon replaces Cyberdemon
 		CYBR M 5 A_NoBlocking
 		CYBR NO 5
 		CYBR P 30
+	Death.Massacre:
 		CYBR P -1 A_BossDeath
 		Stop
 	}
@@ -388,6 +404,7 @@ ACTOR ArgSPIDARS_AAAH_KILL_IT_WITH_FIRE : SpiderMastermind replaces SpiderMaster
 		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-32,32),frandom(-32,32),32+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
 		SPID QR 5
 		SPID S 30
+	Death.Massacre:
 		SPID S -1 A_BossDeath    
 		Stop
 	}
@@ -410,6 +427,7 @@ ACTOR ArgNazi : WolfensteinSS replaces WolfensteinSS
 		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
 		SSWV P 3 A_NoBlocking
 		SSWV QRSTU 3
+	Death.Massacre:
 		SSWV V -1
 		Stop
 	}
