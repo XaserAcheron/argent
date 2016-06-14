@@ -33,7 +33,7 @@ ACTOR ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 		SSGF A 2 Bright {
 			A_GunFlash;
 			A_FireBullets(11.2, 7.1, 20, 5, "ArgBulletPuff");
-			A_PlaySound("weapons/ssg/fire", CHAN_AUTO);
+			A_PlaySound("weapons/ssg/fire", CHAN_5);
 		}
 		SSGF BCDEFFEGHIJKLMNOPQRSTUVXYZ 1
 		SSGG BCDEFGHIJKLMNOPQRSTUVWX 1

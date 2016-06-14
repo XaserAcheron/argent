@@ -41,7 +41,13 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 		"####" B 1 Bright {
 			A_GunFlash;
 			A_FireBullets(2.0, 1.0, -1, 7, "ArgBulletPuff");
-			A_PlaySound("weapons/heavy/fire", CHAN_AUTO);
+			if(CountInv("ArgHeavyARShootyToken") == 0) {
+				A_GiveInventory("ArgHeavyARShootyToken");
+				A_PlaySound("weapons/heavy/fire", CHAN_5);
+			} else {
+				A_TakeInventory("ArgHeavyARShootyToken");
+				A_PlaySound("weapons/heavy/fire", CHAN_6);
+			}
 		}
 		"####" C 1 Bright A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25))
 		"####" D 1 Bright A_WeaponOffset(3.0 + frandom(-0.25, 0.25), 34.0 + frandom(-0.25, 0.25))
@@ -90,7 +96,14 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 			if(CountInv("Clip") < Mod1AmmoUse) { return state("Mod1Down"); }
 			A_TakeInventory("Clip", Mod1AmmoUse, TIF_NOTAKEINFINITE);
 			A_FireCustomMissile("ArgMicroMissile", 0, 0, 4, 4);
-			A_PlaySound("weapons/heavy/missile", CHAN_AUTO);
+			
+			if(CountInv("ArgHeavyARShootyToken") == 0) {
+				A_GiveInventory("ArgHeavyARShootyToken");
+				A_PlaySound("weapons/heavy/missile", CHAN_5);
+			} else {
+				A_TakeInventory("ArgHeavyARShootyToken");
+				A_PlaySound("weapons/heavy/missile", CHAN_6);
+			}
 			
 			// [XA] i really wonder if I can make this jump sequence suck less.
 			if(CountInv("ArgHeavyARModCooldown") >= 75) { return state("Mod1Anim6"); }
@@ -192,10 +205,18 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 		HSCP A 1 {
 			if(CountInv("Clip") < Mod2AmmoUse) { return state("Mod2Down"); }
 			A_TakeInventory("Clip", Mod2AmmoUse, TIF_NOTAKEINFINITE);
-			A_GunFlash;
 			A_FireBullets(0, 0, 1, 14, "ArgBulletPuff");
-			A_PlaySound("weapons/heavy/altfire", CHAN_AUTO);
 			A_ZoomFactor(1.80);
+			A_GunFlash;
+			
+			if(CountInv("ArgHeavyARShootyToken") == 0) {
+				A_GiveInventory("ArgHeavyARShootyToken");
+				A_PlaySound("weapons/heavy/altfire", CHAN_5);
+			} else {
+				A_TakeInventory("ArgHeavyARShootyToken");
+				A_PlaySound("weapons/heavy/altfire", CHAN_6);
+			}
+			
 			return state(0);
 		}
 		HSCP A 1 A_ZoomFactor(1.85)
@@ -210,6 +231,7 @@ ACTOR ArgHeavyARModSelected : ArgModToken {}
 ACTOR ArgHeavyARMod1Enabled : ArgToken    {}
 ACTOR ArgHeavyARMod2Enabled : ArgToken    {}
 ACTOR ArgHeavyARModCooldown : ArgToken    { Inventory.MaxAmount 90 }
+ACTOR ArgHeavyARShootyToken : ArgToken    {} // extra token for sound control
 
 ACTOR ArgMicroMissile
 {    
