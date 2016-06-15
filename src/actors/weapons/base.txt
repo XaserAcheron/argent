@@ -99,7 +99,10 @@ ACTOR ArgModWeapon : ArgWeapon
 		"####" "#" 1 A_WeaponOffset(0.0,116.0)
 		"####" "#" 1 A_WeaponOffset(0.0,128.0)
 		// jump to the unmodded state -- generally a handless version of Ready
-		"####" "#" 0 A_Jump(256, "Mod0Swap")
+		"####" "#" 0 {
+			ACS_NamedExecuteAlways("ClearModCooldown");
+			return state("Mod0Swap");
+		}
 	Mod0Swap:
 	ModSwapUp:
 		// raise the weapon

@@ -74,6 +74,15 @@ script "CheckModCooldown" (void) {
 }
 
 /*
+ * Clears a mod's cooldown entirely.
+ */
+script "ClearModCooldown" (void) {
+	str weapon = GetWeapon();
+	str modCooldownToken = StrParam(s:weapon, s:"ModCooldown");
+	TakeInventory(modCooldownToken, 999);
+}
+
+/*
  * Simplified SynthFire: Primary
  */
 script "SynthFire" (void)
