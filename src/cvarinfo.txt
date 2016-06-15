@@ -1,1 +1,6 @@
-server bool arg_alwaysgib = false;
+server bool arg_alwaysgib    = false;
+server bool arg_classicbfg   = false;
+server bool arg_powerupzerk  = true;
+server bool arg_powerupquad  = true;
+server bool arg_poweruphaste = true;
+server bool arg_powerupregen = false;

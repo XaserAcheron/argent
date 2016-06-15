@@ -18,13 +18,55 @@ ListMenu "MainMenu"
 	TextItem "Quit Game"  , "q", "QuitMenu"
 }
 
+OptionValue "DisabledEnabled"
+{
+	0, "Disabled"
+	1, "Enabled"
+}
+
+OptionValue "EnabledDisabled"
+{
+	0, "Enabled"
+	1, "Disabled"
+}
+
+OptionValue "ModernClassic"
+{
+	0, "Modern"
+	1, "Classic"
+}
+
+OptionValue "ClassicModern"
+{
+	0, "Classic"
+	1, "Modern"
+}
+
 OptionMenu "ArgentMenu"
 {
 	Title       "ARGENT Options"
 	StaticText 	""
-	StaticText 	"ARGENT Settings"              , 1
-	Option      "Monsters Always Gib"          , "arg_alwaysgib", "YesNo"
+	StaticText 	"Game Settings"                , 1
+//	Option      "BFG Style"                    , "arg_classicbfg"    , "ModernClassic"
+//	Option      "Berserk Style"                , "arg_powerupzerk"   , "ClassicModern"
+	Option      "Monsters Always Gib"          , "arg_alwaysgib"     , "DisabledEnabled"
 	StaticText 	""
-	StaticText 	"ARGENT Controls"              , 1
-	Control		"Switch Weapon Mod"            , "+reload"
+	StaticText 	"Powerup Toggles"              , 1
+	Option      "Quad (replaces Invis)"        , "arg_powerupquad"   , "DisabledEnabled"
+	Option      "Haste (replaces LightAmp)"    , "arg_poweruphaste"  , "DisabledEnabled"
+	Option      "Regen (replaces Soulsphere)"  , "arg_powerupregen"  , "DisabledEnabled"
+//	StaticText 	""
+//	StaticText 	"User Preferences"             , 1
+//	Option      "Altfire Style"                , "arg_classicaltfire", "ModernClassic"
+	StaticText 	""
+	StaticText 	"Mod Controls"                 , 1
+	Control		"Fire Weapon"                  , "+attack"
+	Control		"Weapon Mod (Altfire)"         , "+altattack"
+	Control		"Swap Weapon Mod"              , "+reload"
+//	Control		"Use Fists"                    , "arg_selectfist"
+//	Control		"Use Chainsaw"                 , "arg_selectchainsaw"
+//	Control		"Use BFG9000"                  , "arg_selectbfg"
+	Control		"Use Equipment"                , "invuse"
+	Control		"Cycle Equipment Forward"      , "invnext"
+	Control		"Cycle Equipment Backward"     , "invprev"
 }

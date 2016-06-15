@@ -105,3 +105,44 @@ ACTOR ArgRegen : PowerupGiver // [TODO] replace something
 	}
 }
 
+// Classic items w/cvar-controlled spawners
+
+ACTOR ArgBlurSphere : BlurSphere replaces BlurSphere
+{
+	States
+	{
+	Spawn:
+		PINS A 0 NoDelay A_JumpIf(CallACS("GetCVAR_powerupquad"), "AltItem")
+		Goto Super::Spawn
+	AltItem:
+		PINS A 0 A_SpawnItemEx("ArgQuadDamage", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0, tid)
+		Stop
+	}
+}
+
+ACTOR ArgInfrared : Infrared replaces Infrared
+{
+	States
+	{
+	Spawn:
+		PVIS A 0 NoDelay A_JumpIf(CallACS("GetCVAR_poweruphaste"), "AltItem")
+		Goto Super::Spawn
+	AltItem:
+		PVIS A 0 A_SpawnItemEx("ArgHaste", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0, tid)
+		Stop
+	}
+}
+
+ACTOR ArgSoulsphere : Soulsphere replaces Soulsphere
+{
+	States
+	{
+	Spawn:
+		SOUL A 0 NoDelay A_JumpIf(CallACS("GetCVAR_powerupregen"), "AltItem")
+		Goto Super::Spawn
+	AltItem:
+		SOUL A 0 A_SpawnItemEx("ArgRegen", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0, tid)
+		Stop
+	}
+}
+
