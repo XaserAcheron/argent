@@ -6,6 +6,12 @@ weapons/swap4              "sounds/weapons/swap4.flac"
 weapons/swap5              "sounds/weapons/swap5.flac"
 $random weapons/swap { weapons/swap1 weapons/swap2 weapons/swap3 weapons/swap4 weapons/swap5 }
 
+weapons/chainsaw/idle      "sounds/weapons/chainsaw/idle.flac"
+weapons/chainsaw/up        "sounds/weapons/chainsaw/up.flac"
+weapons/chainsaw/loop      "sounds/weapons/chainsaw/loop.flac"
+weapons/chainsaw/down      "sounds/weapons/chainsaw/down.flac"
+weapons/chainsaw/off       "sounds/weapons/chainsaw/off.flac"
+
 weapons/pistol/fire1       "sounds/weapons/pistol/fire1.flac"
 weapons/pistol/fire2       "sounds/weapons/pistol/fire2.flac"
 weapons/pistol/fire3       "sounds/weapons/pistol/fire3.flac"
