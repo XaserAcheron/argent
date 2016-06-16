@@ -120,11 +120,3 @@ script "GetTracerZ" (void) {
 	int targZ = GetActorZ(0);
 	SetResultValue(((projZ - targZ) * 3 / 4) >> 16);
 }
-
-// [XA] Yurck, hardcodes. Hopefully the GetCVAR non-action-function request goes through...
-script "GetCVAR_alwaysgib"    (void) { SetResultValue(GetCvar("arg_alwaysgib"   )); }
-script "GetCVAR_powerupzerk"  (void) { SetResultValue(GetCvar("arg_powerupzerk" )); }
-script "GetCVAR_powerupquad"  (void) { SetResultValue(GetCvar("arg_powerupquad" )); }
-script "GetCVAR_poweruphaste" (void) { SetResultValue(GetCvar("arg_poweruphaste")); }
-script "GetCVAR_powerupregen" (void) { SetResultValue(GetCvar("arg_powerupregen")); }
-
