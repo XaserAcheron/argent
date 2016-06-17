@@ -85,6 +85,7 @@ ACTOR ArgBFG9000 : ArgWeapon replaces BFG9000
 
 ACTOR ArgThatDamnDragonAteMyBalls : BFGBall
 {
+	+SKYEXPLODE
 	+EXTREMEDEATH
 	Scale 0.66
 	DeathSound "weapons/bfg/explode"
