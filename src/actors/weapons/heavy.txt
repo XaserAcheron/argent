@@ -238,12 +238,13 @@ ACTOR ArgMicroMissile
 	Radius 8
 	Height 16
 	Speed 30
-	Damage 2
+	Damage 0
 	Scale 0.33
 	Projectile
 	DamageType "ArgHeavyARMissile"
 	Decal "PlasmaScorchLower"
 	
+	+CAUSEPAIN
 	+BLOODSPLATTER
 	+SEEKERMISSILE
 	+EXTREMEDEATH
