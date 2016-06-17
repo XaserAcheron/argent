@@ -47,7 +47,7 @@ OptionMenu "ArgentMenu"
 	Title       "ARGENT Options"
 	StaticText 	""
 	StaticText 	"Game Settings"                , 1
-//	Option      "BFG Style"                    , "arg_classicbfg"    , "ModernClassic"
+	Option      "BFG Style"                    , "arg_classicbfg"    , "ModernClassic"
 //	Option      "Berserk Style"                , "arg_powerupzerk"   , "ClassicModern"
 	Option      "Monsters Always Gib"          , "arg_alwaysgib"     , "DisabledEnabled"
 	StaticText 	""
