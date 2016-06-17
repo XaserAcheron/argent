@@ -38,6 +38,8 @@ ACTOR ArgQuadDamage : PowerupGiver // [TODO] replace something
 	Powerup.Duration -45
 	Powerup.Color "AA00FF" 0.25
 
+	+COUNTITEM
+	+INVENTORY.ALWAYSPICKUP
 	+INVENTORY.AUTOACTIVATE
 	+INVENTORY.FANCYPICKUPSOUND
 
@@ -69,6 +71,8 @@ ACTOR ArgHaste : CustomInventory // [TODO] replace something
 	Inventory.UseSound "items/powerups/haste"
 	Inventory.MaxAmount 0
 
+	+COUNTITEM
+	+INVENTORY.ALWAYSPICKUP
 	+INVENTORY.AUTOACTIVATE
 	+INVENTORY.FANCYPICKUPSOUND
 
@@ -92,8 +96,11 @@ ACTOR ArgRegen : PowerupGiver // [TODO] replace something
 	Inventory.MaxAmount 0
 	Powerup.Type Regeneration
 	Powerup.Duration -60
+	Powerup.Strength 2
 	Powerup.Color "0080FF" 0.25
 
+	+COUNTITEM
+	+INVENTORY.ALWAYSPICKUP
 	+INVENTORY.AUTOACTIVATE
 	+INVENTORY.FANCYPICKUPSOUND
 
