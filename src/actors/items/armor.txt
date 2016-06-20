@@ -1,0 +1,68 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Armor
+//
+// --------------------------------------------------------------------------
+
+ACTOR ArgArmorBonus : BasicArmorBonus replaces ArmorBonus
+{
+	Radius 20
+	Height 16
+	Scale 0.66
+	Inventory.PickupSound "misc/s_pkup"
+	Inventory.Pickupmessage "$GOTARMBONUS"
+	Inventory.Icon "BON2B0"
+	Armor.Savepercent 33.33333
+	Armor.Saveamount 1
+	Armor.Maxsaveamount 200
+	+RANDOMIZE
+	+COUNTITEM
+	+INVENTORY.ALWAYSPICKUP
+	States
+	{
+	Spawn:
+		BON2 A 30
+		BON2 A 5 BRIGHT
+		loop
+	}
+}
+
+ACTOR ArgArmorGreen : BasicArmorPickup replaces GreenArmor
+{
+	Radius 20
+	Height 16
+	Scale 0.66
+	+RANDOMIZE
+	Inventory.PickupSound "misc/a_pkup"
+	Inventory.Pickupmessage "$GOTARMOR"
+	Inventory.Icon "BON2B0"
+	Armor.SavePercent 33.33333
+	Armor.SaveAmount 100
+	States
+	{
+	Spawn:
+		ARM1 A 30
+		ARM1 A 5 bright
+		loop
+	}
+}
+
+ACTOR ArgArmorBlue : BasicArmorPickup replaces BlueArmor
+{
+	Radius 20
+	Height 16
+	Scale 0.66
+	+RANDOMIZE
+	Inventory.PickupSound "misc/a_pkup"
+	Inventory.Pickupmessage "$GOTMEGA"
+	Inventory.Icon "BON2C0"
+	Armor.Savepercent 50
+	Armor.Saveamount 200
+	States
+	{
+	Spawn:
+		ARM2 A 30
+		ARM2 A 5 bright
+		loop
+	}
+}

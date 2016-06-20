@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------
 //
-// ARGENT: Items
+// ARGENT: Powerups
 //
 // --------------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ ACTOR ArgRegen : PowerupGiver // [TODO] replace something
 	}
 }
 
-// Classic items w/cvar-controlled spawners
+// Classic powerups w/cvar-controlled spawners
 
 ACTOR ArgBlurSphere : BlurSphere replaces BlurSphere
 {
