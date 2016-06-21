@@ -40,7 +40,7 @@ ACTOR ArgVerserkWow : Berserk replaces Berserk
 
 ACTOR ArgPowerQuadDamage : PowerDamage
 {
-	Inventory.Icon "QUADA0"
+	Inventory.Icon "ICONQUAD"
 	DamageFactor "Normal", 4
 	Powerup.Duration -45
 	Powerup.Color "AA00FF" 0.25
@@ -66,6 +66,7 @@ ACTOR ArgPowerHasteSpeed : PowerSpeed
 {
 	Powerup.Duration -45
 	Powerup.Color "FFCC00" 0.25
+	Inventory.Icon "ICONHSTE"
 	Speed 1.5
 }
 ACTOR ArgPowerHasteFiringSpeed : PowerDoubleFiringSpeed
@@ -98,6 +99,7 @@ ACTOR ArgPowerRegen : PowerRegeneration
 	Powerup.Duration -60
 	Powerup.Strength 2
 	Powerup.Color "0080FF" 0.25
+	Inventory.Icon "ICONREGN"
 }
 ACTOR ArgRegen : ArgPowerup
 {
@@ -110,6 +112,29 @@ ACTOR ArgRegen : ArgPowerup
 	Pickup:
 		TNT1 A 0 A_PlaySound("items/powerups/regen", CHAN_7)
 		TNT1 A 0 A_GiveInventory("ArgPowerRegen")
+		Stop
+	}
+}
+
+// -- Invuln --
+
+ACTOR ArgPowerInvuln : PowerInvulnerable
+{
+	Powerup.Duration -30
+	Powerup.Color InverseMap
+	Inventory.Icon "ICONPINV"
+}
+ACTOR ArgInvuln : ArgPowerup replaces InvulnerabilitySphere
+{
+	Inventory.PickupMessage "$ARG_GOT_INVULN"
+	States
+	{
+	Spawn:
+		PINV ABCD 6 Bright
+		Loop
+	Pickup:
+		TNT1 A 0 A_PlaySound("items/powerups/Invuln", CHAN_7)
+		TNT1 A 0 A_GiveInventory("ArgPowerInvuln")
 		Stop
 	}
 }

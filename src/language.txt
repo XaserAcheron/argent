@@ -43,3 +43,4 @@ ARG_GOT_BERSERK = "Berserk! Who's a man and a half?";
 ARG_GOT_HASTE   = "Haste!";
 ARG_GOT_QUAD    = "Quad Damage!";
 ARG_GOT_REGEN   = "Regeneration!";
+ARG_GOT_INVULN  = "Invulnerability! Holy shit!";
