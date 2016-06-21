@@ -6,6 +6,7 @@
 
 ACTOR ArgWeapon : DoomWeapon
 {
+	Inventory.PickupSound "items/weapon"
 	Weapon.UpSound   "weapons/swap"
 	Weapon.BobStyle  "InverseSmooth"
 	Weapon.BobSpeed  2.00

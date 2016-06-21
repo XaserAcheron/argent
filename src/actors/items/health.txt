@@ -12,7 +12,7 @@ ACTOR ArgHealthBonus : Health replaces HealthBonus
 	+INVENTORY.ALWAYSPICKUP
 	Inventory.Amount 1
 	Inventory.MaxAmount 200
-	Inventory.PickupSound "misc/h_pkup"
+	Inventory.PickupSound "items/health"
 	Inventory.PickupMessage "$GOTHTHBONUS"
 	States
 	{
@@ -28,7 +28,7 @@ ACTOR ArgStimpack : Health replaces Stimpack
 	Scale 0.5
 	+RANDOMIZE
 	Inventory.Amount 10
-	Inventory.PickupSound "misc/h_pkup"
+	Inventory.PickupSound "items/health"
 	Inventory.PickupMessage "$GOTSTIM"
 	States
 	{
@@ -44,7 +44,7 @@ ACTOR ArgMedikit : Health replaces Medikit
 	Scale 0.5
 	+RANDOMIZE
 	Inventory.Amount 25
-	Inventory.PickupSound "misc/h_pkup"
+	Inventory.PickupSound "items/health"
 	Inventory.PickupMessage "$GOTMEDIKIT"
 	Health.LowMessage 25, "$GOTMEDINEED"
 	States
@@ -61,7 +61,7 @@ ACTOR SphereMega : CustomInventory replaces Megasphere
 	+COUNTITEM
 	+INVENTORY.ALWAYSPICKUP
 	Inventory.PickupMessage "$GOTMSPHERE"
-	Inventory.PickupSound "misc/p_pkup"
+	Inventory.PickupSound "items/megahealth"
 	States
 	{
 	Spawn:

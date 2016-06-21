@@ -9,7 +9,7 @@ ACTOR ArgArmorBonus : BasicArmorBonus replaces ArmorBonus
 	Radius 20
 	Height 16
 	Scale 0.66
-	Inventory.PickupSound "misc/s_pkup"
+	Inventory.PickupSound "items/shard"
 	Inventory.Pickupmessage "$GOTARMBONUS"
 	Inventory.Icon "BON2B0"
 	Armor.Savepercent 33.33333
@@ -33,7 +33,7 @@ ACTOR ArgArmorGreen : BasicArmorPickup replaces GreenArmor
 	Height 16
 	Scale 0.66
 	+RANDOMIZE
-	Inventory.PickupSound "misc/a_pkup"
+	Inventory.PickupSound "items/armor"
 	Inventory.Pickupmessage "$GOTARMOR"
 	Inventory.Icon "BON2B0"
 	Armor.SavePercent 33.33333
@@ -53,7 +53,7 @@ ACTOR ArgArmorBlue : BasicArmorPickup replaces BlueArmor
 	Height 16
 	Scale 0.66
 	+RANDOMIZE
-	Inventory.PickupSound "misc/a_pkup"
+	Inventory.PickupSound "items/armor"
 	Inventory.Pickupmessage "$GOTMEGA"
 	Inventory.Icon "BON2C0"
 	Armor.Savepercent 50
