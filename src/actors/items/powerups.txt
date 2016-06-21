@@ -189,3 +189,11 @@ ACTOR ArgAutomap : Allmap replaces Allmap
 {
 	Inventory.PickupSound "items/automap"
 }
+ACTOR ArgRadsuit : Radsuit replaces Radsuit
+{
+	Inventory.PickupSound "items/powerup"
+}
+ACTOR ArgBackpack : Backpack replaces Backpack
+{
+	Inventory.PickupSound "items/ammo"
+}
