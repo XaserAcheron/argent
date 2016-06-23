@@ -27,11 +27,24 @@ script "SwapMod" (void) {
 	int mod1Enabled = CheckInventory(mod1EnabledToken);
 	int mod2Enabled = CheckInventory(mod2EnabledToken);
 	
+	int modToSelect = 0;
 	// swap to weapon 2 if 1 is selected; else switch to 1.
-	// [TODO] add 'enabled' logic here.
-	int modToSelect = 1;
-	if (modSelected == 1) {
-		modToSelect = 2;
+	// [XA] the lack of a ternary conditional is quite confounding.
+	//      I need to switch to DH-ACC already. :P
+	if(modSelected == 0) {
+		if(mod1Enabled) {
+			modToSelect = 1;
+		} else if(mod2Enabled) {
+			modToSelect = 2;
+		}
+	} else if(modSelected == 1) {
+		if(mod2Enabled) {
+			modToSelect = 2;
+		}
+	} else {
+		if(mod1Enabled) {
+			modToSelect = 1;
+		}
 	}
 	
 	// Do the mod swap, assuming we have a valid one to swap to.
@@ -50,6 +63,17 @@ script "SwapMod" (void) {
  */
 script "ModSelected" (int mod) {
 	SetResultValue(CheckInventory(StrParam(s:GetWeapon(), s:"ModSelected")) == mod);
+}
+
+/*
+ * Nefarious mod cheat script. For testing, surely.
+ */
+script "GimmeMods" (void) {
+	str weapon = GetWeapon();
+	str mod1EnabledToken = StrParam(s:weapon, s:"Mod1Enabled");
+	str mod2EnabledToken = StrParam(s:weapon, s:"Mod2Enabled");
+	GiveInventory(mod1EnabledToken, 1);
+	GiveInventory(mod2EnabledToken, 1);
 }
 
 /*
