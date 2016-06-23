@@ -55,7 +55,7 @@ ACTOR ArgRedSkull : RedSkull replaces RedSkull
 	{
 	Spawn:
 		RSKU A 30
-		RSKU A 5 BRIGHT
+		RSKU B 5 BRIGHT
 		Loop
 	}
 }
@@ -69,7 +69,7 @@ ACTOR ArgBlueSkull : BlueSkull replaces BlueSkull
 	{
 	Spawn:
 		BSKU A 30
-		BSKU A 5 BRIGHT
+		BSKU B 5 BRIGHT
 		Loop
 	}
 }
@@ -83,7 +83,7 @@ ACTOR ArgYellowSkull : YellowSkull replaces YellowSkull
 	{
 	Spawn:
 		YSKU A 30
-		YSKU A 5 BRIGHT
+		YSKU B 5 BRIGHT
 		Loop
 	}
 }
