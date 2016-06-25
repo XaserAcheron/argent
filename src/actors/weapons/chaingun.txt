@@ -4,12 +4,14 @@
 //
 // --------------------------------------------------------------------------
 
-ACTOR ArgChaingun : ArgWeapon
+ACTOR ArgChaingun : ArgModWeapon
 {
 	Weapon.SelectionOrder 3
 	Weapon.AmmoUse 1
+	Weapon.AmmoUse2 1
 	Weapon.AmmoGive 20
 	Weapon.AmmoType "Clip"
+	Weapon.AmmoType2 "Clip"
 	Inventory.PickupMessage "$ARG_GOT_CHAINGUN"
 	Tag "$ARG_TAG_CHAINGUN"
 	Obituary "$ARG_OB_CHAINGUN"
@@ -21,16 +23,27 @@ ACTOR ArgChaingun : ArgWeapon
 		CHGP A -1
 		Stop
 	Ready:
-		CHGG A 1 A_WeaponReady
-		Loop
-	Select:
+		CHGG A 0
+		Goto Super::Ready
+	Deselect:
+		"####" "#" 0 {
+			A_StopSound(CHAN_WEAPON);
+			A_TakeInventory("ArgChaingunSpinnyToken", 6);
+		}
+		Goto DeselectLoop
+		
+	/* Unmodded + Primary */
+
+	Mod0Select:
 		CHGG A 0
 		Goto SelectLoop
-	Deselect:
-		CHGG A 0 A_StopSound(CHAN_WEAPON)
-		CHGG A 0 A_TakeInventory("ArgChaingunSpinnyToken", 6)
-		Goto DeselectLoop
-	Fire:
+	Mod0Swap:
+		CHGG A 0
+		Goto ModSwapUp
+	Mod0Ready:
+		CHGG A 0
+		Goto ReadyLoop
+	Mod0Fire:
 		CHGF A 0 Bright {
 			A_GunFlash;
 			A_FireBullets(5.6, 1.0, -1, 7, "ArgBulletPuff");
@@ -42,7 +55,7 @@ ACTOR ArgChaingun : ArgWeapon
 				A_TakeInventory("ArgChaingunShootyToken");
 				A_PlaySound("weapons/chaingun/fire", CHAN_6);
 			}
-			return A_JumpIfInventory("ArgChaingunSpinnyToken", 1, "Anim1");
+			return A_JumpIfInventory("ArgChaingunSpinnyToken", 1, "Mod0Anim1");
 		}
 		CHGF A     1 Bright { A_WeaponOffset(3.0 + frandom(-0.5, 0.5), 35.0 + frandom(-0.5, 0.5)); A_PlaySound("weapons/chaingun/spinup", CHAN_WEAPON); }
 		CHGG A     1          A_WeaponOffset(2.0 + frandom(-0.5, 0.5), 34.0 + frandom(-0.5, 0.5))
@@ -50,53 +63,53 @@ ACTOR ArgChaingun : ArgWeapon
 		CHGG B     1          A_WeaponOffset(0.0                     , 32.0                     )
 		CHGG B     2
 		CHGG CD    3
-		Goto FireEnd
-	Anim1:
+		Goto Mod0FireEnd
+	Mod0Anim1:
 		CHGF A 1 Bright {
 			A_PlaySound("weapons/chaingun/spinloop", CHAN_WEAPON, 1.0, 1);
 			A_WeaponOffset(3.0 + frandom(-0.5, 0.5), 35.0 + frandom(-0.5, 0.5)); 
-			return A_JumpIfInventory("ArgChaingunSpinnyToken", 2, "Anim2");
+			return A_JumpIfInventory("ArgChaingunSpinnyToken", 2, "Mod0Anim2");
 		}
 		CHGG A     1          A_WeaponOffset(2.0 + frandom(-0.5, 0.5), 34.0 + frandom(-0.5, 0.5))
 		CHGG B     1          A_WeaponOffset(1.0 + frandom(-0.5, 0.5), 33.0 + frandom(-0.5, 0.5))
 		CHGG B     1          A_WeaponOffset(0.0                     , 32.0                     )
 		CHGG CDA   2
-		Goto FireEnd
-	Anim2:
-		CHGF B     1 Bright { A_WeaponOffset(3.0 + frandom(-0.5, 0.5), 35.0 + frandom(-0.5, 0.5)); return A_JumpIfInventory("ArgChaingunSpinnyToken", 3, "Anim3"); }
+		Goto Mod0FireEnd
+	Mod0Anim2:
+		CHGF B     1 Bright { A_WeaponOffset(3.0 + frandom(-0.5, 0.5), 35.0 + frandom(-0.5, 0.5)); return A_JumpIfInventory("ArgChaingunSpinnyToken", 3, "Mod0Anim3"); }
 		CHGG B     1          A_WeaponOffset(2.0 + frandom(-0.5, 0.5), 34.0 + frandom(-0.5, 0.5))
 		CHGG C     1          A_WeaponOffset(1.0 + frandom(-0.5, 0.5), 33.0 + frandom(-0.5, 0.5))
 		CHGG C     1          A_WeaponOffset(0.0                     , 32.0                     )
 		CHGG D     2
 		CHGG AB    1
-		Goto FireEnd
-	Anim3:
-		CHGF C     1 Bright { A_WeaponOffset(3.0 + frandom(-0.5, 0.5), 35.0 + frandom(-0.5, 0.5)); return A_JumpIfInventory("ArgChaingunSpinnyToken", 4, "Anim4"); }
+		Goto Mod0FireEnd
+	Mod0Anim3:
+		CHGF C     1 Bright { A_WeaponOffset(3.0 + frandom(-0.5, 0.5), 35.0 + frandom(-0.5, 0.5)); return A_JumpIfInventory("ArgChaingunSpinnyToken", 4, "Mod0Anim4"); }
 		CHGF D     1 Bright   A_WeaponOffset(2.0 + frandom(-0.5, 0.5), 34.0 + frandom(-0.5, 0.5))
 		CHGG A     1          A_WeaponOffset(1.0 + frandom(-0.5, 0.5), 33.0 + frandom(-0.5, 0.5))
 		CHGG B     1          A_WeaponOffset(0.0                     , 32.0                     )
 		CHGG CD    1
-		Goto FireEnd
-	Anim4:
-		CHGF A     1 Bright { A_WeaponOffset(3.0 + frandom(-0.7, 0.7), 35.0 + frandom(-0.7, 0.7)); return A_JumpIfInventory("ArgChaingunSpinnyToken", 5, "Anim5"); }
+		Goto Mod0FireEnd
+	Mod0Anim4:
+		CHGF A     1 Bright { A_WeaponOffset(3.0 + frandom(-0.7, 0.7), 35.0 + frandom(-0.7, 0.7)); return A_JumpIfInventory("ArgChaingunSpinnyToken", 5, "Mod0Anim5"); }
 		CHGF B     1 Bright   A_WeaponOffset(2.0 + frandom(-0.6, 0.6), 34.0 + frandom(-0.6, 0.6))
 		CHGG C     1          A_WeaponOffset(1.0 + frandom(-0.5, 0.5), 33.0 + frandom(-0.5, 0.5))
 		CHGG D     1          A_WeaponOffset(0.0                     , 32.0                     )
 		CHGG A     1
-		Goto FireEnd
-	Anim5:
-		CHGF B     1 Bright { A_WeaponOffset(3.0 + frandom(-0.9, 0.9), 35.0 + frandom(-0.9, 0.9)); return A_JumpIfInventory("ArgChaingunSpinnyToken", 6, "Anim6"); }
+		Goto Mod0FireEnd
+	Mod0Anim5:
+		CHGF B     1 Bright { A_WeaponOffset(3.0 + frandom(-0.9, 0.9), 35.0 + frandom(-0.9, 0.9)); return A_JumpIfInventory("ArgChaingunSpinnyToken", 6, "Mod0Anim6"); }
 		CHGF C     1 Bright   A_WeaponOffset(2.0 + frandom(-0.7, 0.7), 34.0 + frandom(-0.7, 0.7))
 		CHGF D     1 Bright   A_WeaponOffset(1.0 + frandom(-0.5, 0.5), 33.0 + frandom(-0.5, 0.5))
 		CHGG A     1          A_WeaponOffset(0.0                     , 32.0                     )
-		Goto FireEnd
-	Anim6:
+		Goto Mod0FireEnd
+	Mod0Anim6:
 		CHGF B     1 Bright   A_WeaponOffset(3.0 + frandom(-0.9, 0.9), 35.0 + frandom(-0.9, 0.9))
 		CHGF C     1 Bright   A_WeaponOffset(2.0 + frandom(-0.7, 0.7), 34.0 + frandom(-0.7, 0.7))
 		CHGF D     1 Bright { A_WeaponOffset(1.0 + frandom(-0.5, 0.5), 33.0 + frandom(-0.5, 0.5)); A_FireBullets(6.8, 1.0, -1, 7, "ArgBulletPuff"); }
 		CHGF A     1 Bright   A_WeaponOffset(0.0                     , 32.0                     )
-		Goto FireEnd
-	FireEnd:
+		Goto Mod0FireEnd
+	Mod0FireEnd:
 		CHGG A 0 {
 			A_WeaponOffset(0.0, 32.0);
 			A_GiveInventory("ArgChaingunSpinnyToken", 1);
@@ -111,7 +124,62 @@ ACTOR ArgChaingun : ArgWeapon
 		TNT1 A 1 Bright A_Light2
 		TNT1 A 1 Bright A_Light1
 		Goto LightDone
+		
+	/* Mod 1: Gatling Rotator */
+		
+	Mod1Select:
+		CHGG A 0
+		Goto SelectLoop
+	Mod1Swap:
+		CHGG A 0 A_PlaySound("weapons/chaingun/mod1swap", CHAN_AUTO)
+	Mod1Ready:
+		CHGG A 0
+		Goto ReadyLoop
+	Mod1Up:
+	Mod1Hold:
+		CHGG A 3 {
+			A_PlaySound("weapons/chaingun/spinup", CHAN_WEAPON);
+			if(CallACS("SynthFire")) {
+				return state("Mod0Fire");
+			} else {
+				return A_JumpIfInventory("ArgChaingunSpinnyToken", 1, "Mod1Anim1");
+			}
+		}
+		CHGG BCD 3
+		Goto Mod0FireEnd
+	Mod1Anim1:
+		CHGG A 1 Bright {
+			A_PlaySound("weapons/chaingun/spinloop", CHAN_WEAPON, 1.0, 1);
+			return A_JumpIfInventory("ArgChaingunSpinnyToken", 2, "Mod1Anim2");
+		}
+		CHGG A 1
+		CHGG BCDA 2
+		Goto Mod0FireEnd
+	Mod1Anim2:
+		CHGG B  2 A_JumpIfInventory("ArgChaingunSpinnyToken", 3, "Mod1Anim3")
+		CHGG CD 2
+		CHGG AB 1
+		Goto Mod0FireEnd
+	Mod1Anim3:
+		CHGG C 1 A_JumpIfInventory("ArgChaingunSpinnyToken", 4, "Mod1Anim4")
+		CHGG DABCD  1
+		Goto Mod0FireEnd
+	Mod1Anim4:
+		CHGG A 1 A_JumpIfInventory("ArgChaingunSpinnyToken", 5, "Mod1Anim5")
+		CHGG BCDA 1
+		Goto Mod0FireEnd
+	Mod1Anim5:
+		CHGG B 1 A_JumpIfInventory("ArgChaingunSpinnyToken", 6, "Mod1Anim6")
+		CHGG CDA 1
+		Goto Mod0FireEnd
+	Mod1Anim6:
+		CHGG BCDA 1
+		Goto Mod0FireEnd
 	}
 }
-ACTOR ArgChaingunShootyToken : ArgToken {} // extra token for sound control
-ACTOR ArgChaingunSpinnyToken : ArgToken { Inventory.MaxAmount 6 }
+ACTOR ArgChaingunModSelected : ArgModToken {}
+ACTOR ArgChaingunMod1Enabled : ArgToken    {}
+ACTOR ArgChaingunMod2Enabled : ArgToken    {}
+ACTOR ArgChaingunModCooldown : ArgToken    {}
+ACTOR ArgChaingunShootyToken : ArgToken    {} // extra token for sound control
+ACTOR ArgChaingunSpinnyToken : ArgToken    { Inventory.MaxAmount 6 }
