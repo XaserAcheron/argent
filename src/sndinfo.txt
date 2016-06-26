@@ -195,11 +195,28 @@ items/megahealth1          "sounds/items/megahealth1.flac"
 items/megahealth2          "sounds/items/megahealth2.flac"
 items/megahealth3          "sounds/items/megahealth3.flac"
 $random items/megahealth { items/megahealth1 items/megahealth2 items/megahealth3 }
+$volume items/health       0.8
+$volume items/armor        0.8
+$volume items/shard        0.8
+$volume items/ammo         0.8
+$volume items/weapon       0.8
+$volume items/powerup      0.8
+$volume items/powerdown    0.8
+$volume items/key          0.8
+$volume items/automap      0.8
+$volume items/infrared     0.8
+$volume items/megahealth   0.8
 
 items/powerups/berserk     "sounds/items/powerups/berserk.flac"
 items/powerups/haste       "sounds/items/powerups/haste.flac"
 items/powerups/quad        "sounds/items/powerups/quad.flac"
 items/powerups/regen       "sounds/items/powerups/regen.flac"
 items/powerups/invuln      "sounds/items/powerups/invuln.flac"
+$volume items/powerups/berserk 0.8
+$volume items/powerups/haste   0.8
+$volume items/powerups/quad    0.8
+$volume items/powerups/regen   0.8
+$volume items/powerups/invuln  0.8
 
 misc/secret                "sounds/secret.flac"
+$volume misc/secret  0.8
