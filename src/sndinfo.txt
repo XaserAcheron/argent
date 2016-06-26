@@ -201,3 +201,5 @@ items/powerups/haste       "sounds/items/powerups/haste.flac"
 items/powerups/quad        "sounds/items/powerups/quad.flac"
 items/powerups/regen       "sounds/items/powerups/regen.flac"
 items/powerups/invuln      "sounds/items/powerups/invuln.flac"
+
+misc/secret                "sounds/secret.flac"
