@@ -223,13 +223,18 @@ ACTOR ArgBFGZapper
 	See:
 		TNT1 A 1 {
 			A_FaceTarget;
-			A_CustomRailgun(20, 0, None, None, RGF_SILENT | RGF_NOPIERCING, 1, 32, "ArgBFGSpray", 0, 0, 0, 0, 4, 0, "ArgBFGZapperTrail");
+			A_CustomRailgun(20, 0, None, None, RGF_SILENT | RGF_NOPIERCING, 1, 32, "ArgBFGSprayZ", 0, 0, 0, 0, 4, 0, "ArgBFGZapperTrail");
 		}
 		Goto Death
 	Death:
 		TNT1 A 0
 		Stop
 	}
+}
+
+ACTOR ArgBFGSprayZ : ArgBFGSpray
+{
+	Damagetype "ArgBFGZapper"
 }
 
 ACTOR ArgBFGZapperTrail : ArgTrailNoPhysics

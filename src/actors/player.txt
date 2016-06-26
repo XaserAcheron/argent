@@ -19,4 +19,5 @@ ACTOR ArgPlayer : DoomPlayer
 	Player.WeaponSlot 7, ArgBFG9000
 	
 	DamageFactor "ArgPlayerRocket", 0.5
+	DamageFactor "ArgBFGZapper", 0.0
 }
