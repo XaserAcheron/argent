@@ -187,7 +187,12 @@ ACTOR ArgIveGotBallsOfSteel : ArgThatDamnDragonAteMyBalls
 	Fly:
 		BFS1 AAAABBBB 1 Bright {
 			A_SpawnItemEx("ArgBFGTrail", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
-			A_CustomMissile("ArgBFGZapper", -8, 0, 0, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_CustomMissile("ArgBFGZapper", -8, 0, 30, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_CustomMissile("ArgBFGZapper", -8, 0, 90, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_CustomMissile("ArgBFGZapper", -8, 0,150, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_CustomMissile("ArgBFGZapper", -8, 0,210, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_CustomMissile("ArgBFGZapper", -8, 0,270, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_CustomMissile("ArgBFGZapper", -8, 0,330, CMF_AIMDIRECTION | CMF_TRACKOWNER);
 		}
 		Loop
 	SuperDeath:
@@ -207,7 +212,6 @@ ACTOR ArgBFGZapper
 	Speed 0
 	MinMissileChance 0
 	Projectile
-	+LOOKALLAROUND
 	+NOINTERACTION
 	+ISMONSTER
 	+FRIENDLY
@@ -218,7 +222,7 @@ ACTOR ArgBFGZapper
 	States
 	{
 	Spawn:
-		TNT1 A 1 NoDelay A_Look
+		TNT1 A 1 NoDelay A_LookEx(LOF_NOSOUNDCHECK, 0, 1024, 0, 60, "See")
 		Stop
 	See:
 		TNT1 A 1 {
