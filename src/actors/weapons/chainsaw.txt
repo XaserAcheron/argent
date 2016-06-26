@@ -24,6 +24,8 @@ ACTOR ArgChainsaw : ArgWeapon replaces Chainsaw
 		SAWG AABB 1 A_WeaponReady
 		Loop
 	Select:
+		SAWG A 0 A_Raise
+		SAWG A 1 A_Raise
 		SAWG A 0 A_PlaySound("weapons/chainsaw/idle", CHAN_5, 1.0, 1)
 		Goto SelectLoop
 	Deselect:
