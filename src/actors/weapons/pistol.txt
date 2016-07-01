@@ -27,7 +27,11 @@ ACTOR ArgPistol : ArgWeapon replaces Pistol
 		PISG A 0
 		Goto SelectLoop
 	Deselect:
-		PISG A 0
+		PISG A 0 {
+			A_StopSound(CHAN_WEAPON);
+			A_TakeInventory("ArgPistolCharge"     , 45);
+			A_TakeInventory("ArgPistolChargeSound", 30);
+		}
 		Goto DeselectLoop
 	Fire:
 		PISF A 1 Bright {
@@ -52,12 +56,77 @@ ACTOR ArgPistol : ArgWeapon replaces Pistol
 		PISG AAAAA 1 A_WeaponReady
 		PISG A 0 A_Refire
 		Goto Ready
+	AltFire:
+		PISA D 1 { A_WeaponOffset(- 2.0, 32.0); A_PlaySound("weapons/pistol/charge", CHAN_WEAPON); }
+		PISA D 1   A_WeaponOffset(- 6.0, 32.0)
+		PISA C 1   A_WeaponOffset(-12.0, 31.5)
+		PISA C 1   A_WeaponOffset(-16.0, 31.0)
+		PISA B 1   A_WeaponOffset(-18.0, 30.5)
+	AltHold:
+		PISA A 1 {
+			if(CountInv("ArgPistolCharge") < 45) {
+				A_GiveInventory("ArgPistolCharge");
+				A_WeaponOffset(-20.0 + frandom(CountInv("ArgPistolCharge") * -0.025, CountInv("ArgPistolCharge") * 0.025)
+				,               30.0 + frandom(CountInv("ArgPistolCharge") * -0.025, CountInv("ArgPistolCharge") * 0.025)
+				);
+				return state(0);
+			} else {
+				A_WeaponOffset(-20.0 + frandom(-0.25, 0.25), 30.0 + frandom(-0.25, 0.25));
+				return state("AltHoldChargeSound");
+			}
+		}
+		PISA A 0 A_JumpIf(CallACS("SynthFire"), "AltShoopDaWoop")
+		PISA A 0 A_Refire
+		Goto AltDown
+	AltHoldChargeSound:
+		PISA A 0 {
+			if(CountInv("ArgPistolChargeSound") == 23) {
+				A_PlaySound("weapons/pistol/hum", CHAN_WEAPON, 1.0, true);
+			}
+			A_GiveInventory("ArgPistolChargeSound");
+		}
+	AltHoldCharged:
+		PISA A 1 A_JumpIf(CallACS("SynthFire"), "AltShoopDaWoop")
+		PISA A 0 A_Refire
+		Goto AltDown
+	AltShoopDaWoop:
+		PISB A 1 Bright {
+			A_GunFlash;
+			A_FireBullets(1.5, 1, 1, 2*CountInv("ArgPistolCharge"), "ArgPistolPuff", FBF_NORANDOM);
+			A_PlaySound("weapons/pistol/altfire", CHAN_7);
+			A_StopSound(CHAN_WEAPON);
+		}
+		PISB B 1
+		PISB C 1 { A_WeaponOffset(-19.0 + frandom(-0.25, 0.25), 31.0 + frandom(-0.25, 0.25)); }
+		PISB C 1 { A_WeaponOffset(-18.0 + frandom( 0.00, 1.00), 35.0 + frandom( 0.00, 1.00)); }
+		PISB B 1 { A_WeaponOffset(-17.0 + frandom( 0.00, 1.00), 38.0 + frandom( 0.00, 2.00)); }
+		PISB B 1 { A_WeaponOffset(-19.0 + frandom(-0.25, 0.25), 36.0 + frandom(-0.25, 0.25)); }
+		PISA A 1   A_WeaponOffset(-12.0, 38.0)
+		PISA A 1   A_WeaponOffset(-15.5, 35.0)
+		PISA A 1   A_WeaponOffset(-17.5, 33.0)
+		PISA A 1   A_WeaponOffset(-19.0, 31.0)
+		PISA A 8   A_WeaponOffset(-20.0, 30.0)
+	AltDown:
+		PISA B 1 {
+			A_StopSound(CHAN_WEAPON);
+			A_TakeInventory("ArgPistolCharge"     , 45);
+			A_TakeInventory("ArgPistolChargeSound", 30);
+			A_ClearRefire;
+			A_WeaponOffset(-18.0, 30.5);
+		}
+		PISA C 1 A_WeaponOffset(-16.0, 31.0)
+		PISA C 1 A_WeaponOffset(-12.0, 31.5)
+		PISA D 1 A_WeaponOffset(- 6.0, 32.0)
+		PISA D 1 A_WeaponOffset(- 2.0, 32.0)
+		Goto Ready
 	Flash:
 		TNT1 A 2 Bright A_Light1
 		Goto LightDone
 	}
 }
-ACTOR ArgPistolShootyToken : ArgToken    {} // extra token for sound control
+ACTOR ArgPistolCharge      : ArgToken { Inventory.MaxAmount 45 }
+ACTOR ArgPistolChargeSound : ArgToken { Inventory.MaxAmount 30 }
+ACTOR ArgPistolShootyToken : ArgToken {} // extra token for sound control
 
 ACTOR ArgPistolPuff : ArgBulletPuff
 {
