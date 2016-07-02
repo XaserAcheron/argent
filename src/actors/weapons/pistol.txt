@@ -12,6 +12,7 @@ ACTOR ArgPistol : ArgWeapon replaces Pistol
 	Obituary "$ARG_OB_PISTOL"
 	DamageType "ArgPistol"
 	
+	+WEAPON.NOALERT
 	+WEAPON.NOAUTOFIRE
 	+WEAPON.WIMPY_WEAPON
 	
@@ -36,6 +37,7 @@ ACTOR ArgPistol : ArgWeapon replaces Pistol
 	Fire:
 		PISF A 1 Bright {
 			A_GunFlash;
+			A_AlertMonsters;
 			A_FireBullets(1.5, 1, 1, 5, "ArgPistolPuff");
 			A_WeaponReady(WRF_NOFIRE);
 			
@@ -92,6 +94,7 @@ ACTOR ArgPistol : ArgWeapon replaces Pistol
 	AltShoopDaWoop:
 		PISB A 1 Bright {
 			A_GunFlash;
+			A_AlertMonsters;
 			A_FireBullets(1.5, 1, 1, 2*CountInv("ArgPistolCharge"), "ArgPistolPuff", FBF_NORANDOM);
 			A_PlaySound("weapons/pistol/altfire", CHAN_7);
 			A_StopSound(CHAN_WEAPON);

@@ -40,6 +40,7 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 	Mod0Fire:
 		"####" B 1 Bright {
 			A_GunFlash;
+			A_AlertMonsters;
 			A_FireBullets(2.0, 1.0, -1, 7, "ArgBulletPuff");
 			if(CountInv("ArgHeavyARShootyToken") == 0) {
 				A_GiveInventory("ArgHeavyARShootyToken");
@@ -96,6 +97,7 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 			if(CountInv("Clip") < Mod1AmmoUse) { return state("Mod1Down"); }
 			A_TakeInventory("Clip", Mod1AmmoUse, TIF_NOTAKEINFINITE);
 			A_FireCustomMissile("ArgMicroMissile", 0, 0, 4, 4);
+			A_AlertMonsters;
 			
 			if(CountInv("ArgHeavyARShootyToken") == 0) {
 				A_GiveInventory("ArgHeavyARShootyToken");
@@ -207,6 +209,7 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 			A_TakeInventory("Clip", Mod2AmmoUse, TIF_NOTAKEINFINITE);
 			A_FireBullets(0, 0, 1, 14, "ArgBulletPuff");
 			A_ZoomFactor(1.80);
+			A_AlertMonsters;
 			A_GunFlash;
 			
 			if(CountInv("ArgHeavyARShootyToken") == 0) {

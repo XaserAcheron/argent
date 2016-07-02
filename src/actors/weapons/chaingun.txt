@@ -46,6 +46,7 @@ ACTOR ArgChaingun : ArgModWeapon
 	Mod0Fire:
 		CHGF A 0 Bright {
 			A_GunFlash;
+			A_AlertMonsters;
 			A_FireBullets(5.6, 1.0, -1, 7, "ArgBulletPuff");
 
 			if(CountInv("ArgChaingunShootyToken") == 0) {
