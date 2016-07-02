@@ -32,14 +32,17 @@ ACTOR ArgChainsaw : ArgWeapon replaces Chainsaw
 		SAWG A 0 A_PlaySound("weapons/chainsaw/off", CHAN_5)
 		Goto DeselectLoop
 	Fire:
-		SAWF A 1 A_PlaySound("weapons/chainsaw/up", CHAN_5)
-		SAWF BCDE 1
-		SAWG D 1 A_WeaponOffset(-5.0, 32.0 + 48)
-		SAWG D 1 A_WeaponOffset(-4.0, 32.0 + 40)
-		SAWG C 1 A_WeaponOffset(-3.0, 32.0 + 32)
-		SAWG C 1 A_WeaponOffset(-2.0, 32.0 + 24)
-		SAWG D 1 A_WeaponOffset(-1.0, 32.0 + 16)
-		SAWG D 1 A_WeaponOffset( 0.0, 32.0 +  8)
+		SAWF A 1 { A_WeaponOffset( 0.0, 32.0 +  8); A_PlaySound("weapons/chainsaw/up", CHAN_5); }
+		SAWF B 1   A_WeaponOffset(-1.0, 32.0 + 16)
+		SAWF C 1   A_WeaponOffset(-2.0, 32.0 + 24)
+		SAWF D 1   A_WeaponOffset(-3.0, 32.0 + 32)
+		SAWF E 1   A_WeaponOffset(-4.0, 32.0 + 40)
+		SAWG D 1   A_WeaponOffset(-5.0, 32.0 + 48)
+		SAWG D 1   A_WeaponOffset(-4.0, 32.0 + 40)
+		SAWG C 1   A_WeaponOffset(-3.0, 32.0 + 32)
+		SAWG C 1   A_WeaponOffset(-2.0, 32.0 + 24)
+		SAWG D 1   A_WeaponOffset(-1.0, 32.0 + 16)
+		SAWG D 1   A_WeaponOffset( 0.0, 32.0 +  8)
 	Hold:
 		SAWG C 0 A_Saw("", "effects/gibs", 0, "ArgChainsawPuff")
 		SAWG CC 1 A_WeaponOffset(frandom(-1.0, 1.0), 32.0 + frandom(-1.0, 1.0))
@@ -63,8 +66,10 @@ ACTOR ArgChainsaw : ArgWeapon replaces Chainsaw
 		SAWG D 1 A_WeaponOffset(-3.0, 32.0 + 32)
 		SAWG C 1 A_WeaponOffset(-4.0, 32.0 + 40)
 		SAWG C 1 A_WeaponOffset(-5.0, 32.0 + 48)
-		SAWF E 1 A_WeaponOffset( 0.0, 32.0     )
-		SAWF DCBA 1
+		SAWF E 1 A_WeaponOffset( 0.0, 32.0 + 16)
+		SAWF D 1 A_WeaponOffset( 0.0, 32.0 +  8)
+		SAWF C 1 A_WeaponOffset( 0.0, 32.0     )
+		SAWF BA 1
 		SAWG AABBAABBAABBAABBAABBAABBAABBAABBAABB 1 A_WeaponReady
 		SAWG A 0 A_PlaySound("weapons/chainsaw/idle", CHAN_5, 1.0, 1)
 		Goto Ready
