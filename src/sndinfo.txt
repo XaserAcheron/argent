@@ -1,3 +1,5 @@
+$pitchshiftrange 0
+
 weapons/dryfire            "sounds/weapons/dryfire.flac"
 weapons/swap1              "sounds/weapons/swap1.flac"
 weapons/swap2              "sounds/weapons/swap2.flac"
