@@ -185,7 +185,7 @@ items/health               "sounds/items/health.flac"
 items/armor                "sounds/items/armor.flac" 
 items/shard                "sounds/items/shard.flac" 
 items/ammo                 "sounds/items/ammo.flac"
-items/weapon               dswpnup
+items/weapon               "sounds/items/weapon.flac"
 items/powerup              "sounds/items/powerup.flac"
 items/powerdown            "sounds/items/powerdown.flac"
 items/key                  "sounds/items/key.flac" 
