@@ -6,7 +6,7 @@ Code and Shenanigans:
 Sprites:
 	- Neccronixis (badass nu-DOOM weapon sprite conversions)
 	- PillowBlaster (powerups n' pickups)
-	- Xaser (gibs, misc edits)
+	- Xaser (gibs, pistol charge, misc edits)
 	- Rogue Entertainment (blood spray)
 	- ??? (puff sprites)
 	- ??? (puff smoke)
@@ -14,6 +14,13 @@ Sprites:
 
 Sounds
 	- id software (taken straight from the game, oh no)
+
+Testing n' Bugreports
+	- Flyingcomputer
+	- Jimmy
+	- Baratus
+	- ravage
+	- Princess Viscra Maelstrom
 
 Misc:
 	- some mobile phone background from somewhere I can't seem to locate
