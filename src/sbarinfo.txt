@@ -16,9 +16,20 @@ statusbar fullscreen, fullscreenoffsets
 	DrawBar "graphics/hud/bar-health-2.png", "graphics/hud/bar-health-2x.png", health(200), horizontal,  0, -41;
 	
 	// armor
-	DrawNumber 3, "hudfont-small", untranslated, armor , alignment(right), 64, -55;
+	DrawNumber 3, "hudfont-small", untranslated, armor, alignment(right), 64, -55;
 	DrawBar "graphics/hud/bar-armor-1.png", "graphics/hud/bar-armor-1x.png", armor(100), horizontal, 79, -55;
 	DrawBar "graphics/hud/bar-armor-2.png", "graphics/hud/bar-armor-2x.png", armor(200), horizontal,  0, -55;
+	
+	// ammo
+	DrawNumber 3, "hudfont-large", untranslated, ammo1, alignment(right),-96, -58;
+	InInventory Backpack, 1 
+	{
+		DrawBar "graphics/hud/bar-ammo-1a.png", "graphics/hud/bar-ammo-1xa.png", ammo1, horizontal, reverse, -228, -41;
+		DrawBar "graphics/hud/bar-ammo-2.png" , "graphics/hud/bar-ammo-2x.png" , ammo1, horizontal, reverse, -162, -41;
+	}
+	Else {
+		DrawBar "graphics/hud/bar-ammo-1.png", "graphics/hud/bar-ammo-1x.png", ammo1, horizontal, reverse, -162, -41;
+	}
 	
 	// keys
 	GameMode singleplayer, cooperative, teamgame
