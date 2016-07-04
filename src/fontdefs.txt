@@ -1,0 +1,29 @@
+hudfont-small
+{
+	0 "graphics/hud/font-small-0.png"
+	1 "graphics/hud/font-small-1.png"
+	2 "graphics/hud/font-small-2.png"
+	3 "graphics/hud/font-small-3.png"
+	4 "graphics/hud/font-small-4.png"
+	5 "graphics/hud/font-small-5.png"
+	6 "graphics/hud/font-small-6.png"
+	7 "graphics/hud/font-small-7.png"
+	8 "graphics/hud/font-small-8.png"
+	9 "graphics/hud/font-small-9.png"
+	- "graphics/hud/font-small-minus.png"    
+}
+
+hudfont-large
+{
+	0 "graphics/hud/font-large-0.png"
+	1 "graphics/hud/font-large-1.png"
+	2 "graphics/hud/font-large-2.png"
+	3 "graphics/hud/font-large-3.png"
+	4 "graphics/hud/font-large-4.png"
+	5 "graphics/hud/font-large-5.png"
+	6 "graphics/hud/font-large-6.png"
+	7 "graphics/hud/font-large-7.png"
+	8 "graphics/hud/font-large-8.png"
+	9 "graphics/hud/font-large-9.png"
+	- "graphics/hud/font-large-minus.png"    
+}

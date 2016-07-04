@@ -1,9 +1,37 @@
 height 32;
 monospacefonts true, "0";
-resolution 640, 480;
+//resolution 640, 480;
+resolution 480, 360;
 
-statusbar fullscreen, fullscreenoffsets // ZDoom HUD
+statusbar fullscreen, fullscreenoffsets
 {
+	// --- Modern-style --- //
+
+	DrawImage "graphics/hud/base-left.png" ,  24, -62;
+	DrawImage "graphics/hud/base-right.png",-167, -62;
+	
+	// health
+	DrawNumber 3, "hudfont-large", untranslated, health, alignment(right), 64, -43;
+	DrawBar "graphics/hud/bar-health-1.png", "graphics/hud/bar-health-1x.png", health(100), horizontal, 79, -41;
+	DrawBar "graphics/hud/bar-health-2.png", "graphics/hud/bar-health-2x.png", health(200), horizontal,  0, -41;
+	
+	// armor
+	DrawNumber 3, "hudfont-small", untranslated, armor , alignment(right), 64, -55;
+	DrawBar "graphics/hud/bar-armor-1.png", "graphics/hud/bar-armor-1x.png", armor(100), horizontal, 79, -55;
+	DrawBar "graphics/hud/bar-armor-2.png", "graphics/hud/bar-armor-2x.png", armor(200), horizontal,  0, -55;
+	
+	// keys
+	GameMode singleplayer, cooperative, teamgame
+	{
+		DrawKeyBar 6, horizontal, auto, 28, -71;
+	}
+	// [TODO] frag counter; somewhat pointless now because DM isn't a thing yet.
+
+	
+	// --- Classic-style --- //
+
+/* [TODO] figure out a sane way of switching between classic/modern modes
+
 	//health
 	drawimage "BON1B0", 20, -2, centerbottom;
 	drawnumber 3, HUDFONT_DOOM, untranslated, health, drawshadow, 82, -20;
@@ -55,6 +83,7 @@ statusbar fullscreen, fullscreenoffsets // ZDoom HUD
 	{
 		drawkeybar 6, vertical, reverserows, auto, -10, 2, 0, 3, auto;
 	}
+*/
 }
 
 statusbar normal // Standard Doom Status bar

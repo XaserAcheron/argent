@@ -55,8 +55,9 @@ OptionMenu "ArgentMenu"
 	Option      "Quad (replaces Invis)"        , "arg_powerupquad"   , "DisabledEnabled"
 	Option      "Haste (replaces LightAmp)"    , "arg_poweruphaste"  , "DisabledEnabled"
 	Option      "Regen (replaces Soulsphere)"  , "arg_powerupregen"  , "DisabledEnabled"
-//	StaticText 	""
-//	StaticText 	"User Preferences"             , 1
+	StaticText 	""
+	StaticText 	"User Preferences"             , 1
+	Option      "HUD Style"                    , "arg_classichud"    , "ModernClassic"
 //	Option      "Altfire Style"                , "arg_classicaltfire", "ModernClassic"
 	StaticText 	""
 	StaticText 	"Mod Controls"                 , 1
