@@ -8,6 +8,7 @@ ACTOR ArgFist : ArgWeapon replaces Fist
 {
 	Weapon.UpSound ""
 	Weapon.SelectionOrder 11
+	Inventory.Icon "graphics/hud/weapon-fist.png"
 	Inventory.PickupMessage "$ARG_GOT_FIST"
 	Obituary "$ARG_OB_FIST"
 	Tag "$ARG_TAG_FIST"

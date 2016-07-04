@@ -10,6 +10,7 @@ ACTOR ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 	Weapon.AmmoUse 2
 	Weapon.AmmoGive 8
 	Weapon.AmmoType "Shell"
+	Inventory.Icon "graphics/hud/weapon-ssg.png"
 	Inventory.PickupMessage "$ARG_GOT_SSG"
 	Tag "$ARG_TAG_SSG"
 	Obituary "$ARG_OB_SSG"

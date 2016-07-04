@@ -10,6 +10,7 @@ ACTOR ArgPlasmaRifle : ArgWeapon replaces PlasmaRifle
 	Weapon.AmmoUse 1
 	Weapon.AmmoGive 40
 	Weapon.AmmoType "Cell"
+	Inventory.Icon "graphics/hud/weapon-plasma.png"
 	Inventory.PickupMessage "$ARG_GOT_PLASMA"
 	Tag "$ARG_TAG_PLASMA"
 	
