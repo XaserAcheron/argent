@@ -32,6 +32,12 @@ statusbar fullscreen, fullscreenoffsets
 		DrawBar "graphics/hud/bar-ammo-1.png", "graphics/hud/bar-ammo-1x.png", ammo1, horizontal, reverse, -162, -41;
 	}
 	
+	// icons
+	WeaponAmmo "Clip"       { DrawImage "graphics/hud/icon-bullets.png", -162, -57; }
+	WeaponAmmo "Shell"      { DrawImage "graphics/hud/icon-shells.png" , -162, -57; }
+	WeaponAmmo "RocketAmmo" { DrawImage "graphics/hud/icon-rockets.png", -162, -57; }
+	WeaponAmmo "Cell"       { DrawImage "graphics/hud/icon-cells.png"  , -162, -57; }
+	
 	// weapon
 	DrawImage weaponicon, -95, -59;
 	
