@@ -1,7 +1,6 @@
 height 32;
 monospacefonts true, "0";
-//resolution 640, 480;
-resolution 480, 360;
+resolution 640, 480;
 
 statusbar fullscreen, fullscreenoffsets
 {
@@ -110,57 +109,59 @@ statusbar fullscreen, fullscreenoffsets
 
 statusbar normal // Standard Doom Status bar
 {
-	drawimage "STBAR", 0, 168;
-	drawimage "STTPRCNT", 90, 171;
-	drawimage "STTPRCNT", 221, 171;
-	drawnumber 3, HUDFONT_DOOM, untranslated, ammo1, 44, 171;
-	drawnumber 3, HUDFONT_DOOM, untranslated, health, 90, 171;
-	drawnumber 3, HUDFONT_DOOM, untranslated, armor, 221, 171;
+	drawimage "STBAR"   , 160, 448;
+	drawimage "STBEXTRA",-160, 448;
+	drawimage "STBEXTRA", 480, 448;
+	drawimage "STTPRCNT", 250, 451;
+	drawimage "STTPRCNT", 381, 451;
+	drawnumber 3, HUDFONT_DOOM, untranslated, ammo1 , 204, 451;
+	drawnumber 3, HUDFONT_DOOM, untranslated, health, 250, 451;
+	drawnumber 3, HUDFONT_DOOM, untranslated, armor , 381, 451;
 
 	//keys
-	drawswitchableimage keyslot 2 && 5, "nullimage", "STKEYS0", "STKEYS3", "STKEYS6", 239, 171;
-	drawswitchableimage keyslot 3 && 6, "nullimage", "STKEYS1", "STKEYS4", "STKEYS7", 239, 181;
-	drawswitchableimage keyslot 1 && 4, "nullimage", "STKEYS2", "STKEYS5", "STKEYS8", 239, 191;
+	drawswitchableimage keyslot 2 && 5, "nullimage", "STKEYS0", "STKEYS3", "STKEYS6", 399, 451;
+	drawswitchableimage keyslot 3 && 6, "nullimage", "STKEYS1", "STKEYS4", "STKEYS7", 399, 461;
+	drawswitchableimage keyslot 1 && 4, "nullimage", "STKEYS2", "STKEYS5", "STKEYS8", 399, 471;
 
-	drawnumber 3, INDEXFONT, gold, ammo Clip, 288, 173;
-	drawnumber 3, INDEXFONT, gold, ammo Shell, 288, 179;
-	drawnumber 3, INDEXFONT, gold, ammo RocketAmmo, 288, 185;
-	drawnumber 3, INDEXFONT, gold, ammo Cell, 288, 191;
+	drawnumber 3, INDEXFONT, gold, ammo Clip      , 448, 453;
+	drawnumber 3, INDEXFONT, gold, ammo Shell     , 448, 459;
+	drawnumber 3, INDEXFONT, gold, ammo RocketAmmo, 448, 465;
+	drawnumber 3, INDEXFONT, gold, ammo Cell      , 448, 471;
 
-	drawnumber 3, INDEXFONT, gold, ammocapacity Clip, 314, 173;
-	drawnumber 3, INDEXFONT, gold, ammocapacity Shell, 314, 179;
-	drawnumber 3, INDEXFONT, gold, ammocapacity RocketAmmo, 314, 185;
-	drawnumber 3, INDEXFONT, gold, ammocapacity Cell, 314, 191;
+	drawnumber 3, INDEXFONT, gold, ammocapacity Clip      , 474, 453;
+	drawnumber 3, INDEXFONT, gold, ammocapacity Shell     , 474, 459;
+	drawnumber 3, INDEXFONT, gold, ammocapacity RocketAmmo, 474, 465;
+	drawnumber 3, INDEXFONT, gold, ammocapacity Cell      , 474, 471;
 	gamemode deathmatch, teamgame
 	{
-		drawnumber 2, HUDFONT_DOOM, untranslated, frags, 138, 171;
+		drawnumber 2, HUDFONT_DOOM, untranslated, frags, 298, 451;
 	}
 	gamemode cooperative, singleplayer
 	{
-		drawimage "STARMS", 104, 168;
-		drawswitchableimage weaponslot 2, "STGNUM2", "STYSNUM2", 111, 172; 
-		drawswitchableimage weaponslot 3, "STGNUM3", "STYSNUM3", 123, 172;
-		drawswitchableimage weaponslot 4, "STGNUM4", "STYSNUM4", 135, 172;
-		drawswitchableimage weaponslot 5, "STGNUM5", "STYSNUM5", 111, 182;
-		drawswitchableimage weaponslot 6, "STGNUM6", "STYSNUM6", 123, 182;
-		drawswitchableimage weaponslot 7, "STGNUM7", "STYSNUM7", 135, 182;
+		drawimage "STARMS", 264, 448;
+		drawswitchableimage weaponslot 2, "STGNUM2", "STYSNUM2", 271, 452; 
+		drawswitchableimage weaponslot 3, "STGNUM3", "STYSNUM3", 283, 452;
+		drawswitchableimage weaponslot 4, "STGNUM4", "STYSNUM4", 295, 452;
+		drawswitchableimage weaponslot 5, "STGNUM5", "STYSNUM5", 271, 462;
+		drawswitchableimage weaponslot 6, "STGNUM6", "STYSNUM6", 283, 462;
+		drawswitchableimage weaponslot 7, "STGNUM7", "STYSNUM7", 295, 462;
 	}
 	gamemode cooperative, deathmatch, teamgame
 	{
-		drawimage translatable "STFBANY", 144, 169;
+		drawimage translatable "STFBANY", 304, 449;
 	}
-	drawselectedinventory alternateonempty, INDEXFONT, 143, 168
+	drawselectedinventory alternateonempty, INDEXFONT, 303, 448
 	{
-		drawmugshot 5, 143, 168;
+		drawmugshot 5, 303, 448;
 	}
 }
 
 statusbar inventory // Standard bar overlay (ZDoom Addition)
 {
-	drawinventorybar Doom, 7, INDEXFONT, 50, 170;
+	drawinventorybar Doom, 7, INDEXFONT, 210, 450;
 }
 
 statusbar inventoryfullscreen // ZDoom HUD overlay.
 {
-	drawinventorybar Doom, translucent, 7, INDEXFONT, 50, 170;
+	drawinventorybar Doom, translucent, 7, INDEXFONT, 210, 450;
 }
