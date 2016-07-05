@@ -8,6 +8,7 @@ ACTOR ArgChainsaw : ArgWeapon replaces Chainsaw
 {
 	Weapon.Kickback 0
 	Weapon.SelectionOrder 10
+	Inventory.Icon "graphics/hud/weapon-chainsaw.png"
 	Inventory.PickupMessage "$ARG_GOT_CHAINSAW"
 	Obituary "$ARG_OB_CHAINSAW"
 	Tag "$ARG_TAG_CHAINSAW"

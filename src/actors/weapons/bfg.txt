@@ -11,6 +11,7 @@ ACTOR ArgBFG9000 : ArgWeapon replaces BFG9000
 	Weapon.AmmoUse 40
 	Weapon.AmmoGive 40
 	Weapon.AmmoType "Cell" // [TODO] give this its own ammotype
+	Inventory.Icon "graphics/hud/weapon-bfg.png"
 	Inventory.PickupMessage "$ARG_GOT_BFG"
 	Tag "$ARG_TAG_BFG"
 	

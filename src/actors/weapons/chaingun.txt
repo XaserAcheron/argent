@@ -12,6 +12,7 @@ ACTOR ArgChaingun : ArgModWeapon
 	Weapon.AmmoGive 20
 	Weapon.AmmoType "Clip"
 	Weapon.AmmoType2 "Clip"
+	Inventory.Icon "graphics/hud/weapon-chaingun.png"
 	Inventory.PickupMessage "$ARG_GOT_CHAINGUN"
 	Tag "$ARG_TAG_CHAINGUN"
 	Obituary "$ARG_OB_CHAINGUN"

@@ -21,3 +21,5 @@ ACTOR ArgPlayer : DoomPlayer
 	DamageFactor "ArgPlayerRocket", 0.5
 	DamageFactor "ArgBFGZapper", 0.0
 }
+
+ACTOR ArgClassicHudToken : ArgToken {}

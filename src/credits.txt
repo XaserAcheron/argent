@@ -12,6 +12,9 @@ Sprites:
 	- ??? (puff smoke)
 	- ??? (floor blood splatter)
 
+Graphics:
+	- Xaser (HUD, ARGENT logo hackup)
+
 Sounds
 	- id software (taken straight from the game, oh no)
 
@@ -21,6 +24,7 @@ Testing n' Bugreports
 	- Baratus
 	- ravage
 	- Princess Viscra Maelstrom
+	- zrrion the insect
 
 Misc:
 	- some mobile phone background from somewhere I can't seem to locate
