@@ -5,106 +5,107 @@ resolution 480, 360;
 
 statusbar fullscreen, fullscreenoffsets
 {
-	// --- Modern-style --- //
+	InInventory NOT ArgClassicHudToken {
 
-	DrawImage "graphics/hud/base-left.png" ,  24, -62;
-	DrawImage "graphics/hud/base-right.png",-167, -62;
+		// --- Modern-style --- //
 	
-	// health
-	DrawNumber 3, "hudfont-large", untranslated, health, alignment(right), 64, -43;
-	DrawBar "graphics/hud/bar-health-1.png", "graphics/hud/bar-health-1x.png", health(100), horizontal, 79, -41;
-	DrawBar "graphics/hud/bar-health-2.png", "graphics/hud/bar-health-2x.png", health(200), horizontal,  0, -41;
-	
-	// armor
-	DrawNumber 3, "hudfont-small", untranslated, armor, alignment(right), 64, -55;
-	DrawBar "graphics/hud/bar-armor-1.png", "graphics/hud/bar-armor-1x.png", armor(100), horizontal, 79, -55;
-	DrawBar "graphics/hud/bar-armor-2.png", "graphics/hud/bar-armor-2x.png", armor(200), horizontal,  0, -55;
-	
-	// ammo
-	DrawNumber 3, "hudfont-large", untranslated, ammo1, alignment(right), -96, -58;
-	InInventory Backpack, 1 
-	{
-		DrawBar "graphics/hud/bar-ammo-1a.png", "graphics/hud/bar-ammo-1xa.png", ammo1, horizontal, reverse, -228, -41;
-		DrawBar "graphics/hud/bar-ammo-2.png" , "graphics/hud/bar-ammo-2x.png" , ammo1, horizontal, reverse, -162, -41;
-	}
-	Else
-	{
-		DrawBar "graphics/hud/bar-ammo-1.png", "graphics/hud/bar-ammo-1x.png", ammo1, horizontal, reverse, -162, -41;
-	}
-	
-	// icons
-	WeaponAmmo "Clip"       { DrawImage "graphics/hud/icon-bullets.png", -162, -57; }
-	WeaponAmmo "Shell"      { DrawImage "graphics/hud/icon-shells.png" , -162, -57; }
-	WeaponAmmo "RocketAmmo" { DrawImage "graphics/hud/icon-rockets.png", -162, -57; }
-	WeaponAmmo "Cell"       { DrawImage "graphics/hud/icon-cells.png"  , -162, -57; }
-	
-	// weapon
-	DrawImage weaponicon, -95, -59;
-	
-	// keys
-	GameMode singleplayer, cooperative, teamgame
-	{
-		DrawKeyBar 6, horizontal, auto, 28, -71;
-	}
-	// [TODO] frag counter; somewhat pointless now because DM isn't a thing yet.
-
-	
-	// --- Classic-style --- //
-
-/* [TODO] figure out a sane way of switching between classic/modern modes
-
-	//health
-	drawimage "BON1B0", 20, -2, centerbottom;
-	drawnumber 3, HUDFONT_DOOM, untranslated, health, drawshadow, 82, -20;
-
-	//armor
-	drawimage armoricon, 20, -24, centerbottom;
-	drawnumber 3, HUDFONT_DOOM, untranslated, armor, drawshadow, whennotzero, 82, -39;
-
-	//ammo
-	drawimage ammoicon1, -14, -4, centerbottom;
-	drawnumber 3, HUDFONT_DOOM, untranslated, ammo1, drawshadow, -25, -20;
-
-	usesammo
-	{
-		//secondary ammo and inventory
-		usessecondaryammo
+		DrawImage "graphics/hud/base-left.png" ,  24, -62;
+		DrawImage "graphics/hud/base-right.png",-167, -62;
+		
+		// health
+		DrawNumber 3, "hudfont-large", untranslated, health, alignment(right), 64, -43;
+		DrawBar "graphics/hud/bar-health-1.png", "graphics/hud/bar-health-1x.png", health(100), horizontal, 79, -41;
+		DrawBar "graphics/hud/bar-health-2.png", "graphics/hud/bar-health-2x.png", health(200), horizontal,  0, -41;
+		
+		// armor
+		DrawNumber 3, "hudfont-small", untranslated, armor, alignment(right), 64, -55;
+		DrawBar "graphics/hud/bar-armor-1.png", "graphics/hud/bar-armor-1x.png", armor(100), horizontal, 79, -55;
+		DrawBar "graphics/hud/bar-armor-2.png", "graphics/hud/bar-armor-2x.png", armor(200), horizontal,  0, -55;
+		
+		// ammo
+		DrawNumber 3, "hudfont-large", untranslated, ammo1, alignment(right), -96, -58;
+		InInventory Backpack, 1 
 		{
-			drawimage ammoicon2, -14, -22, centerbottom;
-			drawnumber 3, HUDFONT_DOOM, untranslated, ammo2, drawshadow, -25, -38;
-			inventorybarnotvisible
+			DrawBar "graphics/hud/bar-ammo-1a.png", "graphics/hud/bar-ammo-1xa.png", ammo1, horizontal, reverse, -228, -41;
+			DrawBar "graphics/hud/bar-ammo-2.png" , "graphics/hud/bar-ammo-2x.png" , ammo1, horizontal, reverse, -162, -41;
+		}
+		Else
+		{
+			DrawBar "graphics/hud/bar-ammo-1.png", "graphics/hud/bar-ammo-1x.png", ammo1, horizontal, reverse, -162, -41;
+		}
+		
+		// icons
+		WeaponAmmo "Clip"       { DrawImage "graphics/hud/icon-bullets.png", -162, -57; }
+		WeaponAmmo "Shell"      { DrawImage "graphics/hud/icon-shells.png" , -162, -57; }
+		WeaponAmmo "RocketAmmo" { DrawImage "graphics/hud/icon-rockets.png", -162, -57; }
+		WeaponAmmo "Cell"       { DrawImage "graphics/hud/icon-cells.png"  , -162, -57; }
+		
+		// weapon
+		DrawImage weaponicon, -95, -59;
+		
+		// keys
+		GameMode singleplayer, cooperative, teamgame
+		{
+			DrawKeyBar 6, horizontal, auto, 28, -71;
+		}
+		// [TODO] frag counter; somewhat pointless now because DM isn't a thing yet.
+	
+	} Else {
+		
+		// --- Classic-style --- //
+	
+		//health
+		drawimage "BON1B0", 20, -2, centerbottom;
+		drawnumber 3, HUDFONT_DOOM, untranslated, health, drawshadow, 82, -20;
+	
+		//armor
+		drawimage armoricon, 20, -24, centerbottom;
+		drawnumber 3, HUDFONT_DOOM, untranslated, armor, drawshadow, whennotzero, 82, -39;
+	
+		//ammo
+		drawimage ammoicon1, -14, -4, centerbottom;
+		drawnumber 3, HUDFONT_DOOM, untranslated, ammo1, drawshadow, -25, -20;
+	
+		usesammo
+		{
+			//secondary ammo and inventory
+			usessecondaryammo
 			{
-				drawselectedinventory centerbottom, drawshadow, alwaysshowcounter, HUDFONT_DOOM, -14, -39, -26, -56, untranslated;
+				drawimage ammoicon2, -14, -22, centerbottom;
+				drawnumber 3, HUDFONT_DOOM, untranslated, ammo2, drawshadow, -25, -38;
+				inventorybarnotvisible
+				{
+					drawselectedinventory centerbottom, drawshadow, alwaysshowcounter, HUDFONT_DOOM, -14, -39, -26, -56, untranslated;
+				}
+			}
+			//no secondary ammo
+			usessecondaryammo not
+			{
+				inventorybarnotvisible
+				{
+					drawselectedinventory centerbottom, drawshadow, alwaysshowcounter, HUDFONT_DOOM, -14, -21, -26, -38, untranslated;
+				}
 			}
 		}
-		//no secondary ammo
-		usessecondaryammo not
+		
+		// no ammo but inventory
+		usesammo not
 		{
 			inventorybarnotvisible
 			{
-				drawselectedinventory centerbottom, drawshadow, alwaysshowcounter, HUDFONT_DOOM, -14, -21, -26, -38, untranslated;
+				drawselectedinventory centerbottom, drawshadow, alwaysshowcounter, HUDFONT_DOOM, -14, -3, -26, -20, untranslated;
 			}
 		}
-	}
 	
-	// no ammo but inventory
-	usesammo not
-	{
-		inventorybarnotvisible
+		gamemode deathmatch
 		{
-			drawselectedinventory centerbottom, drawshadow, alwaysshowcounter, HUDFONT_DOOM, -14, -3, -26, -20, untranslated;
+			drawnumber 2, HUDFONT_DOOM, untranslated, frags, drawshadow, -3, 1;
+		}
+		gamemode singleplayer, cooperative, teamgame
+		{
+			drawkeybar 6, vertical, reverserows, auto, -10, 2, 0, 3, auto;
 		}
 	}
-
-	gamemode deathmatch
-	{
-		drawnumber 2, HUDFONT_DOOM, untranslated, frags, drawshadow, -3, 1;
-	}
-	gamemode singleplayer, cooperative, teamgame
-	{
-		drawkeybar 6, vertical, reverserows, auto, -10, 2, 0, 3, auto;
-	}
-*/
 }
 
 statusbar normal // Standard Doom Status bar
