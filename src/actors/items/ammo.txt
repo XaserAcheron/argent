@@ -4,11 +4,11 @@
 //
 // --------------------------------------------------------------------------
 
-ACTOR ArgClip       : Clip       replaces Clip       { Inventory.PickupSound "items/ammo" }
-ACTOR ArgClipBox    : ClipBox    replaces ClipBox    { Inventory.PickupSound "items/ammo" }
+ACTOR ArgClip       : Clip       replaces Clip       { Inventory.PickupSound "items/ammo" Scale 0.66 }
+ACTOR ArgClipBox    : ClipBox    replaces ClipBox    { Inventory.PickupSound "items/ammo" Scale 0.66 }
 ACTOR ArgShell      : Shell      replaces Shell      { Inventory.PickupSound "items/ammo" }
-ACTOR ArgShellBox   : ShellBox   replaces ShellBox   { Inventory.PickupSound "items/ammo" }
-ACTOR ArgRocketAmmo : RocketAmmo replaces RocketAmmo { Inventory.PickupSound "items/ammo" }
-ACTOR ArgRocketBox  : RocketBox  replaces RocketBox  { Inventory.PickupSound "items/ammo" }
-ACTOR ArgCell       : Cell       replaces Cell       { Inventory.PickupSound "items/ammo" }
-ACTOR ArgCellPack   : CellPack   replaces CellPack   { Inventory.PickupSound "items/ammo" }
+ACTOR ArgShellBox   : ShellBox   replaces ShellBox   { Inventory.PickupSound "items/ammo" Scale 0.66 }
+ACTOR ArgRocketAmmo : RocketAmmo replaces RocketAmmo { Inventory.PickupSound "items/ammo" Scale 0.66 }
+ACTOR ArgRocketBox  : RocketBox  replaces RocketBox  { Inventory.PickupSound "items/ammo" Scale 0.66 }
+ACTOR ArgCell       : Cell       replaces Cell       { Inventory.PickupSound "items/ammo" Scale 0.75 }
+ACTOR ArgCellPack   : CellPack   replaces CellPack   { Inventory.PickupSound "items/ammo" Scale 0.75 }
