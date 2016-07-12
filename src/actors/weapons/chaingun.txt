@@ -68,9 +68,12 @@ ACTOR ArgChaingun : ArgModWeapon
 		Goto Mod0FireEnd
 	Mod0Anim1:
 		CHGF A 1 Bright {
+			A_WeaponOffset(3.0 + frandom(-0.5, 0.5), 35.0 + frandom(-0.5, 0.5));
+			if(CountInv("ArgChaingunSpinnyToken") >= 2) {
+				return state("Mod0Anim2");
+			}
 			A_PlaySound("weapons/chaingun/spinloop", CHAN_WEAPON, 1.0, 1);
-			A_WeaponOffset(3.0 + frandom(-0.5, 0.5), 35.0 + frandom(-0.5, 0.5)); 
-			return A_JumpIfInventory("ArgChaingunSpinnyToken", 2, "Mod0Anim2");
+			return state(0);
 		}
 		CHGG A     1          A_WeaponOffset(2.0 + frandom(-0.5, 0.5), 34.0 + frandom(-0.5, 0.5))
 		CHGG B     1          A_WeaponOffset(1.0 + frandom(-0.5, 0.5), 33.0 + frandom(-0.5, 0.5))
@@ -140,19 +143,23 @@ ACTOR ArgChaingun : ArgModWeapon
 	Mod1Up:
 	Mod1Hold:
 		CHGG A 3 {
-			A_PlaySound("weapons/chaingun/spinup", CHAN_WEAPON);
 			if(CallACS("SynthFire")) {
 				return state("Mod0Fire");
-			} else {
-				return A_JumpIfInventory("ArgChaingunSpinnyToken", 1, "Mod1Anim1");
+			} else if(CountInv("ArgChaingunSpinnyToken") >= 1) {
+				return state("Mod1Anim1");
 			}
+			A_PlaySound("weapons/chaingun/spinup", CHAN_WEAPON);
+			return state(0);
 		}
 		CHGG BCD 3
 		Goto Mod0FireEnd
 	Mod1Anim1:
 		CHGG A 1 Bright {
+			if(CountInv("ArgChaingunSpinnyToken") >= 2) {
+				return state("Mod1Anim2");
+			}
 			A_PlaySound("weapons/chaingun/spinloop", CHAN_WEAPON, 1.0, 1);
-			return A_JumpIfInventory("ArgChaingunSpinnyToken", 2, "Mod1Anim2");
+			return state(0);
 		}
 		CHGG A 1
 		CHGG BCDA 2
