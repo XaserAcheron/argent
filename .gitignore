@@ -39,3 +39,4 @@ jspm_packages
 # [XA] custom stuff:
 [Dd]ist/
 gdcc/
+src/acs/*.o

@@ -3,19 +3,21 @@ import os
 import subprocess
 import zipfile
 
+GDCC_DIR = "gdcc"
 SRC_DIR = "src"
 DIST_DIR = "dist"
 DIST_FNAME = "xaks-argent-orange"
 
 def compileacs ():
     print ("Compiling ACS files...")
+    cmd = subprocess.run ([os.path.join (GDCC_DIR, "gdcc-acc"),
+                           "--lib-path", os.path.join (GDCC_DIR, "lib"),
+                           os.path.join (SRC_DIR, "scripts", "argent.acs"),
+                           "--output", os.path.join (SRC_DIR, "acs", "argent.o")])
+    cmd.check_returncode()
 
 def makepkg ():
     destination = os.path.join (DIST_DIR, DIST_FNAME + ".pk3")
-    if not os.path.exists (DIST_DIR):
-        os.mkdir (DIST_DIR)
-    if os.path.exists (DIST_FNAME):
-        os.remove (DIST_FNAME)
     
     print ("Writing {filename}...".format (filename=destination))
     print ("-" * 70)
@@ -49,6 +51,9 @@ def maketxt ():
     sourcefile.close ()
 
 if __name__ == "__main__":
+    if not os.path.exists (DIST_DIR):
+        os.mkdir (DIST_DIR)
+    
     compileacs ()
     makepkg ()
     maketxt ()
