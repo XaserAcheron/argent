@@ -78,7 +78,6 @@ ACTOR ArgRocket : FastProjectile
 	MissileType "ArgRocketTrailSpawner"
 	MissileHeight 13
 	Decal "Scorch"
-	DamageType "ArgRocketLauncher"
 	Obituary "$ARG_OB_ROCKET"
 	
 	+EXTREMEDEATH
