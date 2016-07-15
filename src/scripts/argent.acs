@@ -142,7 +142,7 @@ script "SynthAltFire" (void)
 }
 
 /*
- * GetTracer functions for sticky missiles
+ * GetTracer functions for sticky missiles (cheers, love!)
  */
 script "GetTracerX" (void) {
 	int projX = GetActorX(0);
@@ -161,4 +161,12 @@ script "GetTracerZ" (void) {
 	SetActivator(0, AAPTR_TRACER);
 	int targZ = GetActorZ(0);
 	SetResultValue(((projZ - targZ) * 3 / 4) >> 16);
+}
+
+/*
+ * Silly Test Stuff
+ */
+script "FontTest" (void) {
+	SetFont("ARGFONT");
+	print(s:"The quick brown katefox jumps over the lazy xaserdog.\n");
 }
