@@ -17,6 +17,7 @@ statusbar fullscreen, fullscreenoffsets
 		DrawBar "graphics/hud/bar-health-2.png", "graphics/hud/bar-health-2x.png", health(200), horizontal,  0, -41;
 		
 		// armor
+		DrawSwitchableImage armortype ArgArmorBlue, "graphics/hud/armor-green.png", "graphics/hud/armor-blue.png", 68, -57;
 		DrawNumber 3, "hudfont-small", untranslated, armor, alignment(right), 64, -55;
 		DrawBar "graphics/hud/bar-armor-1.png", "graphics/hud/bar-armor-1x.png", armor(100), horizontal, 79, -55;
 		DrawBar "graphics/hud/bar-armor-2.png", "graphics/hud/bar-armor-2x.png", armor(200), horizontal,  0, -55;
