@@ -53,7 +53,8 @@ ACTOR ArgRocketLauncher : ArgWeapon replaces RocketLauncher
 		RKLF B 1 A_WeaponOffset( 6.5, 35.5)
 		RKLF B 1 A_WeaponOffset( 2.0, 33.5)
 		RKLG A 1 A_WeaponOffset( 0.0, 32.0)
-		RKLG ABCDEFGHIJ 1
+		RKLG A 1 A_CheckReload
+		RKLG BCDEFGHIJ 1
 		RKLG K 3
 		RKLG LMNOP 1
 		RKLG A 0 A_Refire

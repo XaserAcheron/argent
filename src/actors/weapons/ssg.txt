@@ -36,9 +36,16 @@ ACTOR ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 			A_FireBullets(11.2, 7.1, 20, 5, "ArgBulletPuff");
 			A_PlaySound("weapons/ssg/fire", CHAN_5);
 		}
-		SSGF BCDEFFEGHIJKLMNOPQRSTUVXYZ 1
+		SSGF BCDEF 1
+		SSGF F 1 A_JumpIfNoAmmo("ImOutOfAmmo")
+		SSGF EGHIJKLMNOPQRSTUVXYZ 1
 		SSGG BCDEFGHIJKLMNOPQRSTUVWX 1
 		SSGG A 0 A_ReFire
+		Goto Ready
+	ImOutOfAmmo:
+		SSGF FEDCB 1
+		SSGG A 1
+		SSGG A 0 A_CheckReload
 		Goto Ready
 	Flash:
 		TNT1 A 4 Bright A_Light2
