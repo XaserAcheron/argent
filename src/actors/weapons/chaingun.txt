@@ -6,7 +6,7 @@
 
 ACTOR ArgChaingun : ArgModWeapon
 {
-	Weapon.SelectionOrder 3
+	Weapon.SelectionOrder 2
 	Weapon.AmmoUse 1
 	Weapon.AmmoUse2 1
 	Weapon.AmmoGive 20

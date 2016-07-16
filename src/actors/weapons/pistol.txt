@@ -6,7 +6,7 @@
 
 ACTOR ArgPistol : ArgWeapon replaces Pistol
 {
-	Weapon.SelectionOrder 8
+	Weapon.SelectionOrder 9
 	Inventory.Icon "graphics/hud/weapon-pistol.png"
 	Inventory.PickupMessage "$ARG_GOT_PISTOL"
 	Tag "$ARG_TAG_PISTOL"

@@ -6,7 +6,7 @@
 
 ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 {
-	Weapon.SelectionOrder 6
+	Weapon.SelectionOrder 5
 	Weapon.AmmoUse 1
 	const int Mod1AmmoUse = 3;
 	const int Mod2AmmoUse = 2;

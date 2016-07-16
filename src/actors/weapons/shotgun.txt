@@ -6,7 +6,7 @@
 
 ACTOR ArgShotgun : ArgWeapon replaces Shotgun
 {
-	Weapon.SelectionOrder 7
+	Weapon.SelectionOrder 6
 	Weapon.AmmoUse 1
 	Weapon.AmmoGive 8
 	Weapon.AmmoType "Shell"

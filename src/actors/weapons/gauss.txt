@@ -7,7 +7,7 @@
 ACTOR ArgGaussCannon : ArgWeapon
 {
 	Weapon.UpSound "weapons/gauss/equip"
-	Weapon.SelectionOrder 2
+	Weapon.SelectionOrder 3
 	Weapon.AmmoUse 20
 	Weapon.AmmoGive 40
 	Weapon.AmmoType "Cell"

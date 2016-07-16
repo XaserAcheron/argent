@@ -6,7 +6,7 @@
 
 ACTOR ArgPlasmaRifle : ArgWeapon replaces PlasmaRifle
 {
-	Weapon.SelectionOrder 5
+	Weapon.SelectionOrder 4
 	Weapon.AmmoUse 1
 	Weapon.AmmoGive 40
 	Weapon.AmmoType "Cell"
