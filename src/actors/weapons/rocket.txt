@@ -9,7 +9,7 @@ ACTOR ArgRocketLauncher : ArgWeapon replaces RocketLauncher
 	Weapon.SelectionOrder 7
 	Weapon.AmmoUse 1
 	Weapon.AmmoGive 2
-	Weapon.AmmoType "RocketAmmo"
+	Weapon.AmmoType "ArgRocketAmmo"
 	Inventory.Icon "graphics/hud/weapon-rocket.png"
 	Inventory.PickupMessage "$ARG_GOT_ROCKET"
 	Tag "$ARG_TAG_ROCKET"

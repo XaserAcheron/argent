@@ -6,9 +6,37 @@
 
 ACTOR ArgClip       : Clip       replaces Clip       { Inventory.PickupSound "items/ammo" Scale 0.66 }
 ACTOR ArgClipBox    : ClipBox    replaces ClipBox    { Inventory.PickupSound "items/ammo" Scale 0.66 }
-ACTOR ArgShell      : Shell      replaces Shell      { Inventory.PickupSound "items/ammo" }
+ACTOR ArgShell      : Shell      replaces Shell      { Inventory.PickupSound "items/ammo" Scale 0.66 }
 ACTOR ArgShellBox   : ShellBox   replaces ShellBox   { Inventory.PickupSound "items/ammo" Scale 0.66 }
-ACTOR ArgRocketAmmo : RocketAmmo replaces RocketAmmo { Inventory.PickupSound "items/ammo" Scale 0.66 }
-ACTOR ArgRocketBox  : RocketBox  replaces RocketBox  { Inventory.PickupSound "items/ammo" Scale 0.66 }
 ACTOR ArgCell       : Cell       replaces Cell       { Inventory.PickupSound "items/ammo" Scale 0.75 }
 ACTOR ArgCellPack   : CellPack   replaces CellPack   { Inventory.PickupSound "items/ammo" Scale 0.75 }
+
+ACTOR ArgRocketAmmo : Ammo
+{
+	Inventory.PickupSound "items/ammo"
+	Inventory.PickupMessage "$GOTROCKET"
+	Inventory.Amount 1
+	Inventory.MaxAmount 30
+	Ammo.BackpackAmount 1
+	Ammo.BackpackMaxAmount 60
+	Inventory.Icon "ROCKA0"
+	Scale 0.66
+	States
+	{
+	Spawn:
+		ROCK A -1
+		Stop
+	}
+}
+
+ACTOR ArgRocketBox : ArgRocketAmmo
+{
+	Inventory.PickupMessage "$GOTROCKBOX"
+	Inventory.Amount 5
+	States
+	{
+	Spawn:
+		BROK A -1
+		Stop
+	}
+}
