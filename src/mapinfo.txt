@@ -2,6 +2,8 @@ gameinfo
 {
 	playerclasses = "ArgPlayer"
 	norandomplayerclass = true
+	intermissionmusic = "music/inter.mid"
+	titlemusic = "music/title.mid"
 }
 
 clearskills

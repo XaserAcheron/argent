@@ -18,6 +18,10 @@ Graphics:
 Sounds
 	- id software (taken straight from the game, oh no)
 
+Music
+	- Kate Fox (MIDI awesomeness)
+	- Mick Gordon (original composer; no audio directly ripped though)
+
 Testing n' Bugreports
 	- Flyingcomputer
 	- Jimmy
