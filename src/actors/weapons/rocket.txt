@@ -4,7 +4,7 @@
 //
 // --------------------------------------------------------------------------
 
-ACTOR ArgRocketLauncher : ArgWeapon replaces RocketLauncher
+ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 {
 	Weapon.SelectionOrder 7
 	Weapon.AmmoUse 1
@@ -22,15 +22,27 @@ ACTOR ArgRocketLauncher : ArgWeapon replaces RocketLauncher
 		RKLP A -1
 		Stop
 	Ready:
-		RKLG A 1 A_WeaponReady
-		Loop
+		RKLG A 0
+		Goto Super::Ready
 	Select:
 		RKLG A 0
 		Goto SelectLoop
 	Deselect:
 		RKLG A 0
 		Goto DeselectLoop
-	Fire:
+
+	/* Unmodded + Primary */
+
+	Mod0Select:
+		RKLG A 0
+		Goto SelectLoop
+	Mod0Swap:
+		RKLG A 0
+		Goto ModSwapUp
+	Mod0Ready:
+		RKLG A 0
+		Goto ReadyLoop
+	Mod0Fire:
 		RKLF A 2 Bright {
 			A_GunFlash;
 			A_FireCustomMissile("ArgRocket", 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
@@ -63,8 +75,17 @@ ACTOR ArgRocketLauncher : ArgWeapon replaces RocketLauncher
 		TNT1 A 2 Bright A_Light2
 		TNT1 A 1 Bright A_Light1
 		Goto LightDone
+
+	/* Mod 1: Remote Detonator */
+
+	/* Mod 2: Lock-on Burst */
+
 	}
 }
+ACTOR ArgRocketLauncherModSelected : ArgModToken {}
+ACTOR ArgRocketLauncherMod1Enabled : ArgToken    {}
+ACTOR ArgRocketLauncherMod2Enabled : ArgToken    {}
+ACTOR ArgRocketLauncherModCooldown : ArgToken    { Inventory.MaxAmount 120 }
 
 ACTOR ArgRocket : FastProjectile
 {

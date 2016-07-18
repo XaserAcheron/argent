@@ -4,7 +4,7 @@
 //
 // --------------------------------------------------------------------------
 
-ACTOR ArgPlasmaRifle : ArgWeapon replaces PlasmaRifle
+ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 {
 	Weapon.SelectionOrder 4
 	Weapon.AmmoUse 1
@@ -20,15 +20,27 @@ ACTOR ArgPlasmaRifle : ArgWeapon replaces PlasmaRifle
 		PLSP A -1
 		Stop
 	Ready:
-		PLSG A 1 A_WeaponReady
-		Loop
+		PLSG A 0
+		Goto Super::Ready
 	Select:
 		PLSG A 0
 		Goto SelectLoop
 	Deselect:
 		PLSG A 0
 		Goto DeselectLoop
-	Fire:
+
+	/* Unmodded + Primary */
+
+	Mod0Select:
+		PLSG A 0
+		Goto SelectLoop
+	Mod0Swap:
+		PLSG A 0
+		Goto ModSwapUp
+	Mod0Ready:
+		PLSG A 0
+		Goto ReadyLoop
+	Mod0Fire:
 		PLSF A 1 Bright {
 			A_GunFlash;
 			A_FireCustomMissile("ArgPlasma", 0, 1, 6.0 + frandom(-2.00, 2.00), frandom(-2.00, 2.00));
@@ -42,8 +54,17 @@ ACTOR ArgPlasmaRifle : ArgWeapon replaces PlasmaRifle
 		TNT1 A 2 Bright A_Light2
 		TNT1 A 1 Bright A_Light1
 		Goto LightDone
+
+	/* Mod 1: Heated Core */
+
+	/* Mod 2: Stun Bomb */
+
 	}
 }
+ACTOR ArgPlasmaRifleModSelected : ArgModToken {}
+ACTOR ArgPlasmaRifleMod1Enabled : ArgToken    {}
+ACTOR ArgPlasmaRifleMod2Enabled : ArgToken    {}
+ACTOR ArgPlasmaRifleModCooldown : ArgToken    { Inventory.MaxAmount 120 }
 
 ACTOR ArgPlasma : PlasmaBall
 {
