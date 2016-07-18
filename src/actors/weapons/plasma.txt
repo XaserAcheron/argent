@@ -43,6 +43,7 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 	Mod0Fire:
 		PLSF A 1 Bright {
 			A_GunFlash;
+			A_AlertMonsters;
 			A_FireCustomMissile("ArgPlasma", 0, 1, 6.0 + frandom(-2.00, 2.00), frandom(-2.00, 2.00));
 			A_PlaySound("weapons/plasma/fire", CHAN_5);
 			A_WeaponOffset(0.0, 32.0);

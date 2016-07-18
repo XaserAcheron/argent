@@ -49,6 +49,7 @@ ACTOR ArgShotgun : ArgModWeapon replaces Shotgun
 			A_GunFlash;
 			A_FireBullets(5, 2, 7, 5, "ArgBulletPuff");
 			A_PlaySound("weapons/shotgun/fire", CHAN_5);
+			A_AlertMonsters;
 		}
 		SHTF B 1 A_WeaponOffset(1.0, 33.0)
 		SHTF C 1 A_WeaponOffset(2.0, 37.0)

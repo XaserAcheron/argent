@@ -38,7 +38,7 @@ ACTOR ArgBFG9000 : ArgWeapon replaces BFG9000
 		BFGG D 1 Bright   A_WeaponOffset(frandom(-0.3, 0.3), frandom(-0.3, 0.3) + 32) 
 		BFGG E 1 Bright   A_WeaponOffset(frandom(-0.3, 0.3), frandom(-0.3, 0.3) + 32) 
 		BFGG F 1 Bright   A_WeaponOffset(frandom(-0.4, 0.4), frandom(-0.4, 0.4) + 32) 
-		BFGG G 1 Bright { A_WeaponOffset(frandom(-0.4, 0.4), frandom(-0.4, 0.4) + 32); A_GunFlash; }
+		BFGG G 1 Bright { A_WeaponOffset(frandom(-0.4, 0.4), frandom(-0.4, 0.4) + 32); A_GunFlash; A_AlertMonsters; }
 		BFGG H 1 Bright   A_WeaponOffset(frandom(-0.5, 0.5), frandom(-0.5, 0.5) + 32)
 		BFGG I 1 Bright   A_WeaponOffset(frandom(-0.5, 0.5), frandom(-0.5, 0.5) + 32) 
 		BFGG J 1 Bright   A_WeaponOffset(frandom(-0.6, 0.6), frandom(-0.6, 0.6) + 32) 

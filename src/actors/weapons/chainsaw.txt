@@ -45,7 +45,7 @@ ACTOR ArgChainsaw : ArgWeapon replaces Chainsaw
 		SAWG D 1   A_WeaponOffset(-1.0, 32.0 + 16)
 		SAWG D 1   A_WeaponOffset( 0.0, 32.0 +  8)
 	Hold:
-		SAWG C 0 A_Saw("", "effects/gibs", 0, "ArgChainsawPuff")
+		SAWG C 0 { A_Saw("", "effects/gibs", 0, "ArgChainsawPuff"); A_AlertMonsters; }
 		SAWG CC 1 A_WeaponOffset(frandom(-1.0, 1.0), 32.0 + frandom(-1.0, 1.0))
 		SAWG D 0 A_Saw("", "effects/gibs", 0, "ArgChainsawPuff", SF_NOPULLIN | SF_NOTURN)
 		SAWG DD 1 A_WeaponOffset(frandom(-2.0, 2.0), 32.0 + frandom(-2.0, 2.0))
