@@ -47,6 +47,7 @@ ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 			A_GunFlash;
 			A_FireCustomMissile("ArgRocket", 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
+			A_AlertMonsters;
 		}
 		RKLF B 1 A_WeaponOffset( 2.0, 33.5)
 		RKLF B 1 A_WeaponOffset( 6.0, 35.5)

@@ -14,6 +14,9 @@ ACTOR ArgWeapon : DoomWeapon
 	Weapon.BobRangeY 0.50
 	Weapon.SelectionOrder 9999999
 	Scale 0.75
+	
+	+WEAPON.NOALERT
+	
 	States
 	{
 	Spawn:
