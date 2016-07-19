@@ -8,6 +8,7 @@ Sprites:
 	- PillowBlaster (powerups n' pickups)
 	- Xaser (gibs, pistol charge, misc edits)
 	- Rogue Entertainment (blood spray)
+	- Amuscaria (plasma stun bomb projectile)
 	- ??? (puff sprites)
 	- ??? (puff smoke)
 	- ??? (floor blood splatter)

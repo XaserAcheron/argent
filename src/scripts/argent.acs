@@ -7,6 +7,8 @@
 #library "argent"
 #include "zcommon.acs"
 
+#define DEF_STUN_SECONDS 5
+
 /*
  * Monitor script. Handles stuff that has to be triggered in a script loop.
  * Only updates once a second since none of this requires real-time stuffs.
@@ -161,6 +163,31 @@ script "GetTracerZ" (void) {
 	SetActivator(0, AAPTR_TRACER);
 	int targZ = GetActorZ(0);
 	SetResultValue(((projZ - targZ) * 3 / 4) >> 16);
+}
+
+/*
+ * Stunz0rs
+ */
+script "NeuralStunner" (void) {
+	// [TODO] add stun duration uservars and set 'em on a few choice monsters (like bosses)
+	int duration = DEF_STUN_SECONDS * 35;
+	
+	// loop for the duration and repeatedly set the pain state.
+	// A custom "Pain.Stun" state is used; if this isn't defined,
+	// the it falls back to the regular ol' Pain state.
+	for(int i = 0; i < duration; i++) {
+
+		// Don't SetActorState if the monster's dead,
+		// or else Bad Things(tm) will happen.
+		if(GetActorProperty(0, APROP_HEALTH) >= 1) {
+			SetActorState(0, "Pain.Stun");
+		} else {
+			break;
+		}
+		
+		// [TODO] stunny zap effects
+		Delay(1);
+	}
 }
 
 /*
