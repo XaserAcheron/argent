@@ -24,26 +24,17 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 	Ready:
 		PLSG A 0
 		Goto Super::Ready
-	Select:
-		PLSG A 0
-		Goto SelectLoop
-	Deselect:
-		PLSG A 0
-		Goto DeselectLoop
 
 	/* Unmodded + Primary */
 
 	Mod0Select:
 		PLSG A 0
 		Goto SelectLoop
-	Mod0Swap:
-		PLSG A 0
-		Goto ModSwapUp
 	Mod0Ready:
 		PLSG A 0
 		Goto ReadyLoop
 	Mod0Fire:
-		PLSF A 1 Bright {
+		"####" B 1 Bright {
 			A_GunFlash;
 			A_AlertMonsters;
 			A_FireCustomMissile("ArgPlasma", 0, 1, 6.0 + frandom(-2.00, 2.00), frandom(-2.00, 2.00));
@@ -55,29 +46,32 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			}
 			A_WeaponOffset(0.0, 32.0);
 		}
-		PLSF B 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
-		PLSG A 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50))
+		"####" C 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
+		"####" A 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50))
 		Goto Ready
 	Flash:
-		TNT1 A 2 Bright A_Light2
+		TNT1 A 1 Bright A_Light2
 		TNT1 A 1 Bright A_Light1
 		Goto LightDone
 
 	/* Mod 1: Heat Blast */
 		
 	Mod1Select:
-		PLSG A 0
+		PL1G A 0
 		Goto SelectLoop
+	Mod1Raise:
+		PL1S A 0
+		Goto ModSwapUp
 	Mod1Swap:
-		PLSG A 0 A_PlaySound("weapons/plasma/mod1swap", CHAN_AUTO)
+		PL1G A 0 A_PlaySound("weapons/plasma/mod1swap", CHAN_AUTO)
 	Mod1Ready:
-		PLSG A 0
+		PL1G A 0
 		Goto ReadyLoop
 	Mod1Up:
-		PLSG A 1 A_JumpIfInventory("ArgPlasmaRifleModCharge", 30, "Mod1Hold")
+		PL1G A 1 A_JumpIfInventory("ArgPlasmaRifleModCharge", 30, "Mod1Hold")
 		Goto Mod1Ready
 	Mod1Hold:
-		PLSF A 1 Bright {
+		PL1A A 1 Bright {
 			A_GunFlash;
 			A_AlertMonsters;
 			A_PlaySound("weapons/plasma/mod1fire", CHAN_6);
@@ -86,33 +80,36 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_TakeInventory("ArgPlasmaRifleModCharge", 999);
 			// [TODO] cool heatwave effect
 		}
-		PLSG A 1 A_WeaponOffset( 5.0,  5.0 + 32.0)
-		PLSG A 1 A_WeaponOffset(12.0, 12.0 + 32.0)
-		PLSG A 1 A_WeaponOffset(15.0, 15.0 + 32.0)
-		PLSG A 1 A_WeaponOffset(16.0, 16.0 + 32.0)
-		PLSG A 1 A_WeaponOffset(14.0, 14.0 + 32.0)
-		PLSG A 1 A_WeaponOffset(11.0, 11.0 + 32.0)
-		PLSG A 1 A_WeaponOffset( 8.0,  8.0 + 32.0)
-		PLSG A 1 A_WeaponOffset( 4.0,  4.0 + 32.0)
-		PLSG A 1 A_WeaponOffset( 1.0,  1.0 + 33.0)
-		PLSG A 1 A_WeaponOffset( 0.0,  0.0 + 32.0)
+		PL1A B 1 A_WeaponOffset( 5.0,  5.0 + 32.0)
+		PL1A B 1 A_WeaponOffset(12.0, 12.0 + 32.0)
+		PL1A C 1 A_WeaponOffset(15.0, 15.0 + 32.0)
+		PL1A C 1 A_WeaponOffset(16.0, 16.0 + 32.0)
+		PL1A D 1 A_WeaponOffset(14.0, 14.0 + 32.0)
+		PL1A D 1 A_WeaponOffset(11.0, 11.0 + 32.0)
+		PL1A E 1 A_WeaponOffset( 8.0,  8.0 + 32.0)
+		PL1A E 1 A_WeaponOffset( 4.0,  4.0 + 32.0)
+		PL1A F 1 A_WeaponOffset( 1.0,  1.0 + 33.0)
+		PL1A G 1 A_WeaponOffset( 0.0,  0.0 + 32.0)
 		Goto Mod1Ready
 
 	/* Mod 2: Stun Bomb */
 		
 	Mod2Select:
-		PLSG A 0
+		PL2G A 0
 		Goto SelectLoop
+	Mod2Raise:
+		PL2S A 0
+		Goto ModSwapUp
 	Mod2Swap:
-		PLSG A 0 A_PlaySound("weapons/plasma/mod2swap", CHAN_AUTO)
+		PL2G A 0 A_PlaySound("weapons/plasma/mod2swap", CHAN_AUTO)
 	Mod2Ready:
-		PLSG A 0
+		PL2G A 0
 		Goto ReadyLoop
 	Mod2Up:
-		PLSG A 1 A_JumpIfInventory("Cell", 10, "Mod2Hold")
+		PL2G A 1 A_JumpIfInventory("Cell", 10, "Mod2Hold")
 		Goto Mod1Ready
 	Mod2Hold:
-		PLSF A 1 Bright {
+		PL2G B 1 Bright {
 			A_GunFlash;
 			A_AlertMonsters;
 			A_PlaySound("weapons/plasma/mod2fire", CHAN_6);
@@ -120,16 +117,16 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_TakeInventory("Cell", Mod2AmmoUse, TIF_NOTAKEINFINITE);
 			A_GiveInventory("ArgPlasmaRifleModCooldown", 200);
 		}
-		PLSG A 1 A_WeaponOffset( 5.0,  5.0 + 32.0)
-		PLSG A 1 A_WeaponOffset(12.0, 12.0 + 32.0)
-		PLSG A 1 A_WeaponOffset(15.0, 15.0 + 32.0)
-		PLSG A 1 A_WeaponOffset(16.0, 16.0 + 32.0)
-		PLSG A 1 A_WeaponOffset(14.0, 14.0 + 32.0)
-		PLSG A 1 A_WeaponOffset(11.0, 11.0 + 32.0)
-		PLSG A 1 A_WeaponOffset( 8.0,  8.0 + 32.0)
-		PLSG A 1 A_WeaponOffset( 4.0,  4.0 + 32.0)
-		PLSG A 1 A_WeaponOffset( 1.0,  1.0 + 33.0)
-		PLSG A 1 A_WeaponOffset( 0.0,  0.0 + 32.0)
+		PL2G A 1 A_WeaponOffset( 5.0,  5.0 + 32.0)
+		PL2G A 1 A_WeaponOffset(12.0, 12.0 + 32.0)
+		PL2G A 1 A_WeaponOffset(15.0, 15.0 + 32.0)
+		PL2G A 1 A_WeaponOffset(16.0, 16.0 + 32.0)
+		PL2G A 1 A_WeaponOffset(14.0, 14.0 + 32.0)
+		PL2G A 1 A_WeaponOffset(11.0, 11.0 + 32.0)
+		PL2G A 1 A_WeaponOffset( 8.0,  8.0 + 32.0)
+		PL2G A 1 A_WeaponOffset( 4.0,  4.0 + 32.0)
+		PL2G A 1 A_WeaponOffset( 1.0,  1.0 + 33.0)
+		PL2G A 1 A_WeaponOffset( 0.0,  0.0 + 32.0)
 		Goto Cooldown
 	}
 }

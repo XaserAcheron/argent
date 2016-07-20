@@ -106,8 +106,15 @@ ACTOR ArgModWeapon : ArgWeapon
 		// jump to the unmodded state -- generally a handless version of Ready
 		"####" "#" 0 {
 			ACS_NamedExecuteAlways("ClearModCooldown");
-			return state("Mod0Swap");
+			if(CallACS("ModSelected", 1)) {
+				return state("Mod1Raise");
+			} else {
+				return state("Mod2Raise");
+			}
 		}
+	Mod1Raise:
+	Mod2Raise:
+		"####" "#" 0 A_Jump(256, "Mod0Swap") // legacy; may remove
 	Mod0Swap:
 	ModSwapUp:
 		// raise the weapon
