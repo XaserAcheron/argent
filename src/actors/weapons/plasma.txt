@@ -38,13 +38,15 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_GunFlash;
 			A_AlertMonsters;
 			A_FireCustomMissile("ArgPlasma", 0, 1, 6.0 + frandom(-2.00, 2.00), frandom(-2.00, 2.00));
+			A_WeaponOffset(0.0, 32.0);
 			if(CountInv("ArgPlasmaRifleModSelected") == 1) {
 				A_GiveInventory("ArgPlasmaRifleModCharge", 2);
 				A_PlaySound("weapons/plasma/altfire", CHAN_5);
+				return state("Mod1FirePrimary");
 			} else {
 				A_PlaySound("weapons/plasma/fire", CHAN_5);
 			}
-			A_WeaponOffset(0.0, 32.0);
+			return state(0);
 		}
 		"####" C 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
 		"####" A 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50))
@@ -65,8 +67,33 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 	Mod1Swap:
 		PL1G A 0 A_PlaySound("weapons/plasma/mod1swap", CHAN_AUTO)
 	Mod1Ready:
-		PL1G A 0
+		PL1G A 0 {
+			if(CountInv("ArgPlasmaRifleModCharge") >= 120) { return state("Mod1ReadyD"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >=  90) { return state("Mod1ReadyC"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >=  60) { return state("Mod1ReadyB"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >=  30) { return state("Mod1ReadyA"); }
+			return state(0);
+		}
 		Goto ReadyLoop
+	Mod1ReadyA:
+		PL1A FFFGGG 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		PL1G AAA 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		PL1A GGGFFF 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		Loop
+	Mod1ReadyB:
+		PL1A EEEFFFGGGFFFEEE 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		Loop
+	Mod1ReadyC:
+		PL1A DDDEEEFFFEEEDDD 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		Loop
+	Mod1ReadyD:
+		PL1G DDDEEEFFFGGGHHH 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		Loop
+	Mod1FirePrimary:
+		PL1G B 1 Bright
+		PL1G C 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
+		PL1A D 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50))
+		Goto Mod1Ready
 	Mod1Up:
 		PL1G A 1 A_JumpIfInventory("ArgPlasmaRifleModCharge", 30, "Mod1Hold")
 		Goto Mod1Ready
@@ -78,6 +105,7 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_Explode(CountInv("ArgPlasmaRifleModCharge") * 3, 160, XF_NOTMISSILE, 0, 128);
 			A_Blast(BF_NOIMPACTDAMAGE, CountInv("ArgPlasmaRifleModCharge") * 2, 160, 20, "ArgNothing", "");
 			A_TakeInventory("ArgPlasmaRifleModCharge", 999);
+			A_Quake(2, 8, 0, 8, "");
 			// [TODO] cool heatwave effect
 		}
 		PL1A B 1 A_WeaponOffset( 5.0,  5.0 + 32.0)
