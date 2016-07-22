@@ -115,8 +115,23 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		PL1G DDDEEEFFFGGGHHH 1 A_WeaponReady(WRF_ALLOWRELOAD)
 		Loop
 	Mod1FirePrimary:
+		// extra special animation stuffs for heatblast's primary fire
+		PL1G K 1 Bright {
+			if(CountInv("ArgPlasmaRifleModCharge") >= 120) { return state("Mod1FirePrimaryB"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >=  30) { return state("Mod1FirePrimaryA"); }
+			return state(0);
+		}
+		PL1G L 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
+		PL1G A 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50))
+		Goto Mod1Ready
+	Mod1FirePrimaryA:
 		PL1G B 1 Bright
 		PL1G C 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
+		PL1A D 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50))
+		Goto Mod1Ready
+	Mod1FirePrimaryB:
+		PL1G I 1 Bright
+		PL1G J 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
 		PL1A D 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50))
 		Goto Mod1Ready
 	Mod1Up:
