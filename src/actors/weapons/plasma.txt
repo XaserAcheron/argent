@@ -145,8 +145,18 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_Explode(CountInv("ArgPlasmaRifleModCharge") * 3, 160, XF_NOTMISSILE, 0, 128);
 			A_Blast(BF_NOIMPACTDAMAGE, CountInv("ArgPlasmaRifleModCharge") * 2, 160, 20, "ArgNothing", "");
 			A_TakeInventory("ArgPlasmaRifleModCharge", 999);
+			
+			// cool heatwave fx
 			A_Quake(2, 8, 0, 8, "");
-			// [TODO] cool heatwave effect
+			A_FireCustomMissile("ArgPlasmaHeatWave", -40, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireCustomMissile("ArgPlasmaHeatWave", -30, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireCustomMissile("ArgPlasmaHeatWave", -20, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireCustomMissile("ArgPlasmaHeatWave", -10, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireCustomMissile("ArgPlasmaHeatWave",   0, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireCustomMissile("ArgPlasmaHeatWave",  10, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireCustomMissile("ArgPlasmaHeatWave",  20, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireCustomMissile("ArgPlasmaHeatWave",  30, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireCustomMissile("ArgPlasmaHeatWave",  40, 0, 0, 0, FPF_NOAUTOAIM);
 		}
 		PL1A B 1 A_WeaponOffset( 5.0,  5.0 + 32.0)
 		PL1A B 1 A_WeaponOffset(12.0, 12.0 + 32.0)
@@ -255,10 +265,12 @@ ACTOR ArgPlasma : PlasmaBall
 ACTOR ArgPlasmaHeatWave
 {
 	Projectile
-	Speed 20
+	Speed 10
 	Damage 0
 	Alpha 0.5
 	RenderStyle "Add"
+	XScale 0.5
+	YScale 0.1
 
 	+BOUNCEONWALLS
 	+BOUNCEONCEILINGS
@@ -267,7 +279,12 @@ ACTOR ArgPlasmaHeatWave
 	States
 	{
 	Spawn:
-		
+		PBOM EEFFFGGGGHHHHHIIIIII 1 Bright {
+			A_SetSpeed(speed * 0.66);
+			A_SetScale(0.5, scaley * 1.1);
+			A_FadeOut(0.025);
+		}
+		Stop
 	Death:
 		TNT1 A 0
 		Stop

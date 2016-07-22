@@ -113,6 +113,7 @@ weapons/plasma/mod1fire    "sounds/weapons/plasma/mod1fire.flac"
 weapons/plasma/mod2swap    "sounds/weapons/plasma/mod2swap.flac"
 weapons/plasma/mod2ready   "sounds/weapons/plasma/mod2ready.flac"
 weapons/plasma/mod2fire    "sounds/weapons/plasma/mod2fire.flac"
+weapons/plasma/mod2hit     "sounds/weapons/plasma/mod2hit.flac"
 $random weapons/plasma/fire    { weapons/plasma/fire1    weapons/plasma/fire2    weapons/plasma/fire3    weapons/plasma/fire4    }
 $random weapons/plasma/altfire { weapons/plasma/altfire1 weapons/plasma/altfire2 weapons/plasma/altfire3 weapons/plasma/altfire4 }
 $random weapons/plasma/explode { weapons/plasma/explode1 weapons/plasma/explode2 weapons/plasma/explode3                         }
