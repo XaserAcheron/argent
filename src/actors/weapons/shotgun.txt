@@ -46,7 +46,6 @@ ACTOR ArgShotgun : ArgModWeapon replaces Shotgun
 			A_AlertMonsters;
 		}
 		"####" C 1 Bright A_WeaponOffset(4.0, 34.0)
-	Mod0Anim:
 		"####" D 1 A_WeaponOffset( 8.0, 34.0)
 		"####" E 1 A_WeaponOffset(12.0, 34.0)
 		"####" F 1 A_WeaponOffset(16.0, 34.0) 
@@ -69,12 +68,6 @@ ACTOR ArgShotgun : ArgModWeapon replaces Shotgun
 		"####" H 1 A_WeaponOffset( 2.4, 34.0) 
 		"####" G 1 A_WeaponOffset( 1.2, 33.0) 
 		"####" A 6 A_WeaponOffset( 0.0, 32.0) 
-		"####" A 0 {
-			if(CountInv("ArgShotgunModSelected") > 0) {
-				return state("Cooldown");
-			}
-			return state(0);
-		}
 		"####" A 0 A_ReFire
 		Goto Ready
 	Flash:
@@ -249,8 +242,31 @@ ACTOR ArgShotgun : ArgModWeapon replaces Shotgun
 			A_PlaySound("weapons/shotgun/mod2fire", CHAN_5);
 		}
 		SH2M B 1 Bright A_WeaponOffset(4.0, 34.0)
-		SH2G C 0
-		Goto Mod0Anim
+		// technically copypasta'd pump sequence, but it's the easiest way
+		// to avoid being able to trigger the cooldown script twice, so...
+		SH2G D 1 A_WeaponOffset( 8.0, 34.0)
+		SH2G E 1 A_WeaponOffset(12.0, 34.0)
+		SH2G F 1 A_WeaponOffset(16.0, 34.0) 
+		SH2G F 1 A_WeaponOffset(17.0, 36.0)
+		SH2G E 1 A_WeaponOffset(15.0, 38.0) 
+		SH2G D 1 A_WeaponOffset(12.5, 40.0)
+		SH2G A 1 A_WeaponOffset(10.0, 38.0) 
+		SH2G A 1 A_WeaponOffset( 8.0, 36.5) 
+		SH2G A 1 A_WeaponOffset( 6.0, 35.0)
+		SH2G A 1 A_WeaponOffset( 5.0, 34.0) 
+		SH2G G 1 A_WeaponOffset( 3.2, 33.0) 
+		SH2G I 1 A_WeaponOffset( 2.4, 34.0) 
+		SH2G J 1 A_WeaponOffset( 3.6, 35.0) 
+		SH2G K 1 A_WeaponOffset( 4.8, 36.0) 
+		SH2G L 1 A_WeaponOffset( 6.0, 37.0) 
+		SH2G L 3 A_WeaponOffset( 7.2, 38.0) 
+		SH2G L 1 A_WeaponOffset( 6.0, 37.0) 
+		SH2G K 1 A_WeaponOffset( 4.8, 36.0) 
+		SH2G I 1 A_WeaponOffset( 3.6, 35.0) 
+		SH2G H 1 A_WeaponOffset( 2.4, 34.0) 
+		SH2G G 1 A_WeaponOffset( 1.2, 33.0) 
+		SH2G A 6 A_WeaponOffset( 0.0, 32.0) 
+		Goto Cooldown
 	}
 }
 ACTOR ArgShotgunModSelected : ArgModToken {}
