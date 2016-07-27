@@ -43,36 +43,47 @@ ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RKLG A 0
 		Goto ReadyLoop
 	Mod0Fire:
-		RKLF A 2 Bright {
+		RKLG B 1 Bright {
 			A_GunFlash;
 			A_FireCustomMissile("ArgRocket", 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
 			A_AlertMonsters;
+			A_WeaponOffset(6.0, 3.0 + 32);
 		}
-		RKLF B 1 A_WeaponOffset( 2.0, 33.5)
-		RKLF B 1 A_WeaponOffset( 6.0, 35.5)
-		RKLF C 1 A_WeaponOffset(10.0, 38.0)
-		RKLF C 1 A_WeaponOffset(16.0, 41.0)
-		RKLF D 1 A_WeaponOffset(20.0, 43.0)
-		RKLF D 1 A_WeaponOffset(22.0, 44.5)
-		RKLF E 1 A_WeaponOffset(23.0, 46.2)
-		RKLF E 1 A_WeaponOffset(24.0, 46.5)
-		RKLF E 1 A_WeaponOffset(24.5, 46.6)
-		RKLF E 1 A_WeaponOffset(23.3, 46.5)
-		RKLF D 1 A_WeaponOffset(21.5, 46.2)
-		RKLF D 1 A_WeaponOffset(18.0, 45.5)
-		RKLF C 1 A_WeaponOffset(13.0, 43.0)
-		RKLF C 1 A_WeaponOffset( 9.0, 39.0)
-		RKLF B 1 A_WeaponOffset( 6.5, 35.5)
-		RKLF B 1 A_WeaponOffset( 2.0, 33.5)
-		RKLG A 1 A_WeaponOffset( 0.0, 32.0)
-		RKLG A 1 A_CheckReload
-		RKLG BCDEFGHIJ 1
-		RKLG K 3
-		RKLG LMNOP 1
+		RKLG C 1 A_WeaponOffset(16.0,  8.0 + 32)
+		RKLG D 1 A_WeaponOffset(20.0, 10.0 + 32)
+		RKLG E 1 A_WeaponOffset(22.0, 11.0 + 32)
+		RKLG F 1 A_WeaponOffset(23.0, 11.5 + 32)
+		RKLG G 1 
+		RKLG A 1 
+		RKLG A 1 A_WeaponOffset(22.0, 11.0 + 32)
+		RKLG A 1 A_WeaponOffset(20.0, 10.0 + 32)
+		RKLG H 1 A_WeaponOffset(17.0,  8.5 + 32)
+		RKLG H 1 A_WeaponOffset(13.0,  6.5 + 32)
+		RKLG I 1 A_WeaponOffset(10.0,  5.0 + 32)
+		RKLG J 1 A_WeaponOffset( 7.0,  3.5 + 32)
+		RKLG K 1 A_WeaponOffset( 5.0,  2.5 + 32)
+		RKLG L 1 A_WeaponOffset( 3.0,  1.5 + 32)
+		RKLG M 1 A_WeaponOffset( 2.0,  1.0 + 32)
+		RKLG N 1 A_WeaponOffset( 1.0,  0.5 + 32)
+		RKLG O 1 A_WeaponOffset( 0.0,  0.0 + 32)
+		RKLG P 1 
+		RKLG Q 5 A_CheckReload
+		RKLG Q 1 A_WeaponOffset(-0.25, 0.25+ 32)
+		RKLG R 1 A_WeaponOffset(-0.5,  0.5 + 32)
+		RKLG S 1 A_WeaponOffset(-1.5,  1.5 + 32)
+		RKLG T 1 A_WeaponOffset(-2.5,  2.5 + 32)
+		RKLG U 1 A_WeaponOffset(-3.5,  3.5 + 32)
+		RKLG V 4 A_WeaponOffset(-4.0,  4.0 + 32)
+		RKLG W 1 A_WeaponOffset(-3.5,  3.5 + 32)
+		RKLG X 1 A_WeaponOffset(-2.5,  2.5 + 32)
+		RKLG Y 1 A_WeaponOffset(-1.5,  1.5 + 32)
+		RKLG Z 1 A_WeaponOffset(-0.5,  0.5 + 32)
+		RKLG "[" 1 A_WeaponOffset( 0,  0.0 + 32)
 		RKLG A 0 A_Refire
 		Goto Ready
 	Flash:
+		TNT1 A 1 Bright A_Light1
 		TNT1 A 2 Bright A_Light2
 		TNT1 A 1 Bright A_Light1
 		Goto LightDone
