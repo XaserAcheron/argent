@@ -128,6 +128,19 @@ script "ClearModCooldown" (void) {
 }
 
 /*
+ * Removes all cooldowns on map start.
+ */
+script "ClearCooldownsOnStart" enter {
+	// [XA] bit stiff in the code here, but it works.
+	TakeInventory("ArgShotgunModCooldown"       , 999);
+	TakeInventory("ArgHeavyARModCooldown"       , 999);
+	TakeInventory("ArgChaingunModCooldown"      , 999);
+	TakeInventory("ArgRocketLauncherModCooldown", 999);
+	TakeInventory("ArgPlasmaRifleModCooldown"   , 999);
+	TakeInventory("ArgGaussCannonModCooldown"   , 999);
+}
+
+/*
  * Simplified SynthFire: Primary
  */
 script "SynthFire" (void)
