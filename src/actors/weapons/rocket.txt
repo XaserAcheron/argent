@@ -28,7 +28,7 @@ ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RKLG A 0
 		Goto SelectLoop
 	Deselect:
-		RKLG A 0
+		RKLG A 0 A_StopSound(CHAN_5)
 		Goto DeselectLoop
 
 	/* Unmodded + Primary */
