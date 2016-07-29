@@ -44,3 +44,5 @@ ARG_GOT_HASTE   = "Haste!";
 ARG_GOT_QUAD    = "Quad Damage!";
 ARG_GOT_REGEN   = "Regeneration!";
 ARG_GOT_INVULN  = "Invulnerability! Holy shit!";
+
+ARG_GOT_BFGCELL = "Picked up a bfg cell.";

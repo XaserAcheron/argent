@@ -41,3 +41,68 @@ ACTOR ArgRocketBox : ArgRocketAmmo replaces RocketBox
 		Stop
 	}
 }
+
+ACTOR ArgBFGAmmo : Ammo
+{
+	Inventory.PickupSound "items/ammo"
+	Inventory.PickupMessage "$ARG_GOT_BFGCELL"
+	Inventory.Icon BFGCA0
+	Inventory.Amount 1
+	Inventory.MaxAmount 5
+	Ammo.BackpackAmount 0
+	Ammo.BackpackMaxAmount 10
+	Scale 0.66
+	+FLOATBOB
+	States
+	{
+	Spawn:
+		BFGC BC 5 Bright 
+		Loop
+	}
+}
+
+ACTOR ArgBFGAmmoPickup : CustomInventory
+{
+	Inventory.PickupSound "items/ammo"
+	Inventory.PickupMessage "$ARG_GOT_BFGCELL"
+	Scale 0.66
+	+FLOATBOB
+	States
+	{
+	Spawn:
+		BFGC BC 5 Bright 
+		Loop
+	Pickup:
+		TNT1 A 0 {
+			A_GiveInventory("ArgBFGAmmo", 1);
+			A_RemoveSiblings(true, RMVF_MISC|RMVF_EVERYTHING);
+		}
+		Stop
+	}
+}
+
+ACTOR ArgBFGAmmoStand
+{
+	Scale 0.66
+	+FORCEYBILLBOARD //:V
+	States
+	{
+	Spawn:
+		BFGC A -1
+		Stop
+	}
+}
+
+ACTOR ArgBFGAmmoSpawner
+{
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		TNT1 A -1 NoDelay {
+			A_SpawnItemEx("ArgBFGAmmoStand" ,0,0,0,0,0,0,0,SXF_SETMASTER|SXF_CLIENTSIDE     );
+			A_SpawnItemEx("ArgBFGAmmoPickup",0,0,0,0,0,0,0,SXF_SETMASTER|SXF_TRANSFERSPECIAL); //Juuuust to be sure, in case of mappers doing things.
+		}
+		Stop
+	}
+}
