@@ -243,7 +243,7 @@ ACTOR ArgShotgun : ArgModWeapon replaces Shotgun
 		SH2N A 1 Bright {
 			A_GunFlash;
 			A_AlertMonsters;
-			A_FireCustomMissile("ArgShotgunExplosiveShot", 0, 0, 0, 0, FPF_AIMATANGLE , 5);
+			A_FireCustomMissile("ArgShotgunExplosiveShot", 0, 0, 4,-4, FPF_AIMATANGLE , 5);
 			A_TakeInventory("Shell", SHOTGUN_MOD2_AMMOUSE, TIF_NOTAKEINFINITE);
 			A_GiveInventory("ArgShotgunModCooldown", SHOTGUN_MOD_COOLDOWN);
 			A_PlaySound("weapons/shotgun/mod2fire", CHAN_5);
@@ -257,9 +257,9 @@ ACTOR ArgShotgun : ArgModWeapon replaces Shotgun
 		SH2G F 1 A_WeaponOffset(17.0, 36.0)
 		SH2G E 1 A_WeaponOffset(15.0, 38.0) 
 		SH2G D 1 A_WeaponOffset(12.5, 40.0)
-		SH2G A 1 A_WeaponOffset(10.0, 38.0) 
+//		SH2G A 1 A_WeaponOffset(10.0, 38.0) 
 		SH2G A 1 A_WeaponOffset( 8.0, 36.5) 
-		SH2G A 1 A_WeaponOffset( 6.0, 35.0)
+//		SH2G A 1 A_WeaponOffset( 6.0, 35.0)
 		SH2G A 1 A_WeaponOffset( 5.0, 34.0) 
 		SH2G G 1 A_WeaponOffset( 3.2, 33.0) 
 		SH2G I 1 A_WeaponOffset( 2.4, 34.0) 
