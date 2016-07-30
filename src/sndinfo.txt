@@ -7,6 +7,7 @@ weapons/swap3              "sounds/weapons/swap3.flac"
 weapons/swap4              "sounds/weapons/swap4.flac"
 weapons/swap5              "sounds/weapons/swap5.flac"
 $random weapons/swap { weapons/swap1 weapons/swap2 weapons/swap3 weapons/swap4 weapons/swap5 }
+$volume weapons/swap 0.7
 
 weapons/fist/swing         "sounds/weapons/fist/swing.wav"
 weapons/fist/miss          "sounds/weapons/fist/hit.wav"
