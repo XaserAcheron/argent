@@ -32,10 +32,12 @@ weapons/shotgun/fire3      "sounds/weapons/shotgun/fire3.flac"
 weapons/shotgun/mod1swap   "sounds/weapons/shotgun/mod1swap.flac"
 weapons/shotgun/mod1up     "sounds/weapons/shotgun/mod1up.flac"
 weapons/shotgun/mod1fire   "sounds/weapons/shotgun/mod1fire.flac"
+weapons/shotgun/mod1down   "sounds/weapons/shotgun/mod1down.flac"
 weapons/shotgun/mod2swap   "sounds/weapons/shotgun/mod2swap.flac"
 weapons/shotgun/mod2up     "sounds/weapons/shotgun/mod2up.flac"
 weapons/shotgun/mod2fire   "sounds/weapons/shotgun/mod2fire.flac"
 weapons/shotgun/mod2hit    "sounds/weapons/shotgun/mod2hit.flac"
+weapons/shotgun/mod2down   "sounds/weapons/shotgun/mod1down.flac"
 $random weapons/shotgun/fire    { weapons/shotgun/fire1 weapons/shotgun/fire2 weapons/shotgun/fire3 }
 
 weapons/ssg/fire1          "sounds/weapons/ssg/fire1.flac"
