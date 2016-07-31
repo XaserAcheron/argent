@@ -72,10 +72,10 @@ ACTOR ArgBFGAmmoSpawner
 	Idle:
 		BFGC A 1
 		BFGC A 1 {
-			if(CheckClass("ArgBFGAmmo", AAPTR_TRACER)) {
-				return state(0);
+			if(IsPointerEqual(AAPTR_TRACER, AAPTR_NULL)) {
+				return state("Vanish");
 			}
-			return state("Vanish");
+			return state(0);
 		}
 		Wait
 	Vanish:
