@@ -44,7 +44,7 @@ ACTOR ArgGaussCannon : ArgModWeapon
 		GAUG FFFFFFFFEEDDCCBBAABBCCDDEE 1 A_WeaponReady(WRF_ALLOWRELOAD)
 		Loop
 	Mod0Fire:
-		GAUF A 1 Bright {
+		"####" G 1 Bright {
 			A_GunFlash;
 			A_Recoil(7.5);
 			A_RailAttack (10*random(1,8), 8, 0, "none", "none", RGF_SILENT | RGF_NOPIERCING, 4, "ArgGaussPaul", 0, 0, 0, 0, 16, 0, "none"         , 0);
@@ -61,25 +61,27 @@ ACTOR ArgGaussCannon : ArgModWeapon
 			A_PlaySound("weapons/gauss/fire", CHAN_5);
 			A_WeaponOffset(0.0, 32.0);
 		}
-		GAUF B 1 Bright A_WeaponOffset( 2.0, 34.0)
-		GAUF C 1 Bright A_WeaponOffset( 4.0, 38.0)
-		GAUF D 1 Bright A_WeaponOffset( 6.0, 42.0)
-		GAUF E 1 Bright A_WeaponOffset( 8.0, 44.5)
-		GAUF F 1 Bright A_WeaponOffset( 9.0, 46.5)
-		GAUG E 1        A_WeaponOffset( 9.5, 47.5)
-		GAUG E 1        A_WeaponOffset(10.0, 48.0)
-		GAUG D 1        A_WeaponOffset( 9.0, 47.0)
-		GAUG D 1        A_WeaponOffset( 8.0, 45.0)
-		GAUG C 1        A_WeaponOffset( 6.5, 42.0)
-		GAUG C 1        A_WeaponOffset( 5.0, 38.0)
-		GAUG B 1        A_WeaponOffset( 3.0, 35.0)
-		GAUG B 1        A_WeaponOffset( 2.0, 34.5)
-		GAUG A 1        A_WeaponOffset( 1.0, 33.0)
-		GAUG A 1        A_WeaponOffset( 0.5, 32.5)
-		GAUG A 1        A_WeaponOffset( 0.0, 32.0)
-		GAUG A 35 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH)
-		GAUG BCDE 2 A_WeaponReady(WRF_NOFIRE)
-		GAUG A 0 A_Refire
+		"####" H 1 Bright A_WeaponOffset( 2.0, 34.0)
+		"####" I 1 Bright A_WeaponOffset( 4.0, 38.0)
+		"####" J 1 Bright A_WeaponOffset( 6.0, 42.0)
+		"####" K 1 Bright A_WeaponOffset( 8.0, 44.5)
+		"####" L 1 Bright A_WeaponOffset( 9.0, 46.5)
+		"####" M 1        A_WeaponOffset( 9.5, 47.5)
+		"####" M 1        A_WeaponOffset(10.0, 48.0)
+		"####" N 1        A_WeaponOffset( 9.0, 47.0)
+		"####" N 1        A_WeaponOffset( 8.0, 45.0)
+		"####" O 1        A_WeaponOffset( 6.5, 42.0)
+		"####" O 1        A_WeaponOffset( 5.0, 38.0)
+		"####" P 1        A_WeaponOffset( 3.0, 35.0)
+		"####" P 1        A_WeaponOffset( 2.0, 34.5)
+		"####" Q 1        A_WeaponOffset( 1.0, 33.0)
+		"####" Q 1        A_WeaponOffset( 0.5, 32.5)
+		"####" R 1        A_WeaponOffset( 0.0, 32.0)
+		"####" R 16 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH)
+		"####" ST 1 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH)
+		"####" A 17 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH)
+		"####" BCDE 2 A_WeaponReady(WRF_NOFIRE)
+		"####" A 0 A_Refire
 		Goto Ready
 	Flash:
 		TNT1 A 2 Bright A_Light1
