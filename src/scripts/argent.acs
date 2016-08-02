@@ -2,12 +2,36 @@
 //
 // ARGENT: ACS Lib of Spectacular Scriptage
 //
+// Exceptionally-important note: This now requires GDCC to build.
+// It's pretty much better than acc.exe in every way, so get it! :P
+//
 // --------------------------------------------------------------------------
 
 #library "argent"
 #include "zcommon.acs"
 
 #define DEF_STUN_SECONDS 5
+#define DEF_DUMMY_TID    -1
+#define DEF_TID_START    1000
+
+/*
+ * Exceptionally-useful player struct thingamajig.
+ */
+struct ArgPlayer
+{
+	int rocketTid;
+}
+ArgPlayer players[64]; // zandro max to the max!
+
+/*
+ * Init script. Gotta set those defaults to something sane.
+ */ 
+script "ArgentInit" enter {
+	ArgPlayer playerStruct = {
+		DEF_DUMMY_TID // rocketTid
+	};
+	players[PlayerNumber()] = playerStruct;
+}
 
 /*
  * Monitor script. Handles stuff that has to be triggered in a script loop.
@@ -179,7 +203,54 @@ script "GetTracerZ" (void) {
 }
 
 /*
- * Stunz0rs
+ * Extremely-useful utility function for saving the player's number in a uservar.
+ */
+script "GetPlayerNumber" (void) {
+	SetActivatorToTarget(0);
+	SetResultValue(PlayerNumber());
+}
+
+/*
+ * RAWGGIT LAWNCHAIR scripts
+ */
+script "Mod1RocketFire" (int playerNum) {
+	// remote detonator. Need to snag the rockets' TID so things may happen.
+	int rocketTid = players[playerNum].rocketTid;
+	
+	// if the TID is the placeholder value (DEF_DUMMY_TID), assign a new one.
+	// this will of course break if played with CIF3. Assuming literally anything
+	// else in the mod is compatible with it at all... you crazy git. ;P
+	if(rocketTid == DEF_DUMMY_TID) {
+		rocketTid = UniqueTID(DEF_TID_START);
+		players[playerNum].rocketTid = rocketTid;
+	}
+	
+	// finally, don't forget to assign the TID to the rocket. :P
+	Thing_ChangeTID(0, rocketTid);
+}
+script "Mod1RocketDetonate" (void) {
+	// snag the TID, as before. Note that we actually user playerNum() here
+	// since this script is called from the weapon rather than the projectile.
+	int playerNum = PlayerNumber();
+	int rocketTid = players[playerNum].rocketTid;
+	
+	// Nuke the sucker.
+	SetActorState(rocketTid, "Detonate");
+}
+script "Mod1RocketExplode" (int playerNum) {
+	// la la la TID la la
+	int rocketTid = players[playerNum].rocketTid;
+	
+	// Wait a tic then check to see if there's anything else that has the TID.
+	// Otherwise, clean it up so we can get a fresh one later.
+	Delay(1);
+	if(ThingCount(T_NONE, rocketTid) == 0) {
+		players[playerNum].rocketTid = DEF_DUMMY_TID;
+	}
+}
+
+/*
+ * Plazma Stunz0rs
  */
 script "NeuralStunner" (void) {
 	// [TODO] add stun duration uservars and set 'em on a few choice monsters (like bosses)
