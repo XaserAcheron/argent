@@ -4,14 +4,24 @@
 //
 // --------------------------------------------------------------------------
 
+CONST int PLASMA_MOD1_AMMOUSE  =   0; // pointless, but may as well be explicit. shit.
+CONST int PLASMA_MOD2_AMMOUSE  =  10;
+CONST int PLASMA_MOD_COOLDOWN  = 200;
+CONST int PLASMA_MOD_CHARGE    = 120;
+CONST int PLASMA_MOD_CHARGE_UP =   3;
+
+ACTOR ArgPlasmaRifleModSelected : ArgModToken {}
+ACTOR ArgPlasmaRifleMod1Enabled : ArgToken    {}
+ACTOR ArgPlasmaRifleMod2Enabled : ArgToken    {}
+ACTOR ArgPlasmaRifleModCooldown : ArgToken    { Inventory.MaxAmount 200 }
+ACTOR ArgPlasmaRifleModCharge   : ArgToken    { Inventory.MaxAmount 120 }
+
 ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 {
 	Weapon.SelectionOrder 4
 	Weapon.AmmoUse 1
 	Weapon.AmmoGive 40
 	Weapon.AmmoType "Cell"
-	const int Mod1AmmoUse = 0; // pointless, but may as well be explicit. shit.
-	const int Mod2AmmoUse = 10;
 	Inventory.Icon "graphics/hud/weapon-plasma.png"
 	Inventory.PickupMessage "$ARG_GOT_PLASMA"
 	Tag "$ARG_TAG_PLASMA"
@@ -40,7 +50,7 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_FireCustomMissile("ArgPlasma", 0, 1, 6.0 + frandom(-2.00, 2.00), frandom(-2.00, 2.00));
 			A_WeaponOffset(0.0, 32.0);
 			if(CountInv("ArgPlasmaRifleModSelected") == 1) {
-				A_GiveInventory("ArgPlasmaRifleModCharge", 2);
+				A_GiveInventory("ArgPlasmaRifleModCharge", PLASMA_MOD_CHARGE_UP);
 				A_PlaySound("weapons/plasma/altfire", CHAN_5);
 				return state("Mod1FirePrimary");
 			} else {
@@ -92,10 +102,10 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		PL1A GGGFFFEEEDDDBBBCCCDDDEEEFFFGGG 1 A_WeaponReady(WRF_ALLOWRELOAD)
 	Mod1Ready:
 		PL1G D 0 {
-			if(CountInv("ArgPlasmaRifleModCharge") >= 120) { return state("Mod1ReadyD"); }
-			if(CountInv("ArgPlasmaRifleModCharge") >=  90) { return state("Mod1ReadyC"); }
-			if(CountInv("ArgPlasmaRifleModCharge") >=  60) { return state("Mod1ReadyB"); }
-			if(CountInv("ArgPlasmaRifleModCharge") >=  30) { return state("Mod1ReadyA"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >=  PLASMA_MOD_CHARGE       ) { return state("Mod1ReadyD"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4) * 3) { return state("Mod1ReadyC"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4) * 2) { return state("Mod1ReadyB"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4)    ) { return state("Mod1ReadyA"); }
 			return state(0);
 		}
 		PL1G A 0
@@ -117,8 +127,8 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 	Mod1FirePrimary:
 		// extra special animation stuffs for heatblast's primary fire
 		PL1G K 1 Bright {
-			if(CountInv("ArgPlasmaRifleModCharge") >= 120) { return state("Mod1FirePrimaryB"); }
-			if(CountInv("ArgPlasmaRifleModCharge") >=  30) { return state("Mod1FirePrimaryA"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >=  PLASMA_MOD_CHARGE   ) { return state("Mod1FirePrimaryB"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4)) { return state("Mod1FirePrimaryA"); }
 			return state(0);
 		}
 		PL1G L 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
@@ -144,7 +154,7 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_PlaySound("weapons/plasma/mod1fire", CHAN_6);
 			A_Explode(CountInv("ArgPlasmaRifleModCharge") * 3, 160, XF_NOTMISSILE, 0, 128);
 			A_Blast(BF_NOIMPACTDAMAGE, CountInv("ArgPlasmaRifleModCharge") * 2, 160, 20, "ArgNothing", "");
-			A_TakeInventory("ArgPlasmaRifleModCharge", 999);
+			A_TakeInventory("ArgPlasmaRifleModCharge", PLASMA_MOD_CHARGE);
 			
 			// cool heatwave fx
 			A_Quake(2, 8, 0, 8, "");
@@ -181,7 +191,7 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 	Mod2Swap:
 		PL2S A 1 {
 			A_PlaySound("weapons/plasma/mod2swap", CHAN_AUTO);
-			A_TakeInventory("ArgPlasmaRifleModCharge", 120);
+			A_TakeInventory("ArgPlasmaRifleModCharge", PLASMA_MOD_CHARGE);
 		}
 		PL2S B 1 A_WeaponOffset(  0.0, 32.0)
 		PL2S C 1 A_WeaponOffset(- 1.0, 32.0)
@@ -217,8 +227,8 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_AlertMonsters;
 			A_PlaySound("weapons/plasma/mod2fire", CHAN_6);
 			A_FireCustomMissile("ArgStunBomb", 0, 0, 0, 0, FPF_AIMATANGLE , 5);
-			A_TakeInventory("Cell", Mod2AmmoUse, TIF_NOTAKEINFINITE);
-			A_GiveInventory("ArgPlasmaRifleModCooldown", 200);
+			A_TakeInventory("Cell", PLASMA_MOD2_AMMOUSE, TIF_NOTAKEINFINITE);
+			A_GiveInventory("ArgPlasmaRifleModCooldown", PLASMA_MOD_COOLDOWN);
 		}
 		PL2G A 1 A_WeaponOffset( 5.0,  5.0 + 32.0)
 		PL2G A 1 A_WeaponOffset(12.0, 12.0 + 32.0)
@@ -233,11 +243,6 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		Goto Cooldown
 	}
 }
-ACTOR ArgPlasmaRifleModSelected : ArgModToken {}
-ACTOR ArgPlasmaRifleMod1Enabled : ArgToken    {}
-ACTOR ArgPlasmaRifleMod2Enabled : ArgToken    {}
-ACTOR ArgPlasmaRifleModCooldown : ArgToken    { Inventory.MaxAmount 200 }
-ACTOR ArgPlasmaRifleModCharge   : ArgToken    { Inventory.MaxAmount 120 }
 
 ACTOR ArgPlasma : PlasmaBall
 {

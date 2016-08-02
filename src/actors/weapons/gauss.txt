@@ -4,6 +4,14 @@
 //
 // --------------------------------------------------------------------------
 
+CONST int GAUSS_MOD1_AMMOUSE = 40;
+CONST int GAUSS_MOD2_AMMOUSE = 50;
+
+ACTOR ArgGaussCannonModSelected : ArgModToken {}
+ACTOR ArgGaussCannonMod1Enabled : ArgToken    {}
+ACTOR ArgGaussCannonMod2Enabled : ArgToken    {}
+ACTOR ArgGaussCannonModCooldown : ArgToken    {}
+
 ACTOR ArgGaussCannon : ArgModWeapon
 {
 	Weapon.UpSound "weapons/gauss/equip"
@@ -96,10 +104,6 @@ ACTOR ArgGaussCannon : ArgModWeapon
 
 	}
 }
-ACTOR ArgGaussCannonModSelected : ArgModToken {}
-ACTOR ArgGaussCannonMod1Enabled : ArgToken    {}
-ACTOR ArgGaussCannonMod2Enabled : ArgToken    {}
-ACTOR ArgGaussCannonModCooldown : ArgToken    { Inventory.MaxAmount 120 }
 
 ACTOR ArgGaussTrail : ArgTrail
 {

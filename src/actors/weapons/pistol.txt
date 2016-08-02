@@ -4,6 +4,10 @@
 //
 // --------------------------------------------------------------------------
 
+ACTOR ArgPistolCharge      : ArgToken { Inventory.MaxAmount 45 }
+ACTOR ArgPistolChargeSound : ArgToken { Inventory.MaxAmount 30 }
+ACTOR ArgPistolShootyToken : ArgToken {} // extra token for sound control
+
 ACTOR ArgPistol : ArgWeapon replaces Pistol
 {
 	Weapon.SelectionOrder 9
@@ -129,9 +133,6 @@ ACTOR ArgPistol : ArgWeapon replaces Pistol
 		Goto LightDone
 	}
 }
-ACTOR ArgPistolCharge      : ArgToken { Inventory.MaxAmount 45 }
-ACTOR ArgPistolChargeSound : ArgToken { Inventory.MaxAmount 30 }
-ACTOR ArgPistolShootyToken : ArgToken {} // extra token for sound control
 
 ACTOR ArgPistolPuff : ArgBulletPuff
 {

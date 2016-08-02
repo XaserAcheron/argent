@@ -4,6 +4,13 @@
 //
 // --------------------------------------------------------------------------
 
+ACTOR ArgChaingunModSelected : ArgModToken {}
+ACTOR ArgChaingunMod1Enabled : ArgToken    {}
+ACTOR ArgChaingunMod2Enabled : ArgToken    {}
+ACTOR ArgChaingunModCooldown : ArgToken    {}
+ACTOR ArgChaingunShootyToken : ArgToken    {} // extra token for sound control
+ACTOR ArgChaingunSpinnyToken : ArgToken    { Inventory.MaxAmount 6 }
+
 ACTOR ArgChaingun : ArgModWeapon
 {
 	Weapon.SelectionOrder 2
@@ -255,9 +262,3 @@ ACTOR ArgChaingun : ArgModWeapon
 		Goto LightDone
 	}
 }
-ACTOR ArgChaingunModSelected : ArgModToken {}
-ACTOR ArgChaingunMod1Enabled : ArgToken    {}
-ACTOR ArgChaingunMod2Enabled : ArgToken    {}
-ACTOR ArgChaingunModCooldown : ArgToken    {}
-ACTOR ArgChaingunShootyToken : ArgToken    {} // extra token for sound control
-ACTOR ArgChaingunSpinnyToken : ArgToken    { Inventory.MaxAmount 6 }

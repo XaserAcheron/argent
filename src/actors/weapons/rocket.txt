@@ -4,7 +4,15 @@
 //
 // --------------------------------------------------------------------------
 
-CONST int ROCKET_OVERLAY_LAYER = 2;
+CONST int ROCKET_MOD1_AMMOUSE  =  1;
+CONST int ROCKET_MOD2_AMMOUSE  =  3;
+CONST int ROCKET_MOD_COOLDOWN  = 90;
+CONST int ROCKET_OVERLAY_LAYER =  2;
+
+ACTOR ArgRocketLauncherModSelected : ArgModToken {}
+ACTOR ArgRocketLauncherMod1Enabled : ArgToken    {}
+ACTOR ArgRocketLauncherMod2Enabled : ArgToken    {}
+ACTOR ArgRocketLauncherModCooldown : ArgToken    { Inventory.MaxAmount 90 }
 
 ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 {
@@ -173,10 +181,6 @@ ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		Goto ReadyLoop
 	}
 }
-ACTOR ArgRocketLauncherModSelected : ArgModToken {}
-ACTOR ArgRocketLauncherMod1Enabled : ArgToken    {}
-ACTOR ArgRocketLauncherMod2Enabled : ArgToken    {}
-ACTOR ArgRocketLauncherModCooldown : ArgToken    { Inventory.MaxAmount 120 }
 
 ACTOR ArgRocket : FastProjectile
 {
