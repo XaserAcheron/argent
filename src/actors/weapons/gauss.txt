@@ -142,9 +142,10 @@ ACTOR ArgGaussCannon : ArgModWeapon
 		GA1G A 1 A_WeaponOffset( 20 - 25, 102 - 96 + 32)
 		GA1G A 1 A_WeaponOffset( 24 - 25,  97 - 96 + 32)
 		GA1G A 1 A_WeaponOffset( 25 - 25,  96 - 96 + 32)
+		GA1G BCDEFFFFFFFFFUUFFUUFFUUFFUU 1 A_WeaponReady(WRF_NOBOB|WRF_ALLOWRELOAD)
 	Mod1Ready:
-		GA1G A 0
-		Goto ReadyLoop
+		GA1G FFFFFFFFEEDDCCBBAABBCCDDEE 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		Loop
 
 	/* Mod 2: Siege Mode */
 
