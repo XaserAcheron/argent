@@ -99,6 +99,52 @@ ACTOR ArgGaussCannon : ArgModWeapon
 		Goto LightDone
 
 	/* Mod 1: Precision Scope */
+		
+	Mod1Select:
+		GA1G A 0
+		Goto SelectLoop
+	Mod1Raise:
+		// Override ModSwapUp so we can start the hand animation early.
+		GA1S A 1 A_WeaponOffset(0.0,116.0)
+		GA1S A 1 A_WeaponOffset(0.0,104.0)
+		GA1S A 1 A_WeaponOffset(0.0, 92.0)
+		GA1S B 1 A_WeaponOffset(0.0, 80.0)
+		GA1S C 1 A_WeaponOffset(0.0, 68.0)
+		GA1S D 1 A_WeaponOffset(0.0, 56.0)
+		GA1S E 1 A_WeaponOffset(0.0, 44.0)
+	Mod1Swap:
+		GA1S F 1 A_WeaponOffset( 0.0, 32.0)
+		GA1S GHIJK 1
+		GA1S L 3
+		GA1S M 1
+		GA1S N 1 A_PlaySound("weapons/gauss/mod1swap", CHAN_AUTO)
+		GA1S O 1 A_WeaponOffset( 68 - 67,  87 - 87 + 32)
+		GA1S P 1 A_WeaponOffset(-23 + 27,  97 - 96 + 32)
+		GA1S P 1 A_WeaponOffset(-20 + 27, 100 - 96 + 32)
+		GA1S P 1 A_WeaponOffset(-18 + 27, 102 - 96 + 32)
+		GA1S P 1 A_WeaponOffset(-17 + 27, 103 - 96 + 32)
+		GA1S P 2 A_WeaponOffset(-16 + 27, 104 - 96 + 32)
+		GA1S P 1 A_WeaponOffset(-17 + 27, 103 - 96 + 32)
+		GA1S P 1 A_WeaponOffset(-19 + 27, 101 - 96 + 32)
+		GA1S P 1 A_WeaponOffset(-20 + 27, 100 - 96 + 32)
+		GA1S Q 1 A_WeaponOffset( 80 - 75,  92 - 90 + 32)
+		GA1S Q 1 A_WeaponOffset( 77 - 75,  91 - 90 + 32)
+		GA1S R 1 A_WeaponOffset( 73 - 73,  96 - 96 + 32)
+		GA1S S 1 A_WeaponOffset( 71 - 73,  96 - 96 + 32)
+		GA1S T 1 A_WeaponOffset( 41 - 45,  97 - 96 + 32)
+		GA1S U 1 A_WeaponOffset( 47 - 53,  99 - 96 + 32)
+		GA1S V 1 A_WeaponOffset( 51 - 59, 102 - 96 + 32)
+		GA1S W 1 A_WeaponOffset( 37 - 47, 105 - 96 + 32)
+		GA1S X 1 A_WeaponOffset( 22 - 33, 108 - 96 + 32)
+		GA1G A 1 A_WeaponOffset( 13 - 25, 110 - 96 + 32)
+		GA1G A 1 A_WeaponOffset( 14 - 25, 108 - 96 + 32)
+		GA1G A 1 A_WeaponOffset( 16 - 25, 105 - 96 + 32)
+		GA1G A 1 A_WeaponOffset( 20 - 25, 102 - 96 + 32)
+		GA1G A 1 A_WeaponOffset( 24 - 25,  97 - 96 + 32)
+		GA1G A 1 A_WeaponOffset( 25 - 25,  96 - 96 + 32)
+	Mod1Ready:
+		GA1G A 0
+		Goto ReadyLoop
 
 	/* Mod 2: Siege Mode */
 
