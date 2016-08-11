@@ -33,12 +33,6 @@ ACTOR ArgGaussCannon : ArgModWeapon
 	Ready:
 		GAUG A 0
 		Goto Super::Ready
-	Select:
-		GAUG A 0
-		Goto SelectLoop
-	Deselect:
-		GAUG A 0
-		Goto DeselectLoop
 
 	/* Unmodded + Primary */
 
