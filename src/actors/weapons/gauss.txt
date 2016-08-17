@@ -242,7 +242,13 @@ ACTOR ArgGaussCannon : ArgModWeapon
 		Goto Ready
 
 	/* Mod 2: Siege Mode */
-
+		
+	Mod2Select:
+		GA2G A 0
+		Goto SelectLoop
+	Mod2Ready:
+		GA2G FFFFFFFFEEDDCCBBAABBCCDDEE 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		Loop
 	}
 }
 
