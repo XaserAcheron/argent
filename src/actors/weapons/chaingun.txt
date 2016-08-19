@@ -141,12 +141,12 @@ ACTOR ArgChaingun : ArgModWeapon
 	/* Mod 1: Gatling Rotator */
 		
 	Mod1Select:
-		CHGG A 0
+		CH1G A 0
 		Goto SelectLoop
 	Mod1Swap:
-		CHGG A 0 A_PlaySound("weapons/chaingun/mod1swap", CHAN_AUTO)
+		CH1G A 0 A_PlaySound("weapons/chaingun/mod1swap", CHAN_AUTO)
 	Mod1Ready:
-		CHGG A 0
+		CH1G A 0
 		Goto ReadyLoop
 	Mod1Up:
 	Mod1Hold:
@@ -182,8 +182,8 @@ ACTOR ArgChaingun : ArgModWeapon
 		"####" DABCD  1
 		Goto Mod0FireEnd
 	Mod1Anim4:
-		CHGG A 1 A_JumpIfInventory("ArgChaingunSpinnyToken", 5, "Mod1Anim5")
-		CHGG BCDA 1
+		"####" A 1 A_JumpIfInventory("ArgChaingunSpinnyToken", 5, "Mod1Anim5")
+		"####" BCDA 1
 		Goto Mod0FireEnd
 	Mod1Anim5:
 		"####" B 1 A_JumpIfInventory("ArgChaingunSpinnyToken", 6, "Mod1Anim6")
