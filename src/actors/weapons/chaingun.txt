@@ -241,7 +241,7 @@ ACTOR ArgChaingun : ArgModWeapon
 		CH2M C 1 A_WeaponOffset(  3, 35)
 		CH2M B 1 A_WeaponOffset(  6, 38)
 		CH2M A 1 A_WeaponOffset(  4, 36)
-		CH2G A 1 A_WeaponOffset(  2, 34)
+		CH2M A 1 A_WeaponOffset(  2, 34)
 		CH2G A 1 A_WeaponOffset(  1, 33)
 		Goto Ready
 	Mod2Fire:
