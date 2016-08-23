@@ -143,8 +143,48 @@ ACTOR ArgChaingun : ArgModWeapon
 	Mod1Select:
 		CH1G A 0
 		Goto SelectLoop
+	Mod1Raise:
+		// Override ModSwapUp so we can start the hand animation early.
+		CH1S A 1 A_WeaponOffset(-18.0,116.0)
+		CH1S A 1 A_WeaponOffset(-18.0,104.0)
+		CH1S A 1 A_WeaponOffset(-18.0, 92.0)
+		CH1S B 1 A_WeaponOffset(-18.0, 80.0)
+		CH1S C 1 A_WeaponOffset(-18.0, 68.0)
+		CH1S D 1 A_WeaponOffset(-18.0, 56.0)
+		CH1S E 1 A_WeaponOffset(-18.0, 44.0)
 	Mod1Swap:
-		CH1G A 0 A_PlaySound("weapons/chaingun/mod1swap", CHAN_AUTO)
+		CH1S F 1 A_WeaponOffset(-18.0, 32.0)
+		CH1S GHI 1
+		CH1S J 1 A_PlaySound("weapons/chaingun/mod1swap", CHAN_AUTO)
+		CH1S K 1 A_WeaponOffset(-19, 32)
+		CH1S L 1 A_WeaponOffset(-20, 32)
+		CH1S L 1 A_WeaponOffset(-20, 32)
+		CH1S L 1 A_WeaponOffset(-20, 32)
+		CH1S L 1 A_WeaponOffset(-20, 32)
+		CH1S L 1 A_WeaponOffset(-19, 33)
+		CH1S M 1 A_WeaponOffset(-17, 35)
+		CH1S N 1 A_WeaponOffset(-14, 38)
+		CH1S O 1 A_WeaponOffset(-15, 37)
+		CH1S P 1 A_WeaponOffset(-16, 35)
+		CH1S Q 1 A_WeaponOffset(-16, 33)
+		CH1S N 1 A_WeaponOffset(-15, 32)
+		CH1S O 1 A_WeaponOffset(-14, 32)
+		CH1S P 1 A_WeaponOffset(-12, 32)
+		CH1S Q 1 A_WeaponOffset(-10, 32)
+		CH1S N 1 A_WeaponOffset(- 7, 32)
+		CH1S O 1 A_WeaponOffset(- 3, 32)
+		CH1S R 1 A_WeaponOffset(- 1, 32)
+		CH1S R 1 A_WeaponOffset(  0, 32)
+		CH1S S 1
+		CH1S S 1 A_WeaponOffset(- 1, 33)
+		CH1S T 1 A_WeaponOffset(- 3, 35)
+		CH1S T 1 A_WeaponOffset(- 7, 39)
+		CH1S T 1 A_WeaponOffset(- 8, 40)
+		CH1S T 1 A_WeaponOffset(- 6, 38)
+		CH1S T 1 A_WeaponOffset(- 4, 36)
+		CH1S U 1 A_WeaponOffset(- 2, 34)
+		CH1S V 1 A_WeaponOffset(- 0, 32)
+		CH1S VWX 1
 	Mod1Ready:
 		CH1G A 0
 		Goto ReadyLoop
