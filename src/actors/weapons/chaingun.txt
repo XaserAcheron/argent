@@ -118,8 +118,8 @@ ACTOR ArgChaingun : ArgModWeapon
 		Goto Mod0FireEnd
 	Mod0Anim6:
 		"####" F     1 Bright   A_WeaponOffset(3.0 + frandom(-0.9, 0.9), 35.0 + frandom(-0.9, 0.9))
-		"####" G     1 Bright   A_WeaponOffset(2.0 + frandom(-0.7, 0.7), 34.0 + frandom(-0.7, 0.7))
-		"####" H     1 Bright { A_WeaponOffset(1.0 + frandom(-0.5, 0.5), 33.0 + frandom(-0.5, 0.5)); A_FireBullets(6.8, 1.0, -1, 7, "ArgBulletPuff"); }
+		"####" G     1 Bright { A_WeaponOffset(2.0 + frandom(-0.7, 0.7), 34.0 + frandom(-0.7, 0.7)); A_FireBullets(6.8, 1.0, -1, 7, "ArgBulletPuff"); A_PlaySound("weapons/chaingun/fire", CHAN_7, 0.5); }
+		"####" H     1 Bright   A_WeaponOffset(1.0 + frandom(-0.5, 0.5), 33.0 + frandom(-0.5, 0.5))
 		"####" E     1 Bright   A_WeaponOffset(0.0                     , 32.0                     )
 		Goto Mod0FireEnd
 	Mod0FireEnd:
