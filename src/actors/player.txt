@@ -42,4 +42,5 @@ ACTOR ArgPlayer : DoomPlayer
 	}
 }
 
-ACTOR ArgClassicHudToken : ArgToken {}
+ACTOR ArgClassicHudToken  : ArgToken {}
+ACTOR ArgBFGAmmoTypeToken : ArgToken {}

@@ -11,7 +11,7 @@ ACTOR ArgBFG9000 : ArgWeapon replaces BFG9000
 {
 	Weapon.UpSound "weapons/bfg/equip"
 	Weapon.SelectionOrder 11
-	Weapon.AmmoUse 1 // so you need at least 1 cell to select it
+	Weapon.AmmoUse 0 // needs to be selectable at all times since ammotype is variable :<
 	Weapon.AmmoGive 40
 	Weapon.AmmoType "Cell" // [TODO] give this its own ammotype
 	Inventory.Icon "graphics/hud/weapon-bfg.png"
@@ -35,8 +35,9 @@ ACTOR ArgBFG9000 : ArgWeapon replaces BFG9000
 	Fire:
 		BFGG A 1 Bright {
 			// overly complex ammo check function ohno
-			if((GetCvar("arg_classicbfg") == true  && CountInv("Cell") < BFG_CLASSIC_AMMOUSE)
-			 ||(GetCvar("arg_classicbfg") == false && CountInv("Cell") < BFG_MODERN_AMMOUSE )) {
+			if((GetCvar("arg_bfgammotype") == false && GetCvar("arg_classicbfg") == true  && CountInv("Cell") < BFG_CLASSIC_AMMOUSE)
+			 ||(GetCvar("arg_bfgammotype") == false && GetCvar("arg_classicbfg") == false && CountInv("Cell") < BFG_MODERN_AMMOUSE )
+			 ||(GetCvar("arg_bfgammotype") == true  && CountInv("ArgBFGAmmo") < 1 )) {
 				A_SelectWeapon("None", SWF_SELECTPRIORITY);
 			} else {
 				A_PlaySound("weapons/bfg/fire", CHAN_AUTO);
@@ -63,10 +64,18 @@ ACTOR ArgBFG9000 : ArgWeapon replaces BFG9000
 			A_ZoomFactor(0.90, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
 			if(GetCvar("arg_classicbfg") == true) {
 				A_FireCustomMissile("ArgThatDamnDragonAteMyBalls", 0, 0);
-				A_TakeInventory("Cell", BFG_CLASSIC_AMMOUSE);
+				if(GetCvar("arg_bfgammotype") == true) {
+					A_TakeInventory("ArgBFGAmmo", 1);
+				} else {
+					A_TakeInventory("Cell", BFG_CLASSIC_AMMOUSE);
+				}
 			} else {
 				A_FireCustomMissile("ArgIveGotBallsOfSteel", 0, 0);
-				A_TakeInventory("Cell", BFG_MODERN_AMMOUSE);
+				if(GetCvar("arg_bfgammotype") == true) {
+					A_TakeInventory("ArgBFGAmmo", 1);
+				} else {
+					A_TakeInventory("Cell", BFG_MODERN_AMMOUSE);
+				}
 			}
 			return A_Jump(64, "Fire2");
 		}

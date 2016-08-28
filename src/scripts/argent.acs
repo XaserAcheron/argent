@@ -46,6 +46,13 @@ script "ArgentMonitor" enter {
 		TakeInventory("ArgClassicHudToken", 1);
 	}
 	
+	// bfg ammo counter thingy
+	if(GetCVAR("arg_bfgammotype")) {
+		GiveInventory("ArgBFGAmmoTypeToken", 1);
+	} else {
+		TakeInventory("ArgBFGAmmoTypeToken", 1);
+	}
+	
 	// reeeeplaaay jeeenkiiiins
 	Delay(35);
 	Restart;
