@@ -65,5 +65,6 @@ module.exports = function (grunt) {
 	// task aliases
 	grunt.registerTask('build', ['shell:compile', 'compress', 'copy:main']);
 	grunt.registerTask('dist', ['shell:compile', 'compress', 'copy:main', 'copy:dist']);
+	grunt.registerTask('compile', ['shell:compile']);
 	grunt.registerTask('default', ['build']);
 };
