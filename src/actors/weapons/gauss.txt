@@ -4,7 +4,7 @@
 //
 // --------------------------------------------------------------------------
 
-CONST int GAUSS_MOD1_AMMOUSE = 40;
+CONST int GAUSS_MOD1_AMMOUSE = 30;
 CONST int GAUSS_MOD2_AMMOUSE = 50;
 CONST int GAUSS_MOD_CHARGE   = 30;
 
@@ -196,9 +196,8 @@ ACTOR ArgGaussCannon : ArgModWeapon
 			}
 			
 			// goddamn charge damage damn -- n rounds of 7d8; equals 210%
-			// damage at full charge. Also take ammo -- kinda operates under the
-			// assumption that the max is 40 cells and the charge is 30 iterations...
-			A_TakeInventory("Cell", 10, TIF_NOTAKEINFINITE);
+			// damage at full charge. Also take ammo -- note that we assume
+			// the number of iterations exactly equals the ammo usage.
 			while(CountInv("ArgGaussCannonModCharge") > 0) {
 				// only spawn one trail, for sanity
 				if(CountInv("ArgGaussCannonModCharge") == 1) {
