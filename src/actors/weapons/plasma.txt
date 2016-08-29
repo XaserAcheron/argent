@@ -216,8 +216,12 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		PL2S L 6 A_WeaponOffset(  0.0, 32.0)
 		PL2S MNOP 2
 	Mod2Ready:
-		PL2G A 0
-		Goto ReadyLoop
+		PL2G A 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		PL2G D 1 {
+			return A_JumpIfInventory("ArgPlasmaRifleModCooldown", 1, "Mod2Ready");
+		}
+		PL2G DEEFFFFFFFFEEDDA 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		Loop
 	Mod2Up:
 		PL2G A 1 A_JumpIfInventory("Cell", 10, "Mod2Hold")
 		Goto Mod1Ready
@@ -302,6 +306,9 @@ ACTOR ArgStunBomb : ArgPlasma
 	Damage 0
 	DeathSound "weapons/plasma/mod2hit"
 	DamageType "ArgStun"
+	Decal "None"
+	
+	var int user_i;
 	
 	-NOGRAVITY
 	
@@ -311,11 +318,28 @@ ACTOR ArgStunBomb : ArgPlasma
 		PBOM ABCD 1 Bright
 		Loop
 	Death:
-		PBOM E 3 {
+		PBOM E 0 Bright {
 			A_NoGravity;
 			A_RadiusGive("ArgStunner", 160, RGF_MONSTERS);
-		}
-		PBOM FGHI 3 Bright
+		} 
+		PBOM EE 1 Bright { for (A_SetUserVar(user_i, 0); user_i < 10; A_SetUserVar(user_i, user_i + 1)) { A_CustomRailgun(0, 0, "None", "4444FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 40, 1, 0.2, 0.0); } }
+		PBOM EF 1 Bright { for (A_SetUserVar(user_i, 0); user_i < 10; A_SetUserVar(user_i, user_i + 1)) { A_CustomRailgun(0, 0, "None", "8888FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 48, 1, 0.2, 0.0); } }
+		PBOM FF 1 Bright { for (A_SetUserVar(user_i, 0); user_i < 10; A_SetUserVar(user_i, user_i + 1)) { A_CustomRailgun(0, 0, "None", "AAAAFF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 56, 1, 0.2, 0.0); } }
+		PBOM GG 1 Bright { for (A_SetUserVar(user_i, 0); user_i < 10; A_SetUserVar(user_i, user_i + 1)) { A_CustomRailgun(0, 0, "None", "8888FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 48, 1, 0.2, 0.0); } }
+		PBOM GH 1 Bright { for (A_SetUserVar(user_i, 0); user_i < 10; A_SetUserVar(user_i, user_i + 1)) { A_CustomRailgun(0, 0, "None", "4444FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 40, 1, 0.2, 0.0); } }
+		PBOM HH 1 Bright { for (A_SetUserVar(user_i, 0); user_i < 10; A_SetUserVar(user_i, user_i + 1)) { A_CustomRailgun(0, 0, "None", "0000FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 32, 1, 0.2, 0.0); } }
+		PBOM I 3 Bright
+		Stop
+	}
+}
+
+ACTOR ArgStunBombPuff : ArgPuff
+{
+	+BLOODLESSIMPACT
+	States
+	{
+	Spawn:
+		TNT1 A 1
 		Stop
 	}
 }
