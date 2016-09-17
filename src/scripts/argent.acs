@@ -169,6 +169,7 @@ script "ClearCooldownsOnStart" enter {
 	TakeInventory("ArgRocketLauncherModCooldown", 999);
 	TakeInventory("ArgPlasmaRifleModCooldown"   , 999);
 	TakeInventory("ArgGaussCannonModCooldown"   , 999);
+	TakeInventory("ArgGaussCannonModCharge"     , 999);
 }
 
 /*
