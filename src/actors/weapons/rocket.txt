@@ -128,9 +128,9 @@ ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RK1S D 1
 		RK1S C 1
 		RK1S B 1
-		RK1S A 1 A_Overlay(ROCKET_OVERLAY_LAYER, "Mod1Overlay")
+		RK1S A 1 //A_Overlay(ROCKET_OVERLAY_LAYER, "Mod1Overlay") // [XA] band-aid; moving this below to Ready
 	Mod1Ready:
-		RK1G A 0
+		RK1G A 0 A_Overlay(ROCKET_OVERLAY_LAYER, "Mod1Overlay")
 		Goto ReadyLoop
 	Mod1Overlay:
 		TNT1 A 1 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK, "Mod1Detonate")
