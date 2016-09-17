@@ -150,7 +150,7 @@ ACTOR ArgGaussCannon : ArgModWeapon
 		Loop
 	Mod1Up:
 		GSCP A 1 {
-			if(CountInv("Clip") < GAUSS_Mod1_AMMOUSE) { return state("Ready"); }
+			if(CountInv("Cell") < GAUSS_Mod1_AMMOUSE) { return state("Ready"); }
 			A_PlaySound("weapons/gauss/mod1charge", CHAN_5);
 			A_ZoomFactor(3.0);
 			A_SetCrosshair(GAUSS_CROSSHAIR_ANIM1);
