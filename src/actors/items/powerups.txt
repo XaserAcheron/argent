@@ -44,6 +44,8 @@ ACTOR ArgPowerQuadDamage : PowerDamage
 	DamageFactor "Normal", 4
 	Powerup.Duration -45
 	Powerup.Color "AA00FF" 0.25
+	
+	+INVENTORY.ALWAYSPICKUP
 }
 ACTOR ArgQuadDamage : ArgPowerup
 {
@@ -68,6 +70,8 @@ ACTOR ArgPowerHasteSpeed : PowerSpeed
 	Powerup.Color "FFCC00" 0.25
 	Inventory.Icon "ICONHSTE"
 	Speed 1.5
+	
+	+INVENTORY.ALWAYSPICKUP
 }
 ACTOR ArgPowerHasteFiringSpeed : PowerDoubleFiringSpeed
 {
@@ -75,6 +79,8 @@ ACTOR ArgPowerHasteFiringSpeed : PowerDoubleFiringSpeed
 	// animations use 1-tic animations everywhere. I'll have to come up
 	// with something more clever at some point.
 	Powerup.Duration -45
+	
+	+INVENTORY.ALWAYSPICKUP
 }
 ACTOR ArgHaste : ArgPowerup
 {
@@ -100,6 +106,8 @@ ACTOR ArgPowerRegen : PowerRegeneration
 	Powerup.Strength 2
 	Powerup.Color "0080FF" 0.25
 	Inventory.Icon "ICONREGN"
+	
+	+INVENTORY.ALWAYSPICKUP
 }
 ACTOR ArgRegen : ArgPowerup
 {
@@ -123,6 +131,8 @@ ACTOR ArgPowerInvuln : PowerInvulnerable
 	Powerup.Duration -30
 	Powerup.Color InverseMap
 	Inventory.Icon "ICONPINV"
+	
+	+INVENTORY.ALWAYSPICKUP
 }
 ACTOR ArgInvuln : ArgPowerup replaces InvulnerabilitySphere
 {
