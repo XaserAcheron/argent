@@ -145,6 +145,8 @@ $rolloff weapons/bfg/explode 400 2400
 
 enemies/gibbitude          DSSLOP
 
+enemies/cyberdemon/attack  DSRLAUNC
+
 effects/impact1            "sounds/effects/impact1.flac"
 effects/impact2            "sounds/effects/impact2.flac"
 effects/impact3            "sounds/effects/impact3.flac"
