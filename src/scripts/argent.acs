@@ -261,8 +261,13 @@ script "Mod1RocketExplode" (int playerNum) {
  * Plazma Stunz0rs
  */
 script "NeuralStunner" (void) {
-	// [TODO] add stun duration uservars and set 'em on a few choice monsters (like bosses)
-	int duration = DEF_STUN_SECONDS * 35;
+	// Get stun duration (in seconds) from the Stamina property.
+	// If not set on this monster, use the default value.
+	int stunSeconds = GetActorProperty(0, APROP_STAMINA);
+	if( stunSeconds == 0 ) {
+		stunSeconds = DEF_STUN_SECONDS;
+	}
+	int duration = stunSeconds * 35;
 	
 	// loop for the duration and repeatedly set the pain state.
 	// A custom "Pain.Stun" state is used; if this isn't defined,

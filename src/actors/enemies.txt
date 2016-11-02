@@ -111,6 +111,7 @@ ACTOR ArgImp : DoomImp replaces DoomImp
 
 ACTOR ArgDemon : Demon replaces Demon
 {
+	Stamina 4 // mock "stun seconds" property. :P
 	States
 	{
 	Death:
@@ -151,6 +152,7 @@ ACTOR ArgSpectre : ArgDemon replaces Spectre
 
 ACTOR ArgSoul : LostSoul replaces LostSoul
 {
+	Stamina 4
 	States
 	{
 	Death:
@@ -177,6 +179,7 @@ ACTOR ArgSoul : LostSoul replaces LostSoul
 
 ACTOR ArgCaco : Cacodemon replaces Cacodemon
 {
+	Stamina 3
 	Bloodcolor "Blue"
 	States
 	{
@@ -207,6 +210,7 @@ ACTOR ArgCaco : Cacodemon replaces Cacodemon
 
 ACTOR ArgKnight : HellKnight replaces HellKnight
 {
+	Stamina 3
 	Bloodcolor "00 A0 00"
 	States
 	{
@@ -234,6 +238,7 @@ ACTOR ArgKnight : HellKnight replaces HellKnight
 
 ACTOR ArgBaron : BaronOfHell replaces BaronOfHell
 {
+	Stamina 3
 	Bloodcolor "00 A0 00"
 	States
 	{
@@ -261,6 +266,7 @@ ACTOR ArgBaron : BaronOfHell replaces BaronOfHell
 
 ACTOR ArgRevenant : Revenant replaces Revenant
 {
+	Stamina 3
 	States
 	{
 	Death:
@@ -288,6 +294,7 @@ ACTOR ArgRevenant : Revenant replaces Revenant
 
 ACTOR ArgMancubus : Fatso replaces Fatso
 {
+	Stamina 3
 	States
 	{
 	Death:
@@ -316,6 +323,7 @@ ACTOR ArgMancubus : Fatso replaces Fatso
 
 ACTOR ArgArachnotron : Arachnotron replaces Arachnotron
 {
+	Stamina 3
 	States
 	{
 	Death:
@@ -341,6 +349,7 @@ ACTOR ArgArachnotron : Arachnotron replaces Arachnotron
 
 ACTOR ArgElemental : PainElemental replaces PainElemental
 {
+	Stamina 3
 	States
 	{
 	Death:
@@ -366,6 +375,7 @@ ACTOR ArgElemental : PainElemental replaces PainElemental
 
 ACTOR ArgVile : Archvile replaces Archvile
 {
+	Stamina 2
 	States
 	{
 	Death:
@@ -393,6 +403,7 @@ ACTOR ArgVile : Archvile replaces Archvile
 
 ACTOR ArgCyberDAMN : Cyberdemon replaces Cyberdemon
 {
+	Stamina 1
 	DropItem "ArgGaussCannon"
 	States
 	{
@@ -426,6 +437,7 @@ ACTOR ArgCyberDAMN : Cyberdemon replaces Cyberdemon
 
 ACTOR ArgSPIDARS_AAAH_KILL_IT_WITH_FIRE : SpiderMastermind replaces SpiderMastermind
 {
+	Stamina 1
 	DropItem "ArgChaingun"
 	States
 	{
