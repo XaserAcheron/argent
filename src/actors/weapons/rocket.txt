@@ -184,7 +184,7 @@ ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 
 ACTOR ArgRocket : FastProjectile
 {
-	Radius 11
+	Radius 9
 	Height 8
 	Scale 0.75
 	Damage 30
