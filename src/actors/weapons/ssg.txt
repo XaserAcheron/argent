@@ -38,7 +38,11 @@ ACTOR ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 			A_GunFlash;
 			A_AlertMonsters;
 			A_FireBullets(11.2, 7.1, 20, 5, "ArgBulletPuff");
-			A_PlaySound("weapons/ssg/fire", CHAN_5);
+			if(CountInv("Shell") > 0) {
+				A_PlaySound("weapons/ssg/fire", CHAN_5);
+			} else {
+				A_PlaySound("weapons/ssg/firelast", CHAN_5);
+			}
 		}
 	FireAnim:
 		SSGF BCDEF 1
@@ -49,7 +53,7 @@ ACTOR ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 		Goto Ready
 	ImOutOfAmmo:
 		SSGF FEDCB 1
-		SSGG A 1 A_StopSound(CHAN_5)
+		SSGG A 1
 		SSGG A 0 A_CheckReload
 		Goto Ready
 	Flash:
@@ -83,8 +87,12 @@ ACTOR ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 		SSGB A 2 Bright {
 			A_GunFlash;
 			A_FireBullets(6.0, 3.0, 20, 5, "ArgBulletPuff");
-			A_PlaySound("weapons/ssg/fire", CHAN_5);
 			A_ZoomFactor(1.0);
+			if(CountInv("Shell") > 0) {
+				A_PlaySound("weapons/ssg/fire", CHAN_5);
+			} else {
+				A_PlaySound("weapons/ssg/firelast", CHAN_5);
+			}
 		}
 		SSGB A 0 A_WeaponOffset(0.0, 32.0)
 		Goto FireAnim

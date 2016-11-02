@@ -43,6 +43,7 @@ $random weapons/shotgun/fire    { weapons/shotgun/fire1 weapons/shotgun/fire2 we
 
 weapons/ssg/fire1          "sounds/weapons/ssg/fire1.flac"
 weapons/ssg/fire2          "sounds/weapons/ssg/fire2.flac"
+weapons/ssg/firelast       "sounds/weapons/ssg/firelast.flac"
 weapons/ssg/aimup          "sounds/weapons/ssg/aimup.flac"
 weapons/ssg/aimdown        "sounds/weapons/ssg/aimdown.flac"
 $random weapons/ssg/fire    { weapons/ssg/fire1 weapons/ssg/fire2 }
