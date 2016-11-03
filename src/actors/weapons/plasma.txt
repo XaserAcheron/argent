@@ -238,15 +238,16 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_GiveInventory("ArgPlasmaRifleModCooldown", PLASMA_MOD_COOLDOWN);
 		}
 		PL2G A 1 A_WeaponOffset( 5.0,  5.0 + 32.0)
-		PL2G A 1 A_WeaponOffset(12.0, 12.0 + 32.0)
-		PL2G A 1 A_WeaponOffset(15.0, 15.0 + 32.0)
-		PL2G A 1 A_WeaponOffset(16.0, 16.0 + 32.0)
-		PL2G A 1 A_WeaponOffset(14.0, 14.0 + 32.0)
-		PL2G A 1 A_WeaponOffset(11.0, 11.0 + 32.0)
-		PL2G A 1 A_WeaponOffset( 8.0,  8.0 + 32.0)
-		PL2G A 1 A_WeaponOffset( 4.0,  4.0 + 32.0)
-		PL2G A 1 A_WeaponOffset( 1.0,  1.0 + 33.0)
-		PL2G A 1 A_WeaponOffset( 0.0,  0.0 + 32.0)
+		PL2G G 1 A_WeaponOffset(12.0, 12.0 + 32.0)
+		PL2G G 1 A_WeaponOffset(15.0, 15.0 + 32.0)
+		PL2G H 1 A_WeaponOffset(16.0, 16.0 + 32.0)
+		PL2G H 1 A_WeaponOffset(14.0, 14.0 + 32.0)
+		PL2G I 1 A_WeaponOffset(11.0, 11.0 + 32.0)
+		PL2G I 1 A_WeaponOffset( 8.0,  8.0 + 32.0)
+		PL2G I 1 A_WeaponOffset( 4.0,  4.0 + 32.0)
+		PL2G I 1 A_WeaponOffset( 1.0,  1.0 + 33.0)
+		PL2G J 2 A_WeaponOffset( 0.0,  0.0 + 32.0)
+		PL2G KLIHG 2
 		Goto Cooldown
 	}
 }
