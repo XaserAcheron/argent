@@ -92,12 +92,12 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		PL1S K 1 A_WeaponOffset(-12.0, 40.0)
 		PL1S K 1 A_WeaponOffset(-10.0, 38.0)
 		PL1S K 1 A_WeaponOffset(- 8.0, 36.0)
-		PL1S K 1 A_WeaponOffset(- 6.0, 35.0)
-		PL1S K 1 A_WeaponOffset(- 4.0, 34.0)
-		PL1S K 1 A_WeaponOffset(- 2.0, 33.0)
-		PL1S K 1 A_WeaponOffset(- 1.0, 32.0)
-		PL1S K 6 A_WeaponOffset(  0.0, 32.0)
-		PL1S LMNO 2
+		PL1S L 1 A_WeaponOffset(- 6.0, 35.0)
+		PL1S M 1 A_WeaponOffset(- 4.0, 34.0)
+		PL1S N 1 A_WeaponOffset(- 2.0, 33.0)
+		PL1S O 1 A_WeaponOffset(- 1.0, 32.0)
+		PL1S O 6 A_WeaponOffset(  0.0, 32.0)
+		PL1S PQRS 2
 		PL1G AAAAAAAAAAAA 1 A_WeaponReady(WRF_ALLOWRELOAD)
 		PL1A GGGFFFEEEDDDBBBCCCDDDEEEFFFGGG 1 A_WeaponReady(WRF_ALLOWRELOAD)
 	Mod1Ready:
