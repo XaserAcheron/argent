@@ -218,6 +218,9 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 	Mod2Ready:
 		PL2G A 1 A_WeaponReady(WRF_ALLOWRELOAD)
 		PL2G D 1 {
+			if(CountInv("ArgPlasmaRifleModCooldown") == 1) {
+				A_PlaySound("weapons/plasma/mod2ready", CHAN_AUTO);
+			}
 			return A_JumpIfInventory("ArgPlasmaRifleModCooldown", 1, "Mod2Ready");
 		}
 		PL2G DEEFFFFFFFFEEDDA 1 A_WeaponReady(WRF_ALLOWRELOAD)
