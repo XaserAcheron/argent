@@ -204,17 +204,17 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		PL2S K 1 A_WeaponOffset(- 8.0, 36.0)
 		PL2S L 1 A_WeaponOffset(-10.0, 38.0)
 		PL2S L 1 A_WeaponOffset(-12.0, 40.0)
-		PL2S L 1 A_WeaponOffset(-13.0, 41.0)
-		PL2S L 1 A_WeaponOffset(-13.0, 41.0)
-		PL2S L 1 A_WeaponOffset(-12.0, 40.0)
-		PL2S L 1 A_WeaponOffset(-10.0, 38.0)
-		PL2S L 1 A_WeaponOffset(- 8.0, 36.0)
-		PL2S L 1 A_WeaponOffset(- 6.0, 35.0)
-		PL2S L 1 A_WeaponOffset(- 4.0, 34.0)
-		PL2S L 1 A_WeaponOffset(- 2.0, 33.0)
-		PL2S L 1 A_WeaponOffset(- 1.0, 32.0)
-		PL2S L 6 A_WeaponOffset(  0.0, 32.0)
-		PL2S MNOP 2
+		PL2S M 1 A_WeaponOffset(-13.0, 41.0)
+		PL2S N 1 A_WeaponOffset(-13.0, 41.0)
+		PL2S O 1 A_WeaponOffset(-12.0, 40.0)
+		PL2S P 1 A_WeaponOffset(-10.0, 38.0)
+		PL2S Q 1 A_WeaponOffset(- 8.0, 36.0)
+		PL2S Q 1 A_WeaponOffset(- 6.0, 35.0)
+		PL2S Q 1 A_WeaponOffset(- 4.0, 34.0)
+		PL2S Q 1 A_WeaponOffset(- 2.0, 33.0)
+		PL2S Q 1 A_WeaponOffset(- 1.0, 32.0)
+		PL2S Q 6 A_WeaponOffset(  0.0, 32.0)
+		PL2S RSTU 2
 	Mod2Ready:
 		PL2G A 1 A_WeaponReady(WRF_ALLOWRELOAD)
 		PL2G D 1 {
