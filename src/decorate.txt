@@ -1,4 +1,3 @@
-#include "actors/base.txt"
 #include "actors/player.txt"
 #include "actors/misc.txt"
 #include "actors/enemies.txt"
