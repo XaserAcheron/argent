@@ -114,7 +114,7 @@ class ArgRocketTrailSpawner : ArgTrail
 	States
 	{
 	Spawn:
-		TNT1 A 1 NoDelay A_SpawnItemEx("ArgRocketTrail", 0, 0, 0, 0, frandom(-0.33, 0.33), frandom(-0.33, 0.33));
+		TNT1 A 1 NoDelay A_SpawnItemEx("ArgRocketTrail", 0, 0, 0, 0, frandom[ArgRocketTrailSpawner](-0.33, 0.33), frandom[ArgRocketTrailSpawner](-0.33, 0.33));
 		Stop;
 	}
 }
