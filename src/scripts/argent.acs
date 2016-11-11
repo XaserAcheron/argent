@@ -268,6 +268,7 @@ script "NeuralStunner" (void) {
 		stunSeconds = DEF_STUN_SECONDS;
 	}
 	int duration = stunSeconds * 35;
+	int x, y, z, r;
 	
 	// loop for the duration and repeatedly set the pain state.
 	// A custom "Pain.Stun" state is used; if this isn't defined,
@@ -282,7 +283,23 @@ script "NeuralStunner" (void) {
 			break;
 		}
 		
-		// [TODO] stunny zap effects
+		// stunny zap effects, once per second.
+		if(i % 35 == 0) {
+			x = GetActorX(0);
+			y = GetActorY(0);
+			z = GetActorZ(0) + (GetActorProperty(0, APROP_HEIGHT) / 2);
+			r = GetActorProperty(0, APROP_RADIUS);
+			
+			// spawn a different size actor depending on its radius.
+			if(r <= 28.0) {
+				Spawn("ArgStunEffect", x, y, z);
+			} else if (r <= 56.0) {
+				Spawn("ArgStunEffectLarge", x, y, z);
+			} else {
+				Spawn("ArgStunEffectHuge", x, y, z);
+			}
+		}
+		
 		Delay(1);
 	}
 }

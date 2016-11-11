@@ -361,3 +361,26 @@ ACTOR ArgStunner : CustomInventory
 		Stop
 	}
 }
+
+ACTOR ArgStunEffect : ArgTrailNoPhysics
+{
+	Scale 0.5
+	States
+	{
+	Spawn:
+		STUN A 0 Bright NoDelay A_SetScale(scaleX*(random(0,1)*2-1), scaleY*(random(0,1)*2-1)) // randomly flip x and y
+		STUN ABCDEF 2 Bright
+		STUN GGHHII 1 Bright A_FadeOut(0.2)
+		Stop
+	}
+}
+
+ACTOR ArgStunEffectLarge : ArgStunEffect
+{
+	Scale 1.0
+}
+
+ACTOR ArgStunEffectHuge : ArgStunEffect
+{
+	Scale 1.5
+}
