@@ -34,31 +34,6 @@ script "ArgentInit" enter {
 }
 
 /*
- * Monitor script. Handles stuff that has to be triggered in a script loop.
- * Only updates once a second since none of this requires real-time stuffs.
- */
-script "ArgentMonitor" enter {
-
-	// statbar switching
-	if(GetCVAR("arg_classicHUD")) {
-		GiveInventory("ArgClassicHudToken", 1);
-	} else {
-		TakeInventory("ArgClassicHudToken", 1);
-	}
-	
-	// bfg ammo counter thingy
-	if(GetCVAR("arg_bfgammotype")) {
-		GiveInventory("ArgBFGAmmoTypeToken", 1);
-	} else {
-		TakeInventory("ArgBFGAmmoTypeToken", 1);
-	}
-	
-	// reeeeplaaay jeeenkiiiins
-	Delay(35);
-	Restart;
-}
-
-/*
  * Swaps the player's active weapon mod. This script just swaps the tokens;
  * the base ArgWeaponMod definition handles the state jumps and the initiation
  * of the swap animation.

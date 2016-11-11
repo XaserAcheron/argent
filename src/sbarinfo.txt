@@ -4,7 +4,7 @@ resolution 640, 480;
 
 statusbar fullscreen, fullscreenoffsets
 {
-	InInventory NOT ArgClassicHudToken {
+	IfCVarInt NOT arg_classicHUD, 1 {
 
 		// --- Modern-style --- //
 	
@@ -35,7 +35,7 @@ statusbar fullscreen, fullscreenoffsets
 		
 		// bfg ammo -- hooray unfortunate copypasta
 		Else {
-			InInventory NOT ArgBFGAmmoTypeToken {
+			IfCVarInt NOT arg_bfgammotype, 1 {
 				DrawNumber 3, "hudfont-large", untranslated, ammo1, alignment(right), -96, -58;
 				InInventory Backpack, 1  {
 					DrawBar "graphics/hud/bar-ammo-1a.png", "graphics/hud/bar-ammo-1xa.png", ammo1, horizontal, reverse, -228, -41;
