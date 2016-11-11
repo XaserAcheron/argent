@@ -34,6 +34,17 @@ script "ArgentInit" enter {
 }
 
 /*
+ * The Mod Kit! Shows a simple little menu thing that allows you to select
+ * a mod to apply to your current gun. Is triggered when you use the mod
+ * inventory item.
+ */
+script "UseModKit" (void) {
+	// [TODO] everything ever
+	Print(s:"Mods! Egad!");
+	SetResultValue(true);
+}
+
+/*
  * Swaps the player's active weapon mod. This script just swaps the tokens;
  * the base ArgWeaponMod definition handles the state jumps and the initiation
  * of the swap animation.
