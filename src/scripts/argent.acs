@@ -34,13 +34,57 @@ script "ArgentInit" enter {
 }
 
 /*
+ * Fanciful drawing function for UseModKit below.
+ */
+function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key) {
+
+	// fixed-point conversion eeee
+	x = (x * 1.0);
+	int t = 5.0;
+	
+	// we sure do need some instructions
+	str sel = StrParam(s:"'", k:key, s:"' to select");
+
+	// draw the bocks
+	SetHudSize(640, 480, 1);
+	SetFont("graphics/hud/mod-base.png");
+	HudMessage(s:"A"; HUDMSG_PLAIN, 1100 + id, CR_UNTRANSLATED, x +   0.1,   0.1, t);
+	
+	// draw uh eye-con
+	SetFont(icon);
+	HudMessage(s:"A"; HUDMSG_PLAIN, 1000 + id, CR_UNTRANSLATED, x + 160.0, 180.0, t);
+	
+	// draw some exceptionally text
+	SetFont("ARGFONT");
+	HudMessage(s:tag ; HUDMSG_PLAIN, 1010 + id, CR_UNTRANSLATED, x + 160.0,  30.1, t);
+	HudMessage(s:desc; HUDMSG_PLAIN, 1020 + id, CR_UNTRANSLATED, x + 160.4, 320.1, t);
+	HudMessage(s:sel ; HUDMSG_PLAIN, 1030 + id, CR_RED         , x + 160.0, 400.1, t);
+}
+
+/*
  * The Mod Kit! Shows a simple little menu thing that allows you to select
  * a mod to apply to your current gun. Is triggered when you use the mod
  * inventory item.
  */
 script "UseModKit" (void) {
-	// [TODO] everything ever
-	Print(s:"Mods! Egad!");
+
+	// Snag the correct tags and icon names from LANGUAGE.
+	// [XA] This nuttiness will go away once ZScript-conversion happens.
+	str weapon     = GetWeapon();
+	str weaponBase = StrMid(weapon, 3, 999);
+	str modTag1    = StrParam(l:StrParam(s:"ARG_MOD_TAG_" , s:weaponBase, s:"1"));
+	str modTag2    = StrParam(l:StrParam(s:"ARG_MOD_TAG_" , s:weaponBase, s:"2"));
+	str modDesc1   = StrParam(l:StrParam(s:"ARG_MOD_DESC_", s:weaponBase, s:"1"));
+	str modDesc2   = StrParam(l:StrParam(s:"ARG_MOD_DESC_", s:weaponBase, s:"2"));
+	str modIcon1   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"1"));
+	str modIcon2   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"2"));
+	
+	// Draw mod panels. The Hudmessage bit is abstracted slightly, for sanity.
+	DrawModPanel(1,   0, modTag1, modDesc1, modIcon1, "+attack"   );
+	DrawModPanel(2, 320, modTag2, modDesc2, modIcon2, "+altattack");
+	
+	// [TODO] everything else ever
+	
 	SetResultValue(true);
 }
 

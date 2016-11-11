@@ -47,3 +47,46 @@ ARG_GOT_INVULN  = "Invulnerability! Holy shit!";
 ARG_GOT_MOD_KIT = "Weapon Mod Kit!";
 
 ARG_GOT_BFGCELL = "Picked up a bfg cell.";
+
+// [XA] Pretty hacky way of doing mod data, for now; it's based on the weapon
+//      actor name. Gonna revisit this in the inevitable ZScript conversion.
+//      Having proper properties (heh) for this in an actor would be great.
+
+ARG_MOD_TAG_Shotgun1        = "Charged Burst";
+ARG_MOD_TAG_Shotgun2        = "Explosive Shot";
+ARG_MOD_TAG_HeavyAR1        = "Micro Missiles";
+ARG_MOD_TAG_HeavyAR2        = "Tactical Scope";
+ARG_MOD_TAG_Chaingun1       = "Gatling Rotator";
+ARG_MOD_TAG_Chaingun2       = "Mobile Turret";
+ARG_MOD_TAG_RocketLauncher1 = "Remote Detonator";
+ARG_MOD_TAG_RocketLauncher2 = "Lock-on Burst";
+ARG_MOD_TAG_PlasmaRifle1    = "Heat Blast";
+ARG_MOD_TAG_PlasmaRifle2    = "Stun Bomb";
+ARG_MOD_TAG_GaussCannon1    = "Precision Bolt";
+ARG_MOD_TAG_GaussCannon2    = "Siege Mode";
+
+ARG_MOD_DESC_Shotgun1        = "[description here]\n...\n...\n...\n...";
+ARG_MOD_DESC_Shotgun2        = "[description here]\n...\n...\n...\n...";
+ARG_MOD_DESC_HeavyAR1        = "[description here]\n...\n...\n...\n...";
+ARG_MOD_DESC_HeavyAR2        = "[description here]\n...\n...\n...\n...";
+ARG_MOD_DESC_Chaingun1       = "[description here]\n...\n...\n...\n...";
+ARG_MOD_DESC_Chaingun2       = "[description here]\n...\n...\n...\n...";
+ARG_MOD_DESC_RocketLauncher1 = "[description here]\n...\n...\n...\n...";
+ARG_MOD_DESC_RocketLauncher2 = "[description here]\n...\n...\n...\n...";
+ARG_MOD_DESC_PlasmaRifle1    = "[description here]\n...\n...\n...\n...";
+ARG_MOD_DESC_PlasmaRifle2    = "[description here]\n...\n...\n...\n...";
+ARG_MOD_DESC_GaussCannon1    = "[description here]\n...\n...\n...\n...";
+ARG_MOD_DESC_GaussCannon2    = "[description here]\n...\n...\n...\n...";
+
+ARG_MOD_ICON_Shotgun1        = "graphics/hud/weapon-shotgun.png";
+ARG_MOD_ICON_Shotgun2        = "graphics/hud/weapon-shotgun.png";
+ARG_MOD_ICON_HeavyAR1        = "graphics/hud/weapon-heavy.png";
+ARG_MOD_ICON_HeavyAR2        = "graphics/hud/weapon-heavy.png";
+ARG_MOD_ICON_Chaingun1       = "graphics/hud/weapon-chaingun.png";
+ARG_MOD_ICON_Chaingun2       = "graphics/hud/weapon-chaingun.png";
+ARG_MOD_ICON_RocketLauncher1 = "graphics/hud/weapon-rocket.png";
+ARG_MOD_ICON_RocketLauncher2 = "graphics/hud/weapon-rocket.png";
+ARG_MOD_ICON_PlasmaRifle1    = "graphics/hud/weapon-plasma.png";
+ARG_MOD_ICON_PlasmaRifle2    = "graphics/hud/weapon-plasma.png";
+ARG_MOD_ICON_GaussCannon1    = "graphics/hud/weapon-gauss.png";
+ARG_MOD_ICON_GaussCannon2    = "graphics/hud/greybox.png";
