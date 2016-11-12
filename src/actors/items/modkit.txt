@@ -29,4 +29,6 @@ ACTOR ArgModKit : CustomInventory replaces Backpack
 	}
 }
 
-ACTOR ArgModKitAmmo : BackpackItem {}
+ACTOR ArgModKitAmmo  : BackpackItem {}
+
+ACTOR ArgModKitToken : ArgToken {} // Used to check if the mod menu is open.

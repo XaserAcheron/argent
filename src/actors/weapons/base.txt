@@ -75,6 +75,7 @@ ACTOR ArgModWeapon : ArgWeapon
 	/* Fire Mod-Jump -- need to make sure we're not holding down altfire. */
 	
 	Fire:
+		"####" "#" 0 A_JumpIf(CallACS("EquipModCheck", 1), "ModSwapDown")
 		"####" "#" 0 A_JumpIf(CallACS("SynthAltFire") == false, "Mod0Fire")
 		Goto DontFire
 	Mod0Fire:
@@ -142,6 +143,7 @@ ACTOR ArgModWeapon : ArgWeapon
 	/* Mod Firing. Maximum Dangertime. */
 	
 	AltFire:
+		"####" "#" 0 A_JumpIf(CallACS("EquipModCheck", 2), "ModSwapDown")
 		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 1) && CallACS("CheckModCooldown"), "Mod1Up")
 		"####" "#" 0 A_JumpIf(CallACS("ModSelected", 2) && CallACS("CheckModCooldown"), "Mod2Up")
 		Goto DontFire

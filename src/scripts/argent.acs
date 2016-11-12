@@ -5,6 +5,10 @@
 // Exceptionally-important note: This now requires GDCC to build.
 // It's pretty much better than acc.exe in every way, so get it! :P
 //
+// [XA] As a note, this script got a lot hackier when the Mod Kit item was
+//      introduced, but the plan is to refactor this all in zscript anyway,
+//      so I figured I'd let a few shenanigans slide for now. Be warned. :P
+//
 // --------------------------------------------------------------------------
 
 #library "argent"
@@ -40,10 +44,15 @@ function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key)
 
 	// fixed-point conversion eeee
 	x = (x * 1.0);
-	int t = 5.0;
+	int t = 0.05;
 	
 	// we sure do need some instructions
-	str sel = StrParam(s:"'", k:key, s:"' to select");
+	str sel;
+	if(StrCmp(key, "") ==0 ) {
+		sel = "Select another weapon.";
+	} else {
+		sel = StrParam(s:"'", k:key, s:"' to select");
+	}
 
 	// draw the bocks
 	SetHudSize(640, 480, 1);
@@ -67,25 +76,83 @@ function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key)
  * inventory item.
  */
 script "UseModKit" (void) {
+	SetResultValue(false);
+	
+	// Give a token to indicate that the "menu" is up.
+	GiveInventory("ArgModKitToken", 1);
+	
+	// Loop for a bit.
+	int input;
+	do {
+		input = GetPlayerInput(-1, INPUT_BUTTONS);
 
-	// Snag the correct tags and icon names from LANGUAGE.
-	// [XA] This nuttiness will go away once ZScript-conversion happens.
-	str weapon     = GetWeapon();
-	str weaponBase = StrMid(weapon, 3, 999);
-	str modTag1    = StrParam(l:StrParam(s:"ARG_MOD_TAG_" , s:weaponBase, s:"1"));
-	str modTag2    = StrParam(l:StrParam(s:"ARG_MOD_TAG_" , s:weaponBase, s:"2"));
-	str modDesc1   = StrParam(l:StrParam(s:"ARG_MOD_DESC_", s:weaponBase, s:"1"));
-	str modDesc2   = StrParam(l:StrParam(s:"ARG_MOD_DESC_", s:weaponBase, s:"2"));
-	str modIcon1   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"1"));
-	str modIcon2   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"2"));
+		// Snag the correct tags and icon names from LANGUAGE.
+		// [XA] This nuttiness will go away once ZScript-conversion happens.
+		//      Also why I'm not bothering to make this more efficient yet. :P
+		str weapon     = GetWeapon();
+		str weaponBase = StrMid(weapon, 3, 999);
+		str jankCheck  = StrParam(s:"ARG_MOD_TAG_" , s:weaponBase, s:"1");
+		str modTag1    = StrParam(l:jankCheck);
+		str modTag2    = StrParam(l:StrParam(s:"ARG_MOD_TAG_" , s:weaponBase, s:"2"));
+		str modDesc1   = StrParam(l:StrParam(s:"ARG_MOD_DESC_", s:weaponBase, s:"1"));
+		str modDesc2   = StrParam(l:StrParam(s:"ARG_MOD_DESC_", s:weaponBase, s:"2"));
+		str modIcon1   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"1"));
+		str modIcon2   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"2"));
+		str mod1Token  = StrParam(s:weapon, s:"Mod1Enabled");
+		str mod2Token  = StrParam(s:weapon, s:"Mod2Enabled");
+		str modSelect  = StrParam(s:weapon, s:"ModSelected");
+		
+		// If we ain't got no mods, short-circuit a bit.
+		// [XA] janky check against the language entry, heh
+		if(StrCmp(modTag1, jankCheck) == 0) {
+		
+			// Draw a "can't mod this" panel.
+			DrawModPanel(1, 160, "No Mods Available", "", "graphics/hud/greybox.png", ""); // [TODO] better icon
+			
+		} else {
 	
-	// Draw mod panels. The Hudmessage bit is abstracted slightly, for sanity.
-	DrawModPanel(1,   0, modTag1, modDesc1, modIcon1, "+attack"   );
-	DrawModPanel(2, 320, modTag2, modDesc2, modIcon2, "+altattack");
+			// Draw mod panels. The Hudmessage bit is abstracted slightly, for sanity.
+			// [TODO] grey it out if it's already been got
+			DrawModPanel(1,   0, modTag1, modDesc1, modIcon1, "+attack"   );
+			DrawModPanel(2, 320, modTag2, modDesc2, modIcon2, "+altattack");
+		}
+		
+		Delay(1);
+		
+		// Break if the player 
+	} while (!(input & BT_USE) && CheckInventory("ArgModKitToken") > 0);
 	
-	// [TODO] everything else ever
+	// Take away the token in case the player aborted above.
+	TakeInventory("ArgModKitToken", 1);
+}
+
+script "EquipModCheck" (int mod) {
+
+	// Figure out if the desired mod has been enabled yet. If it is AND
+	// the Mod Kit interface is open, enable the mod and initiate
+	// a weapon swap. This is handled here rather than in the modkit script
+	// itself to use fire/altfire as the controls. Funky, but works.
+	str weapon = GetWeapon();
+	str modSelectedToken = StrParam(s:weapon, s:"ModSelected");
+	str modEnabledToken  = StrParam(s:weapon, s:"Mod", i:mod, s:"Enabled");
 	
-	SetResultValue(true);
+	if(CheckInventory("ArgModKitToken") > 0 && CheckInventory(modEnabledToken) == 0) {
+		// dismiss the Mod Kit interface (and remove the kit).
+		TakeInventory("ArgModKitToken", 1);
+		TakeInventory("ArgModKit", 1);
+		
+		// "gift" the mod and swap to it
+		GiveInventory(modEnabledToken , 1);
+		TakeInventory(modSelectedToken, 1);
+		GiveInventory(modSelectedToken, mod);
+
+		// make the calling weapon jump to the mod swap animation state.
+		SetResultValue(true);
+
+	} else {
+		// don't do a thing otherwise. continue firing, gents!
+		SetResultValue(false);
+	}
 }
 
 /*
