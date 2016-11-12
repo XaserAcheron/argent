@@ -89,4 +89,4 @@ ARG_MOD_ICON_RocketLauncher2 = "graphics/hud/weapon-rocket.png";
 ARG_MOD_ICON_PlasmaRifle1    = "graphics/hud/weapon-plasma.png";
 ARG_MOD_ICON_PlasmaRifle2    = "graphics/hud/weapon-plasma.png";
 ARG_MOD_ICON_GaussCannon1    = "graphics/hud/weapon-gauss.png";
-ARG_MOD_ICON_GaussCannon2    = "graphics/hud/weapon-gauss..png";
+ARG_MOD_ICON_GaussCannon2    = "graphics/hud/weapon-gauss.png";

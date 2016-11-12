@@ -40,33 +40,39 @@ script "ArgentInit" enter {
 /*
  * Fanciful drawing function for UseModKit below.
  */
-function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key) {
+function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key, bool got) {
 
 	// fixed-point conversion eeee
 	x = (x * 1.0);
 	int t = 0.05;
 	
 	// we sure do need some instructions
+	int col = CR_UNTRANSLATED;
+	int alp = 1.0;
 	str sel;
 	if(StrCmp(key, "") ==0 ) {
-		sel = "Select another weapon.";
+		sel = "No mods available for this weapon.";
+	} else if(got) {
+		sel = "This mod is already installed.";
+		col = CR_BLACK;
+		alp = 0.33;
 	} else {
-		sel = StrParam(s:"'", k:key, s:"' to select");
+		sel = StrParam(s:"'", k:key, s:"' to install");
 	}
 
 	// draw the bocks
 	SetHudSize(640, 480, 1);
 	SetFont("graphics/hud/mod-base.png");
-	HudMessage(s:"A"; HUDMSG_PLAIN, 1100 + id, CR_UNTRANSLATED, x +   0.1,   0.1, t);
+	HudMessage(s:"A" ; HUDMSG_PLAIN, 1100 + id, CR_UNTRANSLATED, x +   0.1,   0.1, t);
 	
 	// draw uh eye-con
 	SetFont(icon);
-	HudMessage(s:"A"; HUDMSG_PLAIN, 1000 + id, CR_UNTRANSLATED, x + 160.0, 180.0, t);
+	HudMessage(s:"A" ; HUDMSG_ALPHA, 1000 + id, CR_UNTRANSLATED, x + 160.0, 180.0, t, alp);
 	
 	// draw some exceptionally text
 	SetFont("ARGFONT");
-	HudMessage(s:tag ; HUDMSG_PLAIN, 1010 + id, CR_UNTRANSLATED, x + 160.0,  30.1, t);
-	HudMessage(s:desc; HUDMSG_PLAIN, 1020 + id, CR_UNTRANSLATED, x + 160.4, 320.1, t);
+	HudMessage(s:tag ; HUDMSG_PLAIN, 1010 + id, col            , x + 160.0,  30.1, t);
+	HudMessage(s:desc; HUDMSG_PLAIN, 1020 + id, col            , x + 160.4, 320.1, t);
 	HudMessage(s:sel ; HUDMSG_PLAIN, 1030 + id, CR_RED         , x + 160.0, 400.1, t);
 }
 
@@ -100,21 +106,20 @@ script "UseModKit" (void) {
 		str modIcon2   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"2"));
 		str mod1Token  = StrParam(s:weapon, s:"Mod1Enabled");
 		str mod2Token  = StrParam(s:weapon, s:"Mod2Enabled");
-		str modSelect  = StrParam(s:weapon, s:"ModSelected");
 		
 		// If we ain't got no mods, short-circuit a bit.
 		// [XA] janky check against the language entry, heh
 		if(StrCmp(modTag1, jankCheck) == 0) {
 		
 			// Draw a "can't mod this" panel.
-			DrawModPanel(1, 160, "No Mods Available", "", "graphics/hud/greybox.png", ""); // [TODO] better icon
+			DrawModPanel(1, 160, "No Mods Available", "", "graphics/hud/greybox.png", "", false); // [TODO] better icon
 			
 		} else {
 	
 			// Draw mod panels. The Hudmessage bit is abstracted slightly, for sanity.
 			// [TODO] grey it out if it's already been got
-			DrawModPanel(1,   0, modTag1, modDesc1, modIcon1, "+attack"   );
-			DrawModPanel(2, 320, modTag2, modDesc2, modIcon2, "+altattack");
+			DrawModPanel(1,   0, modTag1, modDesc1, modIcon1, "+attack"   , CheckInventory(mod1Token));
+			DrawModPanel(2, 320, modTag2, modDesc2, modIcon2, "+altattack", CheckInventory(mod2Token));
 		}
 		
 		Delay(1);
@@ -137,7 +142,7 @@ script "EquipModCheck" (int mod) {
 	str modEnabledToken  = StrParam(s:weapon, s:"Mod", i:mod, s:"Enabled");
 	
 	if(CheckInventory("ArgModKitToken") > 0 && CheckInventory(modEnabledToken) == 0) {
-		// dismiss the Mod Kit interface (and remove the kit).
+		// dismiss the Mod Kit interface (and remove the kit, "consuming" it).
 		TakeInventory("ArgModKitToken", 1);
 		TakeInventory("ArgModKit", 1);
 		
