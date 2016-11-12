@@ -88,12 +88,14 @@ script "UseModKit" (void) {
 	// If so, exit it; this way you can Use the kit item to enter/exit the menu.
 	// Hooray parallelism!
 	if(CheckInventory("ArgModKitToken") > 0) {
+		ActivatorSound("items/modkit/dismiss", 255);
 		TakeInventory("ArgModKitToken", 1);
 		return;
 	}
 	
 	// Give a token to indicate that the "menu" is up.
 	GiveInventory("ArgModKitToken", 1);
+	ActivatorSound("items/modkit/use", 255);
 	
 	// Loop for a bit.
 	int input;
@@ -132,8 +134,13 @@ script "UseModKit" (void) {
 		
 		Delay(1);
 		
-		// Break if the player 
+		// Break if the player presses 'use' or the token item is removed.
 	} while (!(input & BT_USE) && CheckInventory("ArgModKitToken") > 0);
+	
+	// Gotta check for playing the sound again; urghy.
+	if(input & BT_USE) {
+		ActivatorSound("items/modkit/dismiss", 255);
+	}
 	
 	// Take away the token in case the player aborted above.
 	TakeInventory("ArgModKitToken", 1);
@@ -150,9 +157,11 @@ script "EquipModCheck" (int mod) {
 	str modEnabledToken  = StrParam(s:weapon, s:"Mod", i:mod, s:"Enabled");
 	
 	if(CheckInventory("ArgModKitToken") > 0 && CheckInventory(modEnabledToken) == 0) {
+
 		// dismiss the Mod Kit interface (and remove the kit, "consuming" it).
 		TakeInventory("ArgModKitToken", 1);
 		TakeInventory("ArgModKit", 1);
+		ActivatorSound("items/modkit/apply", 255);
 		
 		// "gift" the mod and swap to it
 		GiveInventory(modEnabledToken , 1);
