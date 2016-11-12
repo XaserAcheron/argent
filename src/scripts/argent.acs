@@ -84,6 +84,14 @@ function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key,
 script "UseModKit" (void) {
 	SetResultValue(false);
 	
+	// Before doing anything else, check to see if we are already in the menu.
+	// If so, exit it; this way you can Use the kit item to enter/exit the menu.
+	// Hooray parallelism!
+	if(CheckInventory("ArgModKitToken") > 0) {
+		TakeInventory("ArgModKitToken", 1);
+		return;
+	}
+	
 	// Give a token to indicate that the "menu" is up.
 	GiveInventory("ArgModKitToken", 1);
 	
