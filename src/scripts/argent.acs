@@ -40,11 +40,11 @@ script "ArgentInit" enter {
 /*
  * Fanciful drawing function for UseModKit below.
  */
+#define MSG_TIME 0.05
 function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key, bool got) {
 
 	// fixed-point conversion eeee
 	x = (x * 1.0);
-	int t = 0.05;
 	
 	// we sure do need some instructions
 	int col = CR_UNTRANSLATED;
@@ -63,17 +63,17 @@ function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key,
 	// draw the bocks
 	SetHudSize(640, 480, 1);
 	SetFont("graphics/hud/mod-base.png");
-	HudMessage(s:"A" ; HUDMSG_PLAIN, 1100 + id, CR_UNTRANSLATED, x +   0.1,   0.1, t);
+	HudMessage(s:"A" ; HUDMSG_PLAIN, 1100 + id, CR_UNTRANSLATED, x +   0.1,   0.1, MSG_TIME);
 	
 	// draw uh eye-con
 	SetFont(icon);
-	HudMessage(s:"A" ; HUDMSG_ALPHA, 1000 + id, CR_UNTRANSLATED, x + 160.0, 180.0, t, alp);
+	HudMessage(s:"A" ; HUDMSG_ALPHA, 1000 + id, CR_UNTRANSLATED, x + 160.0, 180.0, MSG_TIME, alp);
 	
 	// draw some exceptionally text
 	SetFont("ARGFONT");
-	HudMessage(s:tag ; HUDMSG_PLAIN, 1010 + id, col            , x + 160.0,  30.1, t);
-	HudMessage(s:desc; HUDMSG_PLAIN, 1020 + id, col            , x + 160.4, 320.1, t);
-	HudMessage(s:sel ; HUDMSG_PLAIN, 1030 + id, CR_RED         , x + 160.0, 400.1, t);
+	HudMessage(s:tag ; HUDMSG_PLAIN, 1010 + id, col            , x + 160.0,  30.1, MSG_TIME);
+	HudMessage(s:desc; HUDMSG_PLAIN, 1020 + id, col            , x + 160.4, 320.1, MSG_TIME);
+	HudMessage(s:sel ; HUDMSG_PLAIN, 1030 + id, CR_RED         , x + 160.0, 400.1, MSG_TIME);
 }
 
 /*
@@ -127,11 +127,19 @@ script "UseModKit" (void) {
 		} else {
 	
 			// Draw mod panels. The Hudmessage bit is abstracted slightly, for sanity.
-			// [TODO] grey it out if it's already been got
 			DrawModPanel(1,   0, modTag1, modDesc1, modIcon1, "+attack"   , CheckInventory(mod1Token));
 			DrawModPanel(2, 320, modTag2, modDesc2, modIcon2, "+altattack", CheckInventory(mod2Token));
 		}
 		
+		// Draw footer with instructions n' such.
+		SetHudSize(640, 480, 1);
+		SetFont("ARGFONT");
+		HudMessage(s:"Switch weapons to browse mods."               ; HUDMSG_PLAIN, 1040, CR_UNTRANSLATED, 320.0, 440.1, MSG_TIME);
+		HudMessage(s:StrParam(s:"Press '", k:"+use", s:"' to exit."); HUDMSG_PLAIN, 1041, CR_RED         , 320.0, 456.1, MSG_TIME);
+		SetFont("graphics/hud/mod-footer.png");
+		HudMessage(s:"A"; HUDMSG_PLAIN, 1042, CR_UNTRANSLATED, 320.0, 434.1, MSG_TIME);
+		
+		// delays are important
 		Delay(1);
 		
 		// Break if the player presses 'use' or the token item is removed.
