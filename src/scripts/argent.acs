@@ -50,13 +50,11 @@ function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key,
 	int col = CR_UNTRANSLATED;
 	int alp = 1.0;
 	str sel;
-	if(StrCmp(key, "") ==0 ) {
-		sel = "No mods available for this weapon.";
-	} else if(got) {
+	if(got) {
 		sel = "This mod is already installed.";
 		col = CR_BLACK;
 		alp = 0.33;
-	} else {
+	} else if (StrCmp(key, "") > 0) {
 		sel = StrParam(s:"'", k:key, s:"' to install");
 	}
 
@@ -122,7 +120,7 @@ script "UseModKit" (void) {
 		if(StrCmp(modTag1, jankCheck) == 0) {
 		
 			// Draw a "can't mod this" panel.
-			DrawModPanel(1, 160, "No Mods Available", "", "graphics/hud/greybox.png", "", false); // [TODO] better icon
+			DrawModPanel(1, 160, "No Mods Available", "No mods available for this weapon.", "graphics/hud/mod-pic-nope.png", "", false);
 			
 		} else {
 	
