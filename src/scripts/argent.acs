@@ -173,7 +173,7 @@ script "EquipModCheck" (int mod) {
 		
 		// "gift" the mod and swap to it
 		GiveInventory(modEnabledToken , 1);
-		TakeInventory(modSelectedToken, 1);
+		TakeInventory(modSelectedToken, 2);
 		GiveInventory(modSelectedToken, mod);
 
 		// make the calling weapon jump to the mod swap animation state.
