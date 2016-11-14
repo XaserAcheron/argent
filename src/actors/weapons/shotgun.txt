@@ -150,7 +150,7 @@ ACTOR ArgShotgun : ArgModWeapon replaces Shotgun
 		SH1N A 1 Bright {
 			A_GunFlash;
 			A_AlertMonsters;
-			A_FireBullets(5, 2, 7, 5, "ArgBulletPuff");
+			A_FireBullets(2.5, 1, 7, 5, "ArgBulletPuff");
 			A_TakeInventory("Shell", 1, TIF_NOTAKEINFINITE);
 			A_GiveInventory("ArgShotgunModCooldown", SHOTGUN_MOD_COOLDOWN);
 			A_PlaySound("weapons/shotgun/mod1fire", CHAN_5);
@@ -159,7 +159,7 @@ ACTOR ArgShotgun : ArgModWeapon replaces Shotgun
 		SH1N C 1 A_WeaponOffset(4.0, 34.0)
 		SH1N D 1 Bright {
 			A_GunFlash;
-			A_FireBullets(5, 2, 7, 5, "ArgBulletPuff");
+			A_FireBullets(2.5, 1, 7, 5, "ArgBulletPuff");
 			A_TakeInventory("Shell", 1, TIF_NOTAKEINFINITE);
 			A_WeaponOffset(4.0, 34.0);
 		}
@@ -167,7 +167,7 @@ ACTOR ArgShotgun : ArgModWeapon replaces Shotgun
 		SH1N F 1 A_WeaponOffset( 8.0, 36.0)
 		SH1N G 1 Bright {
 			A_GunFlash;
-			A_FireBullets(5, 2, 7, 5, "ArgBulletPuff");
+			A_FireBullets(2.5, 1, 7, 5, "ArgBulletPuff");
 			A_TakeInventory("Shell", 1, TIF_NOTAKEINFINITE);
 			A_WeaponOffset(8.0, 38.0);
 		}
