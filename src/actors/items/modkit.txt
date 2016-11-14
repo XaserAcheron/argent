@@ -10,6 +10,7 @@ ACTOR ArgModKit : CustomInventory replaces Backpack
 	Inventory.PickupMessage "$ARG_GOT_MOD_KIT"
 	Inventory.PickupSound "items/modkit/pickup"
 	Inventory.MaxAmount 999
+	Inventory.Icon "graphics/hud/equip-icon-modkit.png"
 
 	+INVENTORY.FANCYPICKUPSOUND
 	+INVENTORY.INVBAR
