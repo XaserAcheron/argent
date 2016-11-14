@@ -63,6 +63,7 @@ function bool CheckModsFull (void) {
  * Fanciful drawing functions for UseModKit below.
  */
 #define MSG_TIME 0.05
+#define MSG_FADE 0.20
 function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key, bool got) {
 
 	// fixed-point conversion eeee
@@ -83,17 +84,17 @@ function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key,
 	// draw the bocks
 	SetHudSize(640, 480, 1);
 	SetFont("graphics/hud/mod-base.png");
-	HudMessage(s:"A" ; HUDMSG_PLAIN, 1100 + id, CR_UNTRANSLATED, x +   0.1,   0.1, MSG_TIME);
+	HudMessage(s:"A" ; HUDMSG_FADEOUT, 1100 + id, CR_UNTRANSLATED, x +   0.1,   0.1, MSG_TIME, MSG_FADE);
 	
 	// draw uh eye-con
 	SetFont(icon);
-	HudMessage(s:"A" ; HUDMSG_ALPHA, 1000 + id, CR_UNTRANSLATED, x + 160.0, 180.0, MSG_TIME, alp);
+	HudMessage(s:"A" ; HUDMSG_FADEOUT | HUDMSG_ALPHA, 1000 + id, CR_UNTRANSLATED, x + 160.0, 180.0, MSG_TIME, MSG_FADE, alp);
 	
 	// draw some exceptionally text
 	SetFont("ARGFONT");
-	HudMessage(s:tag ; HUDMSG_PLAIN, 1010 + id, col            , x + 160.0,  30.1, MSG_TIME);
-	HudMessage(s:desc; HUDMSG_PLAIN, 1020 + id, col            , x + 160.4, 320.1, MSG_TIME);
-	HudMessage(s:sel ; HUDMSG_PLAIN, 1030 + id, CR_RED         , x + 160.0, 400.1, MSG_TIME);
+	HudMessage(s:tag ; HUDMSG_FADEOUT, 1010 + id, col            , x + 160.0,  30.1, MSG_TIME, MSG_FADE);
+	HudMessage(s:desc; HUDMSG_FADEOUT, 1020 + id, col            , x + 160.4, 320.1, MSG_TIME, MSG_FADE);
+	HudMessage(s:sel ; HUDMSG_FADEOUT, 1030 + id, CR_RED         , x + 160.0, 400.1, MSG_TIME, MSG_FADE);
 }
 function void DrawModFooter (str text1, str text2, int time) {
 	time = (time == 0) ? MSG_TIME : time; // TIME IS FLEETING. WHAT SAY YOU?
@@ -101,12 +102,12 @@ function void DrawModFooter (str text1, str text2, int time) {
 	// footer borks
 	SetHudSize(640, 480, 1);
 	SetFont("graphics/hud/mod-footer.png");
-	HudMessage(s:"A"  ; HUDMSG_PLAIN, 1042, CR_UNTRANSLATED, 320.0, 434.1, time);
+	HudMessage(s:"A"  ; HUDMSG_FADEOUT, 1042, CR_UNTRANSLATED, 320.0, 434.1, time, MSG_FADE);
 	
 	// australian rules footy text
 	SetFont("ARGFONT");
-	HudMessage(s:text1; HUDMSG_PLAIN, 1040, CR_UNTRANSLATED, 320.0, 440.1, time);
-	HudMessage(s:text2; HUDMSG_PLAIN, 1041, CR_RED         , 320.0, 456.1, time);
+	HudMessage(s:text1; HUDMSG_FADEOUT, 1040, CR_UNTRANSLATED, 320.0, 440.1, time, MSG_FADE);
+	HudMessage(s:text2; HUDMSG_FADEOUT, 1041, CR_RED         , 320.0, 456.1, time, MSG_FADE);
 }
 
 /*
@@ -122,7 +123,7 @@ script "UseModKit" (void) {
 		GiveInventory("Backpack", 1);
 		TakeInventory("ArgModKit", 1);
 		ActivatorSound("items/modkit/pickup", 255);
-		DrawModFooter("All mods have already been purchased.", "Trading mod kit for a backpack full of ammo!.", 4.0);
+		DrawModFooter("All mods have already been purchased.", "Trading mod kit for a backpack full of ammo!", 4.0);
 	
 	// Next, check to see if we are already in the menu before proceeding. 
 	// This way you can Use the kit item to enter/exit the menu.
