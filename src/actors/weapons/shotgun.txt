@@ -297,7 +297,8 @@ ACTOR ArgShotgunExplosiveShot
 		Loop
 	Death:
 		SEXP A 2 Bright {
-			A_Explode(100, 128, 1);
+			A_Explode(50, 128, 1);
+			A_Explode(50, 144, 0, 0, 128);
 			A_NoGravity;
 		}
 		SEXP BC 3 Bright
