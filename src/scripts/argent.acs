@@ -38,7 +38,29 @@ script "ArgentInit" enter {
 }
 
 /*
- * Fanciful drawing function for UseModKit below.
+ * Checks to see if the player has obtained all mods.
+ */
+function bool CheckModsFull (void) {
+	// [XA] welcome to brute-force-ville. I'll hopefully think of a nicer
+	//      way to do this in zscript-land.
+	return
+		CheckInventory("ArgShotgunMod1Enabled"       )
+	&&	CheckInventory("ArgShotgunMod2Enabled"       )
+	&&	CheckInventory("ArgHeavyARMod1Enabled"       )
+	&&	CheckInventory("ArgHeavyARMod2Enabled"       )
+	&&	CheckInventory("ArgChaingunMod1Enabled"      )
+	&&	CheckInventory("ArgChaingunMod2Enabled"      )
+	&&	CheckInventory("ArgRocketLauncherMod1Enabled")
+	&&	CheckInventory("ArgRocketLauncherMod2Enabled")
+	&&	CheckInventory("ArgPlasmaRifleMod1Enabled"   )
+	&&	CheckInventory("ArgPlasmaRifleMod2Enabled"   )
+	&&	CheckInventory("ArgGaussCannonMod1Enabled"   )
+	&&	CheckInventory("ArgGaussCannonMod2Enabled"   )
+	;
+}
+
+/*
+ * Fanciful drawing functions for UseModKit below.
  */
 #define MSG_TIME 0.05
 function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key, bool got) {
@@ -73,85 +95,96 @@ function void DrawModPanel (int id, int x, str tag, str desc, str icon, str key,
 	HudMessage(s:desc; HUDMSG_PLAIN, 1020 + id, col            , x + 160.4, 320.1, MSG_TIME);
 	HudMessage(s:sel ; HUDMSG_PLAIN, 1030 + id, CR_RED         , x + 160.0, 400.1, MSG_TIME);
 }
+function void DrawModFooter (str text1, str text2, int time) {
+	time = (time == 0) ? MSG_TIME : time; // TIME IS FLEETING. WHAT SAY YOU?
+
+	// footer borks
+	SetHudSize(640, 480, 1);
+	SetFont("graphics/hud/mod-footer.png");
+	HudMessage(s:"A"  ; HUDMSG_PLAIN, 1042, CR_UNTRANSLATED, 320.0, 434.1, time);
+	
+	// australian rules footy text
+	SetFont("ARGFONT");
+	HudMessage(s:text1; HUDMSG_PLAIN, 1040, CR_UNTRANSLATED, 320.0, 440.1, time);
+	HudMessage(s:text2; HUDMSG_PLAIN, 1041, CR_RED         , 320.0, 456.1, time);
+}
 
 /*
  * The Mod Kit! Shows a simple little menu thing that allows you to select
- * a mod to apply to your current gun. Is triggered when you use the mod
+ * a mod to apply to your current gun. It's triggered when you use the mod
  * inventory item.
  */
 script "UseModKit" (void) {
-	SetResultValue(false);
+		
+	// First, check if we already have all mods. If so, trade the kit for
+	// a backpack and return.
+	if (CheckModsFull()) {
+		GiveInventory("Backpack", 1);
+		TakeInventory("ArgModKit", 1);
+		ActivatorSound("items/modkit/pickup", 255);
+		DrawModFooter("All mods have already been purchased.", "Trading mod kit for a backpack full of ammo!.", 4.0);
 	
-	// Before doing anything else, check to see if we are already in the menu.
-	// If so, exit it; this way you can Use the kit item to enter/exit the menu.
+	// Next, check to see if we are already in the menu before proceeding. 
+	// This way you can Use the kit item to enter/exit the menu.
 	// Hooray parallelism!
-	if(CheckInventory("ArgModKitToken") > 0) {
-		ActivatorSound("items/modkit/dismiss", 255);
-		TakeInventory("ArgModKitToken", 1);
-		return;
-	}
+	} else if(CheckInventory("ArgModKitToken") == 0) {
 	
-	// Give a token to indicate that the "menu" is up.
-	GiveInventory("ArgModKitToken", 1);
-	ActivatorSound("items/modkit/use", 255);
+		// Give a token to indicate that the "menu" is up.
+		GiveInventory("ArgModKitToken", 1);
+		ActivatorSound("items/modkit/use", 255);
 	
-	// Loop for a bit.
-	int input;
-	do {
-		input = GetPlayerInput(-1, INPUT_BUTTONS);
+		// Loop for a bit.
+		int input;
+		do {
+			input = GetPlayerInput(-1, INPUT_BUTTONS);
 
-		// Snag the correct tags and icon names from LANGUAGE.
-		// [XA] This nuttiness will go away once ZScript-conversion happens.
-		//      Also why I'm not bothering to make this more efficient yet. :P
-		str weapon     = GetWeapon();
-		str weaponBase = StrMid(weapon, 3, 999);
-		str jankCheck  = StrParam(s:"ARG_MOD_TAG_" , s:weaponBase, s:"1");
-		str modTag1    = StrParam(l:jankCheck);
-		str modTag2    = StrParam(l:StrParam(s:"ARG_MOD_TAG_" , s:weaponBase, s:"2"));
-		str modDesc1   = StrParam(l:StrParam(s:"ARG_MOD_DESC_", s:weaponBase, s:"1"));
-		str modDesc2   = StrParam(l:StrParam(s:"ARG_MOD_DESC_", s:weaponBase, s:"2"));
-		str modIcon1   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"1"));
-		str modIcon2   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"2"));
-		str mod1Token  = StrParam(s:weapon, s:"Mod1Enabled");
-		str mod2Token  = StrParam(s:weapon, s:"Mod2Enabled");
+			// Snag the correct tags and icon names from LANGUAGE.
+			// [XA] This nuttiness will go away once ZScript-conversion happens.
+			//      Also why I'm not bothering to make this more efficient yet. :P
+			str weapon     = GetWeapon();
+			str weaponBase = StrMid(weapon, 3, 999);
+			str jankCheck  = StrParam(s:"ARG_MOD_TAG_" , s:weaponBase, s:"1");
+			str modTag1    = StrParam(l:jankCheck);
+			str modTag2    = StrParam(l:StrParam(s:"ARG_MOD_TAG_" , s:weaponBase, s:"2"));
+			str modDesc1   = StrParam(l:StrParam(s:"ARG_MOD_DESC_", s:weaponBase, s:"1"));
+			str modDesc2   = StrParam(l:StrParam(s:"ARG_MOD_DESC_", s:weaponBase, s:"2"));
+			str modIcon1   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"1"));
+			str modIcon2   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"2"));
+			str mod1Token  = StrParam(s:weapon, s:"Mod1Enabled");
+			str mod2Token  = StrParam(s:weapon, s:"Mod2Enabled");
 		
-		// If we ain't got no mods, short-circuit a bit.
-		// [XA] janky check against the language entry, heh
-		if(StrCmp(modTag1, jankCheck) == 0) {
+			// If we ain't got no mods, short-circuit a bit.
+			// [XA] janky check against the language entry, heh
+			if(StrCmp(modTag1, jankCheck) == 0) {
 		
-			// Draw a "can't mod this" panel.
-			DrawModPanel(1, 160, "No Mods Available", "No mods available for this weapon.", "graphics/hud/mod-pic-nope.png", "", false);
+				// Draw a "can't mod this" panel.
+				DrawModPanel(1, 160, "No Mods Available", "No mods available for this weapon.", "graphics/hud/mod-pic-nope.png", "", false);
 			
-		} else {
+			} else {
 	
-			// Draw mod panels. The Hudmessage bit is abstracted slightly, for sanity.
-			DrawModPanel(1,   0, modTag1, modDesc1, modIcon1, "+attack"   , CheckInventory(mod1Token));
-			DrawModPanel(2, 320, modTag2, modDesc2, modIcon2, "+altattack", CheckInventory(mod2Token));
-		}
+				// Draw mod panels. The Hudmessage bit is abstracted slightly, for sanity.
+				DrawModPanel(1,   0, modTag1, modDesc1, modIcon1, "+attack"   , CheckInventory(mod1Token));
+				DrawModPanel(2, 320, modTag2, modDesc2, modIcon2, "+altattack", CheckInventory(mod2Token));
+			}
 		
-		// Draw footer with instructions n' such.
-		SetHudSize(640, 480, 1);
-		SetFont("ARGFONT");
-		HudMessage(s:"Switch weapons to browse mods."               ; HUDMSG_PLAIN, 1040, CR_UNTRANSLATED, 320.0, 440.1, MSG_TIME);
-		HudMessage(s:StrParam(s:"Press '", k:"+use", s:"' to exit."); HUDMSG_PLAIN, 1041, CR_RED         , 320.0, 456.1, MSG_TIME);
-		SetFont("graphics/hud/mod-footer.png");
-		HudMessage(s:"A"; HUDMSG_PLAIN, 1042, CR_UNTRANSLATED, 320.0, 434.1, MSG_TIME);
+			// Draw footer with instructions n' such.
+			DrawModFooter("Switch weapons to browse mods.", StrParam(s:"Press '", k:"+use", s:"' to exit."), 0);
 		
-		// delays are important
-		Delay(1);
+			// delays are important
+			Delay(1);
 		
-		// Break if the player presses 'use' or the token item is removed.
-	} while (!(input & BT_USE) && CheckInventory("ArgModKitToken") > 0);
-	
-	// Gotta check for playing the sound again; urghy.
-	if(input & BT_USE) {
-		ActivatorSound("items/modkit/dismiss", 255);
+			// Break if the player presses 'use' or the token item is removed.
+		} while (!(input & BT_USE) && CheckInventory("ArgModKitToken") > 0);
 	}
 	
 	// Take away the token in case the player aborted above.
+	ActivatorSound("items/modkit/dismiss", 255);
 	TakeInventory("ArgModKitToken", 1);
 }
 
+/*
+ * 
+ */
 script "EquipModCheck" (int mod) {
 
 	// Figure out if the desired mod has been enabled yet. If it is AND
