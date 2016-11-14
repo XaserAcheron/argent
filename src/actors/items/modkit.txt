@@ -9,7 +9,7 @@ ACTOR ArgModKit : CustomInventory replaces Backpack
 	Scale 0.66
 	Inventory.PickupMessage "$ARG_GOT_MOD_KIT"
 	Inventory.PickupSound "items/modkit/pickup"
-	Inventory.MaxAmount 1
+	Inventory.MaxAmount 999
 
 	+INVENTORY.FANCYPICKUPSOUND
 	+INVENTORY.INVBAR
