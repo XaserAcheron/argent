@@ -179,7 +179,7 @@ ACTOR ArgSoul : LostSoul replaces LostSoul
 
 ACTOR ArgCaco : Cacodemon replaces Cacodemon
 {
-	Stamina 3
+	Stamina 4
 	Bloodcolor "Blue"
 	States
 	{
@@ -210,7 +210,7 @@ ACTOR ArgCaco : Cacodemon replaces Cacodemon
 
 ACTOR ArgKnight : HellKnight replaces HellKnight
 {
-	Stamina 3
+	Stamina 4
 	Bloodcolor "00 A0 00"
 	States
 	{
@@ -266,7 +266,7 @@ ACTOR ArgBaron : BaronOfHell replaces BaronOfHell
 
 ACTOR ArgRevenant : Revenant replaces Revenant
 {
-	Stamina 3
+	Stamina 4
 	States
 	{
 	Death:
@@ -349,7 +349,7 @@ ACTOR ArgArachnotron : Arachnotron replaces Arachnotron
 
 ACTOR ArgElemental : PainElemental replaces PainElemental
 {
-	Stamina 3
+	Stamina 4
 	States
 	{
 	Death:
@@ -375,7 +375,7 @@ ACTOR ArgElemental : PainElemental replaces PainElemental
 
 ACTOR ArgVile : Archvile replaces Archvile
 {
-	Stamina 2
+	Stamina 3
 	States
 	{
 	Death:
@@ -403,7 +403,7 @@ ACTOR ArgVile : Archvile replaces Archvile
 
 ACTOR ArgCyberDAMN : Cyberdemon replaces Cyberdemon
 {
-	Stamina 1
+	Stamina 2
 	DropItem "ArgGaussCannon"
 	DamageFactor "ArgPlayerRocket", 0.66
 	DamageFactor "ArgCyberRocket" , 0.5
@@ -466,7 +466,7 @@ ACTOR ArgGoddamnCyberdemonRocket : ArgRocketBase replaces Rocket
 
 ACTOR ArgSPIDARS_AAAH_KILL_IT_WITH_FIRE : SpiderMastermind replaces SpiderMastermind
 {
-	Stamina 1
+	Stamina 2
 	DropItem "ArgChaingun"
 	DamageFactor "ArgPlayerRocket", 0.66
 	DamageFactor "ArgCyberRocket" , 0.5
