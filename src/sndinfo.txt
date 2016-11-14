@@ -234,5 +234,10 @@ $volume items/powerups/quad    0.8
 $volume items/powerups/regen   0.8
 $volume items/powerups/invuln  0.8
 
+items/modkit/pickup         "sounds/items/modkit/pickup.flac"
+items/modkit/use            "sounds/items/modkit/use.flac"
+items/modkit/dismiss        "sounds/items/modkit/dismiss.flac"
+items/modkit/apply          "sounds/items/modkit/apply.flac"
+
 misc/secret                "sounds/secret.flac"
 $volume misc/secret  0.8

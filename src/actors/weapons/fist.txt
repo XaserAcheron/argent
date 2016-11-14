@@ -17,8 +17,6 @@ ACTOR ArgFist : ArgWeapon replaces Fist
 	+WEAPON.WIMPY_WEAPON
 	+WEAPON.MELEEWEAPON
 	
-	// [TODO] make a real version of this O:
-	
 	States
 	{
 	Spawn:
