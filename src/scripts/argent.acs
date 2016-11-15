@@ -24,6 +24,8 @@
 struct ArgPlayer
 {
 	int rocketTid;
+	int targetTid;
+	int targetTidOrig;
 }
 ArgPlayer players[64]; // zandro max to the max!
 
@@ -33,6 +35,8 @@ ArgPlayer players[64]; // zandro max to the max!
 script "ArgentInit" enter {
 	ArgPlayer playerStruct = {
 		DEF_DUMMY_TID // rocketTid
+	,	DEF_DUMMY_TID // targetTid
+	,	DEF_DUMMY_TID // targetTidOrig
 	};
 	players[PlayerNumber()] = playerStruct;
 }
@@ -414,6 +418,26 @@ script "Mod1RocketExplode" (int playerNum) {
 	if(ThingCount(T_NONE, rocketTid) == 0) {
 		players[playerNum].rocketTid = DEF_DUMMY_TID;
 	}
+}
+script "Mod2RocketLockStart" (void) {
+	int playerNum = PlayerNumber();
+	
+	// get the tid of the player's target. If it doesn't exist, assign it one.
+	SetActivator(0, AAPTR_PLAYER_GETTARGET);
+	int targetTid = ActivatorTID();
+	players[playerNum].targetTid     = (targetTid == 0) ? UniqueTID() : targetTid;
+	players[playerNum].targetTidOrig =  targetTid; // keep this around so we can set it back
+	Thing_ChangeTID(0, players[playerNum].targetTid);
+}
+script "Mod2RocketLockFire" (int playerNum) {
+	// simple script: just change the tracer to the stored tid.
+	SetPointer(AAPTR_TRACER, players[playerNum].targetTid);
+}
+script "Mod2RocketLockStop" (void) {
+	int playerNum = PlayerNumber();
+	
+	// remove tid from the player's (former) target.
+	Thing_ChangeTID(players[playerNum].targetTid, players[playerNum].targetTidOrig);
 }
 
 /*
