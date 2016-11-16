@@ -13,6 +13,7 @@ ACTOR ArgRocketLauncherModSelected : ArgModToken {}
 ACTOR ArgRocketLauncherMod1Enabled : ArgToken    {}
 ACTOR ArgRocketLauncherMod2Enabled : ArgToken    {}
 ACTOR ArgRocketLauncherModCooldown : ArgToken    { Inventory.MaxAmount 90 }
+ACTOR ArgRocketLauncherModCharge   : ArgToken    { Inventory.MaxAmount 25 }
 
 ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 {
@@ -182,17 +183,35 @@ ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		Goto ReadyLoop
 	Mod2Up:
 		RK2G A 1 A_JumpIfTargetInLOS("Mod2LockStart", 0, JLOSF_COMBATANTONLY)
-		RK2G A 0 A_ClearRefire
+		RK2G A 0 A_Refire
 		Goto ReadyLoop
 	Mod2LockStart:
-		RK2G A 0 ACS_NamedExecuteAlways("Mod2RocketLockStart")
-		RK2G A 0 A_PlaySound("weapons/rocket/mod2up", CHAN_6)
+		RK2G A 0 {
+			ACS_NamedExecuteAlways("Mod2RocketLockStart");
+			A_PlaySound("weapons/rocket/mod2up", CHAN_6);
+			A_GiveInventory("ArgRocketLauncherModCharge", 1);
+		}
 	Mod2Hold:
-		RK2G A 1 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK, "Mod2Fire")
+		RK2G A 1 {
+			// check to see if the player has any charge. If none, leap back
+			// to Mod2Up as we haven't acquired a valid target yet.
+			if(CountInv("ArgRocketLauncherModCharge") == 0) {
+				return state("Mod2Up");
+
+			// got enough charge and the button's down? fire away!
+			} else if (CountInv("ArgRocketLauncherModCharge") >= 20 && GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK) {
+				return state("Mod2Fire");
+			}
+			A_GiveInventory("ArgRocketLauncherModCharge", 1);
+			return state(0);
+		}
 		RK2G A 0 A_Refire
 	Mod2Down:
-		RK2G A 0 ACS_NamedExecuteAlways("Mod2RocketLockStop")
-		RK2G A 0 A_StopSound(CHAN_6)
+		RK2G A 0 {
+			A_TakeInventory("ArgRocketLauncherModCharge");
+			ACS_NamedExecuteAlways("Mod2RocketLockStop");
+			A_StopSound(CHAN_6);
+		}
 		Goto Ready
 	Mod2Fire:
 		RK2G B 1 Bright {
@@ -201,6 +220,7 @@ ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
 			A_AlertMonsters;
 			A_WeaponOffset(6.0, 3.0 + 32);
+			A_TakeInventory("ArgRocketLauncherModCharge");
 		}
 		Goto Mod0FireAnim
 	}
@@ -229,7 +249,7 @@ ACTOR ArgRocketLockOn : ArgRocket
 			ACS_NamedExecute("Mod2RocketLockFire", user_playernum);
 		}
 	Fly:
-		MISL A 1 Bright A_SeekerMissile(5, 5)
+		MISL A 1 Bright A_SeekerMissile(5, 10)
 		Loop
 	}
 }
