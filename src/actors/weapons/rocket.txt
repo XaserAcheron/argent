@@ -138,7 +138,10 @@ ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		TNT1 A 1 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK, "Mod1Detonate")
 		Loop
 	Mod1Detonate:
-		TNT1 A 1 ACS_NamedExecute("Mod1RocketDetonate")
+		TNT1 A 0 ACS_NamedExecute("Mod1RocketDetonate")
+	Mod1DetonateHold:
+		TNT1 A 1 
+		TNT1 A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK, "Mod1DetonateHold")
 		Goto Mod1Overlay
 //	Mod1Up:
 //	Mod1Fire:

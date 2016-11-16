@@ -406,7 +406,11 @@ script "Mod1RocketDetonate" (void) {
 	int rocketTid = players[playerNum].rocketTid;
 	
 	// Nuke the sucker.
-	SetActorState(rocketTid, "Detonate");
+	if(SetActorState(rocketTid, "Detonate")) {
+		ActivatorSound("weapons/rocket/mod1yep", 255);
+	} else {
+		ActivatorSound("weapons/rocket/mod1nope", 255);
+	}
 }
 script "Mod1RocketExplode" (int playerNum) {
 	// la la la TID la la
