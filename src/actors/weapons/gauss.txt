@@ -41,6 +41,13 @@ ACTOR ArgGaussCannon : ArgModWeapon
 	Ready:
 		GAUG A 0
 		Goto Super::Ready
+	Deselect:
+		"####" "#" 0 {
+			A_SetSpeed(1.0);
+			A_StopSound(CHAN_WEAPON);
+			A_TakeInventory("ArgGaussCannonModCharge");
+		}
+		Goto DeselectLoop
 
 	/* Unmodded + Primary */
 
@@ -144,7 +151,7 @@ ACTOR ArgGaussCannon : ArgModWeapon
 		GA1G A 1 A_WeaponOffset( 20 - 25, 102 - 96 + 32)
 		GA1G A 1 A_WeaponOffset( 24 - 25,  97 - 96 + 32)
 		GA1G A 1 A_WeaponOffset( 25 - 25,  96 - 96 + 32)
-		GA1G BCDEFFFFFFFFFUUFFUUFFUUFFUU 1 A_WeaponReady(WRF_NOBOB|WRF_ALLOWRELOAD)
+		GA1G BCDEFFFFFFFFFUUFFUUFFUUFFUU 1 A_WeaponReady(WRF_NOBOB|WRF_ALLOWRELOAD) // wow rage
 	Mod1Ready:
 		GA1G FFFFFFFFEEDDCCBBAABBCCDDEE 1 A_WeaponReady(WRF_ALLOWRELOAD)
 		Loop
@@ -201,9 +208,9 @@ ACTOR ArgGaussCannon : ArgModWeapon
 			while(CountInv("ArgGaussCannonModCharge") > 0) {
 				// only spawn one trail, for sanity
 				if(CountInv("ArgGaussCannonModCharge") == 1) {
-					A_RailAttack (7*random(1,8), 0, 1, "none", "none", RGF_SILENT | RGF_NOPIERCING, 4, "ArgGaussPuff", 0, 0, 0, 0, 16, 0, "ArgGaussTrail", 0);
+					A_RailAttack (7*random(1,8), 0, 0, "none", "none", RGF_SILENT | RGF_NOPIERCING, 4, "ArgGaussPuff", 0, 0, 0, 0, 16, 0, "ArgGaussTrail", 0);
 				} else {
-					A_RailAttack (7*random(1,8), 0, 1, "none", "none", RGF_SILENT | RGF_NOPIERCING, 4, "ArgGaussPaul", 0, 0, 0, 0, 16, 0, "none"         , 0);
+					A_RailAttack (7*random(1,8), 0, 0, "none", "none", RGF_SILENT | RGF_NOPIERCING, 4, "ArgGaussPaul", 0, 0, 0, 0, 16, 0, "none"         , 0);
 				}
 				A_TakeInventory("ArgGaussCannonModCharge", 1);
 				A_TakeInventory("Cell", 1, TIF_NOTAKEINFINITE);
@@ -246,8 +253,135 @@ ACTOR ArgGaussCannon : ArgModWeapon
 		GA2G A 0
 		Goto SelectLoop
 	Mod2Ready:
-		GA2G FFFFFFFFEEDDCCBBAABBCCDDEE 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		GA2G FFFFFFFFEEDDCCBBAA 1 A_WeaponReady(WRF_ALLOWRELOAD)
+	Mod2ReadyAlt:
+		GA2G BBCCDDEE 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		Goto Mod2Ready
+	Mod2Up:
+		GA2G A 7 {
+			if(CountInv("Cell") < GAUSS_MOD2_AMMOUSE) { return state("Ready"); }
+			A_PlaySound("weapons/gauss/mod2charge", CHAN_5);
+			A_SetSpeed(0.0);
+			return state(0);
+		}
+		GA2G A 1 A_WeaponOffset(- 0.5, 32.0 +  0.0)
+		GA2G A 1 A_WeaponOffset(- 1.0, 32.0 +  0.0)
+		GA2G A 1 A_WeaponOffset(- 2.0, 32.0 +  0.0)
+		GA2G A 1 A_WeaponOffset(- 3.0, 32.0 +  0.0)
+		GA2G A 1 A_WeaponOffset(- 4.0, 32.0 +  0.0)
+		GA2G A 1 A_WeaponOffset(- 5.0, 32.0 +  0.5)
+		GA2G A 1 A_WeaponOffset(- 6.0, 32.0 +  1.0)
+		GA2G A 1 A_WeaponOffset(- 7.0, 32.0 +  2.0)
+		GA2M B 1 A_WeaponOffset(- 9.0, 32.0 +  4.0)
+		GA2M C 1 A_WeaponOffset(-11.0, 32.0 +  7.0)
+		GA2M D 1 A_WeaponOffset(-13.0, 32.0 +  8.0)
+		GA2M E 1 A_WeaponOffset(-12.0, 32.0 +  9.0)
+		GA2M F 1 A_WeaponOffset(-13.0, 32.0 +  8.0)
+		GA2M F 1 A_WeaponOffset(-11.0, 32.0 +  7.0)
+		GA2M F 1 A_WeaponOffset(- 9.0, 32.0 +  4.0)
+		GA2M F 1 A_WeaponOffset(- 7.0, 32.0 +  2.0)
+		GA2M F 1 A_WeaponOffset(- 6.0, 32.0 +  1.0)
+		GA2M F 1 A_WeaponOffset(- 5.0, 32.0 +  0.5)
+		GA2M F 1 A_WeaponOffset(- 4.0, 32.0 +  0.0)
+		GA2M F 1 A_WeaponOffset(- 3.0, 32.0 +  0.0)
+		GA2M F 1 A_WeaponOffset(- 2.0, 32.0 +  0.0)
+		GA2M F 1 A_WeaponOffset(- 1.0, 32.0 +  0.0)
+		GA2M F 1 A_WeaponOffset(- 0.5, 32.0 +  0.0)
+		GA2M F 4 A_WeaponOffset(  0.0, 32.0 +  0.0)
+		GA2M F 1 A_WeaponOffset(  0.5, 32.0 +  0.5)
+		GA2M G 1 A_WeaponOffset(  1.0, 32.0 +  1.0)
+		GA2M H 1 A_WeaponOffset(  2.0, 32.0 +  2.0)
+		GA2M I 1 A_WeaponOffset(  4.0, 32.0 +  4.0)
+		GA2M J 1 A_WeaponOffset(  6.0, 32.0 +  6.0)
+		GA2M K 1 A_WeaponOffset(  7.0, 32.0 +  7.0)
+	Mod2Hold:
+		GA2M LLLMMMNNNOOO 1 {
+			// only using charge for the sound counter. yay hax.
+			A_WeaponOffset(8.0 + frandom(-1, 1), 40.0 + frandom(-1, 1));
+			A_GiveInventory("ArgGaussCannonModCharge", 1);
+			if(CountInv("ArgGaussCannonModCharge") == 61) {
+				A_PlaySound("weapons/gauss/mod2hum", CHAN_5, 1.0, 1);
+			}
+			// emulated reverse-A_Refire
+			if(CallACS("SynthAltFire") > 0) {
+				return A_JumpIf(CallACS("SynthFire"), "Mod2Fire");
+			} else {
+				return state("Mod2Down");
+			}
+		}
 		Loop
+	Mod2Down:
+		GA2M J 1 {
+			A_SetSpeed(1.0);
+			A_TakeInventory("ArgGaussCannonModCharge");
+//			A_PlaySound("weapons/gauss/mod2down", CHAN_5);
+			A_StopSound(CHAN_5);
+			A_ZoomFactor(1.0);
+		}
+		GA2M I 1 A_WeaponOffset(  7.0, 32.0 +  7.0)
+		GA2M H 1 A_WeaponOffset(  6.0, 32.0 +  6.0)
+		GA2M G 1 A_WeaponOffset(  4.0, 32.0 +  4.0)
+		GA2M F 1 A_WeaponOffset(  2.0, 32.0 +  2.0)
+		GA2M E 1 A_WeaponOffset(  1.0, 32.0 +  1.0)
+		GA2M D 1 A_WeaponOffset(  0.5, 32.0 +  0.5)
+		GA2M C 1 A_WeaponOffset(  0.0, 32.0 +  0.0)
+		GA2M BA 1 
+		Goto Mod2ReadyAlt
+	Mod2Fire:
+		GA2N A 1 Bright {
+			// fire several rail shots in a horizontal line to "thicken up" the shot.
+			A_RailAttack (random(100, 120),-16, 0, "none", "none", RGF_SILENT, 4, "ArgGaussPaul"     , 0, 0, 0, 0, 16, 0, "none"              , 0);
+			A_RailAttack (random(100, 120),-12, 0, "none", "none", RGF_SILENT, 4, "ArgGaussPaul"     , 0, 0, 0, 0, 16, 0, "none"              , 0);
+			A_RailAttack (random(100, 120),- 8, 0, "none", "none", RGF_SILENT, 4, "ArgGaussPaul"     , 0, 0, 0, 0, 16, 0, "none"              , 0);
+			A_RailAttack (random(100, 120),- 4, 0, "none", "none", RGF_SILENT, 4, "ArgGaussPaul"     , 0, 0, 0, 0, 16, 0, "none"              , 0);
+			A_RailAttack (random(200, 240),  0, 0, "none", "none", RGF_SILENT, 4, "ArgGaussSiegePuff", 0, 0, 0, 0, 16, 0, "ArgGaussSiegeTrail", 0);
+			A_RailAttack (random(100, 120),  4, 0, "none", "none", RGF_SILENT, 4, "ArgGaussPaul"     , 0, 0, 0, 0, 16, 0, "none"              , 0);
+			A_RailAttack (random(100, 120),  8, 0, "none", "none", RGF_SILENT, 4, "ArgGaussPaul"     , 0, 0, 0, 0, 16, 0, "none"              , 0);
+			A_RailAttack (random(100, 120), 12, 0, "none", "none", RGF_SILENT, 4, "ArgGaussPaul"     , 0, 0, 0, 0, 16, 0, "none"              , 0);
+			A_RailAttack (random(100, 120), 16, 0, "none", "none", RGF_SILENT, 4, "ArgGaussPaul"     , 0, 0, 0, 0, 16, 0, "none"              , 0);
+			
+			// wow, this firing function is way simpler than the other one.
+			A_TakeInventory("Cell", GAUSS_MOD2_AMMOUSE, TIF_NOTAKEINFINITE);
+			A_TakeInventory("ArgGaussCannonModCharge");
+			A_PlaySound("weapons/gauss/mod2fire", CHAN_5);
+			A_AlertMonsters;
+			A_Recoil(15.0);
+			A_GunFlash;
+			A_LightInverse;
+			A_SetSpeed(1.0);
+			A_WeaponOffset( 2.0, 34.0);
+
+			return state(0);
+		}
+		GA2N A 1 Bright A_WeaponOffset( 4.0, 32 +  4.0) // screw mental math
+		GA2N A 1 Bright A_WeaponOffset( 8.0, 32 +  8.0) // that's what computers are for
+		GA2N B 1 Bright A_WeaponOffset(12.0, 32 + 13.0)
+		GA2N C 1 Bright A_WeaponOffset(20.0, 32 + 20.0) // [XA] also what custom functions
+		GA2N D 1 Bright A_WeaponOffset(24.0, 32 + 27.0) //      will be for... gah, so close!
+		GA2M F 1        A_WeaponOffset(25.0, 32 + 28.0)
+		GA2M F 1        A_WeaponOffset(25.5, 32 + 28.5)
+		GA2M F 1        A_WeaponOffset(25.75, 32 + 28.75)
+		GA2M E 1        A_WeaponOffset(25.5, 32 + 28.5)
+		GA2M D 1        A_WeaponOffset(25.0, 32 + 28.0)
+		GA2M C 1        A_WeaponOffset(24.0, 32 + 27.0)
+		GA2M B 1        A_WeaponOffset(22.0, 32 + 26.0)
+		GA2M A 1        A_WeaponOffset(19.0, 32 + 25.0)
+		GA2G A 1        A_WeaponOffset(16.0, 32 + 23.0)
+		GA2G A 1        A_WeaponOffset(14.0, 32 + 21.0)
+		GA2G A 1        A_WeaponOffset(12.0, 32 + 19.0)
+		GA2G A 1        A_WeaponOffset(10.0, 32 + 18.0)
+		GA2G A 1        A_WeaponOffset( 9.0, 47.0)
+		GA2G A 1        A_WeaponOffset( 8.0, 45.0)
+		GA2G A 1        A_WeaponOffset( 6.5, 42.0)
+		GA2G A 1        A_WeaponOffset( 5.0, 38.0)
+		GA2G A 1        A_WeaponOffset( 3.0, 35.0)
+		GA2G A 1        A_WeaponOffset( 2.0, 34.5)
+		GA2G A 1        A_WeaponOffset( 1.0, 33.0)
+		GA2G A 1        A_WeaponOffset( 0.5, 32.5)
+		GA2G A 1        A_WeaponOffset( 0.0, 32.0)
+		GA2G A 20 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH)
+		GA2G BCDE 2 A_WeaponReady(WRF_NOFIRE)
+		Goto Ready
 	}
 }
 
@@ -291,3 +425,7 @@ ACTOR ArgGaussPaul : ArgGaussPuff
 		Stop
 	}
 }
+
+// [TODO] make these
+ACTOR ArgGaussSiegeTrail : ArgGaussTrail { }
+ACTOR ArgGaussSiegePuff  : ArgGaussPuff  { }
