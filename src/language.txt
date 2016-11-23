@@ -67,9 +67,9 @@ ARG_MOD_TAG_GaussCannon2    = "Siege Mode";
 
 ARG_MOD_DESC_Shotgun1        = "Argent-powered compression reloader.\n\nFires a volley of three shells in\nquick succession, with tighter\nspread than a standard shot.";
 ARG_MOD_DESC_Shotgun2        = "Experimental octanitrocubane ammunition.\n\nFires an arcing explosive round with\na wide area of effect. Highly effective\nagainst multiple targets.";
-ARG_MOD_DESC_HeavyAR1        = "High-precision telescopic sight.\n\nEngaging the scope increases\naccuracy and muzzle velocity,\nincreasing damage per shot.";
-ARG_MOD_DESC_HeavyAR2        = "Side-mounted missile rack.\n\nFires a volley of six HMX missilesn\nhich stick to targets and explode\n after a short delay, for heavy damage.";
-ARG_MOD_DESC_Chaingun1       = "Firing crucible release override.\n\nSpins up the chaingun barrels\nprior to firing, allowing for\nmore rapid threat response.";
+ARG_MOD_DESC_HeavyAR1        = "Side-mounted missile rack.\n\nFires a volley of six HMX missilesn\nhich stick to targets and explode\n after a short delay, for heavy damage.";
+ARG_MOD_DESC_HeavyAR2        = "High-precision telescopic sight.\n\nEngaging the scope increases\naccuracy and muzzle velocity,\nincreasing damage per shot.";
+ARG_MOD_DESC_Chaingun1       = "Firing crucible release override.\n\nSpins up the chaingun barrels\nprior to firing, allowing for\nrapid threat response.";
 ARG_MOD_DESC_Chaingun2       = "Dual compression piston chamber.\n\nTransforms the weapon into a\ntri-barreled bullet hose, at the\ncost of reduced mobility.";
 ARG_MOD_DESC_RocketLauncher1 = "Wireless fuse ignition system.\n\nDetonates rockets mid-flight.\nUse with caution, as no safety interlocks\nare present to prevent self-injury.";
 ARG_MOD_DESC_RocketLauncher2 = "Laser guidance system.\n\nLocks on to a target. Firing while\nlocked unleashes a salvo of three\nrockets which home in on the target.";
