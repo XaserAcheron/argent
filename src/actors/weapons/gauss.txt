@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------
 
 CONST int GAUSS_MOD1_AMMOUSE = 30;
-CONST int GAUSS_MOD2_AMMOUSE = 50;
+CONST int GAUSS_MOD2_AMMOUSE = 40;
 CONST int GAUSS_MOD_CHARGE   = 30;
 
 CONST INT GAUSS_CROSSHAIR_ANIM1 = 74;
@@ -301,7 +301,7 @@ ACTOR ArgGaussCannon : ArgModWeapon
 		GA2G A 7 {
 			if(CountInv("Cell") < GAUSS_MOD2_AMMOUSE) { return state("Ready"); }
 			A_PlaySound("weapons/gauss/mod2charge", CHAN_5);
-			A_SetSpeed(0.0);
+			A_SetSpeed(0.15);
 			return state(0);
 		}
 		GA2G A 1 A_WeaponOffset(- 0.5, 32.0 +  0.0)
