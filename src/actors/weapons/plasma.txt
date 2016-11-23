@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------
 
 CONST int PLASMA_MOD1_AMMOUSE  =   0; // pointless, but may as well be explicit. shit.
-CONST int PLASMA_MOD2_AMMOUSE  =   0; // used to be 10; changed it to make stun viable.
+CONST int PLASMA_MOD2_AMMOUSE  =   2;
 CONST int PLASMA_MOD_COOLDOWN  = 200;
 CONST int PLASMA_MOD_CHARGE    = 120;
 CONST int PLASMA_MOD_CHARGE_UP =   3;
@@ -226,15 +226,15 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		PL2G DEEFFFFFFFFEEDDA 1 A_WeaponReady(WRF_ALLOWRELOAD)
 		Loop
 	Mod2Up:
-		PL2G A 1 A_JumpIfInventory("Cell", 10, "Mod2Hold")
-		Goto Mod1Ready
+		PL2G A 1 A_JumpIfInventory("Cell", PLASMA_MOD2_AMMOUSE, "Mod2Hold")
+		Goto Mod2Ready
 	Mod2Hold:
 		PL2G B 1 Bright {
 			A_GunFlash;
 			A_AlertMonsters;
 			A_PlaySound("weapons/plasma/mod2fire", CHAN_6);
 			A_FireCustomMissile("ArgStunBomb", 0, 0, 0, 0, FPF_AIMATANGLE , 5);
-//			A_TakeInventory("Cell", PLASMA_MOD2_AMMOUSE, TIF_NOTAKEINFINITE);
+			A_TakeInventory("Cell", PLASMA_MOD2_AMMOUSE, TIF_NOTAKEINFINITE);
 			A_GiveInventory("ArgPlasmaRifleModCooldown", PLASMA_MOD_COOLDOWN);
 		}
 		PL2G A 1 A_WeaponOffset( 5.0,  5.0 + 32.0)
