@@ -23,35 +23,12 @@ statusbar fullscreen, fullscreenoffsets
 		DrawBar "graphics/hud/bar-armor-2.png", "graphics/hud/bar-armor-2x.png", armor(200), horizontal,  0, -55;
 		
 		// ammo
-		IsSelected NOT ArgBFG9000 {
-			DrawNumber 3, "hudfont-large", untranslated, ammo1, alignment(right), -96, -58;
-			InInventory Backpack, 1 {
-				DrawBar "graphics/hud/bar-ammo-1a.png", "graphics/hud/bar-ammo-1xa.png", ammo1, horizontal, reverse, -228, -41;
-				DrawBar "graphics/hud/bar-ammo-2.png" , "graphics/hud/bar-ammo-2x.png" , ammo1, horizontal, reverse, -162, -41;
-			} Else {
-				DrawBar "graphics/hud/bar-ammo-1.png", "graphics/hud/bar-ammo-1x.png", ammo1, horizontal, reverse, -162, -41;
-			}
-		}
-		
-		// bfg ammo -- hooray unfortunate copypasta
-		Else {
-			IfCVarInt NOT arg_bfgammotype, 1 {
-				DrawNumber 3, "hudfont-large", untranslated, ammo1, alignment(right), -96, -58;
-				InInventory Backpack, 1  {
-					DrawBar "graphics/hud/bar-ammo-1a.png", "graphics/hud/bar-ammo-1xa.png", ammo1, horizontal, reverse, -228, -41;
-					DrawBar "graphics/hud/bar-ammo-2.png" , "graphics/hud/bar-ammo-2x.png" , ammo1, horizontal, reverse, -162, -41;
-				} Else {
-					DrawBar "graphics/hud/bar-ammo-1.png", "graphics/hud/bar-ammo-1x.png", ammo1, horizontal, reverse, -162, -41;
-				}
-			} Else {
-				DrawNumber 3, "hudfont-large", untranslated, ArgBFGAmmo, alignment(right), -96, -58;
-				InInventory Backpack, 1 {
-					DrawBar "graphics/hud/bar-ammo-1a.png", "graphics/hud/bar-ammo-1xa.png", ArgBFGAmmo, horizontal, reverse, -228, -41;
-					DrawBar "graphics/hud/bar-ammo-2.png" , "graphics/hud/bar-ammo-2x.png" , ArgBFGAmmo, horizontal, reverse, -162, -41;
-				} Else {
-					DrawBar "graphics/hud/bar-ammo-1.png", "graphics/hud/bar-ammo-1x.png", ArgBFGAmmo, horizontal, reverse, -162, -41;
-				}
-			}
+		DrawNumber 3, "hudfont-large", untranslated, ammo1, alignment(right), -96, -58;
+		InInventory Backpack, 1 {
+			DrawBar "graphics/hud/bar-ammo-1a.png", "graphics/hud/bar-ammo-1xa.png", ammo1, horizontal, reverse, -228, -41;
+			DrawBar "graphics/hud/bar-ammo-2.png" , "graphics/hud/bar-ammo-2x.png" , ammo1, horizontal, reverse, -162, -41;
+		} Else {
+			DrawBar "graphics/hud/bar-ammo-1.png", "graphics/hud/bar-ammo-1x.png", ammo1, horizontal, reverse, -162, -41;
 		}
 		
 		// equipment
