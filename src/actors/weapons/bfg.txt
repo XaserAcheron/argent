@@ -29,7 +29,7 @@ ACTOR ArgBFG9000 : ArgWeapon replaces BFG9000
 		Loop
 	Select:
 		BFGG A 0 Bright {
-			if(GetCvar("arg_bfgammotype") == true) {
+			if(CountInv("ArgBFG9000AmmoToken") > 0) {
 				A_SelectWeapon("ArgBFG9000Alt");
 			}
 		}
@@ -124,7 +124,7 @@ ACTOR ArgBFG9000Alt : ArgBFG9000 {
 	{
 	Select:
 		BFGG A 0 Bright {
-			if(GetCvar("arg_bfgammotype") == false) {
+			if(CountInv("ArgBFG9000AmmoToken") == 0) {
 				A_SelectWeapon("ArgBFG9000");
 			}
 		}
@@ -147,6 +147,8 @@ ACTOR ArgBFG9000Alt : ArgBFG9000 {
 		Goto Fire1
 	}
 }
+
+ACTOR ArgBFG9000AmmoToken : ArgToken {} 
 
 // classic mode
 

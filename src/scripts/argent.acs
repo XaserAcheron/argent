@@ -39,6 +39,36 @@ script "ArgentInit" enter {
 	,	DEF_DUMMY_TID // targetTidOrig
 	};
 	players[PlayerNumber()] = playerStruct;
+	
+	// Remove all cooldowns on map start. This will eventually go away
+	// once the cooldown system is redone to use overlays.
+	TakeInventory("ArgShotgunModCooldown"       , 999);
+	TakeInventory("ArgHeavyARModCooldown"       , 999);
+	TakeInventory("ArgChaingunModCooldown"      , 999);
+	TakeInventory("ArgRocketLauncherModCooldown", 999);
+	TakeInventory("ArgPlasmaRifleModCooldown"   , 999);
+	TakeInventory("ArgGaussCannonModCooldown"   , 999);
+	TakeInventory("ArgGaussCannonModCharge"     , 999);
+	
+	// BFG management. Give the player a token item to determine whether we
+	// want to use regular cells or BFG cells; we want to check for this item
+	// in the weapon defs rather than the cvar directly since we want to
+	// only fully-change this setting on map-start.
+	if(GetCvar("arg_bfgammotype") == true) {
+		// use bfg cells
+		GiveInventory("ArgBFG9000AmmoToken", 1);
+		// select correct weapon
+		if(StrICmp(GetWeapon(), "ArgBFG9000") == 0) {
+			SetWeapon("ArgBFG9000Alt");
+		}
+	} else {
+		// use regular cells
+		TakeInventory("ArgBFG9000AmmoToken", 1);
+		// select correct weapon
+		if(StrICmp(GetWeapon(), "ArgBFG9000Alt") == 0) {
+			SetWeapon("ArgBFG9000");
+		}
+	}
 }
 
 /*
@@ -319,20 +349,6 @@ script "ClearModCooldown" (void) {
 	str weapon = GetWeapon();
 	str modCooldownToken = StrParam(s:weapon, s:"ModCooldown");
 	TakeInventory(modCooldownToken, 999);
-}
-
-/*
- * Removes all cooldowns on map start.
- */
-script "ClearCooldownsOnStart" enter {
-	// [XA] bit stiff in the code here, but it works.
-	TakeInventory("ArgShotgunModCooldown"       , 999);
-	TakeInventory("ArgHeavyARModCooldown"       , 999);
-	TakeInventory("ArgChaingunModCooldown"      , 999);
-	TakeInventory("ArgRocketLauncherModCooldown", 999);
-	TakeInventory("ArgPlasmaRifleModCooldown"   , 999);
-	TakeInventory("ArgGaussCannonModCooldown"   , 999);
-	TakeInventory("ArgGaussCannonModCharge"     , 999);
 }
 
 /*
