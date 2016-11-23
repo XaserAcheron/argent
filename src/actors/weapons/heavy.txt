@@ -198,33 +198,33 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 		HA2G A 0
 		Goto ReadyLoop
 	Mod2Up:
-		HSCP A 1 {
+		HSCP A 1 Bright {
 			if(CountInv("Clip") < HEAVY_MOD2_AMMOUSE) { return state("Ready"); }
 			A_PlaySound("weapons/heavy/mod2up", CHAN_AUTO);
 			A_ZoomFactor(2.0);
 			A_SetCrosshair(HEAVY_CROSSHAIR_ANIM1);
 			return state(0);
 		}
-		HSCP A 1 A_SetCrosshair(HEAVY_CROSSHAIR_ANIM2)
-		HSCP A 1 A_SetCrosshair(HEAVY_CROSSHAIR_ANIM3)
-		HSCP A 1 A_SetCrosshair(HEAVY_CROSSHAIR_ANIM4)
-		HSCP A 1 A_SetCrosshair(HEAVY_CROSSHAIR_IDLE )
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM2)
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM3)
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM4)
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_IDLE )
 	Mod2Hold:
-		HSCP A 1 A_JumpIf(CallACS("SynthFire"), "Mod2Fire")
-		HSCP A 0 A_Refire
+		HSCP A 1 Bright A_JumpIf(CallACS("SynthFire"), "Mod2Fire")
+		HSCP A 0 Bright A_Refire
 	Mod2Down:
 		HSCP A 1 {
 			A_PlaySound("weapons/heavy/mod2down", CHAN_AUTO);
 			A_ZoomFactor(1.0);
 		}
-		HSCP A 1 A_SetCrosshair(HEAVY_CROSSHAIR_ANIM4)
-		HSCP A 1 A_SetCrosshair(HEAVY_CROSSHAIR_ANIM3)
-		HSCP A 1 A_SetCrosshair(HEAVY_CROSSHAIR_ANIM2)
-		HSCP A 1 A_SetCrosshair(HEAVY_CROSSHAIR_ANIM1)
-		HSCP A 0 A_SetCrosshair(0)
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM4)
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM3)
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM2)
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM1)
+		HSCP A 0 Bright A_SetCrosshair(0)
 		Goto Ready
 	Mod2Fire:
-		HSCP A 1 {
+		HSCP A 1 Bright {
 			if(CountInv("Clip") < HEAVY_MOD2_AMMOUSE) { return state("Mod2Down"); }
 			A_TakeInventory("Clip", HEAVY_MOD2_AMMOUSE, TIF_NOTAKEINFINITE);
 			A_FireBullets(0, 0, 1, 14, "ArgBulletPuff");
@@ -242,10 +242,10 @@ ACTOR ArgHeavyAR : ArgModWeapon replaces Chaingun
 			
 			return state(0);
 		}
-		HSCP A 1 A_ZoomFactor(1.85)
-		HSCP A 1 A_ZoomFactor(1.90)
-		HSCP A 1 A_ZoomFactor(1.95)
-		HSCP A 3 A_ZoomFactor(2.00)
+		HSCP A 1 Bright A_ZoomFactor(1.85)
+		HSCP A 1 Bright A_ZoomFactor(1.90)
+		HSCP A 1 Bright A_ZoomFactor(1.95)
+		HSCP A 3 Bright A_ZoomFactor(2.00)
 		HA2G A 0 A_Refire
 		Goto Mod2Down
 	}
