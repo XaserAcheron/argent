@@ -409,6 +409,7 @@ ACTOR ArgCyberDAMN : Cyberdemon replaces Cyberdemon
 	DamageFactor "ArgCyberRocket" , 0.5
 	
 	-NORADIUSDMG
+	+DONTHARMSPECIES
 	
 	States
 	{
