@@ -119,6 +119,7 @@ ACTOR ArgBFG9000Alt : ArgBFG9000 {
 	Weapon.AmmoGive 1
 	Weapon.AmmoType "ArgBFGAmmo"
 	Weapon.SisterWeapon "ArgBFG9000"
+	Weapon.SelectionOrder 13
 
 	States
 	{
