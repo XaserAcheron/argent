@@ -50,6 +50,10 @@ script "ArgentInit" enter {
 	TakeInventory("ArgGaussCannonModCooldown"   , 999);
 	TakeInventory("ArgGaussCannonModCharge"     , 999);
 	
+	// Reset a couple of player properties.
+	SetActorProperty(0, APROP_SPEED, 1.0);
+	TakeInventory("ArgModKitToken", 1);
+	
 	// BFG management. Give the player a token item to determine whether we
 	// want to use regular cells or BFG cells; we want to check for this item
 	// in the weapon defs rather than the cvar directly since we want to
