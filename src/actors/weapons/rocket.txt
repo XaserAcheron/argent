@@ -310,8 +310,11 @@ ACTOR ArgRocketLockOn : ArgRocket
 			ACS_NamedExecute("Mod2RocketLockFire", user_playernum);
 		}
 	Fly:
-		MISL A 1 Bright A_SeekerMissile(5, 10)
+		MISL A 1 Bright A_JumpIfTargetInLOS("Seek", 0, JLOSF_PROJECTILE)
 		Loop
+	Seek: 
+		MISL A 1 Bright A_SeekerMissile(5, 10)
+		Goto Fly
 	}
 }
 
