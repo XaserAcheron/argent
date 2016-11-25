@@ -8,6 +8,7 @@ zscript/argent/items/armor.txt
 zscript/argent/items/keys.txt
 zscript/argent/items/ammo.txt
 zscript/argent/items/powerups.txt
+zscript/argent/items/modkit.txt
 
 zscript/argent/effects/puffs.txt
 zscript/argent/effects/blood.txt
