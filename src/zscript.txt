@@ -7,7 +7,6 @@ zscript/argent/items/health.txt
 zscript/argent/items/armor.txt
 zscript/argent/items/keys.txt
 zscript/argent/items/ammo.txt
-zscript/argent/items/powerups.txt
 zscript/argent/items/modkit.txt
 
 zscript/argent/effects/puffs.txt
@@ -16,3 +15,7 @@ zscript/argent/effects/gibs.txt
 zscript/argent/effects/teleport.txt
 
 zscript/argent/weapons/base.txt
+zscript/argent/weapons/fist.txt
+zscript/argent/weapons/chainsaw.txt
+
+zscript/argent/items/powerups.txt
