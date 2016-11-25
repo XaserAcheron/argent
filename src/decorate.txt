@@ -5,11 +5,6 @@
 #include "actors/items/powerups.txt"
 #include "actors/items/modkit.txt"
 
-#include "actors/effects/puffs.txt"
-#include "actors/effects/blood.txt"
-#include "actors/effects/gibs.txt"
-#include "actors/effects/teleport.txt"
-
 #include "actors/weapons/base.txt"
 #include "actors/weapons/fist.txt"
 #include "actors/weapons/chainsaw.txt"
