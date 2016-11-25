@@ -1,1 +1,3 @@
 zscript/argent/base.txt
+zscript/argent/player.txt
+zscript/argent/misc.txt
