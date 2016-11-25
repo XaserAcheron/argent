@@ -4,7 +4,10 @@
 //
 // --------------------------------------------------------------------------
 
-ACTOR ArgBarrel : ExplosiveBarrel replaces ExplosiveBarrel
+class ArgBarrel : ExplosiveBarrel replaces ExplosiveBarrel
 {
-	+EXTREMEDEATH
+	Default
+	{ 
+		+EXTREMEDEATH
+	}
 }
