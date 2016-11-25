@@ -4,153 +4,155 @@
 //
 // --------------------------------------------------------------------------
 
-CONST int PLASMA_MOD1_AMMOUSE  =   0; // pointless, but may as well be explicit. shit.
-CONST int PLASMA_MOD2_AMMOUSE  =   2;
-CONST int PLASMA_MOD_COOLDOWN  = 200;
-CONST int PLASMA_MOD_CHARGE    = 120;
-CONST int PLASMA_MOD_CHARGE_UP =   3;
+class ArgPlasmaRifleModSelected : ArgModToken {}
+class ArgPlasmaRifleMod1Enabled : ArgToken    {}
+class ArgPlasmaRifleMod2Enabled : ArgToken    {}
+class ArgPlasmaRifleModCooldown : ArgToken    { Default { Inventory.MaxAmount 200; } }
+class ArgPlasmaRifleModCharge   : ArgToken    { Default { Inventory.MaxAmount 120; } }
 
-ACTOR ArgPlasmaRifleModSelected : ArgModToken {}
-ACTOR ArgPlasmaRifleMod1Enabled : ArgToken    {}
-ACTOR ArgPlasmaRifleMod2Enabled : ArgToken    {}
-ACTOR ArgPlasmaRifleModCooldown : ArgToken    { Inventory.MaxAmount 200 }
-ACTOR ArgPlasmaRifleModCharge   : ArgToken    { Inventory.MaxAmount 120 }
-
-ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
+class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 {
-	Weapon.SelectionOrder 4
-	Weapon.AmmoUse 1
-	Weapon.AmmoGive 40
-	Weapon.AmmoType "Cell"
-	Inventory.Icon "graphics/hud/weapon-plasma.png"
-	Inventory.PickupMessage "$ARG_GOT_PLASMA"
-	Tag "$ARG_TAG_PLASMA"
-	
+	const PLASMA_MOD1_AMMOUSE  =   0; // pointless, but may as well be explicit. shit.
+	const PLASMA_MOD2_AMMOUSE  =   2;
+	const PLASMA_MOD_COOLDOWN  = 200;
+	const PLASMA_MOD_CHARGE    = 120;
+	const PLASMA_MOD_CHARGE_UP =   3;
+
+	Default
+	{
+		Weapon.SelectionOrder 4;
+		Weapon.AmmoUse 1;
+		Weapon.AmmoGive 40;
+		Weapon.AmmoType "Cell";
+		Inventory.Icon "graphics/hud/weapon-plasma.png";
+		Inventory.PickupMessage "$ARG_GOT_PLASMA";
+		Tag "$ARG_TAG_PLASMA";
+	}
 	States
 	{
 	Spawn:
-		PLSP A -1
-		Stop
+		PLSP A -1;
+		Stop;
 	Ready:
-		PLSG A 0
-		Goto Super::Ready
+		PLSG A 0;
+		Goto Super::Ready;
 
 	/* Unmodded + Primary */
 
 	Mod0Select:
-		PLSG A 0
-		Goto SelectLoop
+		PLSG A 0;
+		Goto SelectLoop;
 	Mod0Ready:
-		PLSG A 0
-		Goto ReadyLoop
+		PLSG A 0;
+		Goto ReadyLoop;
 	Mod0Fire:
 		"####" B 1 Bright {
-			A_GunFlash;
-			A_AlertMonsters;
+			A_GunFlash();
+			A_AlertMonsters();
 			A_FireCustomMissile("ArgPlasma", 0, 1, 6.0 + frandom(-2.00, 2.00), frandom(-2.00, 2.00));
 			A_WeaponOffset(0.0, 32.0);
 			if(CountInv("ArgPlasmaRifleModSelected") == 1) {
 				A_GiveInventory("ArgPlasmaRifleModCharge", PLASMA_MOD_CHARGE_UP);
 				A_PlaySound("weapons/plasma/altfire", CHAN_5);
-				return state("Mod1FirePrimary");
+				return ResolveState("Mod1FirePrimary");
 			} else {
 				A_PlaySound("weapons/plasma/fire", CHAN_5);
 			}
-			return state(0);
+			return ResolveState(null);
 		}
-		"####" C 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
-		"####" A 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50))
-		Goto Ready
+		"####" C 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25));
+		"####" A 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50));
+		Goto Ready;
 	Flash:
-		TNT1 A 1 Bright A_Light2
-		TNT1 A 1 Bright A_Light1
-		Goto LightDone
+		TNT1 A 1 Bright A_Light2;
+		TNT1 A 1 Bright A_Light1;
+		Goto LightDone;
 
 	/* Mod 1: Heat Blast */
 		
 	Mod1Select:
-		PL1G A 0
-		Goto SelectLoop
+		PL1G A 0;
+		Goto SelectLoop;
 	Mod1Raise:
-		PL1S A 0
-		Goto ModSwapUp
+		PL1S A 0;
+		Goto ModSwapUp;
 	Mod1Swap:
-		PL1S A 8 A_PlaySound("weapons/plasma/mod1swap", CHAN_AUTO)
-		PL1S B 1 A_WeaponOffset(  0.0, 32.0)
-		PL1S C 1 A_WeaponOffset(- 1.0, 32.0)
-		PL1S D 1 A_WeaponOffset(- 3.0, 32.5)
-		PL1S E 1 A_WeaponOffset(- 5.0, 33.0)
-		PL1S F 1 A_WeaponOffset(- 6.0, 34.0)
-		PL1S GH 1
-		PL1S I 6
-		PL1S I 1 A_WeaponOffset(- 7.0, 35.0)
-		PL1S J 1 A_WeaponOffset(- 8.0, 36.0)
-		PL1S J 1 A_WeaponOffset(-10.0, 38.0)
-		PL1S K 1 A_WeaponOffset(-12.0, 40.0)
-		PL1S K 1 A_WeaponOffset(-13.0, 41.0)
-		PL1S K 1 A_WeaponOffset(-13.0, 41.0)
-		PL1S K 1 A_WeaponOffset(-12.0, 40.0)
-		PL1S K 1 A_WeaponOffset(-10.0, 38.0)
-		PL1S K 1 A_WeaponOffset(- 8.0, 36.0)
-		PL1S L 1 A_WeaponOffset(- 6.0, 35.0)
-		PL1S M 1 A_WeaponOffset(- 4.0, 34.0)
-		PL1S N 1 A_WeaponOffset(- 2.0, 33.0)
-		PL1S O 1 A_WeaponOffset(- 1.0, 32.0)
-		PL1S O 6 A_WeaponOffset(  0.0, 32.0)
-		PL1S PQRS 2
-		PL1G AAAAAAAAAAAA 1 A_WeaponReady(WRF_ALLOWRELOAD)
-		PL1A GGGFFFEEEDDDBBBCCCDDDEEEFFFGGG 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		PL1S A 8 A_PlaySound("weapons/plasma/mod1swap", CHAN_AUTO);
+		PL1S B 1 A_WeaponOffset(  0.0, 32.0);
+		PL1S C 1 A_WeaponOffset(- 1.0, 32.0);
+		PL1S D 1 A_WeaponOffset(- 3.0, 32.5);
+		PL1S E 1 A_WeaponOffset(- 5.0, 33.0);
+		PL1S F 1 A_WeaponOffset(- 6.0, 34.0);
+		PL1S GH 1;
+		PL1S I 6;
+		PL1S I 1 A_WeaponOffset(- 7.0, 35.0);
+		PL1S J 1 A_WeaponOffset(- 8.0, 36.0);
+		PL1S J 1 A_WeaponOffset(-10.0, 38.0);
+		PL1S K 1 A_WeaponOffset(-12.0, 40.0);
+		PL1S K 1 A_WeaponOffset(-13.0, 41.0);
+		PL1S K 1 A_WeaponOffset(-13.0, 41.0);
+		PL1S K 1 A_WeaponOffset(-12.0, 40.0);
+		PL1S K 1 A_WeaponOffset(-10.0, 38.0);
+		PL1S K 1 A_WeaponOffset(- 8.0, 36.0);
+		PL1S L 1 A_WeaponOffset(- 6.0, 35.0);
+		PL1S M 1 A_WeaponOffset(- 4.0, 34.0);
+		PL1S N 1 A_WeaponOffset(- 2.0, 33.0);
+		PL1S O 1 A_WeaponOffset(- 1.0, 32.0);
+		PL1S O 6 A_WeaponOffset(  0.0, 32.0);
+		PL1S PQRS 2;
+		PL1G AAAAAAAAAAAA 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		PL1A GGGFFFEEEDDDBBBCCCDDDEEEFFFGGG 1 A_WeaponReady(WRF_ALLOWRELOAD);
 	Mod1Ready:
 		PL1G D 0 {
-			if(CountInv("ArgPlasmaRifleModCharge") >=  PLASMA_MOD_CHARGE       ) { return state("Mod1ReadyD"); }
-			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4) * 3) { return state("Mod1ReadyC"); }
-			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4) * 2) { return state("Mod1ReadyB"); }
-			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4)    ) { return state("Mod1ReadyA"); }
-			return state(0);
+			if(CountInv("ArgPlasmaRifleModCharge") >=  PLASMA_MOD_CHARGE       ) { return ResolveState("Mod1ReadyD"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4) * 3) { return ResolveState("Mod1ReadyC"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4) * 2) { return ResolveState("Mod1ReadyB"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4)    ) { return ResolveState("Mod1ReadyA"); }
+			return ResolveState(null);
 		}
-		PL1G A 0
-		Goto ReadyLoop
+		PL1G A 0;
+		Goto ReadyLoop;
 	Mod1ReadyA:
-		PL1A FFFGGG 1 A_WeaponReady(WRF_ALLOWRELOAD)
-		PL1G AAA 1 A_WeaponReady(WRF_ALLOWRELOAD)
-		PL1A GGGFFF 1 A_WeaponReady(WRF_ALLOWRELOAD)
-		Loop
+		PL1A FFFGGG 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		PL1G AAA 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		PL1A GGGFFF 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		Loop;
 	Mod1ReadyB:
-		PL1A EEEFFFGGGFFFEEE 1 A_WeaponReady(WRF_ALLOWRELOAD)
-		Loop
+		PL1A EEEFFFGGGFFFEEE 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		Loop;
 	Mod1ReadyC:
-		PL1A DDDEEEFFFEEEDDD 1 A_WeaponReady(WRF_ALLOWRELOAD)
-		Loop
+		PL1A DDDEEEFFFEEEDDD 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		Loop;
 	Mod1ReadyD:
-		PL1G DDDEEEFFFGGGHHH 1 A_WeaponReady(WRF_ALLOWRELOAD)
-		Loop
+		PL1G DDDEEEFFFGGGHHH 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		Loop;
 	Mod1FirePrimary:
 		// extra special animation stuffs for heatblast's primary fire
 		PL1G K 1 Bright {
-			if(CountInv("ArgPlasmaRifleModCharge") >=  PLASMA_MOD_CHARGE   ) { return state("Mod1FirePrimaryB"); }
-			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4)) { return state("Mod1FirePrimaryA"); }
-			return state(0);
+			if(CountInv("ArgPlasmaRifleModCharge") >=  PLASMA_MOD_CHARGE   ) { return ResolveState("Mod1FirePrimaryB"); }
+			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4)) { return ResolveState("Mod1FirePrimaryA"); }
+			return ResolveState(null);
 		}
-		PL1G L 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
-		PL1G A 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50))
-		Goto Mod1Ready
+		PL1G L 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25));
+		PL1G A 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50));
+		Goto Mod1Ready;
 	Mod1FirePrimaryA:
-		PL1G B 1 Bright
-		PL1G C 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
-		PL1A D 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50))
-		Goto Mod1Ready
+		PL1G B 1 Bright;
+		PL1G C 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25));
+		PL1A D 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50));
+		Goto Mod1Ready;
 	Mod1FirePrimaryB:
-		PL1G I 1 Bright
-		PL1G J 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25))
-		PL1A D 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50))
-		Goto Mod1Ready
+		PL1G I 1 Bright;
+		PL1G J 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25));
+		PL1A D 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50));
+		Goto Mod1Ready;
 	Mod1Up:
-		PL1G A 1 A_JumpIfInventory("ArgPlasmaRifleModCharge", 30, "Mod1Hold")
-		Goto Mod1Ready
+		PL1G A 1 A_JumpIfInventory("ArgPlasmaRifleModCharge", 30, "Mod1Hold");
+		Goto Mod1Ready;
 	Mod1Hold:
 		PL1A A 1 Bright {
-			A_GunFlash;
-			A_AlertMonsters;
+			A_GunFlash();
+			A_AlertMonsters();
 			A_PlaySound("weapons/plasma/mod1fire", CHAN_6);
 			A_Explode(CountInv("ArgPlasmaRifleModCharge") * 3, 160, XF_NOTMISSILE, 0, 128);
 			A_Blast(BF_NOIMPACTDAMAGE, CountInv("ArgPlasmaRifleModCharge") * 2, 160, 20, "ArgNothing", "");
@@ -168,219 +170,226 @@ ACTOR ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_FireCustomMissile("ArgPlasmaHeatWave",  30, 0, 0, 0, FPF_NOAUTOAIM);
 			A_FireCustomMissile("ArgPlasmaHeatWave",  40, 0, 0, 0, FPF_NOAUTOAIM);
 		}
-		PL1A B 1 A_WeaponOffset( 5.0,  5.0 + 32.0)
-		PL1A B 1 A_WeaponOffset(12.0, 12.0 + 32.0)
-		PL1A C 1 A_WeaponOffset(15.0, 15.0 + 32.0)
-		PL1A C 1 A_WeaponOffset(16.0, 16.0 + 32.0)
-		PL1A D 1 A_WeaponOffset(14.0, 14.0 + 32.0)
-		PL1A D 1 A_WeaponOffset(11.0, 11.0 + 32.0)
-		PL1A E 1 A_WeaponOffset( 8.0,  8.0 + 32.0)
-		PL1A E 1 A_WeaponOffset( 4.0,  4.0 + 32.0)
-		PL1A F 1 A_WeaponOffset( 1.0,  1.0 + 33.0)
-		PL1A G 1 A_WeaponOffset( 0.0,  0.0 + 32.0)
-		Goto Mod1Ready
+		PL1A B 1 A_WeaponOffset( 5.0,  5.0 + 32.0);
+		PL1A B 1 A_WeaponOffset(12.0, 12.0 + 32.0);
+		PL1A C 1 A_WeaponOffset(15.0, 15.0 + 32.0);
+		PL1A C 1 A_WeaponOffset(16.0, 16.0 + 32.0);
+		PL1A D 1 A_WeaponOffset(14.0, 14.0 + 32.0);
+		PL1A D 1 A_WeaponOffset(11.0, 11.0 + 32.0);
+		PL1A E 1 A_WeaponOffset( 8.0,  8.0 + 32.0);
+		PL1A E 1 A_WeaponOffset( 4.0,  4.0 + 32.0);
+		PL1A F 1 A_WeaponOffset( 1.0,  1.0 + 33.0);
+		PL1A G 1 A_WeaponOffset( 0.0,  0.0 + 32.0);
+		Goto Mod1Ready;
 
 	/* Mod 2: Stun Bomb */
 		
 	Mod2Select:
-		PL2G A 0
-		Goto SelectLoop
+		PL2G A 0;
+		Goto SelectLoop;
 	Mod2Raise:
-		PL2S A 0
-		Goto ModSwapUp
+		PL2S A 0;
+		Goto ModSwapUp;
 	Mod2Swap:
 		PL2S A 1 {
 			A_PlaySound("weapons/plasma/mod2swap", CHAN_AUTO);
 			A_TakeInventory("ArgPlasmaRifleModCharge", PLASMA_MOD_CHARGE);
 		}
-		PL2S B 1 A_WeaponOffset(  0.0, 32.0)
-		PL2S C 1 A_WeaponOffset(- 1.0, 32.0)
-		PL2S D 1 A_WeaponOffset(- 3.0, 32.5)
-		PL2S E 1 A_WeaponOffset(- 5.0, 33.0)
-		PL2S F 1 A_WeaponOffset(- 6.0, 34.0)
-		PL2S GHIJ 1
-		PL2S K 6
-		PL2S K 1 A_WeaponOffset(- 7.0, 35.0)
-		PL2S K 1 A_WeaponOffset(- 8.0, 36.0)
-		PL2S L 1 A_WeaponOffset(-10.0, 38.0)
-		PL2S L 1 A_WeaponOffset(-12.0, 40.0)
-		PL2S M 1 A_WeaponOffset(-13.0, 41.0)
-		PL2S N 1 A_WeaponOffset(-13.0, 41.0)
-		PL2S O 1 A_WeaponOffset(-12.0, 40.0)
-		PL2S P 1 A_WeaponOffset(-10.0, 38.0)
-		PL2S Q 1 A_WeaponOffset(- 8.0, 36.0)
-		PL2S Q 1 A_WeaponOffset(- 6.0, 35.0)
-		PL2S Q 1 A_WeaponOffset(- 4.0, 34.0)
-		PL2S Q 1 A_WeaponOffset(- 2.0, 33.0)
-		PL2S Q 1 A_WeaponOffset(- 1.0, 32.0)
-		PL2S Q 6 A_WeaponOffset(  0.0, 32.0)
-		PL2S RSTU 2
+		PL2S B 1 A_WeaponOffset(  0.0, 32.0);
+		PL2S C 1 A_WeaponOffset(- 1.0, 32.0);
+		PL2S D 1 A_WeaponOffset(- 3.0, 32.5);
+		PL2S E 1 A_WeaponOffset(- 5.0, 33.0);
+		PL2S F 1 A_WeaponOffset(- 6.0, 34.0);
+		PL2S GHIJ 1;
+		PL2S K 6;
+		PL2S K 1 A_WeaponOffset(- 7.0, 35.0);
+		PL2S K 1 A_WeaponOffset(- 8.0, 36.0);
+		PL2S L 1 A_WeaponOffset(-10.0, 38.0);
+		PL2S L 1 A_WeaponOffset(-12.0, 40.0);
+		PL2S M 1 A_WeaponOffset(-13.0, 41.0);
+		PL2S N 1 A_WeaponOffset(-13.0, 41.0);
+		PL2S O 1 A_WeaponOffset(-12.0, 40.0);
+		PL2S P 1 A_WeaponOffset(-10.0, 38.0);
+		PL2S Q 1 A_WeaponOffset(- 8.0, 36.0);
+		PL2S Q 1 A_WeaponOffset(- 6.0, 35.0);
+		PL2S Q 1 A_WeaponOffset(- 4.0, 34.0);
+		PL2S Q 1 A_WeaponOffset(- 2.0, 33.0);
+		PL2S Q 1 A_WeaponOffset(- 1.0, 32.0);
+		PL2S Q 6 A_WeaponOffset(  0.0, 32.0);
+		PL2S RSTU 2;
 	Mod2Ready:
-		PL2G A 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		PL2G A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		PL2G D 1 {
 			if(CountInv("ArgPlasmaRifleModCooldown") == 1) {
 				A_PlaySound("weapons/plasma/mod2ready", CHAN_AUTO);
 			}
 			return A_JumpIfInventory("ArgPlasmaRifleModCooldown", 1, "Mod2Ready");
 		}
-		PL2G DEEFFFFFFFFEEDDA 1 A_WeaponReady(WRF_ALLOWRELOAD)
-		Loop
+		PL2G DEEFFFFFFFFEEDDA 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		Loop;
 	Mod2Up:
-		PL2G A 1 A_JumpIfInventory("Cell", PLASMA_MOD2_AMMOUSE, "Mod2Hold")
-		Goto Mod2Ready
+		PL2G A 1 A_JumpIfInventory("Cell", PLASMA_MOD2_AMMOUSE, "Mod2Hold");
+		Goto Mod2Ready;
 	Mod2Hold:
 		PL2G B 1 Bright {
-			A_GunFlash;
-			A_AlertMonsters;
+			A_GunFlash();
+			A_AlertMonsters();
 			A_PlaySound("weapons/plasma/mod2fire", CHAN_6);
 			A_FireCustomMissile("ArgStunBomb", 0, 0, 0, 0, FPF_AIMATANGLE , 5);
 			A_TakeInventory("Cell", PLASMA_MOD2_AMMOUSE, TIF_NOTAKEINFINITE);
 			A_GiveInventory("ArgPlasmaRifleModCooldown", PLASMA_MOD_COOLDOWN);
 		}
-		PL2G A 1 A_WeaponOffset( 5.0,  5.0 + 32.0)
-		PL2G G 1 A_WeaponOffset(12.0, 12.0 + 32.0)
-		PL2G G 1 A_WeaponOffset(15.0, 15.0 + 32.0)
-		PL2G H 1 A_WeaponOffset(16.0, 16.0 + 32.0)
-		PL2G H 1 A_WeaponOffset(14.0, 14.0 + 32.0)
-		PL2G I 1 A_WeaponOffset(11.0, 11.0 + 32.0)
-		PL2G I 1 A_WeaponOffset( 8.0,  8.0 + 32.0)
-		PL2G I 1 A_WeaponOffset( 4.0,  4.0 + 32.0)
-		PL2G I 1 A_WeaponOffset( 1.0,  1.0 + 33.0)
-		PL2G J 2 A_WeaponOffset( 0.0,  0.0 + 32.0)
-		PL2G KLIHG 2
-		Goto Cooldown
+		PL2G A 1 A_WeaponOffset( 5.0,  5.0 + 32.0);
+		PL2G G 1 A_WeaponOffset(12.0, 12.0 + 32.0);
+		PL2G G 1 A_WeaponOffset(15.0, 15.0 + 32.0);
+		PL2G H 1 A_WeaponOffset(16.0, 16.0 + 32.0);
+		PL2G H 1 A_WeaponOffset(14.0, 14.0 + 32.0);
+		PL2G I 1 A_WeaponOffset(11.0, 11.0 + 32.0);
+		PL2G I 1 A_WeaponOffset( 8.0,  8.0 + 32.0);
+		PL2G I 1 A_WeaponOffset( 4.0,  4.0 + 32.0);
+		PL2G I 1 A_WeaponOffset( 1.0,  1.0 + 33.0);
+		PL2G J 2 A_WeaponOffset( 0.0,  0.0 + 32.0);
+		PL2G KLIHG 2;
+		Goto Cooldown;
 	}
 }
 
-ACTOR ArgPlasma : PlasmaBall
+class ArgPlasma : PlasmaBall
 {
-	Radius 8
-	Height 8
-	Damage 5
-	Scale 0.75
-	Speed 50
-	SeeSound ""
-	DeathSound "weapons/plasma/explode"
-	Decal "PlasmaScorchLower"
-	DamageType "ArgPlasma"
-	Obituary "$ARG_OB_PLASMA"
+	Default
+	{
+		Radius 8;
+		Height 8;
+		Damage 5;
+		Scale 0.75;
+		Speed 50;
+		SeeSound "";
+		DeathSound "weapons/plasma/explode";
+		Decal "PlasmaScorchLower";
+		DamageType "ArgPlasma";
+		Obituary "$ARG_OB_PLASMA";
+	}
 	States
 	{
 	Spawn:
-		PLSS AB 3 Bright
-		Loop
+		PLSS AB 3 Bright;
+		Loop;
 	Death:
-		PLSE ABCDE 2 Bright
-		Stop
+		PLSE ABCDE 2 Bright;
+		Stop;
 	}
 }
 
-ACTOR ArgPlasmaHeatWave
+class ArgPlasmaHeatWave : Actor
 {
-	Projectile
-	Speed 10
-	Damage 0
-	Alpha 0.5
-	RenderStyle "Add"
-	XScale 0.5
-	YScale 0.1
+	Default
+	{
+		Projectile;
+		Speed 10;
+		Damage 0;
+		Alpha 0.5;
+		RenderStyle 'Add';
+		XScale 0.5;
+		YScale 0.1;
 
-	+BOUNCEONWALLS
-	+BOUNCEONCEILINGS
-	+THRUACTORS
-
+		+BOUNCEONWALLS
+		+BOUNCEONCEILINGS
+		+THRUACTORS
+	}
 	States
 	{
 	Spawn:
 		PBOM EEFFFGGGGHHHHHIIIIII 1 Bright {
 			A_SetSpeed(speed * 0.66);
-			A_SetScale(0.5, scaley * 1.1);
+			A_SetScale(0.5, scale.y * 1.1);
 			A_FadeOut(0.025);
 		}
-		Stop
+		Stop;
 	Death:
-		TNT1 A 0
-		Stop
+		TNT1 A 0;
+		Stop;
 	}
 }
 
-ACTOR ArgStunBomb : ArgPlasma
+class ArgStunBomb : ArgPlasma
 {
-	Speed 40
-	Damage 0
-	DeathSound "weapons/plasma/mod2hit"
-	DamageType "ArgStun"
-	Decal "None"
+	Default
+	{
+		Speed 40;
+		Damage 0;
+		DeathSound "weapons/plasma/mod2hit";
+		DamageType "ArgStun";
+		Decal "None";
 	
-	var int user_i;
-	
-	-NOGRAVITY
-	
+		-NOGRAVITY
+	}
 	States
 	{
 	Spawn:
-		PBOM ABCD 1 Bright
-		Loop
+		PBOM ABCD 1 Bright;
+		Loop;
 	Death:
 		PBOM E 0 Bright {
-			A_NoGravity;
+			A_NoGravity();
 			A_RadiusGive("ArgStunner", 160, RGF_MONSTERS);
 		} 
-		PBOM EE 1 Bright { for (A_SetUserVar(user_i, 0); user_i < 10; A_SetUserVar(user_i, user_i + 1)) { A_CustomRailgun(0, 0, "None", "4444FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 40, 1, 0.2, 0.0); } }
-		PBOM EF 1 Bright { for (A_SetUserVar(user_i, 0); user_i < 10; A_SetUserVar(user_i, user_i + 1)) { A_CustomRailgun(0, 0, "None", "8888FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 48, 1, 0.2, 0.0); } }
-		PBOM FF 1 Bright { for (A_SetUserVar(user_i, 0); user_i < 10; A_SetUserVar(user_i, user_i + 1)) { A_CustomRailgun(0, 0, "None", "AAAAFF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 56, 1, 0.2, 0.0); } }
-		PBOM GG 1 Bright { for (A_SetUserVar(user_i, 0); user_i < 10; A_SetUserVar(user_i, user_i + 1)) { A_CustomRailgun(0, 0, "None", "8888FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 48, 1, 0.2, 0.0); } }
-		PBOM GH 1 Bright { for (A_SetUserVar(user_i, 0); user_i < 10; A_SetUserVar(user_i, user_i + 1)) { A_CustomRailgun(0, 0, "None", "4444FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 40, 1, 0.2, 0.0); } }
-		PBOM HH 1 Bright { for (A_SetUserVar(user_i, 0); user_i < 10; A_SetUserVar(user_i, user_i + 1)) { A_CustomRailgun(0, 0, "None", "0000FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 32, 1, 0.2, 0.0); } }
-		PBOM I 3 Bright
-		Stop
+		PBOM EE 1 Bright { for (int i = 0; i < 10; i++) { A_CustomRailgun(0, 0, "", "4444FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 40, 1, 0.2, 0.0); } }
+		PBOM EF 1 Bright { for (int i = 0; i < 10; i++) { A_CustomRailgun(0, 0, "", "8888FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 48, 1, 0.2, 0.0); } }
+		PBOM FF 1 Bright { for (int i = 0; i < 10; i++) { A_CustomRailgun(0, 0, "", "AAAAFF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 56, 1, 0.2, 0.0); } }
+		PBOM GG 1 Bright { for (int i = 0; i < 10; i++) { A_CustomRailgun(0, 0, "", "8888FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 48, 1, 0.2, 0.0); } }
+		PBOM GH 1 Bright { for (int i = 0; i < 10; i++) { A_CustomRailgun(0, 0, "", "4444FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 40, 1, 0.2, 0.0); } }
+		PBOM HH 1 Bright { for (int i = 0; i < 10; i++) { A_CustomRailgun(0, 0, "", "0000FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 32, 1, 0.2, 0.0); } }
+		PBOM I 3 Bright;
+		Stop;
 	}
 }
 
-ACTOR ArgStunBombPuff : ArgPuff
+class ArgStunBombPuff : ArgPuff
 {
-	+BLOODLESSIMPACT
+	Default
+	{
+		+BLOODLESSIMPACT
+	}
 	States
 	{
 	Spawn:
-		TNT1 A 1
-		Stop
+		TNT1 A 1;
+		Stop;
 	}
 }
 
-ACTOR ArgStunner : CustomInventory
+class ArgStunner : CustomInventory
 {
-	-INVENTORY.INVBAR
+	Default
+	{
+		-INVENTORY.INVBAR
+	}
 	States
 	{
 	Spawn:
-		TNT1 A 0
-		Stop
+		TNT1 A 0;
+		Stop;
 	Pickup:
-		TNT1 A 1 ACS_NamedExecuteAlways("NeuralStunner")
-		Stop
+		TNT1 A 1 ACS_NamedExecuteAlways("NeuralStunner");
+		Stop;
 	}
 }
 
-ACTOR ArgStunEffect : ArgTrailNoPhysics
+class ArgStunEffect : ArgTrailNoPhysics
 {
-	Scale 0.5
+	Default
+	{
+		Scale 0.5;
+	}
 	States
 	{
 	Spawn:
-		STUN A 0 Bright NoDelay A_SetScale(scaleX*(random(0,1)*2-1), scaleY*(random(0,1)*2-1)) // randomly flip x and y
-		STUN ABCDEF 2 Bright
-		STUN GGHHII 1 Bright A_FadeOut(0.2)
-		Stop
+		STUN A 0 Bright NoDelay A_SetScale(scale.x*(random(0,1)*2-1), scale.y*(random(0,1)*2-1)); // randomly flip x and y
+		STUN ABCDEF 2 Bright;
+		STUN GGHHII 1 Bright A_FadeOut(0.2);
+		Stop;
 	}
 }
 
-ACTOR ArgStunEffectLarge : ArgStunEffect
-{
-	Scale 1.0
-}
-
-ACTOR ArgStunEffectHuge : ArgStunEffect
-{
-	Scale 1.5
-}
+class ArgStunEffectLarge : ArgStunEffect { Default { Scale 1.0; } }
+class ArgStunEffectHuge  : ArgStunEffect { Default { Scale 1.5; } }
