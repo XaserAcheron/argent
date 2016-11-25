@@ -1,4 +1,3 @@
-#include "actors/weapons/ssg.txt"
 #include "actors/weapons/heavy.txt"
 #include "actors/weapons/chaingun.txt"
 #include "actors/weapons/rocket.txt"
