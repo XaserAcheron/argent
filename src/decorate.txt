@@ -1,4 +1,3 @@
-#include "actors/weapons/chaingun.txt"
 #include "actors/weapons/rocket.txt"
 #include "actors/weapons/plasma.txt"
 #include "actors/weapons/gauss.txt"
