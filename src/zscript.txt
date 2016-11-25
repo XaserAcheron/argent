@@ -20,5 +20,6 @@ zscript/argent/weapons/chainsaw.txt
 zscript/argent/weapons/pistol.txt
 zscript/argent/weapons/shotgun.txt
 zscript/argent/weapons/ssg.txt
+zscript/argent/weapons/heavy.txt
 
 zscript/argent/items/powerups.txt
