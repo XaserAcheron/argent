@@ -1,2 +1,1 @@
-#include "actors/weapons/gauss.txt"
 #include "actors/weapons/bfg.txt"
