@@ -4,85 +4,102 @@
 //
 // --------------------------------------------------------------------------
 
-ACTOR ArgClip       : Clip       replaces Clip       { Inventory.PickupSound "items/ammo" Scale 0.66 }
-ACTOR ArgClipBox    : ClipBox    replaces ClipBox    { Inventory.PickupSound "items/ammo" Scale 0.66 }
-ACTOR ArgShell      : Shell      replaces Shell      { Inventory.PickupSound "items/ammo" Scale 0.66 }
-ACTOR ArgShellBox   : ShellBox   replaces ShellBox   { Inventory.PickupSound "items/ammo" Scale 0.66 }
-ACTOR ArgCell       : Cell       replaces Cell       { Inventory.PickupSound "items/ammo" Scale 0.75 }
-ACTOR ArgCellPack   : CellPack                       { Inventory.PickupSound "items/ammo" Scale 0.75 }
+class ArgClip       : Clip       replaces Clip       { Default { Inventory.PickupSound "items/ammo"; Scale 0.66; } }
+class ArgClipBox    : ClipBox    replaces ClipBox    { Default { Inventory.PickupSound "items/ammo"; Scale 0.66; } }
+class ArgShell      : Shell      replaces Shell      { Default { Inventory.PickupSound "items/ammo"; Scale 0.66; } }
+class ArgShellBox   : ShellBox   replaces ShellBox   { Default { Inventory.PickupSound "items/ammo"; Scale 0.66; } }
+class ArgCell       : Cell       replaces Cell       { Default { Inventory.PickupSound "items/ammo"; Scale 0.75; } }
+class ArgCellPack   : CellPack                       { Default { Inventory.PickupSound "items/ammo"; Scale 0.75; } }
 
-ACTOR ArgRocketAmmo : Ammo replaces RocketAmmo
+class ArgRocketAmmo : Ammo replaces RocketAmmo
 {
-	Inventory.PickupSound "items/ammo"
-	Inventory.PickupMessage "$GOTROCKET"
-	Inventory.Amount 1
-	Inventory.MaxAmount 30
-	Ammo.BackpackAmount 1
-	Ammo.BackpackMaxAmount 60
-	Inventory.Icon "ROCKA0"
-	Scale 0.66
+	Default
+	{
+		Inventory.PickupSound "items/ammo";
+		Inventory.PickupMessage "$GOTROCKET";
+		Inventory.Amount 1;
+		Inventory.MaxAmount 30;
+		Ammo.BackpackAmount 1;
+		Ammo.BackpackMaxAmount 60;
+		Inventory.Icon "ROCKA0";
+		Scale 0.66;
+	}
 	States
 	{
 	Spawn:
-		ROCK A -1
-		Stop
+		ROCK A -1;
+		Stop;
 	}
 }
 
-ACTOR ArgRocketBox : ArgRocketAmmo replaces RocketBox
+class ArgRocketBox : ArgRocketAmmo replaces RocketBox
 {
-	Inventory.PickupMessage "$GOTROCKBOX"
-	Inventory.Amount 5
-	Scale 0.5
+	Default
+	{
+		Inventory.PickupMessage "$GOTROCKBOX";
+		Inventory.Amount 5;
+		Scale 0.5;
+	}
 	States
 	{
 	Spawn:
-		BROK A -1
-		Stop
+		BROK A -1;
+		Stop;
 	}
 }
 
-ACTOR ArgBFGAmmo : Ammo
+class ArgBFGAmmo : Ammo
 {
-	Inventory.PickupSound "items/ammo"
-	Inventory.PickupMessage "$ARG_GOT_BFGCELL"
-	Inventory.Icon BFGCA0
-	Inventory.Amount 1
-	Inventory.MaxAmount 5
-	Ammo.BackpackAmount 0
-	Ammo.BackpackMaxAmount 10
-	Scale 0.66
-	+FLOATBOB
+	Default
+	{
+		Inventory.PickupSound "items/ammo";
+		Inventory.PickupMessage "$ARG_GOT_BFGCELL";
+		Inventory.Icon "BFGCA0";
+		Inventory.Amount 1;
+		Inventory.MaxAmount 5;
+		Ammo.BackpackAmount 0;
+		Ammo.BackpackMaxAmount 10;
+		Scale 0.66;
+
+		+FLOATBOB
+	}
 	States
 	{
 	Spawn:
-		BFGC BC 5 Bright 
-		Loop
+		BFGC BC 5 Bright;
+		Loop;
 	}
 }
 
-ACTOR ArgBFGAmmoPickup : CustomInventory
+class ArgBFGAmmoPickup : CustomInventory
 {
-	Inventory.PickupSound "items/ammo"
-	Inventory.PickupMessage "$ARG_GOT_BFGCELL"
-	Scale 0.66
-	+FLOATBOB
+	Default
+	{
+		Inventory.PickupSound "items/ammo";
+		Inventory.PickupMessage "$ARG_GOT_BFGCELL";
+		Scale 0.66;
+
+		+FLOATBOB
+	}
 	States
 	{
 	Spawn:
-		BFGC BC 5 Bright 
-		Loop
+		BFGC BC 5 Bright ;
+		Loop;
 	Pickup:
-		TNT1 A 0 A_GiveInventory("ArgBFGAmmo", 1)
-		TNT1 A 0 A_GiveInventory("Cell"      ,60)
-		Stop
+		TNT1 A 0 A_GiveInventory("ArgBFGAmmo", 1);
+		TNT1 A 0 A_GiveInventory("Cell"      ,60);
+		Stop;
 	}
 }
 
-ACTOR ArgBFGAmmoSpawner replaces CellPack
+class ArgBFGAmmoSpawner : Actor replaces CellPack
 {
-	Scale 0.66
-	+FORCEYBILLBOARD
+	Default
+	{
+		Scale 0.66;
+		+FORCEYBILLBOARD;
+	}
 	States
 	{
 	Spawn:
@@ -91,23 +108,23 @@ ACTOR ArgBFGAmmoSpawner replaces CellPack
 			// isn't enabled.
 			if(GetCvar("arg_bfgammotype") == false) {
 				A_SpawnItemEx("ArgCellPack",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
-				return state("Vanish");
+				return ResolveState("Vanish");
 			} else {
 				A_SpawnItemEx("ArgBFGAmmoPickup",0,0,0,0,0,0,0,SXF_ISTRACER|SXF_TRANSFERSPECIAL);
 			}
-			return state(0);
+			return ResolveState(null);
 		}
 	Idle:
-		BFGC A 1
+		BFGC A 1;
 		BFGC A 1 {
 			if(IsPointerEqual(AAPTR_TRACER, AAPTR_NULL)) {
-				return state("Vanish");
+				return ResolveState("Vanish");
 			}
-			return state(0);
+			return ResolveState(null);
 		}
-		Wait
+		Wait;
 	Vanish:
-		TNT1 A 0
-		Stop
+		TNT1 A 0;
+		Stop;
 	}
 }
