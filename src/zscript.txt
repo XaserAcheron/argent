@@ -22,5 +22,6 @@ zscript/argent/weapons/shotgun.txt
 zscript/argent/weapons/ssg.txt
 zscript/argent/weapons/heavy.txt
 zscript/argent/weapons/chaingun.txt
+zscript/argent/weapons/rocket.txt
 
 zscript/argent/items/powerups.txt
