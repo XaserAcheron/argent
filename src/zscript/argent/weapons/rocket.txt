@@ -4,144 +4,146 @@
 //
 // --------------------------------------------------------------------------
 
-CONST int ROCKET_MOD1_AMMOUSE  =  1;
-CONST int ROCKET_MOD2_AMMOUSE  =  3;
-CONST int ROCKET_MOD_COOLDOWN  = 90;
-CONST int ROCKET_OVERLAY_LAYER =  2;
+class ArgRocketLauncherModSelected : ArgModToken {}
+class ArgRocketLauncherMod1Enabled : ArgToken    {}
+class ArgRocketLauncherMod2Enabled : ArgToken    {}
+class ArgRocketLauncherModCooldown : ArgToken    { Default { Inventory.MaxAmount 90; } }
+class ArgRocketLauncherModCharge   : ArgToken    { Default { Inventory.MaxAmount 25; } }
 
-ACTOR ArgRocketLauncherModSelected : ArgModToken {}
-ACTOR ArgRocketLauncherMod1Enabled : ArgToken    {}
-ACTOR ArgRocketLauncherMod2Enabled : ArgToken    {}
-ACTOR ArgRocketLauncherModCooldown : ArgToken    { Inventory.MaxAmount 90 }
-ACTOR ArgRocketLauncherModCharge   : ArgToken    { Inventory.MaxAmount 25 }
-
-ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
+class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 {
-	Weapon.SelectionOrder 7
-	Weapon.AmmoUse 1
-	Weapon.AmmoGive 2
-	Weapon.AmmoType "ArgRocketAmmo"
-	Inventory.Icon "graphics/hud/weapon-rocket.png"
-	Inventory.PickupMessage "$ARG_GOT_ROCKET"
-	Tag "$ARG_TAG_ROCKET"
+	const ROCKET_MOD1_AMMOUSE  =  1;
+	const ROCKET_MOD2_AMMOUSE  =  3;
+	const ROCKET_MOD_COOLDOWN  = 90;
+	const ROCKET_OVERLAY_LAYER =  2;
+	
+	Default
+	{
+		Weapon.SelectionOrder 7;
+		Weapon.AmmoUse 1;
+		Weapon.AmmoGive 2;
+		Weapon.AmmoType "ArgRocketAmmo";
+		Inventory.Icon "graphics/hud/weapon-rocket.png";
+		Inventory.PickupMessage "$ARG_GOT_ROCKET";
+		Tag "$ARG_TAG_ROCKET";
 
-	+WEAPON.NOAUTOFIRE
-
+		+WEAPON.NOAUTOFIRE
+	}
 	States
 	{
 	Spawn:
-		RKLP A -1
-		Stop
+		RKLP A -1;
+		Stop;
 	Ready:
-		RKLG A 0
-		Goto Super::Ready
+		RKLG A 0;
+		Goto Super::Ready;
 	Deselect:
-		"####" A 0 A_StopSound(CHAN_5)
-		Goto DeselectLoop
+		"####" A 0 A_StopSound(CHAN_5);
+		Goto DeselectLoop;
 
 	/* Unmodded + Primary */
 
 	Mod0Select:
-		RKLG A 0
-		Goto SelectLoop
+		RKLG A 0;
+		Goto SelectLoop;
 	Mod0Swap:
-		RKLG A 0
-		Goto ModSwapUp
+		RKLG A 0;
+		Goto ModSwapUp;
 	Mod0Ready:
-		RKLG A 0
-		Goto ReadyLoop
+		RKLG A 0;
+		Goto ReadyLoop;
 	Mod0Fire:
 		"####" B 1 Bright {
-			A_GunFlash;
+			A_GunFlash();
 			if(CountInv("ArgRocketLauncherModSelected") == 1) {
 				A_FireCustomMissile("ArgRocketDetonate", 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
 			} else {
 				A_FireCustomMissile("ArgRocket"        , 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
 			}
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
-			A_AlertMonsters;
+			A_AlertMonsters();
 			A_WeaponOffset(6.0, 3.0 + 32);
 		}
-		"####" C 1 A_WeaponOffset(16.0,  8.0 + 32)
-		"####" D 1 A_WeaponOffset(20.0, 10.0 + 32)
-		"####" E 1 A_WeaponOffset(22.0, 11.0 + 32)
-		"####" F 1 A_WeaponOffset(23.0, 11.5 + 32)
-		"####" G 1 
-		"####" A 1 
-		"####" A 1 A_WeaponOffset(22.0, 11.0 + 32)
-		"####" A 1 A_WeaponOffset(20.0, 10.0 + 32)
-		"####" H 1 A_WeaponOffset(17.0,  8.5 + 32)
-		"####" H 1 A_WeaponOffset(13.0,  6.5 + 32)
-		"####" I 1 A_WeaponOffset(10.0,  5.0 + 32)
-		"####" J 1 A_WeaponOffset( 7.0,  3.5 + 32)
-		"####" K 1 A_WeaponOffset( 5.0,  2.5 + 32)
-		"####" L 1 A_WeaponOffset( 3.0,  1.5 + 32)
-		"####" M 1 A_WeaponOffset( 2.0,  1.0 + 32)
-		"####" N 1 A_WeaponOffset( 1.0,  0.5 + 32)
-		"####" O 1 A_WeaponOffset( 0.0,  0.0 + 32)
-		"####" P 1 
-		"####" Q 5 A_CheckReload
-		"####" Q 1 A_WeaponOffset(-0.25, 0.25+ 32)
-		"####" R 1 A_WeaponOffset(-0.5,  0.5 + 32)
-		"####" S 1 A_WeaponOffset(-1.5,  1.5 + 32)
-		"####" T 1 A_WeaponOffset(-2.5,  2.5 + 32)
-		"####" U 1 A_WeaponOffset(-3.5,  3.5 + 32)
-		"####" V 4 A_WeaponOffset(-4.0,  4.0 + 32)
-		"####" W 1 A_WeaponOffset(-3.5,  3.5 + 32)
-		"####" X 1 A_WeaponOffset(-2.5,  2.5 + 32)
-		"####" Y 1 A_WeaponOffset(-1.5,  1.5 + 32)
-		"####" Z 1 A_WeaponOffset(-0.5,  0.5 + 32)
-		"####" "[" 1 A_WeaponOffset( 0,  0.0 + 32)
-		"####" A 0 A_Refire
-		Goto Ready
+		"####" C 1 A_WeaponOffset(16.0,  8.0 + 32);
+		"####" D 1 A_WeaponOffset(20.0, 10.0 + 32);
+		"####" E 1 A_WeaponOffset(22.0, 11.0 + 32);
+		"####" F 1 A_WeaponOffset(23.0, 11.5 + 32);
+		"####" G 1;
+		"####" A 1;
+		"####" A 1 A_WeaponOffset(22.0, 11.0 + 32);
+		"####" A 1 A_WeaponOffset(20.0, 10.0 + 32);
+		"####" H 1 A_WeaponOffset(17.0,  8.5 + 32);
+		"####" H 1 A_WeaponOffset(13.0,  6.5 + 32);
+		"####" I 1 A_WeaponOffset(10.0,  5.0 + 32);
+		"####" J 1 A_WeaponOffset( 7.0,  3.5 + 32);
+		"####" K 1 A_WeaponOffset( 5.0,  2.5 + 32);
+		"####" L 1 A_WeaponOffset( 3.0,  1.5 + 32);
+		"####" M 1 A_WeaponOffset( 2.0,  1.0 + 32);
+		"####" N 1 A_WeaponOffset( 1.0,  0.5 + 32);
+		"####" O 1 A_WeaponOffset( 0.0,  0.0 + 32);
+		"####" P 1;
+		"####" Q 5 A_CheckReload;
+		"####" Q 1 A_WeaponOffset(-0.25, 0.25+ 32);
+		"####" R 1 A_WeaponOffset(-0.5,  0.5 + 32);
+		"####" S 1 A_WeaponOffset(-1.5,  1.5 + 32);
+		"####" T 1 A_WeaponOffset(-2.5,  2.5 + 32);
+		"####" U 1 A_WeaponOffset(-3.5,  3.5 + 32);
+		"####" V 4 A_WeaponOffset(-4.0,  4.0 + 32);
+		"####" W 1 A_WeaponOffset(-3.5,  3.5 + 32);
+		"####" X 1 A_WeaponOffset(-2.5,  2.5 + 32);
+		"####" Y 1 A_WeaponOffset(-1.5,  1.5 + 32);
+		"####" Z 1 A_WeaponOffset(-0.5,  0.5 + 32);
+		"####" "[" 1 A_WeaponOffset( 0,  0.0 + 32);
+		"####" A 0 A_Refire();
+		Goto Ready;
 	Flash:
-		TNT1 A 1 Bright A_Light1
-		TNT1 A 2 Bright A_Light2
-		TNT1 A 1 Bright A_Light1
-		Goto LightDone
+		TNT1 A 1 Bright A_Light1;
+		TNT1 A 2 Bright A_Light2;
+		TNT1 A 1 Bright A_Light1;
+		Goto LightDone;
 
 	/* Mod 1: Remote Detonator */
 	
 	Mod1Select:
-		RK1G A 0
-		Goto SelectLoop
+		RK1G A 0;
+		Goto SelectLoop;
 	Mod1Raise:
 		RKLG A 0 {
 			A_PlaySound("weapons/rocket/mod1swap", CHAN_AUTO);
 			A_WeaponOffset(4.0, 32.0, WOF_KEEPY);
 		}
-		Goto ModSwapUp
+		Goto ModSwapUp;
 	Mod1Swap:
-		RK1S S 1 A_WeaponOffset( 5.0, 2.0 + 32)
-		RK1S R 1 A_WeaponOffset( 6.0, 5.0 + 32)
-		RK1S Q 1 A_WeaponOffset( 8.0, 7.0 + 32)
-		RK1S P 1 A_WeaponOffset(11.0, 9.0 + 32)
-		RK1S P 1 A_WeaponOffset(13.0, 8.0 + 32)
-		RK1S P 5 A_WeaponOffset(14.0, 7.0 + 32)
-		RK1S O 1 A_WeaponOffset(13.0, 6.5 + 32)
-		RK1S N 1 A_WeaponOffset(11.0, 5.5 + 32)
-		RK1S M 1 A_WeaponOffset( 9.0, 4.5 + 32)
-		RK1S L 1 A_WeaponOffset( 7.0, 3.5 + 32)
-		RK1S J 1 A_WeaponOffset( 5.0, 2.5 + 32)
-		RK1S H 1 A_WeaponOffset( 3.0, 1.5 + 32)
-		RK1S F 1 A_WeaponOffset( 1.0, 0.5 + 32)
-		RK1S E 4 A_WeaponOffset( 0.0, 0.0 + 32)
-		RK1S D 1
-		RK1S C 1
-		RK1S B 1
-		RK1S A 1 //A_Overlay(ROCKET_OVERLAY_LAYER, "Mod1Overlay") // [XA] band-aid; moving this below to Ready
+		RK1S S 1 A_WeaponOffset( 5.0, 2.0 + 32);
+		RK1S R 1 A_WeaponOffset( 6.0, 5.0 + 32);
+		RK1S Q 1 A_WeaponOffset( 8.0, 7.0 + 32);
+		RK1S P 1 A_WeaponOffset(11.0, 9.0 + 32);
+		RK1S P 1 A_WeaponOffset(13.0, 8.0 + 32);
+		RK1S P 5 A_WeaponOffset(14.0, 7.0 + 32);
+		RK1S O 1 A_WeaponOffset(13.0, 6.5 + 32);
+		RK1S N 1 A_WeaponOffset(11.0, 5.5 + 32);
+		RK1S M 1 A_WeaponOffset( 9.0, 4.5 + 32);
+		RK1S L 1 A_WeaponOffset( 7.0, 3.5 + 32);
+		RK1S J 1 A_WeaponOffset( 5.0, 2.5 + 32);
+		RK1S H 1 A_WeaponOffset( 3.0, 1.5 + 32);
+		RK1S F 1 A_WeaponOffset( 1.0, 0.5 + 32);
+		RK1S E 4 A_WeaponOffset( 0.0, 0.0 + 32);
+		RK1S D 1;
+		RK1S C 1;
+		RK1S B 1;
+		RK1S A 1; //A_Overlay(ROCKET_OVERLAY_LAYER, "Mod1Overlay") // [XA] band-aid; moving this below to Ready
 	Mod1Ready:
-		RK1G A 0 A_Overlay(ROCKET_OVERLAY_LAYER, "Mod1Overlay")
-		Goto ReadyLoop
+		RK1G A 0 A_Overlay(ROCKET_OVERLAY_LAYER, "Mod1Overlay");
+		Goto ReadyLoop;
 	Mod1Overlay:
-		TNT1 A 1 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK, "Mod1Detonate")
-		Loop
+		TNT1 A 1 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK, "Mod1Detonate");
+		Loop;
 	Mod1Detonate:
-		TNT1 A 0 ACS_NamedExecute("Mod1RocketDetonate")
+		TNT1 A 0 ACS_NamedExecute("Mod1RocketDetonate");
 	Mod1DetonateHold:
-		TNT1 A 1 
-		TNT1 A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK, "Mod1DetonateHold")
-		Goto Mod1Overlay
+		TNT1 A 1;
+		TNT1 A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK, "Mod1DetonateHold");
+		Goto Mod1Overlay;
 //	Mod1Up:
 //	Mod1Fire:
 //		RK1G A 1 { A_WeaponOffset( 1.0, 0.0 + 32); ACS_NamedExecute("Mod1RocketDetonate"); }
@@ -154,42 +156,42 @@ ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	/* Mod 2: Lock-on Burst */
 	
 	Mod2Select:
-		RK2G A 0
-		Goto SelectLoop
+		RK2G A 0;
+		Goto SelectLoop;
 	Mod2Raise:
 		RKLG A 0 {
 			A_Overlay(ROCKET_OVERLAY_LAYER);
 			A_PlaySound("weapons/rocket/mod2swap", CHAN_AUTO);
 			A_WeaponOffset(4.0, 32.0, WOF_KEEPY);
 		}
-		Goto ModSwapUp
+		Goto ModSwapUp;
 	Mod2Swap:
-		RK2S N 1 A_WeaponOffset( 5.0, 2.0 + 32)
-		RK2S M 1 A_WeaponOffset( 6.0, 5.0 + 32)
-		RK2S L 1 A_WeaponOffset( 8.0, 7.0 + 32)
-		RK2S K 1 A_WeaponOffset(11.0, 9.0 + 32)
-		RK2S K 1 A_WeaponOffset(13.0, 8.0 + 32)
-		RK2S K 5 A_WeaponOffset(14.0, 7.0 + 32)
-		RK2S J 1 A_WeaponOffset(13.0, 6.5 + 32)
-		RK2S I 1 A_WeaponOffset(11.0, 5.5 + 32)
-		RK2S H 1 A_WeaponOffset( 9.0, 4.5 + 32)
-		RK2S G 1 A_WeaponOffset( 7.0, 3.5 + 32)
-		RK2S F 1 A_WeaponOffset( 5.0, 2.5 + 32)
-		RK2S E 1 A_WeaponOffset( 3.0, 1.5 + 32)
-		RK2S D 1 A_WeaponOffset( 1.0, 0.5 + 32)
-		RK2S C 1 A_WeaponOffset( 0.0, 0.0 + 32)
-		RK2S B 4 A_WeaponOffset( 0.0, 0.0 + 32)
-		RK2S A 2
+		RK2S N 1 A_WeaponOffset( 5.0, 2.0 + 32);
+		RK2S M 1 A_WeaponOffset( 6.0, 5.0 + 32);
+		RK2S L 1 A_WeaponOffset( 8.0, 7.0 + 32);
+		RK2S K 1 A_WeaponOffset(11.0, 9.0 + 32);
+		RK2S K 1 A_WeaponOffset(13.0, 8.0 + 32);
+		RK2S K 5 A_WeaponOffset(14.0, 7.0 + 32);
+		RK2S J 1 A_WeaponOffset(13.0, 6.5 + 32);
+		RK2S I 1 A_WeaponOffset(11.0, 5.5 + 32);
+		RK2S H 1 A_WeaponOffset( 9.0, 4.5 + 32);
+		RK2S G 1 A_WeaponOffset( 7.0, 3.5 + 32);
+		RK2S F 1 A_WeaponOffset( 5.0, 2.5 + 32);
+		RK2S E 1 A_WeaponOffset( 3.0, 1.5 + 32);
+		RK2S D 1 A_WeaponOffset( 1.0, 0.5 + 32);
+		RK2S C 1 A_WeaponOffset( 0.0, 0.0 + 32);
+		RK2S B 4 A_WeaponOffset( 0.0, 0.0 + 32);
+		RK2S A 2;
 	Mod2Ready:
-		RK2G A 0
-		Goto ReadyLoop
+		RK2G A 0;
+		Goto ReadyLoop;
 	Mod2Up:
 		RK2G A 1 {
-			if(CountInv("ArgRocketAmmo") < ROCKET_MOD2_AMMOUSE) { return state("Ready"); }
+			if(CountInv("ArgRocketAmmo") < ROCKET_MOD2_AMMOUSE) { return ResolveState("Ready"); }
 			return A_JumpIfTargetInLOS("Mod2LockStart", 0, JLOSF_COMBATANTONLY);
 		}
-		RK2G A 0 A_Refire
-		Goto ReadyLoop
+		RK2G A 0 A_Refire();
+		Goto ReadyLoop;
 	Mod2LockStart:
 		RK2G A 0 {
 			ACS_NamedExecuteAlways("Mod2RocketLockStart");
@@ -201,144 +203,149 @@ ACTOR ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 			// check to see if the player has any charge. If none, leap back
 			// to Mod2Up as we haven't acquired a valid target yet.
 			if(CountInv("ArgRocketLauncherModCharge") == 0) {
-				return state("Mod2Up");
+				return ResolveState("Mod2Up");
 
 			// got enough charge and the button's down? fire away!
 			} else if (CountInv("ArgRocketLauncherModCharge") >= 20 && GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK) {
-				return state("Mod2Fire");
+				return ResolveState("Mod2Fire");
 			}
 			A_GiveInventory("ArgRocketLauncherModCharge", 1);
-			return state(0);
+			return ResolveState(null);
 		}
-		RK2G A 0 A_Refire
+		RK2G A 0 A_Refire();
 	Mod2Down:
 		RK2G A 0 {
 			A_TakeInventory("ArgRocketLauncherModCharge");
 			ACS_NamedExecuteAlways("Mod2RocketLockStop");
 			A_StopSound(CHAN_6);
 		}
-		Goto Ready
+		Goto Ready;
 	Mod2Fire:
 		RK2G C 1 Bright {
-			if(CountInv("ArgRocketAmmo") < ROCKET_MOD2_AMMOUSE) { return state("Ready"); }
+			if(CountInv("ArgRocketAmmo") < ROCKET_MOD2_AMMOUSE) { return ResolveState("Ready"); }
 			A_TakeInventory("ArgRocketLauncherModCharge");
-			A_GunFlash;
+			A_GunFlash();
 			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
 			A_FireCustomMissile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
-			A_AlertMonsters;
+			A_AlertMonsters();
 			A_WeaponOffset(6.0, 3.0 + 32);
-			return state(0);
+			return ResolveState(null);
 		}
-		RK2G D 1 A_WeaponOffset(16.0,  8.0 + 32)
-		RK2G E 1 A_WeaponOffset(22.0, 11.0 + 32)
-		RK2G F 1 A_WeaponOffset(20.0, 10.0 + 32)
+		RK2G D 1 A_WeaponOffset(16.0,  8.0 + 32);
+		RK2G E 1 A_WeaponOffset(22.0, 11.0 + 32);
+		RK2G F 1 A_WeaponOffset(20.0, 10.0 + 32);
 		RK2G D 1 Bright {
-			A_GunFlash;
+			A_GunFlash();
 			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
 			A_FireCustomMissile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
 			A_PlaySound("weapons/rocket/altfire", CHAN_6);
-			A_AlertMonsters;
+			A_AlertMonsters();
 			A_WeaponOffset(12.0, 6.0 + 32);
 		}
-		RK2G E 1 A_WeaponOffset(20.0, 10.0 + 32)
-		RK2G F 1 A_WeaponOffset(23.0, 11.5 + 32)
-		RK2G G 1 A_WeaponOffset(22.0, 11.0 + 32)
+		RK2G E 1 A_WeaponOffset(20.0, 10.0 + 32);
+		RK2G F 1 A_WeaponOffset(23.0, 11.5 + 32);
+		RK2G G 1 A_WeaponOffset(22.0, 11.0 + 32);
 		RK2G B 1 Bright {
-			A_GunFlash;
+			A_GunFlash();
 			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
 			A_FireCustomMissile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
-			A_AlertMonsters;
+			A_AlertMonsters();
 			A_WeaponOffset(14.0, 7.0 + 32);
 		}
-		RK2G C 1 A_WeaponOffset(16.0,  8.0 + 32)
-		RK2G D 1 A_WeaponOffset(20.0, 10.0 + 32)
-		RK2G E 1 A_WeaponOffset(22.0, 11.0 + 32)
-		RK2G F 1 A_WeaponOffset(23.0, 11.5 + 32)
-		RK2G G 1 
-		RK2G A 1 
-		RK2G A 1 A_WeaponOffset(22.0, 11.0 + 32)
-		RK2G A 1 A_WeaponOffset(20.0, 10.0 + 32)
-		RK2G A 1 A_WeaponOffset(17.0,  8.5 + 32)
-		RK2G A 1 A_WeaponOffset(13.0,  6.5 + 32)
-		RK2G A 1 A_WeaponOffset(10.0,  5.0 + 32)
-		RK2G H 1 A_WeaponOffset( 7.0,  3.5 + 32)
-		RK2G H 1 A_WeaponOffset( 5.0,  2.5 + 32)
-		RK2G I 1 A_WeaponOffset( 3.0,  1.5 + 32)
-		RK2G I 1 A_WeaponOffset( 2.0,  1.0 + 32)
+		RK2G C 1 A_WeaponOffset(16.0,  8.0 + 32);
+		RK2G D 1 A_WeaponOffset(20.0, 10.0 + 32);
+		RK2G E 1 A_WeaponOffset(22.0, 11.0 + 32);
+		RK2G F 1 A_WeaponOffset(23.0, 11.5 + 32);
+		RK2G G 1;
+		RK2G A 1;
+		RK2G A 1 A_WeaponOffset(22.0, 11.0 + 32);
+		RK2G A 1 A_WeaponOffset(20.0, 10.0 + 32);
+		RK2G A 1 A_WeaponOffset(17.0,  8.5 + 32);
+		RK2G A 1 A_WeaponOffset(13.0,  6.5 + 32);
+		RK2G A 1 A_WeaponOffset(10.0,  5.0 + 32);
+		RK2G H 1 A_WeaponOffset( 7.0,  3.5 + 32);
+		RK2G H 1 A_WeaponOffset( 5.0,  2.5 + 32);
+		RK2G I 1 A_WeaponOffset( 3.0,  1.5 + 32);
+		RK2G I 1 A_WeaponOffset( 2.0,  1.0 + 32);
 		RK2G J 1{A_WeaponOffset( 1.0,  0.5 + 32); A_PlaySound("weapons/rocket/mod2load", CHAN_5); }
-		RK2G J 1 A_WeaponOffset( 0.0,  0.0 + 32)
-		RK2G K 1 A_CheckReload
-		RK2G LMNOP 1 
-		RK2G Q 1 A_WeaponOffset(-0.25, 0.25+ 32)
-		RK2G R 1 A_WeaponOffset(-0.5,  0.5 + 32)
-		RK2G S 1 A_WeaponOffset(-1.5,  1.5 + 32)
-		RK2G T 1 A_WeaponOffset(-2.5,  2.5 + 32)
-		RK2G U 1 A_WeaponOffset(-3.5,  3.5 + 32)
-		RK2G V 1 A_WeaponOffset(-4.0,  4.0 + 32)
-		RK2G W 1 A_WeaponOffset(-3.5,  3.5 + 32)
-		RK2G X 1 A_WeaponOffset(-2.5,  2.5 + 32)
-		RK2G Y 1 A_WeaponOffset(-1.5,  1.5 + 32)
-		RK2G Z 1 A_WeaponOffset(-0.5,  0.5 + 32)
-		RK2G "[" 1 A_WeaponOffset( 0,  0.0 + 32)
-		RK2G A 0 A_Refire
-		Goto Ready
+		RK2G J 1 A_WeaponOffset( 0.0,  0.0 + 32);
+		RK2G K 1 A_CheckReload();
+		RK2G LMNOP 1;
+		RK2G Q 1 A_WeaponOffset(-0.25, 0.25+ 32);
+		RK2G R 1 A_WeaponOffset(-0.5,  0.5 + 32);
+		RK2G S 1 A_WeaponOffset(-1.5,  1.5 + 32);
+		RK2G T 1 A_WeaponOffset(-2.5,  2.5 + 32);
+		RK2G U 1 A_WeaponOffset(-3.5,  3.5 + 32);
+		RK2G V 1 A_WeaponOffset(-4.0,  4.0 + 32);
+		RK2G W 1 A_WeaponOffset(-3.5,  3.5 + 32);
+		RK2G X 1 A_WeaponOffset(-2.5,  2.5 + 32);
+		RK2G Y 1 A_WeaponOffset(-1.5,  1.5 + 32);
+		RK2G Z 1 A_WeaponOffset(-0.5,  0.5 + 32);
+		RK2G "[" 1 A_WeaponOffset( 0,  0.0 + 32);
+		RK2G A 0 A_Refire();
+		Goto Ready;
 	}
 }
 
-ACTOR ArgRocket : ArgRocketBase
+class ArgRocket : ArgRocketBase
 {
-	Radius 9
-	Damage 30
-	Speed 30
-	DamageType "ArgPlayerRocket"
-	Obituary "$ARG_OB_ROCKET"
+	Default
+	{
+		Radius 9;
+		Damage 30;
+		Speed 30;
+		DamageType "ArgPlayerRocket";
+		Obituary "$ARG_OB_ROCKET";
 	
-	+EXTREMEDEATH
+		+EXTREMEDEATH
+	}
 }
 
-ACTOR ArgRocketLockOn : ArgRocket
+class ArgRocketLockOn : ArgRocket
 {
-	+SEEKERMISSILE
-	var int user_playernum;
+	int user_playernum;
+	Default
+	{
+		+SEEKERMISSILE
+	}
 	States
 	{
 	Spawn:
 		MISL A 0 NoDelay {
-			A_SetUserVar("user_playernum", CallACS("GetPlayerNumber"));
-			ACS_NamedExecute("Mod2RocketLockFire", user_playernum);
+			ACS_NamedExecuteAlways("Mod2RocketLockFire", CallACS("GetPlayerNumber"));
 		}
 	Fly:
-		MISL A 1 Bright A_JumpIfTargetInLOS("Seek", 0, JLOSF_PROJECTILE)
-		Loop
+		MISL A 1 Bright A_JumpIfTargetInLOS("Seek", 0, JLOSF_PROJECTILE);
+		Loop;
 	Seek: 
-		MISL A 1 Bright A_SeekerMissile(5, 10)
-		Goto Fly
+		MISL A 1 Bright A_SeekerMissile(5, 10);
+		Goto Fly;
 	}
 }
 
-ACTOR ArgRocketDetonate : ArgRocket
+class ArgRocketDetonate : ArgRocket
 {
-	var int user_playernum;
+	int user_playernum;
 	States
 	{
 	Spawn:
 		MISL A 0 NoDelay {
-			A_SetUserVar("user_playernum", CallACS("GetPlayerNumber"));
+			user_playernum = CallACS("GetPlayerNumber");
 			ACS_NamedExecute("Mod1RocketFire", user_playernum);
 		}
-		Goto Super::Spawn
+		Goto Super::Spawn;
 	Detonate:
 		TNT1 A 0 Bright {
-			A_Stop;
+			A_Stop();
 			A_SetScale(1.0);
 			A_Explode(240, 192, 1, 0, 64);
 			A_PlaySound("weapons/rocket/explode", CHAN_VOICE);
 			ACS_NamedExecute("Mod1RocketExplode", user_playernum);
 			A_SpawnItemEx("ArgRocketSplosionWide", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION);
 		}
-		Stop
+		Stop;
 	Death:
 		TNT1 A 0 Bright {
 			A_SetScale(1.0);
@@ -346,32 +353,35 @@ ACTOR ArgRocketDetonate : ArgRocket
 			ACS_NamedExecute("Mod1RocketExplode", user_playernum);
 			A_SpawnItemEx("ArgRocketSplosion", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION);
 		}
-		Stop
+		Stop;
 	}
 }
 
-ACTOR ArgRocketSplosion : ArgRocket
+class ArgRocketSplosion : ArgRocket
 {
-	Skip_Super
-	+NOINTERACTION
+	Default
+	{
+		Skip_Super;
+		+NOINTERACTION
+	}
 	States
 	{
 	Spawn:
-		REXP A 4 Bright
-		Goto Super::Boom
+		REXP A 4 Bright;
+		Goto Super::Boom;
 	}
 }
 
-ACTOR ArgRocketSplosionWide : ArgRocketSplosion
+class ArgRocketSplosionWide : ArgRocketSplosion
 {
 	States
 	{
 	Spawn:
-		REXP A 4 Bright
+		REXP A 4 Bright;
 		REXP C 3 Bright { A_SetScale(1.2, 1.0); A_SetTranslucent(0.7); }
 		REXP D 2 Bright { A_SetScale(1.4, 1.0); A_SetTranslucent(0.6); }
 		REXP E 2 Bright { A_SetScale(1.5, 1.0); A_SetTranslucent(0.5); }
 		REXP F 2 Bright { A_SetScale(1.6, 1.0); A_SetTranslucent(0.4); }
-		Stop
+		Stop;
 	}
 }
