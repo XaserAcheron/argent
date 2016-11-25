@@ -3,6 +3,10 @@ zscript/argent/player.txt
 zscript/argent/misc.txt
 zscript/argent/enemies.txt
 
+zscript/argent/items/health.txt
+zscript/argent/items/armor.txt
+zscript/argent/items/keys.txt
+
 zscript/argent/effects/puffs.txt
 zscript/argent/effects/blood.txt
 zscript/argent/effects/gibs.txt

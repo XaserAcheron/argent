@@ -1,6 +1,3 @@
-#include "actors/items/health.txt"
-#include "actors/items/armor.txt"
-#include "actors/items/keys.txt"
 #include "actors/items/ammo.txt"
 #include "actors/items/powerups.txt"
 #include "actors/items/modkit.txt"
