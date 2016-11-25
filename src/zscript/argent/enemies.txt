@@ -4,529 +4,570 @@
 //
 // --------------------------------------------------------------------------
 
-ACTOR ArgZombieman : Zombieman replaces Zombieman
+class ArgZombieman : Zombieman replaces Zombieman
 {
 	States
 	{
 	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath")
-		Goto Super::Death
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
 	XDeath:
-		POSS M 3
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		POSS M 3;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		POSS N 3 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		POSS O 3 A_NoBlocking
-		POSS PQRST 3
+		POSS N 3 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		POSS O 3 A_NoBlocking;
+		POSS PQRST 3;
 	Dead:
-		POSS U -1
-		Stop
+		POSS U -1;
+		Stop;
 	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
 	}
 }
 
-ACTOR ArgShotgunGuy : ShotgunGuy replaces ShotgunGuy
+class ArgShotgunGuy : ShotgunGuy replaces ShotgunGuy
 {
 	States
 	{
 	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath")
-		Goto Super::Death
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
 	XDeath:
-		SPOS M 3
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		SPOS M 3;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		SPOS N 3 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		SPOS O 3 A_NoBlocking
-		SPOS PQRST 3
+		SPOS N 3 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		SPOS O 3 A_NoBlocking;
+		SPOS PQRST 3;
 	Dead:
-		SPOS U -1
-		Stop
+		SPOS U -1;
+		Stop;
 	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
 	}
 }
 
-ACTOR ArgChaingunGuy : ChaingunGuy replaces ChaingunGuy
+class ArgChaingunGuy : ChaingunGuy replaces ChaingunGuy
 {
 	States
 	{
 	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath")
-		Goto Super::Death
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
 	XDeath:
-		CPOS O 3 
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		CPOS O 3 ;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		CPOS P 3 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		CPOS Q 3 A_NoBlocking
-		CPOS RS 3
+		CPOS P 3 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		CPOS Q 3 A_NoBlocking;
+		CPOS RS 3;
 	Dead:
-		CPOS T -1
-		Stop
+		CPOS T -1;
+		Stop;
 	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
 	}
 }
 
-ACTOR ArgImp : DoomImp replaces DoomImp
+class ArgImp : DoomImp replaces DoomImp
 {
 	States
 	{
 	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath")
-		Goto Super::Death
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
 	XDeath:
-		TROO N 3
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		TROO N 3;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		TROO O 3 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		TROO P 3
-		TROO Q 3 A_NoBlocking
-		TROO RST 3
+		TROO O 3 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		TROO P 3;
+		TROO Q 3 A_NoBlocking;
+		TROO RST 3;
 	Dead:
-		TROO U -1
-		Stop
+		TROO U -1;
+		Stop;
 	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
 	}
 }
 
-ACTOR ArgDemon : Demon replaces Demon
+class ArgDemon : Demon replaces Demon
 {
-	Stamina 4 // mock "stun seconds" property. :P
+	Default
+	{
+		Stamina 4; // mock "stun seconds" property. :P
+	}
 	States
 	{
 	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath")
-		Goto Super::Death
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
 	XDeath:
-		SARG O 3
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#######" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		SARG O 3;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#######" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		SARG P 3 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "###" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		"####" "#" 3 A_NoBlocking
-		SARG QRSTUV 3
+		SARG P 3 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "###" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		"####" "#" 3 A_NoBlocking;
+		SARG QRSTUV 3;
 	Dead:
-		SARG W -1
-		Stop
+		SARG W -1;
+		Stop;
 	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
 	}
 }
 
-ACTOR ArgSpectre : ArgDemon replaces Spectre
+class ArgSpectre : ArgDemon replaces Spectre
 {
-	SpawnID 9
-	+SHADOW
-	RenderStyle OptFuzzy
-	Alpha 0.5
-	SeeSound "spectre/sight"
-	AttackSound "spectre/melee"
-	PainSound "spectre/pain"
-	DeathSound "spectre/death"
-	ActiveSound "spectre/active"
-	HitObituary "$OB_SPECTREHIT"
-}
-
-ACTOR ArgSoul : LostSoul replaces LostSoul
-{
-	Stamina 4
-	States
+	Default
 	{
-	Death:
-	XDeath:
-		SKUL F 3 BRIGHT
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),16+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		SKUL G 3 BRIGHT A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),16+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		"####" "#" 3 A_NoBlocking
-		SKUL H 3 BRIGHT
-		SKUL I 3 BRIGHT A_NoBlocking
-		SKUL J 3
-	Dead:
-		SKUL K 3
-		Stop
-	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		Alpha 0.5;
+		RenderStyle 'OptFuzzy';
+		SeeSound "spectre/sight";
+		AttackSound "spectre/melee";
+		PainSound "spectre/pain";
+		DeathSound "spectre/death";
+		ActiveSound "spectre/active";
+		HitObituary "$OB_SPECTREHIT";
+
+		+SHADOW
 	}
 }
 
-ACTOR ArgCaco : Cacodemon replaces Cacodemon
+class ArgSoul : LostSoul replaces LostSoul
 {
-	Stamina 4
-	Bloodcolor "Blue"
-	States
+	Default
 	{
-	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath")
-		Goto Super::Death
-	XDeath:
-		HEAD M 3 A_NoGravity
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, SXF_USEBLOODCOLOR,0)
-		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		HEAD N 3 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-4,4),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, SXF_USEBLOODCOLOR,0)
-		"####" "#" 3 A_NoBlocking
-		HEAD OP 3
-		HEAD Q 2 A_Gravity
-		HEAD RSTUVW 2
-		HEAD X 0 A_PlaySound("effects/gore")
-	Dead:
-		HEAD X -1
-		Stop
-	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		Stamina 4;
 	}
-}
-
-ACTOR ArgKnight : HellKnight replaces HellKnight
-{
-	Stamina 4
-	Bloodcolor "00 A0 00"
-	States
-	{
-	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath")
-		Goto Super::Death
-	XDeath:
-		BOS2 P 3
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, SXF_USEBLOODCOLOR,0)
-		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		BOS2 Q 3 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, SXF_USEBLOODCOLOR,0)
-		"####" "#" 3 A_NoBlocking
-		BOS2 RSTU 3
-	Dead:
-		BOS2 V -1
-		Stop
-	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
-	}
-}
-
-ACTOR ArgBaron : BaronOfHell replaces BaronOfHell
-{
-	Stamina 3
-	Bloodcolor "00 A0 00"
-	States
-	{
-	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath")
-		Goto Super::Death
-	XDeath:
-		BOSS P 3
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, SXF_USEBLOODCOLOR,0)
-		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		BOSS Q 3 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, SXF_USEBLOODCOLOR,0)
-		"####" "#" 3 A_NoBlocking
-		BOSS RSTU 3
-	Dead:
-		BOSS V -1 A_BossDeath
-		Stop
-	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
-	}
-}
-
-ACTOR ArgRevenant : Revenant replaces Revenant
-{
-	Stamina 4
-	States
-	{
-	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath")
-		Goto Super::Death
-	XDeath:
-		SKEL R 3
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		SKEL S 3 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		SKEL T 3
-		SKEL U 3 A_NoBlocking
-		SKEL VWX 3
-	Dead:
-		SKEL Y -1
-		Stop
-	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
-	}
-}
-
-ACTOR ArgMancubus : Fatso replaces Fatso
-{
-	Stamina 3
-	States
-	{
-	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath")
-		Goto Super::Death
-	XDeath:
-		FATG A 3
-		FATG B 3 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
-		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		FATG C 3
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		FATG E 3
-		FATG F 3 A_NoBlocking
-		FATG GHI 3
-	Dead:
-		FATG J -1 A_BossDeath
-		Stop
-	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
-	}
-}
-
-ACTOR ArgArachnotron : Arachnotron replaces Arachnotron
-{
-	Stamina 3
 	States
 	{
 	Death:
 	XDeath:
-		BSPI J 20 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		SKUL F 3 BRIGHT;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),16+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		BSPI K 4
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		BSPI L 4
-		BSPI M 4 A_NoBlocking
-		BSPI NO 4
+		SKUL G 3 BRIGHT A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),16+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		"####" "#" 3 A_NoBlocking;
+		SKUL H 3 BRIGHT;
+		SKUL I 3 BRIGHT A_NoBlocking;
+		SKUL J 3;
 	Dead:
-		BSPI P -1 A_BossDeath
-		Stop
+		SKUL K 3;
+		Stop;
 	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
 	}
 }
 
-ACTOR ArgElemental : PainElemental replaces PainElemental
+class ArgCaco : Cacodemon replaces Cacodemon
 {
-	Stamina 4
+	Default
+	{
+		Stamina 4;
+		Bloodcolor "Blue";
+	}
+	States
+	{
+	Death:
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
+	XDeath:
+		HEAD M 3 A_NoGravity;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, SXF_USEBLOODCOLOR,0);
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
+		HEAD N 3 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-4,4),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, SXF_USEBLOODCOLOR,0);
+		"####" "#" 3 A_NoBlocking;
+		HEAD OP 3;
+		HEAD Q 2 A_Gravity;
+		HEAD RSTUVW 2;
+		HEAD X 0 A_PlaySound("effects/gore");
+	Dead:
+		HEAD X -1;
+		Stop;
+	Death.Massacre:
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
+	}
+}
+
+class ArgKnight : HellKnight replaces HellKnight
+{
+	Default
+	{
+		Stamina 4;
+		Bloodcolor "00 A0 00";
+	}
+	States
+	{
+	Death:
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
+	XDeath:
+		BOS2 P 3;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, SXF_USEBLOODCOLOR,0);
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
+		BOS2 Q 3 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, SXF_USEBLOODCOLOR,0);
+		"####" "#" 3 A_NoBlocking;
+		BOS2 RSTU 3;
+	Dead:
+		BOS2 V -1;
+		Stop;
+	Death.Massacre:
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
+	}
+}
+
+class ArgBaron : BaronOfHell replaces BaronOfHell
+{
+	Default
+	{
+		Stamina 3;
+		Bloodcolor "00 A0 00";
+	}
+	States
+	{
+	Death:
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
+	XDeath:
+		BOSS P 3;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, SXF_USEBLOODCOLOR,0);
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
+		BOSS Q 3 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, SXF_USEBLOODCOLOR,0);
+		"####" "#" 3 A_NoBlocking;
+		BOSS RSTU 3;
+	Dead:
+		BOSS V -1 A_BossDeath;
+		Stop;
+	Death.Massacre:
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
+	}
+}
+
+class ArgRevenant : Revenant replaces Revenant
+{
+	Default
+	{
+		Stamina 4;
+	}
+	States
+	{
+	Death:
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
+	XDeath:
+		SKEL R 3;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
+		SKEL S 3 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		SKEL T 3;
+		SKEL U 3 A_NoBlocking;
+		SKEL VWX 3;
+	Dead:
+		SKEL Y -1;
+		Stop;
+	Death.Massacre:
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
+	}
+}
+
+class ArgMancubus : Fatso replaces Fatso
+{
+	Default
+	{
+		Stamina 3;
+	}
+	States
+	{
+	Death:
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
+	XDeath:
+		FATG A 3;
+		FATG B 3 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
+		FATG C 3;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		FATG E 3;
+		FATG F 3 A_NoBlocking;
+		FATG GHI 3;
+	Dead:
+		FATG J -1 A_BossDeath;
+		Stop;
+	Death.Massacre:
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
+	}
+}
+
+class ArgArachnotron : Arachnotron replaces Arachnotron
+{
+	Default
+	{
+		Stamina 3;
+	}
 	States
 	{
 	Death:
 	XDeath:
-		PAIN H 8 BRIGHT
-		PAIN I 8 BRIGHT A_Scream
-		PAIN JK 8 BRIGHT
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		BSPI J 20 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		PAIN L 8 BRIGHT A_PainDie
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-4,4),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		"####" "#" 3 A_NoBlocking
+		BSPI K 4;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		BSPI L 4;
+		BSPI M 4 A_NoBlocking;
+		BSPI NO 4;
 	Dead:
-		PAIN M 8 BRIGHT
-		Stop
+		BSPI P -1 A_BossDeath;
+		Stop;
 	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
 	}
 }
 
-ACTOR ArgVile : Archvile replaces Archvile
+class ArgElemental : PainElemental replaces PainElemental
 {
-	Stamina 3
+	Default
+	{
+		Stamina 4;
+	}
 	States
 	{
 	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath")
-		Goto Super::Death
 	XDeath:
-		VILG A 3
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		PAIN H 8 BRIGHT;
+		PAIN I 8 BRIGHT A_Scream;
+		PAIN JK 8 BRIGHT;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		VILG B 3 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		VILG C 3
-		VILG D 3 A_NoBlocking
-		VILG EFGH 3
+		PAIN L 8 BRIGHT A_PainDie;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-5,5),frandom(-5,5),32+frandom(-4,4),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		"####" "#" 3 A_NoBlocking;
 	Dead:
-		VILG I -1
-		Stop
+		PAIN M 8 BRIGHT;
+		Stop;
 	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
 	}
 }
 
-ACTOR ArgCyberDAMN : Cyberdemon replaces Cyberdemon
+class ArgVile : Archvile replaces Archvile
 {
-	Stamina 2
-	DropItem "ArgGaussCannon"
-	DamageFactor "ArgPlayerRocket", 0.66
-	DamageFactor "ArgCyberRocket" , 0.5
+	Default
+	{
+		Stamina 3;
+	}
+	States
+	{
+	Death:
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
+	XDeath:
+		VILG A 3;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),32+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
+		VILG B 3 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),32+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		VILG C 3;
+		VILG D 3 A_NoBlocking;
+		VILG EFGH 3;
+	Dead:
+		VILG I -1;
+		Stop;
+	Death.Massacre:
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
+	}
+}
+
+class ArgCyberDAMN : Cyberdemon replaces Cyberdemon
+{
+	Default
+	{
+		Stamina 2;
+		DropItem "ArgGaussCannon";
+		DamageFactor "ArgPlayerRocket", 0.66;
+		DamageFactor "ArgCyberRocket" , 0.5;
 	
-	-NORADIUSDMG
-	+DONTHARMSPECIES
+		-NORADIUSDMG;
+		+DONTHARMSPECIES;
+	}
 	
 	States
 	{
 	Pain:
-		CYBR G 5
-		CYBR G 5 A_Pain
-		Goto See
+		CYBR G 5;
+		CYBR G 5 A_Pain;
+		Goto See;
 	Death:
 	XDeath:
-		CYBR H 5
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "################" 0 A_SpawnItemEx("ArgGibSmall",frandom(-20,20),frandom(-20,20),64+frandom(-8,8),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		CYBR H 5;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "################" 0 A_SpawnItemEx("ArgGibSmall",frandom(-20,20),frandom(-20,20),64+frandom(-8,8),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		CYBR I 5 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-16,16),frandom(-16,16),64+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		CYBR JK 5
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "################" 0 A_SpawnItemEx("ArgGibSmall",frandom(-20,20),frandom(-20,20),64+frandom(-8,8),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		CYBR I 5 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-16,16),frandom(-16,16),64+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		CYBR JK 5;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "################" 0 A_SpawnItemEx("ArgGibSmall",frandom(-20,20),frandom(-20,20),64+frandom(-8,8),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		CYBR L 5
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-16,16),frandom(-16,16),64+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		CYBR M 5 A_NoBlocking
-		CYBR NO 5
-		CYBR P 30
+		CYBR L 5;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-16,16),frandom(-16,16),64+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		CYBR M 5 A_NoBlocking;
+		CYBR NO 5;
+		CYBR P 30;
 	Dead:
-		CYBR P -1 A_BossDeath
-		Stop
+		CYBR P -1 A_BossDeath;
+		Stop;
 	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
 	}
 }
 
-ACTOR ArgGoddamnCyberdemonRocket : ArgRocketBase replaces Rocket
+class ArgGoddamnCyberdemonRocket : ArgRocketBase replaces Rocket
 {
-	DamageType "ArgCyberRocket"
-	SeeSound "enemies/cyberdemon/attack"
-	Damage 20
-	Speed 20
+	Default
+	{
+		DamageType "ArgCyberRocket";
+		SeeSound "enemies/cyberdemon/attack";
+		Damage 20;
+		Speed 20;
+	}
 	States
 	{
 	Spawn:
-		MISL A 1 Bright
-		Loop
+		MISL A 1 Bright;
+		Loop;
 	Death:
 		REXP A 4 Bright {
 			A_SetScale(1.0);
 			A_Explode(128, 128, 0); // cybie self-immunity
 		}
-		Goto Boom
+		Goto Boom;
 	}
 }
 
-ACTOR ArgSPIDARS_AAAH_KILL_IT_WITH_FIRE : SpiderMastermind replaces SpiderMastermind
+class ArgSPIDARS_AAAH_KILL_IT_WITH_FIRE : SpiderMastermind replaces SpiderMastermind
 {
-	Stamina 2
-	DropItem "ArgChaingun"
-	DamageFactor "ArgPlayerRocket", 0.66
-	DamageFactor "ArgCyberRocket" , 0.5
+	Default
+	{
+		Stamina 2;
+		DropItem "ArgChaingun";
+		DamageFactor "ArgPlayerRocket", 0.66;
+		DamageFactor "ArgCyberRocket" , 0.5;
 	
-	-NORADIUSDMG
-	
+		-NORADIUSDMG
+	}
 	States
 	{
 	Death:
 	XDeath:
-		SPID J 20 A_Scream
-		SPID K 5 A_NoBlocking
-		SPID LM 5
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "################" 0 A_SpawnItemEx("ArgGibSmall",frandom(-48,48),frandom(-48,48),32+frandom(-8,8),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		SPID J 20 A_Scream;
+		SPID K 5 A_NoBlocking;
+		SPID LM 5;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "################" 0 A_SpawnItemEx("ArgGibSmall",frandom(-48,48),frandom(-48,48),32+frandom(-8,8),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		SPID N 5
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-32,32),frandom(-32,32),32+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		SPID O 5
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "################" 0 A_SpawnItemEx("ArgGibSmall",frandom(-48,48),frandom(-48,48),32+frandom(-8,8),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		SPID N 5;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-32,32),frandom(-32,32),32+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		SPID O 5;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "################" 0 A_SpawnItemEx("ArgGibSmall",frandom(-48,48),frandom(-48,48),32+frandom(-8,8),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		SPID P 5
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-32,32),frandom(-32,32),32+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		SPID QR 5
-		SPID S 30
+		SPID P 5;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "##########" 0 A_SpawnItemEx("ArgGibLarge",frandom(-32,32),frandom(-32,32),32+frandom(-16,16),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		SPID QR 5;
+		SPID S 30;
 	Dead:
-		SPID S -1 A_BossDeath    
-		Stop
+		SPID S -1 A_BossDeath;
+		Stop;
 	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
 	}
 }
 
-ACTOR ArgNazi : WolfensteinSS replaces WolfensteinSS
+class ArgNazi : WolfensteinSS replaces WolfensteinSS
 {
 	States
 	{
 	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath")
-		Goto Super::Death
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
 	XDeath:
-		SSWV N 3 
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0)
+		SSWV N 3;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
 		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		SSWV O 3 A_Scream
-		"####" "#" 0 A_Jump(256,1,2,3)
-		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0)
-		SSWV P 3 A_NoBlocking
-		SSWV QRSTU 3
+		SSWV O 3 A_Scream;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		SSWV P 3 A_NoBlocking;
+		SSWV QRSTU 3;
 	Dead:
-		SSWV V -1
-		Stop
+		SSWV V -1;
+		Stop;
 	Death.Massacre:
-		"####" "#" 0 A_NoBlocking
-		Goto Dead
+		"####" "#" 0 A_NoBlocking;
+		Goto Dead;
 	}
 }
