@@ -239,4 +239,3 @@ class ArgSoulsphere : Soulsphere replaces Soulsphere
 
 class ArgAutomap  : Allmap   replaces Allmap   { Default { Inventory.PickupSound "items/automap"; } }
 class ArgRadsuit  : Radsuit  replaces Radsuit  { Default { Inventory.PickupSound "items/powerup"; } }
-class ArgBackpack : Backpack replaces Backpack { Default { Inventory.PickupSound "items/ammo"   ; } }
