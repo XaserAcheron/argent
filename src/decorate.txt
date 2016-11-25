@@ -1,4 +1,3 @@
-#include "actors/items/ammo.txt"
 #include "actors/items/powerups.txt"
 #include "actors/items/modkit.txt"
 
