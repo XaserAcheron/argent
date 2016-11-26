@@ -4,22 +4,69 @@
 //
 // --------------------------------------------------------------------------
 
+// [TODO] move these into a common space and apply to all monsters (and the
+//        player) once possible. Just doing this for prototyping at present.
+
+enum Arg_TossGibsFlags
+{
+	ARG_TG_FALL  = 1, // Call A_NoBlocking after tossing gibs.
+	ARG_TG_SOUND = 2, // Play gibbing sound effect after tossing gibs.
+};
+
 class ArgZombieman : Zombieman replaces Zombieman
 {
+	/*
+	 * Convenience function; jumps to XDeath if the Always Gib cvar is set.
+	 */
+	action state Arg_GibCheck()
+	{
+		return GetCvar("arg_alwaysgib") ? ResolveState("XDeath") : ResolveState(null);
+	}
+
+	/*
+	 * Gib tossing action. Throws up to 'count' actors of 'type' from the calling
+	 * actor using the specified height/speed values (varied a bit for random's sake).
+	 * Includes a couple of convenience flags to chain additional actions.
+	 */
+	action void Arg_TossGibs(class<Actor> type, int count, int flags, double spawndist, double spawnheight, double xspeed, double yspeed)
+	{
+		// Randomly subtract 1 or 2 from the count to vary the number of gibs a bit.
+		count = count - random(0, 2);
+		
+		for(int i = 0; i < count; i++) {
+			A_SpawnItemEx(type
+			,	frandom(-spawndist, spawndist)
+			,	frandom(-spawndist, spawndist)
+			,	spawnheight + frandom(-2, 2)
+			,	xspeed * frandom(-1.0, 1.0)
+			,	xspeed * frandom(-1.0, 1.0)
+			,	yspeed * frandom( 0.5, 1.5)
+			,	0
+			,	0
+			,	0
+			);
+		}
+		
+		// Do optional flaggy stuff.
+		if(flags & ARG_TG_FALL) {
+			A_NoBlocking();
+		}
+		if (flags & ARG_TG_SOUND) {
+			 A_PlaySound("effects/splat", CHAN_AUTO);
+			 A_PlaySound("effects/gibs", CHAN_AUTO);
+			 A_Scream();
+		}
+	}
+
 	States
 	{
 	Death:
-		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		"####" "#" 0 Arg_GibCheck();
 		Goto Super::Death;
 	XDeath:
 		POSS M 3;
-		"####" "#" 0 A_Jump(256,1,2,3);
-		"####" "#####" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
-		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
-		POSS N 3 A_Scream;
-		"####" "#" 0 A_Jump(256,1,2,3);
-		"####" "##" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
-		POSS O 3 A_NoBlocking;
+		POSS N 3 Arg_TossGibs('ArgGibSmall', 5, ARG_TG_SOUND, 10, 24, 3, 5);
+		POSS O 3 Arg_TossGibs('ArgGibLarge', 2, ARG_TG_FALL ,  2, 24, 2, 3);
 		POSS PQRST 3;
 	Dead:
 		POSS U -1;
@@ -29,6 +76,9 @@ class ArgZombieman : Zombieman replaces Zombieman
 		Goto Dead;
 	}
 }
+
+// [XA] I'll apply the handy gib functions to all the other actors
+//      once it's possible to export them Actor or a global space.
 
 class ArgShotgunGuy : ShotgunGuy replaces ShotgunGuy
 {
