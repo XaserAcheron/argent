@@ -72,34 +72,25 @@ class ArgPistol : ArgWeapon replaces Pistol
 		PISA B 1   Arg_A_WeaponOffset(-18.0, -0.5);
 	AltHold:
 		PISA A 1 {
+			invoker.charge++;
 			if(invoker.charge < PISTOL_MAX_CHARGE) {
-				invoker.charge++;
 				Arg_A_WeaponOffset(-20, -2, invoker.charge * -0.025);
-				return ResolveState(null);
 			} else {
 				Arg_A_WeaponOffset(-20, -2, 0.25);
-				return ResolveState("AltHoldChargeSound");
 			}
-		}
-		PISA A 0 Arg_A_SynthFire("AltShoopDaWoop");
-		PISA A 0 A_Refire();
-		Goto AltDown;
-	AltHoldChargeSound:
-		PISA A 0 {
 			if(invoker.charge == (PISTOL_MAX_CHARGE + PISTOL_SND_CHARGE)) {
 				A_PlaySound("weapons/pistol/hum", CHAN_WEAPON, 1.0, true);
 			}
-			invoker.charge++;
+			return Arg_A_SynthFire("AltShoopDaWoop");
 		}
-	AltHoldCharged:
-		PISA A 1 Arg_A_SynthFire("AltShoopDaWoop");
+//		PISA A 1 Arg_A_SynthFire("AltShoopDaWoop");
 		PISA A 0 A_Refire();
 		Goto AltDown;
 	AltShoopDaWoop:
 		PISB A 1 Bright {
 			A_GunFlash();
 			A_AlertMonsters();
-			A_FireBullets(1.5, 1, 1, 2*invoker.charge, "ArgPistolPuff", FBF_NORANDOM);
+			A_FireBullets(1.5, 1, 1, 2*min(invoker.charge, PISTOL_MAX_CHARGE), "ArgPistolPuff", FBF_NORANDOM);
 			A_PlaySound("weapons/pistol/altfire", CHAN_7);
 			A_StopSound(CHAN_WEAPON);
 		}
