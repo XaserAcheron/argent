@@ -40,9 +40,6 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 	Mod0Select:
 		SHTG A 0;
 		Goto SelectLoop;
-	Mod0Swap:
-		SH0G A 0;
-		Goto ModSwapUp;
 	Mod0Ready:
 		SHTG A 0;
 		Goto ReadyLoop;

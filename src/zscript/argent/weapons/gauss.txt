@@ -56,9 +56,6 @@ class ArgGaussCannon : ArgModWeapon
 	Mod0Select:
 		GAUG A 0;
 		Goto SelectLoop;
-	Mod0Swap:
-		GAUG A 0;
-		Goto ModSwapUp;
 	Mod0Ready:
 		GAUG FFFFFFFFEEDDCCBBAABBCCDDEE 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;

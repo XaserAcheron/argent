@@ -46,9 +46,6 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 	Mod0Select:
 		HARG A 0;
 		Goto SelectLoop;
-	Mod0Swap:
-		HA0G A 0;
-		Goto ModSwapUp;
 	Mod0Ready:
 		HARG A 0;
 		Goto ReadyLoop;
@@ -81,6 +78,9 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 	Mod1Select:
 		HA1G A 0;
 		Goto SelectLoop;
+	Mod1Raise:
+		HA0G A 0;
+		Goto ModSwapUp;
 	Mod1Swap:
 		HA1S A 1 A_PlaySound("weapons/heavy/mod1swap", CHAN_AUTO);
 		HA1S BCD 1;
@@ -186,6 +186,9 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 	Mod2Select:
 		HA2G A 0;
 		Goto SelectLoop;
+	Mod2Raise:
+		HA0G A 0;
+		Goto ModSwapUp;
 	Mod2Swap:
 		HA0G A 1 A_PlaySound("weapons/heavy/mod2swap", CHAN_AUTO);
 		HA2S ABCD 1;

@@ -48,9 +48,6 @@ class ArgChaingun : ArgModWeapon
 	Mod0Select:
 		CHGG A 0;
 		Goto SelectLoop;
-	Mod0Swap:
-		CHGG A 0;
-		Goto ModSwapUp;
 	Mod0Ready:
 		CHGG A 0;
 		Goto ReadyLoop;

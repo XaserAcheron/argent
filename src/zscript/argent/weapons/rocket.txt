@@ -46,9 +46,6 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	Mod0Select:
 		RKLG A 0;
 		Goto SelectLoop;
-	Mod0Swap:
-		RKLG A 0;
-		Goto ModSwapUp;
 	Mod0Ready:
 		RKLG A 0;
 		Goto ReadyLoop;

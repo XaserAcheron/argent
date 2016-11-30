@@ -156,8 +156,6 @@ class ArgModWeapon : ArgWeapon
 		}
 	Mod1Raise:
 	Mod2Raise:
-		"####" "#" 0 ResolveState("Mod0Swap"); // legacy; may remove
-	Mod0Swap:
 	ModSwapUp:
 		// raise the weapon & start the swap animation
 		"####" "########" 1 A_WeaponOffset(0.0,-12.0, WOF_KEEPX | WOF_ADD);
