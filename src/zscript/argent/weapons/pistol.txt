@@ -83,7 +83,6 @@ class ArgPistol : ArgWeapon replaces Pistol
 			}
 			return Arg_A_SynthFire("AltShoopDaWoop");
 		}
-//		PISA A 1 Arg_A_SynthFire("AltShoopDaWoop");
 		PISA A 0 A_Refire();
 		Goto AltDown;
 	AltShoopDaWoop:
