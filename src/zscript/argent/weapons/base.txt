@@ -11,6 +11,8 @@
  */
 class ArgWeapon : DoomWeapon
 {
+	bool altSound;
+	
 	Default
 	{
 		Inventory.PickupSound "items/weapon";
@@ -55,6 +57,37 @@ class ArgWeapon : DoomWeapon
 	action void Arg_A_Raise() {
 		A_Raise();
 		A_Raise();
+	}
+	
+	/*
+	 * A_GunFlash extension, wrapping a whole bunch of cool
+	 * common stuff, like A_WeaponReady, A_PlaySound, and the like.
+	 */
+	enum Arg_A_GunFlashFlags {
+		ARG_GF_NOALERT  = 1, // Don't call A_AlertMonsters.
+		ARG_GF_ALTSOUND = 2, // Alternate firing sound between channels 5 and 6
+		ARG_GF_BOB      = 4, // Continue bobbing when firing (i.e. call A_WeaponReady)
+	}
+	action void Arg_A_GunFlash(statelabel flashstate = null, sound flashsound = "", int flags = 0, double recoil = 0) {
+		A_GunFlash(flashstate);
+		
+		if(!(flags & ARG_GF_NOALERT)) {
+			A_AlertMonsters();
+		}
+		if(flashsound != "") {
+			if(flags & ARG_GF_ALTSOUND) {
+				A_PlaySound(flashsound, invoker.altSound ? CHAN_6 : CHAN_5);
+				invoker.altSound = !invoker.altSound;
+			} else {
+				A_PlaySound(flashsound, CHAN_5);
+			}
+		}
+		if(flags & ARG_GF_BOB) {
+			A_WeaponReady(WRF_NOFIRE | WRF_NOFIRE);
+		}
+		if(recoil > 0) {
+			A_Recoil(recoil);
+		}
 	}
 	
 	/*
