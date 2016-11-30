@@ -74,6 +74,16 @@ class ArgWeapon : DoomWeapon
 	action state Arg_A_SynthAltFire(statelabel label) {
 		return Arg_SynthAltFire() ? ResolveState(label) : ResolveState(null);
 	}
+	
+	/*
+	 * Weapon Offset function alias. This does two things mainly:
+	 * - adjusts 'y' by 32 so that (0,0) is actually the origin, and
+	 * - adds a convenient parameter for random jitter, as that's common.
+	 */
+	action void Arg_A_WeaponOffset(double x, double y, double j = 0, double k = 0) {
+		k = (k == 0) ? j : k; // means you can't do x-only jitter, but meh
+		A_WeaponOffset(x + frandom(-j, j), 32.0 + y + frandom(-k, k));
+	}
 }
 
 /*
