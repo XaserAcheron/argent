@@ -91,6 +91,23 @@ class ArgWeapon : DoomWeapon
 	}
 	
 	/*
+	 * Convenient ammo-taker function. Since ARGENT weapons only use a single
+	 * ammo type, just subtract a bit from AmmoType1. Easy-peasy.
+	 */
+	action void Arg_A_TakeAmmo(int amount = 1)
+	{
+		A_TakeInventory(invoker.AmmoType1, amount, TIF_NOTAKEINFINITE);
+	}
+	
+	/*
+	 * A certain function that would've been nice to have built-in for ages. ;)
+	 */
+	action state Arg_A_JumpIfNoAmmo(statelabel state = 'Ready', int amount = 1)
+	{
+		return (CountInv(invoker.AmmoType1) < amount) ? ResolveState(state) : ResolveState(null);
+	}
+	
+	/*
 	 * Synth-fire convenience functions. Comes in both
 	 * check and jump variants. Note that the 'checks' need to be labeled
 	 * with "action" even though they kinda aren't; funky compat stuff.
@@ -117,6 +134,14 @@ class ArgWeapon : DoomWeapon
 		k = (k == 0) ? j : k; // means you can't do x-only jitter, but meh
 		A_WeaponOffset(x + frandom(-j, j), 32.0 + y + frandom(-k, k));
 	}
+}
+
+/*
+ * Cool Mod struct, containing info representing a weapon mod. Is cool.
+ */
+struct ArgMod
+{
+	// [TODO] make this cool. :(
 }
 
 /*
