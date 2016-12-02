@@ -33,7 +33,7 @@ class ArgPistol : ArgWeapon replaces Pistol
 		PISG A 1 A_WeaponReady;
 		Loop;
 	Select:
-		PISG A 0 Arg_A_PistolReset();
+		PISG A 0 Arg_A_PistolReset(false);
 		Goto SelectLoop;
 	Deselect:
 		PISG A 0 Arg_A_PistolReset();
@@ -126,8 +126,10 @@ class ArgPistol : ArgWeapon replaces Pistol
 	/*
 	 * Resets pistol charge state.
 	 */
-	action void Arg_A_PistolReset() {
-		A_StopSound(CHAN_WEAPON);
+	action void Arg_A_PistolReset(bool stopSound = true) {
+		if(stopSound) {
+			A_StopSound(CHAN_WEAPON);
+		}
 		A_ClearRefire();
 		invoker.charge = 0;
 	}
