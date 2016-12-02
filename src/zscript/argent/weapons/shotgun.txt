@@ -11,9 +11,15 @@ class ArgShotgunModCooldown : ArgToken    { Default { Inventory.MaxAmount 90; } 
 
 class ArgShotgun : ArgModWeapon replaces Shotgun
 {
-	const SHOTGUN_MOD1_AMMOUSE = 3;
-	const SHOTGUN_MOD2_AMMOUSE = 2;
-	const SHOTGUN_MOD_COOLDOWN = 90;
+	override void BeginPlay()
+	{
+		mod1.ammoUse  =  3;
+		mod1.cooldown = 90;
+
+		mod2.ammoUse  =  2;
+		mod2.cooldown = 90;
+	}
+	
 	Default
 	{
 		Weapon.SelectionOrder 6;
@@ -121,7 +127,7 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 		SH1G A 0;
 		Goto ReadyLoop;
 	Mod1Up:
-		SH1G A 0 Arg_A_JumpIfNoAmmo('Ready', SHOTGUN_MOD1_AMMOUSE);
+		SH1G A 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod1.ammoUse);
 		SH1G A 1 {
 			A_PlaySound("weapons/shotgun/mod1up", CHAN_AUTO);
 			A_WeaponOffset(-2.0, 32.0);
@@ -146,7 +152,7 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 			Arg_A_GunFlash('Flash', "weapons/shotgun/mod1fire");
 			Arg_A_TakeAmmo();
 			A_FireBullets(2.5, 1, 7, 5, "ArgBulletPuff");
-			A_GiveInventory("ArgShotgunModCooldown", SHOTGUN_MOD_COOLDOWN);
+			A_GiveInventory("ArgShotgunModCooldown", invoker.mod1.cooldown);
 		}
 		SH1N B 1 Arg_A_WeaponOffset(8.0, 4.0);
 		SH1N C 1 Arg_A_WeaponOffset(4.0, 2.0);
@@ -212,7 +218,7 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 		SH2G A 0;
 		Goto ReadyLoop;
 	Mod2Up:
-		SH2G A 0 Arg_A_JumpIfNoAmmo('Ready', SHOTGUN_MOD2_AMMOUSE);
+		SH2G A 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod2.ammoUse);
 		SH2G A 1 {
 			A_PlaySound("weapons/shotgun/mod2up", CHAN_AUTO);
 			A_WeaponOffset(-2.0, 32.0);
@@ -234,9 +240,9 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 	Mod2Fire:
 		SH2N A 1 Bright {
 			Arg_A_GunFlash('Flash', "weapons/shotgun/mod2fire");
-			Arg_A_TakeAmmo(SHOTGUN_MOD2_AMMOUSE);
+			Arg_A_TakeAmmo(invoker.mod2.ammoUse);
 			A_FireCustomMissile("ArgShotgunExplosiveShot", 0, 0, 4,-4, FPF_AIMATANGLE , 5);
-			A_GiveInventory("ArgShotgunModCooldown", SHOTGUN_MOD_COOLDOWN);
+			A_GiveInventory("ArgShotgunModCooldown", invoker.mod2.cooldown);
 		}
 		SH2M B 1 Bright Arg_A_WeaponOffset(4.0, 34.0);
 		// technically copypasta'd pump sequence, but it's the easiest way

@@ -141,7 +141,11 @@ class ArgWeapon : DoomWeapon
  */
 struct ArgMod
 {
-	// [TODO] make this cool. :(
+	// [TODO] make this cooler. :(
+	bool enabled;
+	int ammoUse;
+	int cooldown;
+	int charge;
 }
 
 /*
@@ -154,6 +158,9 @@ struct ArgMod
  */
 class ArgModWeapon : ArgWeapon
 {
+	ArgMod mod1;
+	ArgMod mod2;
+
 	Default
 	{
 		+WEAPON.NOALERT
