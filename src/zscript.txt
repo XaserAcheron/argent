@@ -1,30 +1,30 @@
-zscript/argent/base.txt
-zscript/argent/player.txt
-zscript/argent/misc.txt
-zscript/argent/enemies.txt
+#include "zscript/argent/base.txt"
+#include "zscript/argent/player.txt"
+#include "zscript/argent/misc.txt"
+#include "zscript/argent/enemies.txt"
 
-zscript/argent/items/health.txt
-zscript/argent/items/armor.txt
-zscript/argent/items/keys.txt
-zscript/argent/items/ammo.txt
-zscript/argent/items/modkit.txt
+#include "zscript/argent/items/health.txt"
+#include "zscript/argent/items/armor.txt"
+#include "zscript/argent/items/keys.txt"
+#include "zscript/argent/items/ammo.txt"
+#include "zscript/argent/items/modkit.txt"
 
-zscript/argent/effects/puffs.txt
-zscript/argent/effects/blood.txt
-zscript/argent/effects/gibs.txt
-zscript/argent/effects/teleport.txt
+#include "zscript/argent/effects/puffs.txt"
+#include "zscript/argent/effects/blood.txt"
+#include "zscript/argent/effects/gibs.txt"
+#include "zscript/argent/effects/teleport.txt"
 
-zscript/argent/weapons/base.txt
-zscript/argent/weapons/fist.txt
-zscript/argent/weapons/chainsaw.txt
-zscript/argent/weapons/pistol.txt
-zscript/argent/weapons/shotgun.txt
-zscript/argent/weapons/ssg.txt
-zscript/argent/weapons/heavy.txt
-zscript/argent/weapons/chaingun.txt
-zscript/argent/weapons/rocket.txt
-zscript/argent/weapons/plasma.txt
-zscript/argent/weapons/gauss.txt
-zscript/argent/weapons/bfg.txt
+#include "zscript/argent/weapons/base.txt"
+#include "zscript/argent/weapons/fist.txt"
+#include "zscript/argent/weapons/chainsaw.txt"
+#include "zscript/argent/weapons/pistol.txt"
+#include "zscript/argent/weapons/shotgun.txt"
+#include "zscript/argent/weapons/ssg.txt"
+#include "zscript/argent/weapons/heavy.txt"
+#include "zscript/argent/weapons/chaingun.txt"
+#include "zscript/argent/weapons/rocket.txt"
+#include "zscript/argent/weapons/plasma.txt"
+#include "zscript/argent/weapons/gauss.txt"
+#include "zscript/argent/weapons/bfg.txt"
 
-zscript/argent/items/powerups.txt
+#include "zscript/argent/items/powerups.txt"
