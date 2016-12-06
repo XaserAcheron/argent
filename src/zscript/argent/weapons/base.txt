@@ -144,8 +144,8 @@ struct ArgMod
 	// [TODO] make this cooler. :(
 	bool enabled;
 	int ammoUse;
-	int cooldown;
-	int charge;
+	ArgCounter cooldown;
+	ArgCounter charge;
 }
 
 /*
@@ -226,7 +226,7 @@ class ArgModWeapon : ArgWeapon
 		// lower the weapon and jump to the raise animation
 		"####" "########" 1 A_WeaponOffset(0.0, 12.0, WOF_KEEPX | WOF_ADD);
 		"####" "#" 0 {
-			ACS_NamedExecuteAlways("ClearModCooldown");
+			Arg_A_ClearModCooldown();
 			return Arg_A_JumpMod("Mod1Raise", "Mod2Raise");
 		}
 	Mod1Raise:
@@ -269,9 +269,23 @@ class ArgModWeapon : ArgWeapon
 	Cooldown:
 		"####" "#" 0 {
 			A_ClearReFire();
-			ACS_NamedExecuteAlways("StartModCooldown");
+			Arg_A_StartModCooldown();
 		}
 		Goto Ready;
+	}
+	
+	/*
+	 * Overridden Tick function, for handiness's sake.
+	 */
+	override void Tick()
+	{
+		Super.Tick();
+		
+		// Subtract 1 from mod cooldown every tick, no matter
+		// what else happens. Huzzah!
+		ArgModWeapon this = ArgModWeapon(self);
+		this.mod1.cooldown.dec();
+		this.mod2.cooldown.dec();
 	}
 	
 	/*
@@ -283,8 +297,7 @@ class ArgModWeapon : ArgWeapon
 		
 		// Check to see if we have an active cooldown. If so and the
 		// checkCooldown flag is set, don't do any jumps.
-		// [TODO] make the logic a bit cleaner when I don't have to short-circuit ACS :P
-		bool coolDone = checkCooldown ? CallACS("CheckModCooldown") : true;
+		bool coolDone = checkCooldown ? Arg_A_CheckModCooldown() : true;
 		
 		// Jump to either the mod 1 or mod 2 state depending on which exists.
 		if(CallACS("ModSelected", 1) && coolDone) {
@@ -319,6 +332,47 @@ class ArgModWeapon : ArgWeapon
 		} else {
 			return ResolveState("DontSwap");
 		}
+	}
+	
+	/*
+	 * Start the cooldown cycle for the selected mod.
+	 */
+	action void Arg_A_StartModCooldown() {
+		ArgModWeapon this = ArgModWeapon(invoker);
+		// [TODO] do just the selected mod, not both.
+		this.mod1.cooldown.setMax();
+		this.mod2.cooldown.setMax();
+		
+		// [TODO] remove this ACS bit once all weapons are ported over.
+		CallACS("StartModCooldown");
+	}
+	
+	/*
+	 * Clear the cooldown cycle for the selected mod.
+	 * Generally done on weapon swap.
+	 */
+	action void Arg_A_ClearModCooldown() {
+		ArgModWeapon this = ArgModWeapon(invoker);
+		// [TODO] do just the selected mod, not both.
+		this.mod1.cooldown.setMin();
+		this.mod2.cooldown.setMin();
+		
+		// [TODO] remove this ACS bit once all weapons are ported over.
+		CallACS("ClearModCooldown");
+	}
+	
+	/*
+	 * Check to see if the current weapon is still
+	 * cooling down, for state jump purposes.
+	 */
+	action bool Arg_A_CheckModCooldown() {
+		ArgModWeapon this = ArgModWeapon(invoker);
+		// [TODO] do just the selected mod, not both.
+		// [TODO] remove this ACS bit once all weapons are ported over.
+		return CallACS("CheckModCooldown")
+		    && this.mod1.cooldown.get() == 0
+		    && this.mod2.cooldown.get() == 0
+		;
 	}
 }
 

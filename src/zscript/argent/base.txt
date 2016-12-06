@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------
 //
-// ARGENT: Basic Actors
+// ARGENT: Basic Actors & Stuff
 //
 // --------------------------------------------------------------------------
 
@@ -131,5 +131,65 @@ class ArgRocketTrail : ArgTrail
 	Spawn:
 		RTRL HHABCDEFG 1 Bright;
 		Stop;
+	}
+}
+
+/*
+ * Basic "counter" struct. Represents the concept of a number with a capped
+ * maximum; also includes a special "end" value that can be set higher than
+ * the max to allow for "over-max" -- this is often used in argent to control
+ * a looping sound after the charge has already hit its theoretical maximum.
+ */
+struct ArgCounter
+{
+	int val;
+	int max;
+	int over;
+	
+	void init(int v = 0, int m = 1, int o = 1)
+	{
+		self.val = v;
+		self.max = m;
+		self.over = self.clamp(m, o, o); // cow level confirmed
+	}
+	int get(bool over = false)
+	{
+		return over
+			? self.clamp(0, self.val, self.max)
+			: self.clamp(0, self.val, self.over)
+		;
+	}
+	void set(int v)
+	{
+		self.val = self.clamp(0, v, self.over);
+	}
+	void setMin()
+	{
+		self.val = 0;
+	}
+	void setMax()
+	{
+		self.val = self.max;
+	}
+	void setOver()
+	{
+		self.val = self.over;
+	}
+	void inc()
+	{
+		self.set(self.val + 1);
+	}
+	void dec()
+	{
+		self.set(self.val - 1);
+	}
+	int clamp(int l, int m, int h)
+	{
+		if(m < l) {
+			return l;
+		} else if (h < m) {
+			return h;
+		}
+		return m;
 	}
 }
