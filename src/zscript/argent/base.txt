@@ -163,15 +163,15 @@ struct ArgCounter
 	{
 		self.val = self.clamp(0, v, self.over);
 	}
-	void setMin()
+	void toMin()
 	{
 		self.val = 0;
 	}
-	void setMax()
+	void toMax()
 	{
 		self.val = self.max;
 	}
-	void setOver()
+	void toOver()
 	{
 		self.val = self.over;
 	}

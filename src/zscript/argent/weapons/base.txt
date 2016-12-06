@@ -283,7 +283,7 @@ class ArgModWeapon : ArgWeapon
 		
 		// Subtract 1 from mod cooldown every tick, no matter
 		// what else happens. Huzzah!
-		ArgModWeapon this = ArgModWeapon(self);
+		let this = ArgModWeapon(self);
 		this.mod1.cooldown.dec();
 		this.mod2.cooldown.dec();
 	}
@@ -338,10 +338,9 @@ class ArgModWeapon : ArgWeapon
 	 * Start the cooldown cycle for the selected mod.
 	 */
 	action void Arg_A_StartModCooldown() {
-		ArgModWeapon this = ArgModWeapon(invoker);
 		// [TODO] do just the selected mod, not both.
-		this.mod1.cooldown.setMax();
-		this.mod2.cooldown.setMax();
+		invoker.mod1.cooldown.toMax();
+		invoker.mod2.cooldown.toMax();
 		
 		// [TODO] remove this ACS bit once all weapons are ported over.
 		CallACS("StartModCooldown");
@@ -352,10 +351,9 @@ class ArgModWeapon : ArgWeapon
 	 * Generally done on weapon swap.
 	 */
 	action void Arg_A_ClearModCooldown() {
-		ArgModWeapon this = ArgModWeapon(invoker);
 		// [TODO] do just the selected mod, not both.
-		this.mod1.cooldown.setMin();
-		this.mod2.cooldown.setMin();
+		invoker.mod1.cooldown.toMin();
+		invoker.mod2.cooldown.toMin();
 		
 		// [TODO] remove this ACS bit once all weapons are ported over.
 		CallACS("ClearModCooldown");
@@ -366,12 +364,11 @@ class ArgModWeapon : ArgWeapon
 	 * cooling down, for state jump purposes.
 	 */
 	action bool Arg_A_CheckModCooldown() {
-		ArgModWeapon this = ArgModWeapon(invoker);
 		// [TODO] do just the selected mod, not both.
 		// [TODO] remove this ACS bit once all weapons are ported over.
 		return CallACS("CheckModCooldown")
-		    && this.mod1.cooldown.get() == 0
-		    && this.mod2.cooldown.get() == 0
+		    && invoker.mod1.cooldown.get() == 0
+		    && invoker.mod2.cooldown.get() == 0
 		;
 	}
 }

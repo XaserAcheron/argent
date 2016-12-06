@@ -7,12 +7,14 @@
 class ArgShotgunModSelected : ArgModToken {}
 class ArgShotgunMod1Enabled : ArgToken    {}
 class ArgShotgunMod2Enabled : ArgToken    {}
-class ArgShotgunModCooldown : ArgToken    { Default { Inventory.MaxAmount 90; } }
+class ArgShotgunModCooldown : ArgToken    {} // [TODO] remove
 
 class ArgShotgun : ArgModWeapon replaces Shotgun
 {
 	override void BeginPlay()
 	{
+		Super.BeginPlay();
+		
 		mod1.ammoUse = 3;
 		mod1.cooldown.init(0, 90);
 
@@ -55,6 +57,7 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 			A_FireBullets(5, 2, 7, 5, "ArgBulletPuff");
 		}
 		"####" C 1 Bright Arg_A_WeaponOffset(4.0, 2.0);
+	Mod0FireAnim:
 		"####" D 1 Arg_A_WeaponOffset( 8.0, 2.0);
 		"####" E 1 Arg_A_WeaponOffset(12.0, 2.0);
 		"####" F 1 Arg_A_WeaponOffset(16.0, 2.0);
@@ -152,7 +155,6 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 			Arg_A_GunFlash('Flash', "weapons/shotgun/mod1fire");
 			Arg_A_TakeAmmo();
 			A_FireBullets(2.5, 1, 7, 5, "ArgBulletPuff");
-//			A_GiveInventory("ArgShotgunModCooldown", invoker.mod1.cooldown.get()); // [TODO] remove
 		}
 		SH1N B 1 Arg_A_WeaponOffset(8.0, 4.0);
 		SH1N C 1 Arg_A_WeaponOffset(4.0, 2.0);
@@ -242,12 +244,12 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 			Arg_A_GunFlash('Flash', "weapons/shotgun/mod2fire");
 			Arg_A_TakeAmmo(invoker.mod2.ammoUse);
 			A_FireCustomMissile("ArgShotgunExplosiveShot", 0, 0, 4,-4, FPF_AIMATANGLE , 5);
-//			A_GiveInventory("ArgShotgunModCooldown", invoker.mod2.cooldown.get()); // [TODO] remove
 		}
 		SH2M B 1 Bright Arg_A_WeaponOffset(4.0, 34.0);
+		SH2G D 0;
+		Goto Mod0FireAnim;
 		// technically copypasta'd pump sequence, but it's the easiest way
 		// to avoid being able to trigger the cooldown script twice, so...
-		// [XA] heeey, I can remove this once overlay cooldowns are done! :D
 		SH2G D 1 Arg_A_WeaponOffset( 8.0, 2.0);
 		SH2G E 1 Arg_A_WeaponOffset(12.0, 2.0);
 		SH2G F 1 Arg_A_WeaponOffset(16.0, 2.0);
