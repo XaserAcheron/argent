@@ -6,10 +6,12 @@
 
 class ArgPistol : ArgWeapon replaces Pistol
 {	
-	int charge;
-
-	const PISTOL_MAX_CHARGE = 45;
-	const PISTOL_SND_CHARGE = 23;
+	ArgCounter charge;
+	
+	override void BeginPlay()
+	{
+		charge.init(0, 45, 68);
+	}
 
 	Default
 	{
@@ -102,13 +104,13 @@ class ArgPistol : ArgWeapon replaces Pistol
 	 * is pressed (via synthfire) and jumping to the shoot state if so.
 	 */
 	action state Arg_A_PistolCharge() {
-		invoker.charge++;
-		if(invoker.charge < PISTOL_MAX_CHARGE) {
-			Arg_A_WeaponOffset(-20, -2, invoker.charge * -0.025);
+		invoker.charge.inc();
+		if(!invoker.charge.isMax()) {
+			Arg_A_WeaponOffset(-20, -2, invoker.charge.val * -0.025);
 		} else {
 			Arg_A_WeaponOffset(-20, -2, 0.25);
 		}
-		if(invoker.charge == (PISTOL_MAX_CHARGE + PISTOL_SND_CHARGE)) {
+		if(invoker.charge.isOver()) {
 			A_PlaySound("weapons/pistol/hum", CHAN_WEAPON, 1.0, true);
 		}
 		return Arg_A_SynthFire("AltShoopDaWoop");
@@ -119,7 +121,7 @@ class ArgPistol : ArgWeapon replaces Pistol
 	 */
 	action void Arg_A_PistolAltFire() {
 		Arg_A_GunFlash('Flash', "weapons/pistol/altfire");
-		A_FireBullets(1.5, 1, 1, 2*min(invoker.charge, PISTOL_MAX_CHARGE), "ArgPistolPuff", FBF_NORANDOM);
+		A_FireBullets(1.5, 1, 1, 2*invoker.charge.get(), "ArgPistolPuff", FBF_NORANDOM);
 		A_StopSound(CHAN_WEAPON);
 	}
 	
@@ -131,7 +133,7 @@ class ArgPistol : ArgWeapon replaces Pistol
 			A_StopSound(CHAN_WEAPON);
 		}
 		A_ClearRefire();
-		invoker.charge = 0;
+		invoker.charge.toMin();
 	}
 }
 

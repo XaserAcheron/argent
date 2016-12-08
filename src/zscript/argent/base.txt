@@ -143,45 +143,66 @@ class ArgRocketTrail : ArgTrail
 struct ArgCounter
 {
 	int val;
+	int min;
 	int max;
 	int over;
 	
-	void init(int v = 0, int m = 1, int o = 1)
+	ArgCounter init(int v = 0, int m = 1, int o = 1)
 	{
-		self.val = v;
+		self.val = 0;
+		self.min = v;
 		self.max = m;
 		self.over = self.clamp(m, o, o); // cow level confirmed
+		return self;
 	}
 	int get(bool over = false)
 	{
 		return over
-			? self.clamp(0, self.val, self.max)
-			: self.clamp(0, self.val, self.over)
+			? self.clamp(self.min, self.val, self.over)
+			: self.clamp(self.min, self.val, self.max)
 		;
 	}
-	void set(int v)
+	ArgCounter set(int v)
 	{
-		self.val = self.clamp(0, v, self.over);
+		self.val = self.clamp(self.min, v, self.over);
+		return self;
 	}
-	void toMin()
+	ArgCounter toMin()
 	{
-		self.val = 0;
+		self.val = min;
+		return self;
 	}
-	void toMax()
+	ArgCounter toMax()
 	{
 		self.val = self.max;
+		return self;
 	}
-	void toOver()
+	ArgCounter toOver()
 	{
 		self.val = self.over;
+		return self;
 	}
-	void inc()
+	ArgCounter inc()
 	{
 		self.set(self.val + 1);
+		return self;
 	}
-	void dec()
+	ArgCounter dec()
 	{
 		self.set(self.val - 1);
+		return self;
+	}
+	bool isMin()
+	{
+		return self.val == self.min;
+	}
+	bool isMax()
+	{
+		return self.val >= self.max;
+	}
+	bool isOver()
+	{
+		return self.val == self.over;
 	}
 	int clamp(int l, int m, int h)
 	{
