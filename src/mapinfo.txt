@@ -4,6 +4,7 @@ gameinfo
 	norandomplayerclass = true
 	intermissionmusic = "music/inter.mid"
 	titlemusic = "music/title.mid"
+	finalemusic = "music/finale.mid"
 }
 
 clearskills
