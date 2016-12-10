@@ -34,32 +34,32 @@ class ArgFist : ArgWeapon replaces Fist
 		PUNG A 0;
 		Goto DeselectLoop;
 	Fire:
-		PUNG A 1   A_WeaponOffset(  8.0, 40.0);
-		PUNG A 1   A_WeaponOffset( 16.0, 48.0);
-		PUNG A 1   A_WeaponOffset( 24.0, 64.0);
-		TNT1 A 1   A_WeaponOffset( 32.0, 80.0);
-		TNT1 A 1   A_WeaponOffset(-80.0, 80.0);
+		PUNG A 1   Arg_A_WeaponOffset(  8,  8);
+		PUNG A 1   Arg_A_WeaponOffset( 16, 16);
+		PUNG A 1   Arg_A_WeaponOffset( 24, 32);
+		TNT1 A 1   Arg_A_WeaponOffset( 32, 48);
+		TNT1 A 1   Arg_A_WeaponOffset(-80, 48);
 	Hold:
-		PUNG B 1 { A_WeaponOffset(-64.0, 64.0); A_PlaySound("weapons/fist/swing", CHAN_6); }
-		PUNG B 1   A_WeaponOffset(-48.0, 48.0);
-		PUNG C 1   A_WeaponOffset(-24.0, 24.0);
-		PUNG C 1   A_WeaponOffset(- 0.0,  0.0);
-		PUNG C 1 { A_WeaponOffset( 10.0,-10.0); Arg_A_Punch(); }
-		PUNG D 1   A_WeaponOffset( 15.0,-15.0);
-		PUNG D 1   A_WeaponOffset( 16.0,-16.0);
-		PUNG D 1   A_WeaponOffset( 15.0,-15.0);
-		PUNG D 1   A_WeaponOffset( 12.0,-12.0);
-		PUNG D 1   A_WeaponOffset(  8.0,- 8.0);
-		PUNG C 1   A_WeaponOffset(  0.0,  0.0);
-		PUNG C 1   A_WeaponOffset(-16.0, 16.0);
-		PUNG C 1   A_WeaponOffset(-32.0, 32.0);
-		PUNG B 1   A_WeaponOffset(-48.0, 48.0);
+		PUNG B 1 { Arg_A_WeaponOffset(-64, 32); A_PlaySound("weapons/fist/swing", CHAN_6); }
+		PUNG B 1   Arg_A_WeaponOffset(-48, 16);
+		PUNG C 1   Arg_A_WeaponOffset(-24,  8);
+		PUNG C 1   Arg_A_WeaponOffset(- 0,-32);
+		PUNG C 1 { Arg_A_WeaponOffset( 10,-42); Arg_A_Punch(); }
+		PUNG D 1   Arg_A_WeaponOffset( 15,-47);
+		PUNG D 1   Arg_A_WeaponOffset( 16,-48);
+		PUNG D 1   Arg_A_WeaponOffset( 15,-47);
+		PUNG D 1   Arg_A_WeaponOffset( 12,-44);
+		PUNG D 1   Arg_A_WeaponOffset(  8,-40);
+		PUNG C 1   Arg_A_WeaponOffset(  0,-32);
+		PUNG C 1   Arg_A_WeaponOffset(-16,-16);
+		PUNG C 1   Arg_A_WeaponOffset(-32,  0);
+		PUNG B 1   Arg_A_WeaponOffset(-48, 16);
 	FireEnd:
-		TNT1 A 1 { A_WeaponOffset(-80.0, 80.0); A_Refire(); }
-		TNT1 A 1   A_WeaponOffset( 32.0, 80.0);
-		PUNG A 1   A_WeaponOffset( 24.0, 64.0);
-		PUNG A 1   A_WeaponOffset( 16.0, 48.0);
-		PUNG A 1   A_WeaponOffset(  8.0, 40.0);
+		TNT1 A 1 { Arg_A_WeaponOffset(-80, 48); A_Refire(); }
+		TNT1 A 1   Arg_A_WeaponOffset( 32, 48);
+		PUNG A 1   Arg_A_WeaponOffset( 24, 32);
+		PUNG A 1   Arg_A_WeaponOffset( 16, 16);
+		PUNG A 1   Arg_A_WeaponOffset(  8,  8);
 		Goto Ready;
 	}
 	
