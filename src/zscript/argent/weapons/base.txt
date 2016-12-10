@@ -164,6 +164,7 @@ class ArgModWeapon : ArgWeapon
 	Default
 	{
 		+WEAPON.NOALERT
+		+WEAPON.AMMO_OPTIONAL
 	}
 	States
 	{
@@ -197,7 +198,7 @@ class ArgModWeapon : ArgWeapon
 		"####" "#" 0 {
 			if(Arg_A_InstallMod(1)) {
 				return ResolveState("ModSwapDown");
-			} else if(!Arg_SynthAltFire()) {
+			} else if(!Arg_SynthAltFire() && Arg_A_CheckAmmo()) {
 				return ResolveState("Mod0Fire");
 			} else {
 				return ResolveState("DontFire");
@@ -247,8 +248,10 @@ class ArgModWeapon : ArgWeapon
 		"####" "#" 0 {
 			if(Arg_A_InstallMod(2)) {
 				return ResolveState("ModSwapDown");
-			} else {
+			} else if(Arg_A_CheckAmmo()) {
 				return Arg_A_JumpMod("Mod1Up", "Mod2Up", "DontFire", true);
+			} else {
+				return ResolveState("DontFire");
 			}
 		}
 	AltHold:
@@ -286,6 +289,19 @@ class ArgModWeapon : ArgWeapon
 		let this = ArgModWeapon(self);
 		this.mod1.cooldown.dec();
 		this.mod2.cooldown.dec();
+	}
+	
+	/*
+	 * Manually check if the player has ammo, to circumvent AMMO_OPTIONAL.
+	 */
+	action bool Arg_A_CheckAmmo()
+	{
+		if(CountInv(invoker.AmmoType1) < invoker.AmmoUse1) {
+			A_SelectWeapon("None", SWF_SELECTPRIORITY);
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	/*
