@@ -246,8 +246,6 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 			A_FireCustomMissile("ArgShotgunExplosiveShot", 0, 0, 4,-4, FPF_AIMATANGLE , 5);
 		}
 		SH2M B 1 Bright Arg_A_WeaponOffset(4.0, 34.0);
-		SH2G D 0;
-		Goto Mod0FireAnim;
 		// technically copypasta'd pump sequence, but it's the easiest way
 		// to avoid being able to trigger the cooldown script twice, so...
 		SH2G D 1 Arg_A_WeaponOffset( 8.0, 2.0);
