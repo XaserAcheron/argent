@@ -132,7 +132,7 @@ class ArgWeapon : DoomWeapon
 	 */
 	action void Arg_A_WeaponOffset(double x, double y, double j = 0, double k = 0) {
 		k = (k == 0) ? j : k; // means you can't do x-only jitter, but meh
-		A_WeaponOffset(x + frandom(-j, j), 32.0 + y + frandom(-k, k));
+		A_WeaponOffset(x + frandom(-j, j), 32.0 + y + frandom(-k, k), WOF_INTERPOLATE);
 	}
 }
 
