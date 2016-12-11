@@ -249,7 +249,7 @@ class ArgModWeapon : ArgWeapon
 			if(Arg_A_InstallMod(2)) {
 				return ResolveState("ModSwapDown");
 			} else if(Arg_A_CheckAmmo()) {
-				return Arg_A_JumpMod("Mod1Up", "Mod2Up", "DontFire", true);
+				return Arg_A_JumpMod("Mod1UpCheck", "Mod2UpCheck", "DontFire", true);
 			} else {
 				return ResolveState("DontFire");
 			}
@@ -260,6 +260,14 @@ class ArgModWeapon : ArgWeapon
 	ModDown:
 		"####" "#" 0 Arg_A_JumpMod("Mod1Down", "Mod2Down");
 		Goto DontFire;
+	/* [TODO] remove these band-aids after ACS is ousted. */
+	Mod1UpCheck:
+		"####" "#" 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod1.ammoUse);
+		"####" "#" 0 ResolveState("Mod1Up");
+	Mod2UpCheck:
+		"####" "#" 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod2.ammoUse);
+		"####" "#" 0 ResolveState("Mod2Up");
+	/* [/TODO */
 	Mod1Up:
 	Mod2Up:
 	Mod1Hold:

@@ -130,7 +130,6 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 		SH1G A 0;
 		Goto ReadyLoop;
 	Mod1Up:
-		SH1G A 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod1.ammoUse);
 		SH1G A 1 {
 			A_PlaySound("weapons/shotgun/mod1up", CHAN_AUTO);
 			A_WeaponOffset(-2.0, 32.0);
@@ -220,7 +219,6 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 		SH2G A 0;
 		Goto ReadyLoop;
 	Mod2Up:
-		SH2G A 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod2.ammoUse);
 		SH2G A 1 {
 			A_PlaySound("weapons/shotgun/mod2up", CHAN_AUTO);
 			A_WeaponOffset(-2.0, 32.0);
