@@ -244,9 +244,7 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 
 class ArgMicroMissile : Actor
 {	
-	int user_hitx;
-	int user_hity;
-	int user_hitz;
+	Vector3 hitOffset;
 
 	Default
 	{
@@ -267,27 +265,20 @@ class ArgMicroMissile : Actor
 	States
 	{
 	Spawn:
-		HMIS A 1 Bright; // this is some crazy-arse code, but it's how El Zee did it in the ROTT TC, so...
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); A_SeekerMissile( 5, 20, 0, 50, 5); A_ChangeVelocity (5.0, frandom(-2.5, 2.5), frandom(-1.0, 1.0), 1); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); A_SeekerMissile( 5, 20, 0, 50, 5); A_ChangeVelocity (5.0, frandom(-2.5, 2.5), frandom(-2.0, 2.0), 1); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); A_SeekerMissile( 5, 20, 0, 50, 5); A_ChangeVelocity (5.0, frandom(-2.5, 2.5), frandom(-2.5, 2.5), 1); }
+		HMIS AAA 1 Bright Arg_A_MicroMissileTrail();
+		HMIS A   1 Bright Arg_A_MicroMissileSeek();
+		HMIS AAA 1 Bright Arg_A_MicroMissileTrail();
+		HMIS A   1 Bright Arg_A_MicroMissileSeek();
+		HMIS AAA 1 Bright Arg_A_MicroMissileTrail();
+		HMIS A   1 Bright Arg_A_MicroMissileSeek();
 	Flight:
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); A_SeekerMissile( 5, 20, 0, 50, 5); A_ChangeVelocity (5.0, frandom(-2.5, 2.5), frandom(-2.5, 2.5), 1); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); A_SeekerMissile(10, 20, 0, 50, 5); }
-		HMIS A 1 Bright { A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE); }
+		HMIS A   1 Bright Arg_A_MicroMissileSeek();
+		HMIS AA  1 Bright Arg_A_MicroMissileTrail();
+		HMIS A   1 Bright Arg_A_MicroMissileSeek(10, false);
+		HMIS A   1 Bright Arg_A_MicroMissileTrail();
 		Loop;
 	XDeath:
-		HMIS A 0 Bright A_SeekerMissile(90, 90, SMF_LOOK, 256, 1);
+		HMIS A 0 Bright Arg_A_MicroMissileSticky();
 		Goto Stick;
 	Death:
 		HMIS A 0 Bright {
@@ -295,12 +286,7 @@ class ArgMicroMissile : Actor
 			A_SpawnItemEx("ArgBulletPuff");
 		}
 	Stick:
-		HMIS A 0 Bright {
-			user_hitx = CallACS("GetTracerX");
-			user_hity = CallACS("GetTracerY");
-			user_hitz = CallACS("GetTracerZ");
-		}
-		HMIS AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 1 Bright A_Warp(AAPTR_TRACER, user_hitx, user_hity, user_hitz, 0, WARPF_ABSOLUTEOFFSET|WARPF_USECALLERANGLE|WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE);
+		HMIS AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 1 Bright Arg_A_MicroMissileWarp();
 	Explode:
 		REXP A 2 Bright {
 			A_Stop();
@@ -315,6 +301,39 @@ class ArgMicroMissile : Actor
 		REXP E 2 Bright A_SetTranslucent(0.5);
 		REXP F 2 Bright A_SetTranslucent(0.4);
 		Stop;
+	}
+	
+	/*
+	 * Micro Missile Trail n' Seek functions. Thanks to el zee -- the basis
+	 * for this was borrowed from the ROTT TC's Drunk Missile.
+	 */
+	action void Arg_A_MicroMissileTrail() {
+		A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+	}
+	action void Arg_A_MicroMissileSeek(float threshold = 5, bool velShift = true) {
+		Arg_A_MicroMissileTrail();
+		A_SeekerMissile(threshold, 20, 0, 50, 5);
+		if(velShift) {
+			A_ChangeVelocity(5.0, frandom(-2.5, 2.5), frandom(-2.5, 2.5), 1);
+		}
+	}
+	action void Arg_A_MicroMissileSticky() {
+		let this = ArgMicroMissile(self);
+		
+		// set the tracer to the stuck target.
+		// [TODO] retire this old hack and come up with a better method of doing this.
+		A_SeekerMissile(90, 90, SMF_LOOK, 256, 1);
+
+		// store the relative offset for use in A_Warp later. Note that we'll
+		// treat the actor as 3/4 its actual size (except for z) so the missiles
+		// will physically "stick" inside the actor they hit.
+		this.hitOffset = this.tracer.Vec3To(this);
+		this.hitOffset.x = this.hitOffset.x * 3 / 4;
+		this.hitOffset.y = this.hitOffset.y * 3 / 4;
+	}
+	action void Arg_A_MicroMissileWarp() {
+		let this = ArgMicroMissile(self);
+		A_Warp(AAPTR_TRACER, this.hitOffset.x, this.hitOffset.y, this.hitOffset.z, 0, WARPF_ABSOLUTEOFFSET|WARPF_USECALLERANGLE|WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE);
 	}
 }
 
