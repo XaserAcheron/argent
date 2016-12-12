@@ -146,6 +146,7 @@ struct ArgCounter
 	int min;
 	int max;
 	int over;
+	bool locked;
 	
 	ArgCounter init(int v = 0, int m = 1, int o = 1)
 	{
@@ -182,14 +183,26 @@ struct ArgCounter
 		self.val = self.over;
 		return self;
 	}
-	ArgCounter inc()
+	ArgCounter inc(int amount = 1)
 	{
-		self.set(self.val + 1);
+		self.set(self.val + amount);
 		return self;
 	}
-	ArgCounter dec()
+	ArgCounter dec(int amount = 1)
 	{
-		self.set(self.val - 1);
+		if(!self.locked) {
+			self.set(self.val - amount);
+		}
+		return self;
+	}
+	ArgCounter lock()
+	{
+		self.locked = true;
+		return self;
+	}
+	ArgCounter unlock()
+	{
+		self.locked = false;
 		return self;
 	}
 	bool isMin()

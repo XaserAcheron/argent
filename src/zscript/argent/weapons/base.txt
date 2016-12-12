@@ -100,6 +100,22 @@ class ArgWeapon : DoomWeapon
 	}
 	
 	/*
+	 * Manually check if the player has ammo, to circumvent AMMO_OPTIONAL.
+	 */
+	action bool Arg_A_CheckAmmo(int amount = 0)
+	{
+		if(amount == 0) {
+			amount = invoker.AmmoUse1;
+		}
+		if(CountInv(invoker.AmmoType1) < amount) {
+			A_SelectWeapon("None", SWF_SELECTPRIORITY);
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/*
 	 * A certain function that would've been nice to have built-in for ages. ;)
 	 */
 	action state Arg_A_JumpIfNoAmmo(statelabel state = 'Ready', int amount = 1)
@@ -297,19 +313,6 @@ class ArgModWeapon : ArgWeapon
 		let this = ArgModWeapon(self);
 		this.mod1.cooldown.dec();
 		this.mod2.cooldown.dec();
-	}
-	
-	/*
-	 * Manually check if the player has ammo, to circumvent AMMO_OPTIONAL.
-	 */
-	action bool Arg_A_CheckAmmo()
-	{
-		if(CountInv(invoker.AmmoType1) < invoker.AmmoUse1) {
-			A_SelectWeapon("None", SWF_SELECTPRIORITY);
-			return false;
-		} else {
-			return true;
-		}
 	}
 	
 	/*
