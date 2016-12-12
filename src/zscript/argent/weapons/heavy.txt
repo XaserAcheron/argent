@@ -21,6 +21,17 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 	const HEAVY_CROSSHAIR_ANIM4 = 44;
 	const HEAVY_CROSSHAIR_IDLE  = 45;
 
+	override void BeginPlay()
+	{
+		Super.BeginPlay();
+		
+		mod1.ammoUse = 3;
+		mod1.cooldown.init(0, 90);
+
+		mod2.ammoUse = 2;
+		mod2.cooldown.init(0, 90);
+	}
+
 	Default {
 		Weapon.SelectionOrder 5;
 		Weapon.AmmoUse 1;
@@ -51,26 +62,18 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 		Goto ReadyLoop;
 	Mod0Fire:
 		"####" B 1 Bright {
-			A_GunFlash();
-			A_AlertMonsters();
+			Arg_A_GunFlash('Flash', "weapons/heavy/fire", ARG_GF_ALTSOUND);
 			A_FireBullets(2.0, 1.0, -1, 7, "ArgBulletPuff");
-			if(CountInv("ArgHeavyARShootyToken") == 0) {
-				A_GiveInventory("ArgHeavyARShootyToken");
-				A_PlaySound("weapons/heavy/fire", CHAN_5);
-			} else {
-				A_TakeInventory("ArgHeavyARShootyToken");
-				A_PlaySound("weapons/heavy/fire", CHAN_6);
-			}
 		}
-		"####" C 1 Bright A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25));
-		"####" D 1 Bright A_WeaponOffset(3.0 + frandom(-0.25, 0.25), 34.0 + frandom(-0.25, 0.25));
-		"####" A 1        A_WeaponOffset(2.0 + frandom(-0.25, 0.25), 33.0 + frandom(-0.25, 0.25));
-		"####" A 1        A_WeaponOffset(1.0 + frandom(-0.25, 0.25), 32.0 + frandom(-0.25, 0.25));
+		"####" C 1 Bright Arg_A_WeaponOffset(1, 1, 0.25);
+		"####" D 1 Bright Arg_A_WeaponOffset(3, 2, 0.25);
+		"####" A 1        Arg_A_WeaponOffset(2, 1, 0.25);
+		"####" A 1        Arg_A_WeaponOffset(1, 0, 0.25);
 		"####" A 0 A_Refire();
 		Goto Ready;
 	Flash:
-		TNT1 A 1 Bright A_Light2();
-		TNT1 A 1 Bright A_Light1();
+		TNT1 A 1 Bright A_Light(2);
+		TNT1 A 1 Bright A_Light(1);
 		Goto LightDone;
 		
 	/* Mod 1: Micro Missiles */
@@ -93,24 +96,23 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 		HA1G A 0;
 		Goto ReadyLoop;
 	Mod1Up:
-		HA1M A 1 {
-			if(CountInv("Clip") < HEAVY_MOD1_AMMOUSE) { return ResolveState("Ready"); }
-			A_PlaySound("weapons/heavy/mod1up", CHAN_AUTO);
-			return ResolveState(null);
-		}
+		HA1M A 1 A_PlaySound("weapons/heavy/mod1up", CHAN_AUTO);
 		HA1M BCDE 1;
 		HA1M G 0;
 	Mod1Hold:
-		"####" "#" 1 A_JumpIf(CallACS("SynthFire"), "Mod1Fire");
+		"####" "#" 1 Arg_A_SynthFire("Mod1Fire");
 		"####" "#" 0 A_Refire();
 	Mod1Down:
 		HA1M E 1 A_PlaySound("weapons/heavy/mod1down", CHAN_AUTO);
 		HA1M DCBA 1;
-		Goto Cooldown;
+		Goto Cooldown; // [TODO] only do this after firing; or maybe circumvent?
 	Mod1Fire:
 		HA1N A 0 Bright {
+			// extra ammo check, so we'll know to break out of sustained fire
+			// if we run out of juice.
 			if(CountInv("Clip") < HEAVY_MOD1_AMMOUSE) { return ResolveState("Mod1Down"); }
-			A_TakeInventory("Clip", HEAVY_MOD1_AMMOUSE, TIF_NOTAKEINFINITE);
+			
+			Arg_A_TakeAmmo(invoker.mod1.ammoUse);
 			A_FireCustomMissile("ArgMicroMissile", 0, 0, 4, 4);
 			A_AlertMonsters();
 			
