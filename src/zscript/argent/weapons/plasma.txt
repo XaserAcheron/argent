@@ -49,7 +49,7 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		"####" B 1 Bright {
 			A_GunFlash();
 			A_AlertMonsters();
-			A_FireCustomMissile("ArgPlasma", 0, 1, 6.0 + frandom(-2.00, 2.00), frandom(-2.00, 2.00));
+			A_FireProjectile("ArgPlasma", 0, 1, 6.0 + frandom(-2.00, 2.00), frandom(-2.00, 2.00));
 			A_WeaponOffset(0.0, 32.0);
 			if(CountInv("ArgPlasmaRifleModSelected") == 1) {
 				A_GiveInventory("ArgPlasmaRifleModCharge", PLASMA_MOD_CHARGE_UP);
@@ -160,15 +160,15 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			
 			// cool heatwave fx
 			A_Quake(2, 8, 0, 8, "");
-			A_FireCustomMissile("ArgPlasmaHeatWave", -40, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireCustomMissile("ArgPlasmaHeatWave", -30, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireCustomMissile("ArgPlasmaHeatWave", -20, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireCustomMissile("ArgPlasmaHeatWave", -10, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireCustomMissile("ArgPlasmaHeatWave",   0, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireCustomMissile("ArgPlasmaHeatWave",  10, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireCustomMissile("ArgPlasmaHeatWave",  20, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireCustomMissile("ArgPlasmaHeatWave",  30, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireCustomMissile("ArgPlasmaHeatWave",  40, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireProjectile("ArgPlasmaHeatWave", -40, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireProjectile("ArgPlasmaHeatWave", -30, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireProjectile("ArgPlasmaHeatWave", -20, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireProjectile("ArgPlasmaHeatWave", -10, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireProjectile("ArgPlasmaHeatWave",   0, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireProjectile("ArgPlasmaHeatWave",  10, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireProjectile("ArgPlasmaHeatWave",  20, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireProjectile("ArgPlasmaHeatWave",  30, 0, 0, 0, FPF_NOAUTOAIM);
+			A_FireProjectile("ArgPlasmaHeatWave",  40, 0, 0, 0, FPF_NOAUTOAIM);
 		}
 		PL1A B 1 A_WeaponOffset( 5.0,  5.0 + 32.0);
 		PL1A B 1 A_WeaponOffset(12.0, 12.0 + 32.0);
@@ -235,7 +235,7 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_GunFlash();
 			A_AlertMonsters();
 			A_PlaySound("weapons/plasma/mod2fire", CHAN_6);
-			A_FireCustomMissile("ArgStunBomb", 0, 0, 0, 0, FPF_AIMATANGLE , 5);
+			A_FireProjectile("ArgStunBomb", 0, 0, 0, 0, FPF_AIMATANGLE , 5);
 			A_TakeInventory("Cell", PLASMA_MOD2_AMMOUSE, TIF_NOTAKEINFINITE);
 			A_GiveInventory("ArgPlasmaRifleModCooldown", PLASMA_MOD_COOLDOWN);
 		}

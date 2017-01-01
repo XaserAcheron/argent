@@ -241,7 +241,7 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 		SH2N A 1 Bright {
 			Arg_A_GunFlash('Flash', "weapons/shotgun/mod2fire");
 			Arg_A_TakeAmmo(invoker.mod2.ammoUse);
-			A_FireCustomMissile("ArgShotgunExplosiveShot", 0, 0, 4,-4, FPF_AIMATANGLE , 5);
+			A_FireProjectile("ArgShotgunExplosiveShot", 0, 0, 4,-4, FPF_AIMATANGLE , 5);
 		}
 		SH2M B 1 Bright Arg_A_WeaponOffset(4.0, 34.0);
 		// technically copypasta'd pump sequence, but it's the easiest way

@@ -53,9 +53,9 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		"####" B 1 Bright {
 			A_GunFlash();
 			if(CountInv("ArgRocketLauncherModSelected") == 1) {
-				A_FireCustomMissile("ArgRocketDetonate", 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
+				A_FireProjectile("ArgRocketDetonate", 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
 			} else {
-				A_FireCustomMissile("ArgRocket"        , 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
+				A_FireProjectile("ArgRocket"        , 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
 			}
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
 			A_AlertMonsters();
@@ -223,7 +223,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 			A_TakeInventory("ArgRocketLauncherModCharge");
 			A_GunFlash();
 			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
-			A_FireCustomMissile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
+			A_FireProjectile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
 			A_AlertMonsters();
 			A_WeaponOffset(6.0, 3.0 + 32);
@@ -235,7 +235,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RK2G D 1 Bright {
 			A_GunFlash();
 			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
-			A_FireCustomMissile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
+			A_FireProjectile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
 			A_PlaySound("weapons/rocket/altfire", CHAN_6);
 			A_AlertMonsters();
 			A_WeaponOffset(12.0, 6.0 + 32);
@@ -246,7 +246,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RK2G B 1 Bright {
 			A_GunFlash();
 			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
-			A_FireCustomMissile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
+			A_FireProjectile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
 			A_AlertMonsters();
 			A_WeaponOffset(14.0, 7.0 + 32);

@@ -117,7 +117,7 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 			
 			Arg_A_TakeAmmo(invoker.mod1.ammoUse);
 			Arg_A_GunFlash('Flash', "weapons/heavy/missile", ARG_GF_ALTSOUND);
-			A_FireCustomMissile("ArgMicroMissile", 0, 0, 4, 4);
+			A_FireProjectile("ArgMicroMissile", 0, 0, 4, 4);
 			
 			// Jump to whatever part of the animation we happen to be on.
 			// [TODO] this whenever it's possible :|
