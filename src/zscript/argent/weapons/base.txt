@@ -128,11 +128,11 @@ class ArgWeapon : DoomWeapon
 	 * check and jump variants. Note that the 'checks' need to be labeled
 	 * with "action" even though they kinda aren't; funky compat stuff.
 	 */
-	action bool Arg_SynthFire() {
-		return GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK;
+	action bool Arg_SynthFire   (bool checkAmmo = false) {
+		return (GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK   ) && (!checkAmmo || CountInv(invoker.AmmoType1) > 0);
 	}
-	action bool Arg_SynthAltFire() {
-		return GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK;
+	action bool Arg_SynthAltFire(bool checkAmmo = false) {
+		return (GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK) && (!checkAmmo || CountInv(invoker.AmmoType1) > 0);
 	}
 	action state Arg_A_SynthFire(statelabel label) {
 		return Arg_SynthFire() ? ResolveState(label) : ResolveState(null);
@@ -181,6 +181,7 @@ class ArgModWeapon : ArgWeapon
 	{
 		+WEAPON.NOALERT
 		+WEAPON.AMMO_OPTIONAL
+		+WEAPON.ALT_AMMO_OPTIONAL
 	}
 	States
 	{
