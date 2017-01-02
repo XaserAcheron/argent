@@ -315,22 +315,6 @@ script "GimmeMods" (void) {
 }
 
 /*
- * Simplified SynthFire: Primary
- */
-script "SynthFire" (void)
-{
-	SetResultValue(GetPlayerInput(-1, INPUT_BUTTONS) & BT_ATTACK);
-}
-
-/*
- * Simplified SynthFire: Alternate
- */
-script "SynthAltFire" (void)
-{
-	SetResultValue(GetPlayerInput(-1, INPUT_BUTTONS) & BT_ALTATTACK);
-}
-
-/*
  * GetTracer functions for sticky missiles (cheers, love!)
  */
 script "GetTracerX" (void) {

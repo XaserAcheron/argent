@@ -211,7 +211,7 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM4);
 		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_IDLE );
 	Mod2Hold:
-		HSCP A 1 Bright A_JumpIf(CallACS("SynthFire"), "Mod2Fire");
+		HSCP A 1 Bright Arg_A_SynthFire("Mod2Fire");
 		HSCP A 0 Bright A_Refire();
 	Mod2Down:
 		HSCP A 1 {
