@@ -23,7 +23,6 @@
  */
 struct ArgPlayer
 {
-	int rocketTid;
 	int targetTid;
 	int targetTidOrig;
 }
@@ -34,8 +33,7 @@ ArgPlayer players[64]; // zandro max to the max!
  */ 
 script "ArgentInit" enter {
 	ArgPlayer playerStruct = {
-		DEF_DUMMY_TID // rocketTid
-	,	DEF_DUMMY_TID // targetTid
+		DEF_DUMMY_TID // targetTid
 	,	DEF_DUMMY_TID // targetTidOrig
 	};
 	players[PlayerNumber()] = playerStruct;
@@ -325,45 +323,6 @@ script "GetPlayerNumber" (void) {
 /*
  * RAWGGIT LAWNCHAIR scripts
  */
-script "Mod1RocketFire" (int playerNum) {
-	// remote detonator. Need to snag the rockets' TID so things may happen.
-	int rocketTid = players[playerNum].rocketTid;
-	
-	// if the TID is the placeholder value (DEF_DUMMY_TID), assign a new one.
-	// this will of course break if played with CIF3. Assuming literally anything
-	// else in the mod is compatible with it at all... you crazy git. ;P
-	if(rocketTid == DEF_DUMMY_TID) {
-		rocketTid = UniqueTID(DEF_TID_START);
-		players[playerNum].rocketTid = rocketTid;
-	}
-	
-	// finally, don't forget to assign the TID to the rocket. :P
-	Thing_ChangeTID(0, rocketTid);
-}
-script "Mod1RocketDetonate" (void) {
-	// snag the TID, as before. Note that we actually user playerNum() here
-	// since this script is called from the weapon rather than the projectile.
-	int playerNum = PlayerNumber();
-	int rocketTid = players[playerNum].rocketTid;
-	
-	// Nuke the sucker.
-	if(SetActorState(rocketTid, "Detonate")) {
-		ActivatorSound("weapons/rocket/mod1yep", 255);
-	} else {
-		ActivatorSound("weapons/rocket/mod1nope", 255);
-	}
-}
-script "Mod1RocketExplode" (int playerNum) {
-	// la la la TID la la
-	int rocketTid = players[playerNum].rocketTid;
-	
-	// Wait a tic then check to see if there's anything else that has the TID.
-	// Otherwise, clean it up so we can get a fresh one later.
-	Delay(1);
-	if(ThingCount(T_NONE, rocketTid) == 0) {
-		players[playerNum].rocketTid = DEF_DUMMY_TID;
-	}
-}
 script "Mod2RocketLockStart" (void) {
 	int playerNum = PlayerNumber();
 	

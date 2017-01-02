@@ -6,6 +6,18 @@
 
 class ArgPlayer : DoomPlayer
 {
+	const MAX_ROCKETS = 50; // ought to be enough for anybody ;)
+
+	int numRockets;
+	Actor[MAX_ROCKETS] rockets;
+	
+	override void BeginPlay() {
+		numRockets = 0;
+		for(int i = 0; i < MAX_ROCKETS; i++) {
+			rockets[i] = null;
+		}
+	}
+
 	Default
 	{
 		Player.DisplayName "Doom Marine";

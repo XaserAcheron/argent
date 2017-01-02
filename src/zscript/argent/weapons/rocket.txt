@@ -138,7 +138,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		TNT1 A 1 Arg_A_SynthAltFire("Mod1Detonate");
 		Loop;
 	Mod1Detonate:
-		TNT1 A 0 ACS_NamedExecute("Mod1RocketDetonate");
+		TNT1 A 0 Arg_A_DetonateRockets();
 	Mod1DetonateHold:
 		TNT1 A 1;
 		TNT1 A 0 Arg_A_SynthAltFire("Mod1DetonateHold");
@@ -274,6 +274,30 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RK2G A 0 A_Refire();
 		Goto Ready;
 	}
+	
+	/*
+	 * Remote-detonates all rockets. Aww yeah!
+	 */
+	action void Arg_A_DetonateRockets() {
+		let player = ArgPlayer(self);
+		if(player) {
+			bool didDetonate = false;
+
+			// pretty simple stuff. just loop through the player's rocket array
+			// and detonate anything we see.
+			for(int i = 0; i < player.numRockets; i++) {
+				let rocket = ArgRocketDetonate(player.rockets[i]);
+				if(rocket && !rocket.detonated) {
+					didDetonate = true;
+					rocket.SetStateLabel('Detonate');
+				}
+				player.rockets[i] = null;
+			}
+			player.numRockets = 0;
+
+			A_PlaySound(didDetonate ? "weapons/rocket/mod1yep" : "weapons/rocket/mod1nope", CHAN_7);
+		}
+	}
 }
 
 class ArgRocket : ArgRocketBase
@@ -292,7 +316,6 @@ class ArgRocket : ArgRocketBase
 
 class ArgRocketLockOn : ArgRocket
 {
-	int user_playernum;
 	Default
 	{
 		+SEEKERMISSILE
@@ -312,61 +335,55 @@ class ArgRocketLockOn : ArgRocket
 
 class ArgRocketDetonate : ArgRocket
 {
-	int user_playernum;
+	bool detonated;
 	States
 	{
 	Spawn:
 		MISL A 0 NoDelay {
-			user_playernum = CallACS("GetPlayerNumber");
-			ACS_NamedExecute("Mod1RocketFire", user_playernum);
+			// add the rocket to the player array so we can nuke it later.
+			// [XA] normally I'd like to do this when spawning the rocket, but
+			//      I'd have to replicate a bunch of A_FireProjectile to do so,
+			//      which I'll wait on for a bit.
+			
+			// [XA] Presently, if for some reason you have more than the max
+			//      number of rockets, the most recent one just isn't detonate-able.
+			//      This is kinda dumb, but this situation is hella rare so I'm
+			//      taking the lazy-Xaser route. D:
+			let player = ArgPlayer(self.target);
+			if(player && player.numRockets < player.MAX_ROCKETS) {
+				player.rockets[player.numRockets] = self;
+				player.numRockets++;
+			}
 		}
 		Goto Super::Spawn;
 	Detonate:
-		TNT1 A 0 Bright {
+		REXP A 4 Bright {
+			detonated = true;
 			A_Stop();
 			A_SetScale(1.0);
 			A_Explode(240, 192, 1, 0, 64);
 			A_PlaySound("weapons/rocket/explode", CHAN_VOICE);
-			ACS_NamedExecute("Mod1RocketExplode", user_playernum);
-			A_SpawnItemEx("ArgRocketSplosionWide", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION);
 		}
-		Stop;
-	Death:
-		TNT1 A 0 Bright {
-			A_SetScale(1.0);
-			A_Explode(200, 128, 1);
-			ACS_NamedExecute("Mod1RocketExplode", user_playernum);
-			A_SpawnItemEx("ArgRocketSplosion", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION);
-		}
-		Stop;
-	}
-}
-
-class ArgRocketSplosion : ArgRocket
-{
-	Default
-	{
-		Skip_Super;
-		+NOINTERACTION
-	}
-	States
-	{
-	Spawn:
-		REXP A 4 Bright;
-		Goto Super::Boom;
-	}
-}
-
-class ArgRocketSplosionWide : ArgRocketSplosion
-{
-	States
-	{
-	Spawn:
-		REXP A 4 Bright;
 		REXP C 3 Bright { A_SetScale(1.2, 1.0); A_SetTranslucent(0.7); }
 		REXP D 2 Bright { A_SetScale(1.4, 1.0); A_SetTranslucent(0.6); }
 		REXP E 2 Bright { A_SetScale(1.5, 1.0); A_SetTranslucent(0.5); }
 		REXP F 2 Bright { A_SetScale(1.6, 1.0); A_SetTranslucent(0.4); }
 		Stop;
+	Death:
+		REXP A 4 Bright {
+			detonated = true;
+			A_SetScale(1.0);
+			A_Explode(200, 128, 1);
+		}
+		Goto Super::Boom;
+	}
+	
+	/*
+	 * FastProjectile trail effect override: don't spawn a trail if we've gone boom.
+	 */
+	override void Effect() {
+		if(!detonated) {
+			super.Effect();
+		}
 	}
 }
