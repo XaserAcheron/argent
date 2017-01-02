@@ -107,6 +107,7 @@ weapons/rocket/mod2load    "sounds/weapons/rocket/mod2load.ogg"
 $random weapons/rocket/fire    { weapons/rocket/fire1    weapons/rocket/fire2    weapons/rocket/fire3    }
 $random weapons/rocket/altfire { weapons/rocket/altfire1 weapons/rocket/altfire2 weapons/rocket/altfire3 }
 $random weapons/rocket/explode { weapons/rocket/explode1 weapons/rocket/explode2 weapons/rocket/explode3 }
+$volume weapons/rocket/mod2load 0.6
 
 weapons/plasma/fire1       "sounds/weapons/plasma/fire1.flac"
 weapons/plasma/fire2       "sounds/weapons/plasma/fire2.flac"

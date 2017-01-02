@@ -315,28 +315,6 @@ script "GimmeMods" (void) {
 }
 
 /*
- * GetTracer functions for sticky missiles (cheers, love!)
- */
-script "GetTracerX" (void) {
-	int projX = GetActorX(0);
-	SetActivator(0, AAPTR_TRACER);
-	int targX = GetActorX(0);
-	SetResultValue(((projX - targX) * 3 / 4) >> 16);
-}
-script "GetTracerY" (void) {
-	int projY = GetActorY(0);
-	SetActivator(0, AAPTR_TRACER);
-	int targY = GetActorY(0);
-	SetResultValue(((projY - targY) * 3 / 4) >> 16);
-}
-script "GetTracerZ" (void) {
-	int projZ = GetActorZ(0);
-	SetActivator(0, AAPTR_TRACER);
-	int targZ = GetActorZ(0);
-	SetResultValue(((projZ - targZ) * 3 / 4) >> 16);
-}
-
-/*
  * Extremely-useful utility function for saving the player's number in a uservar.
  */
 script "GetPlayerNumber" (void) {
