@@ -7,16 +7,20 @@
 class ArgPlasmaRifleModSelected : ArgModToken {}
 class ArgPlasmaRifleMod1Enabled : ArgToken    {}
 class ArgPlasmaRifleMod2Enabled : ArgToken    {}
-class ArgPlasmaRifleModCooldown : ArgToken    { Default { Inventory.MaxAmount 200; } }
-class ArgPlasmaRifleModCharge   : ArgToken    { Default { Inventory.MaxAmount 120; } }
+class ArgPlasmaRifleModCooldown : ArgToken    {} // [TODO] remove
 
 class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 {
-	const PLASMA_MOD1_AMMOUSE  =   0; // pointless, but may as well be explicit. shit.
-	const PLASMA_MOD2_AMMOUSE  =   2;
-	const PLASMA_MOD_COOLDOWN  = 200;
-	const PLASMA_MOD_CHARGE    = 120;
-	const PLASMA_MOD_CHARGE_UP =   3;
+	override void BeginPlay()
+	{
+		Super.BeginPlay();
+		
+		mod1.ammoUse = 0; // pointless, but may as well be explicit. shit.
+		mod1.charge.init(0, 120);
+
+		mod2.ammoUse = 2;
+		mod2.cooldown.init(0, 200);
+	}
 
 	Default
 	{
@@ -47,12 +51,11 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		Goto ReadyLoop;
 	Mod0Fire:
 		"####" B 1 Bright {
-			A_GunFlash();
-			A_AlertMonsters();
+			Arg_A_GunFlash();
 			A_FireProjectile("ArgPlasma", 0, 1, 6.0 + frandom(-2.00, 2.00), frandom(-2.00, 2.00));
-			A_WeaponOffset(0.0, 32.0);
+			Arg_A_WeaponOffset(0, 0);
 			if(CountInv("ArgPlasmaRifleModSelected") == 1) {
-				A_GiveInventory("ArgPlasmaRifleModCharge", PLASMA_MOD_CHARGE_UP);
+				invoker.mod1.charge.inc(3);
 				A_PlaySound("weapons/plasma/altfire", CHAN_5);
 				return ResolveState("Mod1FirePrimary");
 			} else {
@@ -60,12 +63,12 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			}
 			return ResolveState(null);
 		}
-		"####" C 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25));
-		"####" A 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50));
+		"####" C 1 Bright Arg_A_WeaponOffset(2.50, 1.500, 0.75, 0.250);
+		"####" A 1        Arg_A_WeaponOffset(2.25, 0.875, 1.25, 0.375);
 		Goto Ready;
 	Flash:
-		TNT1 A 1 Bright A_Light2;
-		TNT1 A 1 Bright A_Light1;
+		TNT1 A 1 Bright A_Light(2);
+		TNT1 A 1 Bright A_Light(1);
 		Goto LightDone;
 
 	/* Mod 1: Heat Blast */
@@ -78,43 +81,43 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		Goto ModSwapUp;
 	Mod1Swap:
 		PL1S A 8 A_PlaySound("weapons/plasma/mod1swap", CHAN_AUTO);
-		PL1S B 1 A_WeaponOffset(  0.0, 32.0);
-		PL1S C 1 A_WeaponOffset(- 1.0, 32.0);
-		PL1S D 1 A_WeaponOffset(- 3.0, 32.5);
-		PL1S E 1 A_WeaponOffset(- 5.0, 33.0);
-		PL1S F 1 A_WeaponOffset(- 6.0, 34.0);
+		PL1S B 1 Arg_A_WeaponOffset(  0.0, 0.0);
+		PL1S C 1 Arg_A_WeaponOffset(- 1.0, 0.0);
+		PL1S D 1 Arg_A_WeaponOffset(- 3.0, 0.5);
+		PL1S E 1 Arg_A_WeaponOffset(- 5.0, 1.0);
+		PL1S F 1 Arg_A_WeaponOffset(- 6.0, 2.0);
 		PL1S GH 1;
 		PL1S I 6;
-		PL1S I 1 A_WeaponOffset(- 7.0, 35.0);
-		PL1S J 1 A_WeaponOffset(- 8.0, 36.0);
-		PL1S J 1 A_WeaponOffset(-10.0, 38.0);
-		PL1S K 1 A_WeaponOffset(-12.0, 40.0);
-		PL1S K 1 A_WeaponOffset(-13.0, 41.0);
-		PL1S K 1 A_WeaponOffset(-13.0, 41.0);
-		PL1S K 1 A_WeaponOffset(-12.0, 40.0);
-		PL1S K 1 A_WeaponOffset(-10.0, 38.0);
-		PL1S K 1 A_WeaponOffset(- 8.0, 36.0);
-		PL1S L 1 A_WeaponOffset(- 6.0, 35.0);
-		PL1S M 1 A_WeaponOffset(- 4.0, 34.0);
-		PL1S N 1 A_WeaponOffset(- 2.0, 33.0);
-		PL1S O 1 A_WeaponOffset(- 1.0, 32.0);
-		PL1S O 6 A_WeaponOffset(  0.0, 32.0);
+		PL1S I 1 Arg_A_WeaponOffset(- 7.0, 3.0);
+		PL1S J 1 Arg_A_WeaponOffset(- 8.0, 4.0);
+		PL1S J 1 Arg_A_WeaponOffset(-10.0, 6.0);
+		PL1S K 1 Arg_A_WeaponOffset(-12.0, 8.0);
+		PL1S K 1 Arg_A_WeaponOffset(-13.0, 9.0);
+		PL1S K 1 Arg_A_WeaponOffset(-13.0, 9.0);
+		PL1S K 1 Arg_A_WeaponOffset(-12.0, 8.0);
+		PL1S K 1 Arg_A_WeaponOffset(-10.0, 6.0);
+		PL1S K 1 Arg_A_WeaponOffset(- 8.0, 4.0);
+		PL1S L 1 Arg_A_WeaponOffset(- 6.0, 3.0);
+		PL1S M 1 Arg_A_WeaponOffset(- 4.0, 2.0);
+		PL1S N 1 Arg_A_WeaponOffset(- 2.0, 1.0);
+		PL1S O 1 Arg_A_WeaponOffset(- 1.0, 0.0);
+		PL1S O 6 Arg_A_WeaponOffset(  0.0, 0.0);
 		PL1S PQRS 2;
 		PL1G AAAAAAAAAAAA 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		PL1A GGGFFFEEEDDDBBBCCCDDDEEEFFFGGG 1 A_WeaponReady(WRF_ALLOWRELOAD);
 	Mod1Ready:
 		PL1G D 0 {
-			if(CountInv("ArgPlasmaRifleModCharge") >=  PLASMA_MOD_CHARGE       ) { return ResolveState("Mod1ReadyD"); }
-			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4) * 3) { return ResolveState("Mod1ReadyC"); }
-			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4) * 2) { return ResolveState("Mod1ReadyB"); }
-			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4)    ) { return ResolveState("Mod1ReadyA"); }
+			if(invoker.mod1.charge.val >=  invoker.mod1.charge.max       ) { return ResolveState("Mod1ReadyD"); }
+			if(invoker.mod1.charge.val >= (invoker.mod1.charge.max/4) * 3) { return ResolveState("Mod1ReadyC"); }
+			if(invoker.mod1.charge.val >= (invoker.mod1.charge.max/4) * 2) { return ResolveState("Mod1ReadyB"); }
+			if(invoker.mod1.charge.val >= (invoker.mod1.charge.max/4)    ) { return ResolveState("Mod1ReadyA"); }
 			return ResolveState(null);
 		}
 		PL1G A 0;
 		Goto ReadyLoop;
 	Mod1ReadyA:
 		PL1A FFFGGG 1 A_WeaponReady(WRF_ALLOWRELOAD);
-		PL1G AAA 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		PL1G AAA    1 A_WeaponReady(WRF_ALLOWRELOAD);
 		PL1A GGGFFF 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 	Mod1ReadyB:
@@ -129,57 +132,54 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 	Mod1FirePrimary:
 		// extra special animation stuffs for heatblast's primary fire
 		PL1G K 1 Bright {
-			if(CountInv("ArgPlasmaRifleModCharge") >=  PLASMA_MOD_CHARGE   ) { return ResolveState("Mod1FirePrimaryB"); }
-			if(CountInv("ArgPlasmaRifleModCharge") >= (PLASMA_MOD_CHARGE/4)) { return ResolveState("Mod1FirePrimaryA"); }
+			if(invoker.mod1.charge.val >=  invoker.mod1.charge.max   ) { return ResolveState("Mod1FirePrimaryB"); }
+			if(invoker.mod1.charge.val >= (invoker.mod1.charge.max/4)) { return ResolveState("Mod1FirePrimaryA"); }
 			return ResolveState(null);
 		}
-		PL1G L 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25));
-		PL1G A 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50));
+		PL1G L 1 Bright Arg_A_WeaponOffset(2.50, 1.500, 0.75, 0.250);
+		PL1G A 1        Arg_A_WeaponOffset(2.25, 0.875, 1.25, 0.375);
 		Goto Mod1Ready;
 	Mod1FirePrimaryA:
 		PL1G B 1 Bright;
-		PL1G C 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25));
-		PL1A D 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50));
+		PL1G C 1 Bright Arg_A_WeaponOffset(2.50, 1.500, 0.75, 0.250);
+		PL1A D 1        Arg_A_WeaponOffset(2.25, 0.875, 1.25, 0.375);
 		Goto Mod1Ready;
 	Mod1FirePrimaryB:
 		PL1G I 1 Bright;
-		PL1G J 1 Bright A_WeaponOffset(2.0 + frandom(-0.25, 1.25), 33.5 + frandom(-0.25, 0.25));
-		PL1A D 1        A_WeaponOffset(1.0 + frandom(-0.25, 2.25), 33.0 + frandom(-0.25, 0.50));
+		PL1G J 1 Bright Arg_A_WeaponOffset(2.50, 1.500, 0.75, 0.250);
+		PL1A D 1        Arg_A_WeaponOffset(2.25, 0.875, 1.25, 0.375);
 		Goto Mod1Ready;
 	Mod1Up:
-		PL1G A 1 A_JumpIfInventory("ArgPlasmaRifleModCharge", 30, "Mod1Hold");
+		PL1G A 1 {
+			if(invoker.mod1.charge.val >= (invoker.mod1.charge.max/4)) {
+				return ResolveState("Mod1Hold");
+			}
+			return ResolveState(null);
+		}
 		Goto Mod1Ready;
 	Mod1Hold:
 		PL1A A 1 Bright {
-			A_GunFlash();
-			A_AlertMonsters();
-			A_PlaySound("weapons/plasma/mod1fire", CHAN_6);
-			A_Explode(CountInv("ArgPlasmaRifleModCharge") * 3, 160, XF_NOTMISSILE, 0, 128);
-			A_Blast(BF_NOIMPACTDAMAGE, CountInv("ArgPlasmaRifleModCharge") * 2, 160, 20, "ArgNothing", "");
-			A_TakeInventory("ArgPlasmaRifleModCharge", PLASMA_MOD_CHARGE);
+			Arg_A_GunFlash('Flash', "weapons/plasma/mod1fire");
+			A_Explode(invoker.mod1.charge.val * 3, 160, XF_NOTMISSILE, 0, 128);
+			A_Blast(BF_NOIMPACTDAMAGE, invoker.mod1.charge.val * 2, 160, 20, "ArgNothing", "");
+			invoker.mod1.charge.toMin();
 			
 			// cool heatwave fx
 			A_Quake(2, 8, 0, 8, "");
-			A_FireProjectile("ArgPlasmaHeatWave", -40, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireProjectile("ArgPlasmaHeatWave", -30, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireProjectile("ArgPlasmaHeatWave", -20, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireProjectile("ArgPlasmaHeatWave", -10, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireProjectile("ArgPlasmaHeatWave",   0, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireProjectile("ArgPlasmaHeatWave",  10, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireProjectile("ArgPlasmaHeatWave",  20, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireProjectile("ArgPlasmaHeatWave",  30, 0, 0, 0, FPF_NOAUTOAIM);
-			A_FireProjectile("ArgPlasmaHeatWave",  40, 0, 0, 0, FPF_NOAUTOAIM);
+			for(int i = -40; i <= 40; i += 10) {
+				A_FireProjectile("ArgPlasmaHeatWave", i, 0, 0, 0, FPF_NOAUTOAIM);
+			}
 		}
-		PL1A B 1 A_WeaponOffset( 5.0,  5.0 + 32.0);
-		PL1A B 1 A_WeaponOffset(12.0, 12.0 + 32.0);
-		PL1A C 1 A_WeaponOffset(15.0, 15.0 + 32.0);
-		PL1A C 1 A_WeaponOffset(16.0, 16.0 + 32.0);
-		PL1A D 1 A_WeaponOffset(14.0, 14.0 + 32.0);
-		PL1A D 1 A_WeaponOffset(11.0, 11.0 + 32.0);
-		PL1A E 1 A_WeaponOffset( 8.0,  8.0 + 32.0);
-		PL1A E 1 A_WeaponOffset( 4.0,  4.0 + 32.0);
-		PL1A F 1 A_WeaponOffset( 1.0,  1.0 + 33.0);
-		PL1A G 1 A_WeaponOffset( 0.0,  0.0 + 32.0);
+		PL1A B 1 Arg_A_WeaponOffset( 5.0,  5.0);
+		PL1A B 1 Arg_A_WeaponOffset(12.0, 12.0);
+		PL1A C 1 Arg_A_WeaponOffset(15.0, 15.0);
+		PL1A C 1 Arg_A_WeaponOffset(16.0, 16.0);
+		PL1A D 1 Arg_A_WeaponOffset(14.0, 14.0);
+		PL1A D 1 Arg_A_WeaponOffset(11.0, 11.0);
+		PL1A E 1 Arg_A_WeaponOffset( 8.0,  8.0);
+		PL1A E 1 Arg_A_WeaponOffset( 4.0,  4.0);
+		PL1A F 1 Arg_A_WeaponOffset( 1.0,  1.0);
+		PL1A G 1 Arg_A_WeaponOffset( 0.0,  0.0);
 		Goto Mod1Ready;
 
 	/* Mod 2: Stun Bomb */
@@ -193,42 +193,45 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 	Mod2Swap:
 		PL2S A 1 {
 			A_PlaySound("weapons/plasma/mod2swap", CHAN_AUTO);
-			A_TakeInventory("ArgPlasmaRifleModCharge", PLASMA_MOD_CHARGE);
+			invoker.mod1.charge.toMin();
 		}
-		PL2S B 1 A_WeaponOffset(  0.0, 32.0);
-		PL2S C 1 A_WeaponOffset(- 1.0, 32.0);
-		PL2S D 1 A_WeaponOffset(- 3.0, 32.5);
-		PL2S E 1 A_WeaponOffset(- 5.0, 33.0);
-		PL2S F 1 A_WeaponOffset(- 6.0, 34.0);
+		PL2S B 1 Arg_A_WeaponOffset(  0.0, 0.0);
+		PL2S C 1 Arg_A_WeaponOffset(- 1.0, 0.0);
+		PL2S D 1 Arg_A_WeaponOffset(- 3.0, 0.5);
+		PL2S E 1 Arg_A_WeaponOffset(- 5.0, 1.0);
+		PL2S F 1 Arg_A_WeaponOffset(- 6.0, 2.0);
 		PL2S GHIJ 1;
 		PL2S K 6;
-		PL2S K 1 A_WeaponOffset(- 7.0, 35.0);
-		PL2S K 1 A_WeaponOffset(- 8.0, 36.0);
-		PL2S L 1 A_WeaponOffset(-10.0, 38.0);
-		PL2S L 1 A_WeaponOffset(-12.0, 40.0);
-		PL2S M 1 A_WeaponOffset(-13.0, 41.0);
-		PL2S N 1 A_WeaponOffset(-13.0, 41.0);
-		PL2S O 1 A_WeaponOffset(-12.0, 40.0);
-		PL2S P 1 A_WeaponOffset(-10.0, 38.0);
-		PL2S Q 1 A_WeaponOffset(- 8.0, 36.0);
-		PL2S Q 1 A_WeaponOffset(- 6.0, 35.0);
-		PL2S Q 1 A_WeaponOffset(- 4.0, 34.0);
-		PL2S Q 1 A_WeaponOffset(- 2.0, 33.0);
-		PL2S Q 1 A_WeaponOffset(- 1.0, 32.0);
-		PL2S Q 6 A_WeaponOffset(  0.0, 32.0);
+		PL2S K 1 Arg_A_WeaponOffset(- 7.0, 3.0);
+		PL2S K 1 Arg_A_WeaponOffset(- 8.0, 4.0);
+		PL2S L 1 Arg_A_WeaponOffset(-10.0, 6.0);
+		PL2S L 1 Arg_A_WeaponOffset(-12.0, 8.0);
+		PL2S M 1 Arg_A_WeaponOffset(-13.0, 9.0);
+		PL2S N 1 Arg_A_WeaponOffset(-13.0, 9.0);
+		PL2S O 1 Arg_A_WeaponOffset(-12.0, 8.0);
+		PL2S P 1 Arg_A_WeaponOffset(-10.0, 6.0);
+		PL2S Q 1 Arg_A_WeaponOffset(- 8.0, 4.0);
+		PL2S Q 1 Arg_A_WeaponOffset(- 6.0, 3.0);
+		PL2S Q 1 Arg_A_WeaponOffset(- 4.0, 2.0);
+		PL2S Q 1 Arg_A_WeaponOffset(- 2.0, 1.0);
+		PL2S Q 1 Arg_A_WeaponOffset(- 1.0, 0.0);
+		PL2S Q 6 Arg_A_WeaponOffset(  0.0, 0.0);
 		PL2S RSTU 2;
 	Mod2Ready:
 		PL2G A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		PL2G D 1 {
-			if(CountInv("ArgPlasmaRifleModCooldown") == 1) {
+			if(invoker.mod2.cooldown.val == 1) {
 				A_PlaySound("weapons/plasma/mod2ready", CHAN_AUTO);
 			}
-			return A_JumpIfInventory("ArgPlasmaRifleModCooldown", 1, "Mod2Ready");
+			if(invoker.mod2.cooldown.val >= 1) {
+				return ResolveState("Mod2Ready");
+			}
+			return ResolveState(null);
 		}
 		PL2G DEEFFFFFFFFEEDDA 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 	Mod2Up:
-		PL2G A 1 A_JumpIfInventory("Cell", PLASMA_MOD2_AMMOUSE, "Mod2Hold");
+		PL2G A 1 Arg_A_JumpIfAmmo('Mod2Hold', invoker.mod2.ammoUse);
 		Goto Mod2Ready;
 	Mod2Hold:
 		PL2G B 1 Bright {
@@ -236,19 +239,18 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_AlertMonsters();
 			A_PlaySound("weapons/plasma/mod2fire", CHAN_6);
 			A_FireProjectile("ArgStunBomb", 0, 0, 0, 0, FPF_AIMATANGLE , 5);
-			A_TakeInventory("Cell", PLASMA_MOD2_AMMOUSE, TIF_NOTAKEINFINITE);
-			A_GiveInventory("ArgPlasmaRifleModCooldown", PLASMA_MOD_COOLDOWN);
+			Arg_A_TakeAmmo(invoker.mod2.ammoUse);
 		}
-		PL2G A 1 A_WeaponOffset( 5.0,  5.0 + 32.0);
-		PL2G G 1 A_WeaponOffset(12.0, 12.0 + 32.0);
-		PL2G G 1 A_WeaponOffset(15.0, 15.0 + 32.0);
-		PL2G H 1 A_WeaponOffset(16.0, 16.0 + 32.0);
-		PL2G H 1 A_WeaponOffset(14.0, 14.0 + 32.0);
-		PL2G I 1 A_WeaponOffset(11.0, 11.0 + 32.0);
-		PL2G I 1 A_WeaponOffset( 8.0,  8.0 + 32.0);
-		PL2G I 1 A_WeaponOffset( 4.0,  4.0 + 32.0);
-		PL2G I 1 A_WeaponOffset( 1.0,  1.0 + 33.0);
-		PL2G J 2 A_WeaponOffset( 0.0,  0.0 + 32.0);
+		PL2G A 1 Arg_A_WeaponOffset( 5.0,  5.0);
+		PL2G G 1 Arg_A_WeaponOffset(12.0, 12.0);
+		PL2G G 1 Arg_A_WeaponOffset(15.0, 15.0);
+		PL2G H 1 Arg_A_WeaponOffset(16.0, 16.0);
+		PL2G H 1 Arg_A_WeaponOffset(14.0, 14.0);
+		PL2G I 1 Arg_A_WeaponOffset(11.0, 11.0);
+		PL2G I 1 Arg_A_WeaponOffset( 8.0,  8.0);
+		PL2G I 1 Arg_A_WeaponOffset( 4.0,  4.0);
+		PL2G I 1 Arg_A_WeaponOffset( 1.0,  1.0);
+		PL2G J 2 Arg_A_WeaponOffset( 0.0,  0.0);
 		PL2G KLIHG 2;
 		Goto Cooldown;
 	}
@@ -333,14 +335,23 @@ class ArgStunBomb : ArgPlasma
 			A_NoGravity();
 			A_RadiusGive("ArgStunner", 160, RGF_MONSTERS);
 		} 
-		PBOM EE 1 Bright { for (int i = 0; i < 10; i++) { A_CustomRailgun(0, 0, "", "4444FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 40, 1, 0.2, 0.0); } }
-		PBOM EF 1 Bright { for (int i = 0; i < 10; i++) { A_CustomRailgun(0, 0, "", "8888FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 48, 1, 0.2, 0.0); } }
-		PBOM FF 1 Bright { for (int i = 0; i < 10; i++) { A_CustomRailgun(0, 0, "", "AAAAFF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 56, 1, 0.2, 0.0); } }
-		PBOM GG 1 Bright { for (int i = 0; i < 10; i++) { A_CustomRailgun(0, 0, "", "8888FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 48, 1, 0.2, 0.0); } }
-		PBOM GH 1 Bright { for (int i = 0; i < 10; i++) { A_CustomRailgun(0, 0, "", "4444FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 40, 1, 0.2, 0.0); } }
-		PBOM HH 1 Bright { for (int i = 0; i < 10; i++) { A_CustomRailgun(0, 0, "", "0000FF", RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, 32, 1, 0.2, 0.0); } }
+		PBOM EE 1 Bright Arg_A_StunBombFX("4444FF", 40);
+		PBOM EF 1 Bright Arg_A_StunBombFX("8888FF", 48);
+		PBOM FF 1 Bright Arg_A_StunBombFX("AAAAFF", 56);
+		PBOM GG 1 Bright Arg_A_StunBombFX("8888FF", 48);
+		PBOM GH 1 Bright Arg_A_StunBombFX("4444FF", 40);
+		PBOM HH 1 Bright Arg_A_StunBombFX("0000FF", 32);
 		PBOM I 3 Bright;
 		Stop;
+	}
+	
+	/*
+	 * spiffy zappy FX function
+	 */
+	action void Arg_A_StunBombFX(color col, int range) {
+		for (int i = 0; i < 10; i++) {
+			A_CustomRailgun(0, 0, "", col, RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, range, 1, 0.2, 0.0);
+		}
 	}
 }
 

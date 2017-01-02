@@ -124,6 +124,14 @@ class ArgWeapon : DoomWeapon
 	}
 	
 	/*
+	 * The inverse of the above, for completeness' sake.
+	 */
+	action state Arg_A_JumpIfAmmo(statelabel state = 'Ready', int amount = 1)
+	{
+		return (CountInv(invoker.AmmoType1) >= amount) ? ResolveState(state) : ResolveState(null);
+	}
+	
+	/*
 	 * Synth-fire convenience functions. Comes in both
 	 * check and jump variants. Note that the 'checks' need to be labeled
 	 * with "action" even though they kinda aren't; funky compat stuff.
