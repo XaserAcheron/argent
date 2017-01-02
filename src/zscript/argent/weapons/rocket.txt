@@ -7,7 +7,6 @@
 class ArgRocketLauncherModSelected : ArgModToken {}
 class ArgRocketLauncherMod1Enabled : ArgToken    {}
 class ArgRocketLauncherMod2Enabled : ArgToken    {}
-class ArgRocketLauncherModCooldown : ArgToken    { Default { Inventory.MaxAmount 90; } }
 class ArgRocketLauncherModCharge   : ArgToken    { Default { Inventory.MaxAmount 25; } }
 
 class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher

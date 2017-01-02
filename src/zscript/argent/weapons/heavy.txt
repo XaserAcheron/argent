@@ -7,7 +7,6 @@
 class ArgHeavyARModSelected : ArgModToken {}
 class ArgHeavyARMod1Enabled : ArgToken    {}
 class ArgHeavyARMod2Enabled : ArgToken    {}
-class ArgHeavyARModCooldown : ArgToken    {}
 
 class ArgHeavyAR : ArgModWeapon replaces Chaingun
 {

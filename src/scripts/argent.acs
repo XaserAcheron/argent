@@ -40,16 +40,6 @@ script "ArgentInit" enter {
 	};
 	players[PlayerNumber()] = playerStruct;
 	
-	// Remove all cooldowns on map start. This will eventually go away
-	// once the cooldown system is redone to use overlays.
-	TakeInventory("ArgShotgunModCooldown"       , 999);
-	TakeInventory("ArgHeavyARModCooldown"       , 999);
-	TakeInventory("ArgChaingunModCooldown"      , 999);
-	TakeInventory("ArgRocketLauncherModCooldown", 999);
-	TakeInventory("ArgPlasmaRifleModCooldown"   , 999);
-	TakeInventory("ArgGaussCannonModCooldown"   , 999);
-	TakeInventory("ArgGaussCannonModCharge"     , 999);
-	
 	// Reset a couple of player properties.
 	SetActorProperty(0, APROP_SPEED, 1.0);
 	TakeInventory("ArgModKitToken", 1);
@@ -322,37 +312,6 @@ script "GimmeMods" (void) {
 	str mod2EnabledToken = StrParam(s:weapon, s:"Mod2Enabled");
 	GiveInventory(mod1EnabledToken, 1);
 	GiveInventory(mod2EnabledToken, 1);
-}
-
-/*
- * Start mod cooldown phase. This is done in a script so there
- * aren't a zillion ACS_NamedExecutes done in a 1-tic loop constantly.
- */
-script "StartModCooldown" (void) {
-	str weapon = GetWeapon();
-	str modCooldownToken = StrParam(s:weapon, s:"ModCooldown");
-	while(CheckInventory(modCooldownToken) > 0) {
-		TakeInventory(modCooldownToken, 1);
-		delay(1);
-	}
-}
-
-/*
- * Checks if mod cooldown is complete.
- */
-script "CheckModCooldown" (void) {
-	str weapon = GetWeapon();
-	str modCooldownToken = StrParam(s:weapon, s:"ModCooldown");
-	SetResultValue(CheckInventory(modCooldownToken) == 0);
-}
-
-/*
- * Clears a mod's cooldown entirely.
- */
-script "ClearModCooldown" (void) {
-	str weapon = GetWeapon();
-	str modCooldownToken = StrParam(s:weapon, s:"ModCooldown");
-	TakeInventory(modCooldownToken, 999);
 }
 
 /*

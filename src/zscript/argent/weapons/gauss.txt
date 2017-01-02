@@ -8,7 +8,6 @@ class ArgGaussCannonModSelected : ArgModToken {}
 class ArgGaussCannonMod1Enabled : ArgToken    {}
 class ArgGaussCannonMod2Enabled : ArgToken    {}
 class ArgGaussCannonModCharge   : ArgToken    { Default { Inventory.MaxAmount 71; } } // 30 is the damage max, but this is higher for sound looping purposes
-class ArgGaussCannonModCooldown : ArgToken    {}
 
 class ArgGaussCannon : ArgModWeapon
 {

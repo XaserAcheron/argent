@@ -7,7 +7,6 @@
 class ArgPlasmaRifleModSelected : ArgModToken {}
 class ArgPlasmaRifleMod1Enabled : ArgToken    {}
 class ArgPlasmaRifleMod2Enabled : ArgToken    {}
-class ArgPlasmaRifleModCooldown : ArgToken    {} // [TODO] remove
 
 class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 {

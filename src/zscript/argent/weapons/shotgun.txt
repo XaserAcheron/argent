@@ -7,7 +7,6 @@
 class ArgShotgunModSelected : ArgModToken {}
 class ArgShotgunMod1Enabled : ArgToken    {}
 class ArgShotgunMod2Enabled : ArgToken    {}
-class ArgShotgunModCooldown : ArgToken    {} // [TODO] remove
 
 class ArgShotgun : ArgModWeapon replaces Shotgun
 {

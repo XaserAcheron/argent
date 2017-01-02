@@ -377,9 +377,6 @@ class ArgModWeapon : ArgWeapon
 		// [TODO] do just the selected mod, not both.
 		invoker.mod1.cooldown.toMax();
 		invoker.mod2.cooldown.toMax();
-		
-		// [TODO] remove this ACS bit once all weapons are ported over.
-		CallACS("StartModCooldown");
 	}
 	
 	/*
@@ -390,9 +387,6 @@ class ArgModWeapon : ArgWeapon
 		// [TODO] do just the selected mod, not both.
 		invoker.mod1.cooldown.toMin();
 		invoker.mod2.cooldown.toMin();
-		
-		// [TODO] remove this ACS bit once all weapons are ported over.
-		CallACS("ClearModCooldown");
 	}
 	
 	/*
@@ -401,9 +395,7 @@ class ArgModWeapon : ArgWeapon
 	 */
 	action bool Arg_A_CheckModCooldown() {
 		// [TODO] do just the selected mod, not both.
-		// [TODO] remove this ACS bit once all weapons are ported over.
-		return CallACS("CheckModCooldown")
-		    && invoker.mod1.cooldown.get() == 0
+		return invoker.mod1.cooldown.get() == 0
 		    && invoker.mod2.cooldown.get() == 0
 		;
 	}

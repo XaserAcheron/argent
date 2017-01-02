@@ -7,7 +7,6 @@
 class ArgChaingunModSelected : ArgModToken {}
 class ArgChaingunMod1Enabled : ArgToken    {}
 class ArgChaingunMod2Enabled : ArgToken    {}
-class ArgChaingunModCooldown : ArgToken    {} // [TODO] remove
 
 class ArgChaingun : ArgModWeapon
 {
