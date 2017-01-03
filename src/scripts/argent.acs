@@ -15,29 +15,11 @@
 #include "zcommon.acs"
 
 #define DEF_STUN_SECONDS 5
-#define DEF_DUMMY_TID    -1
-#define DEF_TID_START    1000
-
-/*
- * Exceptionally-useful player struct thingamajig.
- */
-struct ArgPlayer
-{
-	int targetTid;
-	int targetTidOrig;
-}
-ArgPlayer players[64]; // zandro max to the max!
 
 /*
  * Init script. Gotta set those defaults to something sane.
  */ 
 script "ArgentInit" enter {
-	ArgPlayer playerStruct = {
-		DEF_DUMMY_TID // targetTid
-	,	DEF_DUMMY_TID // targetTidOrig
-	};
-	players[PlayerNumber()] = playerStruct;
-	
 	// Reset a couple of player properties.
 	SetActorProperty(0, APROP_SPEED, 1.0);
 	TakeInventory("ArgModKitToken", 1);
@@ -318,30 +300,6 @@ script "GimmeMods" (void) {
 script "GetPlayerNumber" (void) {
 	SetActivatorToTarget(0);
 	SetResultValue(PlayerNumber());
-}
-
-/*
- * RAWGGIT LAWNCHAIR scripts
- */
-script "Mod2RocketLockStart" (void) {
-	int playerNum = PlayerNumber();
-	
-	// get the tid of the player's target. If it doesn't exist, assign it one.
-	SetActivator(0, AAPTR_PLAYER_GETTARGET);
-	int targetTid = ActivatorTID();
-	players[playerNum].targetTid     = (targetTid == 0) ? UniqueTID() : targetTid;
-	players[playerNum].targetTidOrig =  targetTid; // keep this around so we can set it back
-	Thing_ChangeTID(0, players[playerNum].targetTid);
-}
-script "Mod2RocketLockFire" (int playerNum) {
-	// simple script: just change the tracer to the stored tid.
-	SetPointer(AAPTR_TRACER, players[playerNum].targetTid);
-}
-script "Mod2RocketLockStop" (void) {
-	int playerNum = PlayerNumber();
-	
-	// remove tid from the player's (former) target.
-	Thing_ChangeTID(players[playerNum].targetTid, players[playerNum].targetTidOrig);
 }
 
 /*

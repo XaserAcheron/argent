@@ -8,8 +8,9 @@ class ArgPlayer : DoomPlayer
 {
 	const MAX_ROCKETS = 50; // ought to be enough for anybody ;)
 
-	int numRockets;
-	Actor[MAX_ROCKETS] rockets;
+	int numRockets; // number of detonate-able rockets in flight
+	Actor[MAX_ROCKETS] rockets; // list of detonate-able rockets in flight
+	Actor lockTarget; // current lock-on burst target
 	
 	override void BeginPlay() {
 		numRockets = 0;
