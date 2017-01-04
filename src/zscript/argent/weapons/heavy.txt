@@ -20,11 +20,11 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 	{
 		Super.BeginPlay();
 		
-		mod1.ammoUse = 3;
-		mod1.cooldown.init(0, 90);
+		mod[1].ammoUse = 3;
+		mod[1].cooldown.init(0, 90);
 
-		mod2.ammoUse = 2;
-		mod2.cooldown.init(0, 90);
+		mod[2].ammoUse = 2;
+		mod[2].cooldown.init(0, 90);
 	}
 
 	Default {
@@ -47,7 +47,7 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 		HARG A 0;
 		Goto Super::Ready;
 	Select:
-		HARG A 0 { invoker.mod1.cooldown.unlock(); }
+		HARG A 0 { invoker.mod[1].cooldown.unlock(); }
 		Goto Super::Select;
 		
 	/* Unmodded + Primary */
@@ -95,7 +95,7 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 		Goto ReadyLoop;
 	Mod1Up:
 		HA1M A 1 {
-			invoker.mod1.cooldown.lock();
+			invoker.mod[1].cooldown.lock();
 			A_PlaySound("weapons/heavy/mod1up", CHAN_AUTO);
 		}
 		HA1M BCDE 1;
@@ -106,28 +106,28 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 	Mod1Down:
 		HA1M E 1 A_PlaySound("weapons/heavy/mod1down", CHAN_AUTO);
 		HA1M DCBA 1;
-		HA1M A 0 { invoker.mod1.cooldown.unlock(); }
+		HA1M A 0 { invoker.mod[1].cooldown.unlock(); }
 		Goto Ready;
 	Mod1Fire:
 		HA1N A 0 Bright {
 			// extra ammo check, so we'll know to break out of sustained fire
 			// if we run out of juice.
-			if(!Arg_A_CheckAmmo(invoker.mod1.ammoUse)) { return ResolveState("Mod1Down"); }
+			if(!Arg_A_CheckAmmo(invoker.mod[1].ammoUse)) { return ResolveState("Mod1Down"); }
 			
-			Arg_A_TakeAmmo(invoker.mod1.ammoUse);
+			Arg_A_TakeAmmo(invoker.mod[1].ammoUse);
 			Arg_A_GunFlash('Flash', "weapons/heavy/missile", ARG_GF_ALTSOUND);
 			A_FireProjectile("ArgMicroMissile", 0, 0, 4, 4);
 			
 			// Jump to whatever part of the animation we happen to be on.
 			// [TODO] this whenever it's possible :|
-//			int animStage = invoker.mod1.cooldown.get() / (invoker.mod1.cooldown.max/6) + 1;
+//			int animStage = invoker.mod[1].cooldown.get() / (invoker.mod[1].cooldown.max/6) + 1;
 //			string animLabel = "Mod1Anim" .. animStage;
 //			return ResolveState(animLabel);
-			if(invoker.mod1.cooldown.get() >= (invoker.mod1.cooldown.max/6) * 5) { return ResolveState("Mod1Anim6"); }
-			if(invoker.mod1.cooldown.get() >= (invoker.mod1.cooldown.max/6) * 4) { return ResolveState("Mod1Anim5"); }
-			if(invoker.mod1.cooldown.get() >= (invoker.mod1.cooldown.max/6) * 3) { return ResolveState("Mod1Anim4"); }
-			if(invoker.mod1.cooldown.get() >= (invoker.mod1.cooldown.max/6) * 2) { return ResolveState("Mod1Anim3"); }
-			if(invoker.mod1.cooldown.get() >= (invoker.mod1.cooldown.max/6) * 1) { return ResolveState("Mod1Anim2"); }
+			if(invoker.mod[1].cooldown.get() >= (invoker.mod[1].cooldown.max/6) * 5) { return ResolveState("Mod1Anim6"); }
+			if(invoker.mod[1].cooldown.get() >= (invoker.mod[1].cooldown.max/6) * 4) { return ResolveState("Mod1Anim5"); }
+			if(invoker.mod[1].cooldown.get() >= (invoker.mod[1].cooldown.max/6) * 3) { return ResolveState("Mod1Anim4"); }
+			if(invoker.mod[1].cooldown.get() >= (invoker.mod[1].cooldown.max/6) * 2) { return ResolveState("Mod1Anim3"); }
+			if(invoker.mod[1].cooldown.get() >= (invoker.mod[1].cooldown.max/6) * 1) { return ResolveState("Mod1Anim2"); }
 			return ResolveState(null);
 		}
 	Mod1Anim1:
@@ -173,8 +173,8 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 		HA1M F 1        Arg_A_WeaponOffset(1, 0, 0.25);
 	Mod1AnimEnd:
 		"####" "#" 0 {
-			invoker.mod1.cooldown.inc(invoker.mod1.cooldown.max/6);
-			if(invoker.mod1.cooldown.get() <= (invoker.mod1.cooldown.max/6)*5 && Arg_A_CheckAmmo(invoker.mod1.ammoUse)) {
+			invoker.mod[1].cooldown.inc(invoker.mod[1].cooldown.max/6);
+			if(invoker.mod[1].cooldown.get() <= (invoker.mod[1].cooldown.max/6)*5 && Arg_A_CheckAmmo(invoker.mod[1].ammoUse)) {
 				return A_Refire();
 			}
 			return;
@@ -226,7 +226,7 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 		Goto Ready;
 	Mod2Fire:
 		HSCP A 1 Bright {
-			Arg_A_TakeAmmo(invoker.mod2.ammoUse);
+			Arg_A_TakeAmmo(invoker.mod[2].ammoUse);
 			Arg_A_GunFlash('Flash', "weapons/heavy/altfire", ARG_GF_ALTSOUND);
 			A_FireBullets(0, 0, 1, 14, "ArgBulletPuff");
 			A_ZoomFactor(1.80);

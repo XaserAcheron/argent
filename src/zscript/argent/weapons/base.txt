@@ -182,8 +182,11 @@ struct ArgMod
  */
 class ArgModWeapon : ArgWeapon
 {
-	ArgMod mod1;
-	ArgMod mod2;
+	/*
+	 * Mod definition & control.
+	 */
+	int modSelected;
+	ArgMod[3] mod; // mod[0] is used as a placeholder for "no mod selected."
 
 	Default
 	{
@@ -287,10 +290,10 @@ class ArgModWeapon : ArgWeapon
 		Goto DontFire;
 	/* [TODO] remove these band-aids after ACS is ousted. */
 	Mod1UpCheck:
-		"####" "#" 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod1.ammoUse);
+		"####" "#" 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod[1].ammoUse);
 		"####" "#" 0 ResolveState("Mod1Up");
 	Mod2UpCheck:
-		"####" "#" 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod2.ammoUse);
+		"####" "#" 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod[2].ammoUse);
 		"####" "#" 0 ResolveState("Mod2Up");
 	/* [/TODO */
 	Mod1Up:
@@ -320,8 +323,8 @@ class ArgModWeapon : ArgWeapon
 		// Subtract 1 from mod cooldown every tick, no matter
 		// what else happens. Huzzah!
 		let this = ArgModWeapon(self);
-		this.mod1.cooldown.dec();
-		this.mod2.cooldown.dec();
+		this.mod[1].cooldown.dec();
+		this.mod[2].cooldown.dec();
 	}
 	
 	/*
@@ -362,7 +365,7 @@ class ArgModWeapon : ArgWeapon
 	 */
 	action state Arg_A_SwapMod() {
 		// [TODO] port ACS to zscript.
-		
+
 		if(CallACS("SwapMod")) {
 			return ResolveState("ModSwapDown");
 		} else {
@@ -375,8 +378,8 @@ class ArgModWeapon : ArgWeapon
 	 */
 	action void Arg_A_StartModCooldown() {
 		// [TODO] do just the selected mod, not both.
-		invoker.mod1.cooldown.toMax();
-		invoker.mod2.cooldown.toMax();
+		invoker.mod[1].cooldown.toMax();
+		invoker.mod[2].cooldown.toMax();
 	}
 	
 	/*
@@ -385,8 +388,8 @@ class ArgModWeapon : ArgWeapon
 	 */
 	action void Arg_A_ClearModCooldown() {
 		// [TODO] do just the selected mod, not both.
-		invoker.mod1.cooldown.toMin();
-		invoker.mod2.cooldown.toMin();
+		invoker.mod[1].cooldown.toMin();
+		invoker.mod[2].cooldown.toMin();
 	}
 	
 	/*
@@ -395,8 +398,8 @@ class ArgModWeapon : ArgWeapon
 	 */
 	action bool Arg_A_CheckModCooldown() {
 		// [TODO] do just the selected mod, not both.
-		return invoker.mod1.cooldown.get() == 0
-		    && invoker.mod2.cooldown.get() == 0
+		return invoker.mod[1].cooldown.get() == 0
+		    && invoker.mod[2].cooldown.get() == 0
 		;
 	}
 }

@@ -16,9 +16,10 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	{
 		Super.BeginPlay();
 
-		mod1.ammoUse = 1;
-		mod2.ammoUse = 3;
-		mod2.charge.init(0, 20);
+		mod[1].ammoUse = 1;
+
+		mod[2].ammoUse = 3;
+		mod[2].charge.init(0, 20);
 	}
 	
 	Default
@@ -44,7 +45,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	Deselect:
 		"####" A 0 {
 			A_StopSound(CHAN_5);
-			invoker.mod2.charge.toMin();
+			invoker.mod[2].charge.toMin();
 			Arg_A_RocketLockClear();
 		}
 		Goto DeselectLoop;
@@ -188,33 +189,33 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RK2G A 0 {
 			Arg_A_RocketLockOn();
 			A_PlaySound("weapons/rocket/mod2up", CHAN_6);
-			invoker.mod2.charge.inc();
+			invoker.mod[2].charge.inc();
 		}
 	Mod2Hold:
 		RK2G A 1 {
 			// check to see if the player has any charge. If none, leap back
 			// to Mod2Up as we haven't acquired a valid target yet.
-			if(invoker.mod2.charge.isMin()) {
+			if(invoker.mod[2].charge.isMin()) {
 				return ResolveState("Mod2Up");
 
 			// got enough charge and the button's down? fire away!
-			} else if (invoker.mod2.charge.isMax() && Arg_SynthFire()) {
+			} else if (invoker.mod[2].charge.isMax() && Arg_SynthFire()) {
 				return ResolveState("Mod2Fire");
 			}
-			invoker.mod2.charge.inc();
+			invoker.mod[2].charge.inc();
 			return ResolveState(null);
 		}
 		RK2G A 0 A_Refire();
 	Mod2Down:
 		RK2G A 0 {
-			invoker.mod2.charge.toMin();
+			invoker.mod[2].charge.toMin();
 			Arg_A_RocketLockClear();
 			A_StopSound(CHAN_6);
 		}
 		Goto Ready;
 	Mod2Fire:
 		RK2G C 1 Bright {
-			invoker.mod2.charge.toMin();
+			invoker.mod[2].charge.toMin();
 			A_GunFlash();
 			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
 			A_FireProjectile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
