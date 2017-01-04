@@ -4,10 +4,6 @@
 //
 // --------------------------------------------------------------------------
 
-class ArgRocketLauncherModSelected : ArgModToken {}
-class ArgRocketLauncherMod1Enabled : ArgToken    {}
-class ArgRocketLauncherMod2Enabled : ArgToken    {}
-
 class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 {
 	const ROCKET_OVERLAY_LAYER = 2;

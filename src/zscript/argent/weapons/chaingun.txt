@@ -4,10 +4,6 @@
 //
 // --------------------------------------------------------------------------
 
-class ArgChaingunModSelected : ArgModToken {}
-class ArgChaingunMod1Enabled : ArgToken    {}
-class ArgChaingunMod2Enabled : ArgToken    {}
-
 class ArgChaingun : ArgModWeapon
 {
 	int spinStage;

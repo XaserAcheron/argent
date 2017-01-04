@@ -170,7 +170,9 @@ class ArgWeapon : DoomWeapon
  */
 struct ArgMod
 {
-	// [TODO] make this cooler. :(
+	// [XA] at some point, things like mod kit menu icons and text strings
+	//      (or at least the LANGUAGE references) will be placed here.
+	//      Needs an interface betwen ACS and ZScript first, though.
 	bool enabled;
 	int ammoUse;
 	ArgCounter cooldown;
@@ -447,7 +449,6 @@ class ArgModWeapon : ArgWeapon
  *      is still being done there. This ought to go away once some
  *      hudmessage equivalent exists in ZScript.
  */
-class ArgModToken : ArgToken { Default { Inventory.MaxAmount 2; } }
+class ArgModTotal    : ArgToken { Default { Inventory.MaxAmount 12; } }
 class ArgMod1Enabled : ArgToken {}
 class ArgMod2Enabled : ArgToken {}
-class ArgModTotal    : ArgToken { Default { Inventory.MaxAmount 12; } }

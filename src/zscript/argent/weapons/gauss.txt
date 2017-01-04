@@ -4,14 +4,8 @@
 //
 // --------------------------------------------------------------------------
 
-class ArgGaussCannonModSelected : ArgModToken {}
-class ArgGaussCannonMod1Enabled : ArgToken    {}
-class ArgGaussCannonMod2Enabled : ArgToken    {}
-
 class ArgGaussCannon : ArgModWeapon
 {
-	const GAUSS_MOD_CHARGE   = 30;
-
 	const GAUSS_CROSSHAIR_ANIM1 = 74;
 	const GAUSS_CROSSHAIR_ANIM2 = 73;
 	const GAUSS_CROSSHAIR_ANIM3 = 72;

@@ -4,10 +4,6 @@
 //
 // --------------------------------------------------------------------------
 
-class ArgShotgunModSelected : ArgModToken {}
-class ArgShotgunMod1Enabled : ArgToken    {}
-class ArgShotgunMod2Enabled : ArgToken    {}
-
 class ArgShotgun : ArgModWeapon replaces Shotgun
 {
 	override void BeginPlay()

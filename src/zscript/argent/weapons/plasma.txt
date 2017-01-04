@@ -4,10 +4,6 @@
 //
 // --------------------------------------------------------------------------
 
-class ArgPlasmaRifleModSelected : ArgModToken {}
-class ArgPlasmaRifleMod1Enabled : ArgToken    {}
-class ArgPlasmaRifleMod2Enabled : ArgToken    {}
-
 class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 {
 	override void BeginPlay()
