@@ -61,7 +61,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	Mod0Fire:
 		"####" B 1 Bright {
 			Arg_A_GunFlash('Flash', "weapons/rocket/fire");
-			if(CountInv("ArgRocketLauncherModSelected") == 1) {
+			if(invoker.modSelected == 1) {
 				A_FireProjectile("ArgRocketDetonate", 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
 			} else {
 				A_FireProjectile("ArgRocket"        , 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));

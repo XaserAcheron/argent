@@ -53,7 +53,7 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			Arg_A_GunFlash();
 			A_FireProjectile("ArgPlasma", 0, 1, 6.0 + frandom(-2.00, 2.00), frandom(-2.00, 2.00));
 			Arg_A_WeaponOffset(0, 0);
-			if(CountInv("ArgPlasmaRifleModSelected") == 1) {
+			if(invoker.modSelected == 1) {
 				invoker.mod[1].charge.inc(3);
 				A_PlaySound("weapons/plasma/altfire", CHAN_5);
 				return ResolveState("Mod1FirePrimary");
@@ -380,6 +380,8 @@ class ArgStunner : CustomInventory
 		TNT1 A 0;
 		Stop;
 	Pickup:
+		// [XA] This is one of the few remaining cases where ACS is the right
+		//      tool for the job, since we need to do some delays in a loop.
 		TNT1 A 1 ACS_NamedExecuteAlways("NeuralStunner");
 		Stop;
 	}

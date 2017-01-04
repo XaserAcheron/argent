@@ -35,6 +35,11 @@ class ArgWeapon : DoomWeapon
 		TNT1 A 1 A_WeaponReady;
 		Loop;
 	Select:
+		"####" "#" 0 {
+			// [XA] remove this once the ACS menu is ousted
+			A_TakeInventory("ArgMod1Enabled");
+			A_TakeInventory("ArgMod2Enabled");
+		}
 	SelectLoop:
 		"####" "#" 1 Arg_A_Raise();
 		Loop;
@@ -214,7 +219,10 @@ class ArgModWeapon : ArgWeapon
 	/* Select Mod-Jump */
 	
 	Select:
-		"####" "#" 0 Arg_A_JumpMod("Mod1Select", "Mod2Select", "Mod0Select");
+		"####" "#" 0 {
+			Arg_A_RefreshModTokens();
+			return Arg_A_JumpMod("Mod1Select", "Mod2Select", "Mod0Select");
+		}
 	Mod0Select:
 	Mod1Select:
 	Mod2Select:
@@ -295,7 +303,7 @@ class ArgModWeapon : ArgWeapon
 	Mod2UpCheck:
 		"####" "#" 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod[2].ammoUse);
 		"####" "#" 0 ResolveState("Mod2Up");
-	/* [/TODO */
+	/* [/TODO] */
 	Mod1Up:
 	Mod2Up:
 	Mod1Hold:
@@ -328,21 +336,27 @@ class ArgModWeapon : ArgWeapon
 	}
 	
 	/*
+	 * [XA] legacy function for ACS bridge support. Will go away once possible.
+	 */
+	action void Arg_A_RefreshModTokens()
+	{
+		A_TakeInventory("ArgMod1Enabled");
+		A_TakeInventory("ArgMod2Enabled");
+		if(invoker.mod[1].enabled) { A_GiveInventory("ArgMod1Enabled", 1); }
+		if(invoker.mod[2].enabled) { A_GiveInventory("ArgMod2Enabled", 1); }
+	}
+	
+	/*
 	 * Jump to one of two states depending on which mod is selected.
 	 * If no mods are selected, no state jump occurs.
 	 */
 	action state Arg_A_JumpMod(statelabel mod1label, statelabel mod2label, statelabel mod0label = null, bool checkCooldown = false) {
-		// [TODO] port ACS to zscript.
-		
-		// Check to see if we have an active cooldown. If so and the
-		// checkCooldown flag is set, don't do any jumps.
-		bool coolDone = checkCooldown ? Arg_A_CheckModCooldown() : true;
-		
 		// Jump to either the mod 1 or mod 2 state depending on which exists.
-		if(CallACS("ModSelected", 1) && coolDone) {
+		// Optionally, check if cooldown is complete first.
+		if(invoker.modSelected == 1 && (!checkCooldown || invoker.mod[1].cooldown.get() == 0)) {
 			return ResolveState(mod1label);
 
-		} else if(CallACS("ModSelected", 2) && coolDone) {
+		} else if(invoker.modSelected == 2 && (!checkCooldown || invoker.mod[2].cooldown.get() == 0)) {
 			return ResolveState(mod2label);
 
 		} else {
@@ -354,19 +368,54 @@ class ArgModWeapon : ArgWeapon
 	 * Attempt to install the specified mod. If already installed (or the
 	 * shop menu isn't opened), 'false' is returned; else 'true'.
 	 */
-	action bool Arg_A_InstallMod(int mod) {
-		// [TODO] port ACS to zscript.
+	action bool Arg_A_InstallMod(int modToInstall) {
 
-		return CallACS("EquipModCheck", mod);
+		if(CountInv("ArgModKitToken") > 0 && !invoker.mod[modToInstall].enabled) {
+
+			// dismiss the Mod Kit interface (and remove the kit, "consuming" it).
+			A_TakeInventory("ArgModKitToken");
+			A_TakeInventory("ArgModKit", 1);
+			A_PlaySound("items/modkit/apply", CHAN_AUTO);
+		
+			// "gift" the mod and signal the calling state to jump to the
+			// mod swap animation.
+			invoker.mod[modToInstall].enabled = true;
+			invoker.modSelected = modToInstall;
+			
+			// [XA] remove this legacy stuff once possible.
+			A_GiveInventory("ArgModTotal", 1);
+			Arg_A_RefreshModTokens();
+
+			return true;
+
+		} else {
+			// don't do a thing otherwise. continue firing, gents!
+			return false;
+		}
 	}
 	
 	/*
 	 * Swap the currently-selected mod. 'Nuff said.
 	 */
 	action state Arg_A_SwapMod() {
-		// [TODO] port ACS to zscript.
 
-		if(CallACS("SwapMod")) {
+		// determine what to swap to. Hooray goofy extra logic for zero.
+		int modToSelect = 0;
+		if(invoker.modSelected == 1 && invoker.mod[2].enabled) {
+			modToSelect = 2;
+		} else if(invoker.modSelected == 2 && invoker.mod[1].enabled) {
+			modToSelect = 1;
+		} else {
+			if(invoker.mod[1].enabled) {
+				modToSelect = 1;
+			} else if(invoker.mod[2].enabled) {
+				modToSelect = 2;
+			}
+		}
+
+		// if we've successfully done a swap, initiate the animation.
+		if(modToSelect > 0) {
+			invoker.modSelected = modToSelect;
 			return ResolveState("ModSwapDown");
 		} else {
 			return ResolveState("DontSwap");
@@ -377,9 +426,9 @@ class ArgModWeapon : ArgWeapon
 	 * Start the cooldown cycle for the selected mod.
 	 */
 	action void Arg_A_StartModCooldown() {
-		// [TODO] do just the selected mod, not both.
-		invoker.mod[1].cooldown.toMax();
-		invoker.mod[2].cooldown.toMax();
+		if(invoker.modSelected > 0 && invoker.modSelected <= 2) {
+			invoker.mod[invoker.modSelected].cooldown.toMax();
+		}
 	}
 	
 	/*
@@ -387,21 +436,18 @@ class ArgModWeapon : ArgWeapon
 	 * Generally done on weapon swap.
 	 */
 	action void Arg_A_ClearModCooldown() {
-		// [TODO] do just the selected mod, not both.
-		invoker.mod[1].cooldown.toMin();
-		invoker.mod[2].cooldown.toMin();
-	}
-	
-	/*
-	 * Check to see if the current weapon is still
-	 * cooling down, for state jump purposes.
-	 */
-	action bool Arg_A_CheckModCooldown() {
-		// [TODO] do just the selected mod, not both.
-		return invoker.mod[1].cooldown.get() == 0
-		    && invoker.mod[2].cooldown.get() == 0
-		;
+		if(invoker.modSelected > 0 && invoker.modSelected <= 2) {
+			invoker.mod[invoker.modSelected].cooldown.toMin();
+		}
 	}
 }
 
+/*
+ * [XA] These tokens exist as a bridge to ACS, since the mod kit menu
+ *      is still being done there. This ought to go away once some
+ *      hudmessage equivalent exists in ZScript.
+ */
 class ArgModToken : ArgToken { Default { Inventory.MaxAmount 2; } }
+class ArgMod1Enabled : ArgToken {}
+class ArgMod2Enabled : ArgToken {}
+class ArgModTotal    : ArgToken { Default { Inventory.MaxAmount 12; } }

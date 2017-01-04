@@ -28,6 +28,10 @@ script "ArgentInit" enter {
 	// want to use regular cells or BFG cells; we want to check for this item
 	// in the weapon defs rather than the cvar directly since we want to
 	// only fully-change this setting on map-start.
+/*
+	// [XA] this technically is no longer used, but I'm keeping it around
+	//      for a short bit as I need to do something here to make the zscript
+	//      code do this bit on map start properly.
 	if(GetCvar("arg_bfgammotype") == true) {
 		// use bfg cells
 		GiveInventory("ArgBFG9000AmmoToken", 1);
@@ -43,28 +47,16 @@ script "ArgentInit" enter {
 			SetWeapon("ArgBFG9000");
 		}
 	}
+*/
 }
 
 /*
  * Checks to see if the player has obtained all mods.
  */
 function bool CheckModsFull (void) {
-	// [XA] welcome to brute-force-ville. I'll hopefully think of a nicer
-	//      way to do this in zscript-land.
-	return
-		CheckInventory("ArgShotgunMod1Enabled"       )
-	&&	CheckInventory("ArgShotgunMod2Enabled"       )
-	&&	CheckInventory("ArgHeavyARMod1Enabled"       )
-	&&	CheckInventory("ArgHeavyARMod2Enabled"       )
-	&&	CheckInventory("ArgChaingunMod1Enabled"      )
-	&&	CheckInventory("ArgChaingunMod2Enabled"      )
-	&&	CheckInventory("ArgRocketLauncherMod1Enabled")
-	&&	CheckInventory("ArgRocketLauncherMod2Enabled")
-	&&	CheckInventory("ArgPlasmaRifleMod1Enabled"   )
-	&&	CheckInventory("ArgPlasmaRifleMod2Enabled"   )
-	&&	CheckInventory("ArgGaussCannonMod1Enabled"   )
-	&&	CheckInventory("ArgGaussCannonMod2Enabled"   )
-	;
+	// [XA] welcome to silly-assumption-ville. This ought to get
+	//      better once ACS can call out to ZScript.
+	return CheckInventory("ArgModTotal") == 12;
 }
 
 /*
@@ -159,8 +151,8 @@ script "UseModKit" (void) {
 			str modDesc2   = StrParam(l:StrParam(s:"ARG_MOD_DESC_", s:weaponBase, s:"2"));
 			str modIcon1   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"1"));
 			str modIcon2   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"2"));
-			str mod1Token  = StrParam(s:weapon, s:"Mod1Enabled");
-			str mod2Token  = StrParam(s:weapon, s:"Mod2Enabled");
+			str mod1Token  = "ArgMod1Enabled";
+			str mod2Token  = "ArgMod2Enabled";
 		
 			// If we ain't got no mods, short-circuit a bit.
 			// [XA] janky check against the language entry, heh
@@ -189,117 +181,6 @@ script "UseModKit" (void) {
 	// Take away the token in case the player aborted above.
 	ActivatorSound("items/modkit/dismiss", 255);
 	TakeInventory("ArgModKitToken", 1);
-}
-
-/*
- * 
- */
-script "EquipModCheck" (int mod) {
-
-	// Figure out if the desired mod has been enabled yet. If it is AND
-	// the Mod Kit interface is open, enable the mod and initiate
-	// a weapon swap. This is handled here rather than in the modkit script
-	// itself to use fire/altfire as the controls. Funky, but works.
-	str weapon = GetWeapon();
-	str modSelectedToken = StrParam(s:weapon, s:"ModSelected");
-	str modEnabledToken  = StrParam(s:weapon, s:"Mod", i:mod, s:"Enabled");
-	
-	if(CheckInventory("ArgModKitToken") > 0 && CheckInventory(modEnabledToken) == 0) {
-
-		// dismiss the Mod Kit interface (and remove the kit, "consuming" it).
-		TakeInventory("ArgModKitToken", 1);
-		TakeInventory("ArgModKit", 1);
-		ActivatorSound("items/modkit/apply", 255);
-		
-		// "gift" the mod and swap to it
-		GiveInventory(modEnabledToken , 1);
-		TakeInventory(modSelectedToken, 2);
-		GiveInventory(modSelectedToken, mod);
-
-		// make the calling weapon jump to the mod swap animation state.
-		SetResultValue(true);
-
-	} else {
-		// don't do a thing otherwise. continue firing, gents!
-		SetResultValue(false);
-	}
-}
-
-/*
- * Swaps the player's active weapon mod. This script just swaps the tokens;
- * the base ArgWeaponMod definition handles the state jumps and the initiation
- * of the swap animation.
- */
-script "SwapMod" (void) {
-
-	// Get the classes of the weapon tokens to figure out which
-	// mod is selected (and whether or not each mod has actually
-	// been picked up).
-	str weapon = GetWeapon();
-	str modSelectedToken = StrParam(s:weapon, s:"ModSelected");
-	str mod1EnabledToken = StrParam(s:weapon, s:"Mod1Enabled");
-	str mod2EnabledToken = StrParam(s:weapon, s:"Mod2Enabled");
-	
-	// determine which mod is actually selected
-	int modSelected = CheckInventory(modSelectedToken);
-	int mod1Enabled = CheckInventory(mod1EnabledToken);
-	int mod2Enabled = CheckInventory(mod2EnabledToken);
-	
-	int modToSelect = 0;
-	// swap to weapon 2 if 1 is selected; else switch to 1.
-	// [XA] the lack of a ternary conditional is quite confounding.
-	//      I need to switch to DH-ACC already. :P
-	if(modSelected == 0) {
-		if(mod1Enabled) {
-			modToSelect = 1;
-		} else if(mod2Enabled) {
-			modToSelect = 2;
-		}
-	} else if(modSelected == 1) {
-		if(mod2Enabled) {
-			modToSelect = 2;
-		}
-	} else {
-		if(mod1Enabled) {
-			modToSelect = 1;
-		}
-	}
-	
-	// Do the mod swap, assuming we have a valid one to swap to.
-	if(modToSelect > 0) {
-		TakeInventory(modSelectedToken, 2);
-		GiveInventory(modSelectedToken, modToSelect);
-		SetResultValue(true);
-	}
-	else {
-		SetResultValue(false);
-	}
-}
-
-/*
- * Checks if the specified mod is currently selected. Used for state jumps.
- */
-script "ModSelected" (int mod) {
-	SetResultValue(CheckInventory(StrParam(s:GetWeapon(), s:"ModSelected")) == mod);
-}
-
-/*
- * Nefarious mod cheat script. For testing, surely.
- */
-script "GimmeMods" (void) {
-	str weapon = GetWeapon();
-	str mod1EnabledToken = StrParam(s:weapon, s:"Mod1Enabled");
-	str mod2EnabledToken = StrParam(s:weapon, s:"Mod2Enabled");
-	GiveInventory(mod1EnabledToken, 1);
-	GiveInventory(mod2EnabledToken, 1);
-}
-
-/*
- * Extremely-useful utility function for saving the player's number in a uservar.
- */
-script "GetPlayerNumber" (void) {
-	SetActivatorToTarget(0);
-	SetResultValue(PlayerNumber());
 }
 
 /*
