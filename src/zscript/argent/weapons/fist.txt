@@ -1,0 +1,76 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Fist
+//
+// --------------------------------------------------------------------------
+
+class ArgFist : ArgWeapon replaces Fist
+{
+	Default
+	{
+		Weapon.UpSound "";
+		Weapon.SelectionOrder 10;
+		Inventory.Icon "graphics/hud/weapon-fist.png";
+		Inventory.PickupMessage "$ARG_GOT_FIST";
+		Obituary "$ARG_OB_FIST";
+		Tag "$ARG_TAG_FIST";
+		DamageType "ArgFist";
+	
+		+WEAPON.WIMPY_WEAPON
+		+WEAPON.MELEEWEAPON
+	}
+	States
+	{
+	Spawn:
+		PUNG A -1;
+		Stop;
+	Ready:
+		PUNG A 1 A_WeaponReady();
+		Loop;
+	Select:
+		PUNG A 0;
+		Goto SelectLoop;
+	Deselect:
+		PUNG A 0;
+		Goto DeselectLoop;
+	Fire:
+		PUNG A 1   Arg_A_WeaponOffset(  8,  8);
+		PUNG A 1   Arg_A_WeaponOffset( 16, 16);
+		PUNG A 1   Arg_A_WeaponOffset( 24, 32);
+		TNT1 A 1   Arg_A_WeaponOffset( 32, 48);
+		TNT1 A 1   Arg_A_WeaponOffset(-80, 48);
+	Hold:
+		PUNG B 1 { Arg_A_WeaponOffset(-64, 32); A_PlaySound("weapons/fist/swing", CHAN_6); }
+		PUNG B 1   Arg_A_WeaponOffset(-48, 16);
+		PUNG C 1   Arg_A_WeaponOffset(-24,  8);
+		PUNG C 1   Arg_A_WeaponOffset(- 0,-32);
+		PUNG C 1 { Arg_A_WeaponOffset( 10,-42); Arg_A_Punch(); }
+		PUNG D 1   Arg_A_WeaponOffset( 15,-47);
+		PUNG D 1   Arg_A_WeaponOffset( 16,-48);
+		PUNG D 1   Arg_A_WeaponOffset( 15,-47);
+		PUNG D 1   Arg_A_WeaponOffset( 12,-44);
+		PUNG D 1   Arg_A_WeaponOffset(  8,-40);
+		PUNG C 1   Arg_A_WeaponOffset(  0,-32);
+		PUNG C 1   Arg_A_WeaponOffset(-16,-16);
+		PUNG C 1   Arg_A_WeaponOffset(-32,  0);
+		PUNG B 1   Arg_A_WeaponOffset(-48, 16);
+	FireEnd:
+		TNT1 A 1 { Arg_A_WeaponOffset(-80, 48); A_Refire(); }
+		TNT1 A 1   Arg_A_WeaponOffset( 32, 48);
+		PUNG A 1   Arg_A_WeaponOffset( 24, 32);
+		PUNG A 1   Arg_A_WeaponOffset( 16, 16);
+		PUNG A 1   Arg_A_WeaponOffset(  8,  8);
+		Goto Ready;
+	}
+	
+	/*
+	 * Punch function. Respects berserk and does a few minor custom things.
+	 */
+	action void Arg_A_Punch() {
+		if(CountInv("PowerStrength") > 0) {
+			A_CustomPunch(20 * random(1, 10), true, 0, "ArgFistPuff", 0, 0, 0, "None", "weapons/fist/hit");
+		} else {
+			A_CustomPunch( 2 * random(1, 10), true, 0, "ArgFistPuff", 0, 0, 0, "None", "weapons/fist/hit");
+		}
+	}
+}

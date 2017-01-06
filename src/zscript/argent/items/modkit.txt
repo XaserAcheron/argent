@@ -1,0 +1,31 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Weapon Mod Kit
+//
+// --------------------------------------------------------------------------
+
+class ArgModKit : CustomInventory replaces Backpack
+{
+	Default
+	{
+		Scale 0.66;
+		Inventory.PickupMessage "$ARG_GOT_MOD_KIT";
+		Inventory.PickupSound "items/modkit/pickup";
+		Inventory.MaxAmount 999;
+		Inventory.Icon "graphics/hud/equip-icon-modkit.png";
+
+		+INVENTORY.FANCYPICKUPSOUND
+		+INVENTORY.INVBAR
+	}
+	States
+	{
+	Spawn:
+		MODK A 5 Bright;
+		MODK A 30;
+		Loop;
+	Use:
+		TNT1 A 0 ACS_NamedExecuteAlways("UseModKit");
+		Fail; // remove the actor via ACS, not here. :P
+	}
+}
+class ArgModKitToken : ArgToken {} // Used to check if the mod menu is open.

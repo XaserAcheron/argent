@@ -1,0 +1,58 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Player Definition
+//
+// --------------------------------------------------------------------------
+
+class ArgPlayer : DoomPlayer
+{
+	const MAX_ROCKETS = 50; // ought to be enough for anybody ;)
+
+	int numRockets; // number of detonate-able rockets in flight
+	Actor[MAX_ROCKETS] rockets; // list of detonate-able rockets in flight
+	Actor lockTarget; // current lock-on burst target
+	
+	override void BeginPlay() {
+		numRockets = 0;
+		for(int i = 0; i < MAX_ROCKETS; i++) {
+			rockets[i] = null;
+		}
+	}
+
+	Default
+	{
+		Player.DisplayName "Doom Marine";
+		Player.StartItem "ArgPistol";
+		Player.StartItem "ArgFist";
+		Player.StartItem "Clip", 50;
+		Player.WeaponSlot 1, 'ArgFist', 'ArgChainsaw';
+		Player.WeaponSlot 2, 'ArgPistol';
+		Player.WeaponSlot 3, 'ArgShotgun', 'ArgSuperShotgun';
+		Player.WeaponSlot 4, 'ArgHeavyAR', 'ArgChaingun';
+		Player.WeaponSlot 5, 'ArgRocketLauncher';
+		Player.WeaponSlot 6, 'ArgPlasmaRifle', 'ArgGaussCannon';
+		Player.WeaponSlot 7, 'ArgBFG9000';
+	
+		DamageFactor "ArgPlayerRocket", 0.5;
+		DamageFactor "ArgBFGZapper", 0.0;
+	}
+	States
+	{
+	Death:
+		"####" "#" 0 A_JumpIf(GetCvar("arg_alwaysgib"), "XDeath");
+		Goto Super::Death;
+	XDeath:
+		PLAY O 3;
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "#########" 0 A_SpawnItemEx("ArgGibSmall",frandom(-10,10),frandom(-10,10),24+frandom(-2,2),0.3*random(-10,10),0.3*random(-10,10),0.5*random(5,15),0, 0,0);
+		"####" "#" 0 { A_PlaySound("effects/splat", CHAN_AUTO); A_PlaySound("effects/gibs", CHAN_AUTO); }
+		PLAY P 3 A_PlaySound("*xdeath");
+		"####" "#" 0 A_Jump(256,1,2,3);
+		"####" "####" 0 A_SpawnItemEx("ArgGibLarge",frandom(-2,2),frandom(-2,2),24+frandom(-2,2),0.2*random(-10,10),0.2*random(-10,10),0.3*random(5,15),0, 0,0);
+		PLAY Q 3 A_NoBlocking;
+		PLAY RSTUV 3;
+	Death.Massacre:
+		PLAY W -1;
+		Stop;
+	}
+}

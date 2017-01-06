@@ -1,0 +1,93 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Health
+//
+// --------------------------------------------------------------------------
+
+class ArgHealthBonus : Health replaces HealthBonus
+{
+	Default
+	{
+		Scale 0.66;
+		Inventory.Amount 1;
+		Inventory.MaxAmount 200;
+		Inventory.PickupSound "items/health";
+		Inventory.PickupMessage "$GOTHTHBONUS";
+
+		+RANDOMIZE
+		+COUNTITEM
+		+INVENTORY.ALWAYSPICKUP
+	}
+	States
+	{
+	Spawn:
+		BON1 A 30;
+		BON1 A 5 BRIGHT;
+		Loop;
+	}
+}
+
+class ArgStimpack : Health replaces Stimpack
+{
+	Default
+	{
+		Scale 0.5;
+		Inventory.Amount 10;
+		Inventory.PickupSound "items/health";
+		Inventory.PickupMessage "$GOTSTIM";
+
+		+RANDOMIZE
+	}
+	States
+	{
+	Spawn:
+		STIM A 30;
+		STIM A 5 BRIGHT;
+		Loop;
+	}
+}
+
+class ArgMedikit : Health replaces Medikit
+{
+	Default
+	{
+		Scale 0.5;
+		Inventory.Amount 25;
+		Inventory.PickupSound "items/health";
+		Inventory.PickupMessage "$GOTMEDIKIT";
+		Health.LowMessage 25, "$GOTMEDINEED";
+
+		+RANDOMIZE
+	}
+	States
+	{
+	Spawn:
+		MEDI A 30;
+		MEDI A 5 BRIGHT;
+		Loop;
+	}
+}
+
+class SphereMega : CustomInventory replaces Megasphere
+{
+	Default
+	{
+		Inventory.PickupMessage "$GOTMSPHERE";
+		Inventory.PickupSound "items/megahealth";
+
+		+COUNTITEM
+		+INVENTORY.ALWAYSPICKUP
+	}
+	States
+	{
+	Spawn:
+		MEGA A 30;
+		MEGA A 5 BRIGHT;
+		Loop;
+	Pickup:
+		TNT1 A 0 A_GiveInventory("ArgArmorBlue", 1);
+		TNT1 A 0 A_GiveInventory("MegasphereHealth", 1);
+		TNT1 A 0 A_RailWait(); // ensure pickup always happens.
+		Stop;
+	}
+}

@@ -1,0 +1,107 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Keys
+//
+// --------------------------------------------------------------------------
+
+class ArgRedCard : RedCard replaces RedCard
+{
+	Default
+	{
+		Scale 0.66;
+		Species "RedCard";
+		Inventory.PickupSound "items/key";
+	}
+	States
+	{
+	Spawn:
+		RKEY A 30;
+		RKEY A 5 Bright;
+		Loop;
+	}
+}
+
+class ArgBlueCard : BlueCard replaces BlueCard
+{
+	Default
+	{
+		Scale 0.66;
+		Species "BlueCard";
+		Inventory.PickupSound "items/key";
+	}
+	States
+	{
+	Spawn:
+		BKEY A 30;
+		BKEY A 5 Bright;
+		Loop;
+	}
+}
+
+class ArgYellowCard : YellowCard replaces YellowCard
+{
+	Default
+	{
+		Scale 0.66;
+		Species "YellowCard";
+		Inventory.PickupSound "items/key";
+	}
+	States
+	{
+	Spawn:
+		YKEY A 30;
+		YKEY A 5 Bright;
+		Loop;
+	}
+}
+
+class ArgRedSkull : RedSkull replaces RedSkull
+{
+	Default
+	{
+		Scale 0.66;
+		Species "RedSkull";
+		Inventory.PickupSound "items/key";
+	}
+	States
+	{
+	Spawn:
+		RSKU A 30;
+		RSKU B 5 Bright;
+		Loop;
+	}
+}
+
+class ArgBlueSkull : BlueSkull replaces BlueSkull
+{
+	Default
+	{
+		Scale 0.66;
+		Species "BlueSkull";
+		Inventory.PickupSound "items/key";
+	}
+	States
+	{
+	Spawn:
+		BSKU A 30;
+		BSKU B 5 Bright;
+		Loop;
+	}
+}
+
+class ArgYellowSkull : YellowSkull replaces YellowSkull
+{
+	Default
+	{
+		Scale 0.66;
+		Species "YellowSkull";
+		Inventory.PickupSound "items/key";
+	}
+	States
+	{
+	Spawn:
+		YSKU A 30;
+		YSKU B 5 Bright;
+		Loop;
+	}
+}

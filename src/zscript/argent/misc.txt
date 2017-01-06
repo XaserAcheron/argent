@@ -1,0 +1,13 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Miscellaneous Other Stuff
+//
+// --------------------------------------------------------------------------
+
+class ArgBarrel : ExplosiveBarrel replaces ExplosiveBarrel
+{
+	Default
+	{ 
+		+EXTREMEDEATH
+	}
+}

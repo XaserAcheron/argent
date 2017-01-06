@@ -1,0 +1,229 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Basic Actors & Stuff
+//
+// --------------------------------------------------------------------------
+
+class ArgTrail : Actor
+{
+	Default
+	{
+		-RANDOMIZE
+		+NOBLOCKMONST
+		+NOTELEPORT
+		+FORCEXYBILLBOARD
+		+NOBLOCKMAP
+		+NOGRAVITY
+		+THRUACTORS
+	}
+}
+
+class ArgTrailNoPhysics : Actor
+{
+	Default
+	{
+		+NOINTERACTION
+	}
+}
+
+class ArgDrop : ArgTrail
+{
+	Default
+	{
+		Projectile;
+		Damage 0;
+		Speed 0;
+
+		-NOGRAVITY
+	}
+}
+
+class ArgPuff : Actor
+{
+	Default
+	{
+		+NOGRAVITY
+		+PUFFGETSOWNER
+		+PUFFONACTORS
+	}
+}
+
+class ArgToken : Inventory
+{
+	Default
+	{
+		+INVENTORY.UNDROPPABLE
+	}
+}
+
+class ArgNothing : Actor
+{
+	Default
+	{
+		+NOINTERACTION
+	}
+	States
+	{
+	Spawn:
+		TNT1 A 0;
+		Stop;
+	}
+}
+
+class ArgRocketBase : FastProjectile // so Cyber & Player rockets can share some stuff.
+{
+	Default {
+		Radius 11;
+		Height 8;
+		Speed 20;
+		Damage 20;
+		Scale 0.75;
+		DeathSound "weapons/rocket/explode";
+		MissileType "ArgRocketTrailSpawner";
+		MissileHeight 13;
+		Decal "Scorch";
+		Obituary "$ARG_OB_ROCKET";
+	
+		+EXTREMEDEATH
+	}
+	States
+	{
+	Spawn:
+		MISL A 1 Bright;
+		Loop;
+	Death:
+		REXP A 4 Bright {
+			A_SetScale(1.0);
+			A_Explode(200, 128, 1);
+		}
+	Boom:
+		REXP B 3 Bright;
+		REXP C 3 Bright A_SetTranslucent(0.7);
+		REXP D 2 Bright A_SetTranslucent(0.6);
+		REXP E 2 Bright A_SetTranslucent(0.5);
+		REXP F 2 Bright A_SetTranslucent(0.4);
+		Stop;
+	}
+}
+
+class ArgRocketTrailSpawner : ArgTrail
+{
+	Default {
+		RenderStyle "None";
+	}
+	States
+	{
+	Spawn:
+		TNT1 A 1 NoDelay A_SpawnItemEx("ArgRocketTrail", 0, 0, 0, 0, frandom[ArgRocketTrailSpawner](-0.33, 0.33), frandom[ArgRocketTrailSpawner](-0.33, 0.33));
+		Stop;
+	}
+}
+
+class ArgRocketTrail : ArgTrail
+{
+	Default {
+		RenderStyle "Add";
+		Alpha 0.5;
+		Scale 0.25;
+	}
+	States
+	{
+	Spawn:
+		RTRL HHABCDEFG 1 Bright;
+		Stop;
+	}
+}
+
+/*
+ * Basic "counter" struct. Represents the concept of a number with a capped
+ * maximum; also includes a special "end" value that can be set higher than
+ * the max to allow for "over-max" -- this is often used in argent to control
+ * a looping sound after the charge has already hit its theoretical maximum.
+ */
+struct ArgCounter
+{
+	int val;
+	int min;
+	int max;
+	int over;
+	bool locked;
+	
+	ArgCounter init(int v = 0, int m = 1, int o = 1)
+	{
+		self.val = 0;
+		self.min = v;
+		self.max = m;
+		self.over = self.clamp(m, o, o); // cow level confirmed
+		return self;
+	}
+	int get(bool over = false)
+	{
+		return over
+			? self.clamp(self.min, self.val, self.over)
+			: self.clamp(self.min, self.val, self.max)
+		;
+	}
+	ArgCounter set(int v)
+	{
+		self.val = self.clamp(self.min, v, self.over);
+		return self;
+	}
+	ArgCounter toMin()
+	{
+		self.val = min;
+		return self;
+	}
+	ArgCounter toMax()
+	{
+		self.val = self.max;
+		return self;
+	}
+	ArgCounter toOver()
+	{
+		self.val = self.over;
+		return self;
+	}
+	ArgCounter inc(int amount = 1)
+	{
+		self.set(self.val + amount);
+		return self;
+	}
+	ArgCounter dec(int amount = 1)
+	{
+		if(!self.locked) {
+			self.set(self.val - amount);
+		}
+		return self;
+	}
+	ArgCounter lock()
+	{
+		self.locked = true;
+		return self;
+	}
+	ArgCounter unlock()
+	{
+		self.locked = false;
+		return self;
+	}
+	bool isMin()
+	{
+		return self.val == self.min;
+	}
+	bool isMax()
+	{
+		return self.val >= self.max;
+	}
+	bool isOver()
+	{
+		return self.val == self.over;
+	}
+	int clamp(int l, int m, int h)
+	{
+		if(m < l) {
+			return l;
+		} else if (h < m) {
+			return h;
+		}
+		return m;
+	}
+}

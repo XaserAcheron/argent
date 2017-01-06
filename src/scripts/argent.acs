@@ -15,86 +15,28 @@
 #include "zcommon.acs"
 
 #define DEF_STUN_SECONDS 5
-#define DEF_DUMMY_TID    -1
-#define DEF_TID_START    1000
-
-/*
- * Exceptionally-useful player struct thingamajig.
- */
-struct ArgPlayer
-{
-	int rocketTid;
-	int targetTid;
-	int targetTidOrig;
-}
-ArgPlayer players[64]; // zandro max to the max!
 
 /*
  * Init script. Gotta set those defaults to something sane.
  */ 
 script "ArgentInit" enter {
-	ArgPlayer playerStruct = {
-		DEF_DUMMY_TID // rocketTid
-	,	DEF_DUMMY_TID // targetTid
-	,	DEF_DUMMY_TID // targetTidOrig
-	};
-	players[PlayerNumber()] = playerStruct;
-	
-	// Remove all cooldowns on map start. This will eventually go away
-	// once the cooldown system is redone to use overlays.
-	TakeInventory("ArgShotgunModCooldown"       , 999);
-	TakeInventory("ArgHeavyARModCooldown"       , 999);
-	TakeInventory("ArgChaingunModCooldown"      , 999);
-	TakeInventory("ArgRocketLauncherModCooldown", 999);
-	TakeInventory("ArgPlasmaRifleModCooldown"   , 999);
-	TakeInventory("ArgGaussCannonModCooldown"   , 999);
-	TakeInventory("ArgGaussCannonModCharge"     , 999);
-	
 	// Reset a couple of player properties.
 	SetActorProperty(0, APROP_SPEED, 1.0);
 	TakeInventory("ArgModKitToken", 1);
 	
-	// BFG management. Give the player a token item to determine whether we
-	// want to use regular cells or BFG cells; we want to check for this item
-	// in the weapon defs rather than the cvar directly since we want to
-	// only fully-change this setting on map-start.
-	if(GetCvar("arg_bfgammotype") == true) {
-		// use bfg cells
-		GiveInventory("ArgBFG9000AmmoToken", 1);
-		// select correct weapon
-		if(StrICmp(GetWeapon(), "ArgBFG9000") == 0) {
-			SetWeapon("ArgBFG9000Alt");
-		}
-	} else {
-		// use regular cells
-		TakeInventory("ArgBFG9000AmmoToken", 1);
-		// select correct weapon
-		if(StrICmp(GetWeapon(), "ArgBFG9000Alt") == 0) {
-			SetWeapon("ArgBFG9000");
-		}
-	}
+	// Give the player a BFG token on map start to signal zscript to
+	// recalculate the BFG's ammotype. This will eventually be replaced
+	// with a direct zscript function call once that's a thing.
+	GiveInventory("ArgBFG9000AmmoToken", 1);
 }
 
 /*
  * Checks to see if the player has obtained all mods.
  */
 function bool CheckModsFull (void) {
-	// [XA] welcome to brute-force-ville. I'll hopefully think of a nicer
-	//      way to do this in zscript-land.
-	return
-		CheckInventory("ArgShotgunMod1Enabled"       )
-	&&	CheckInventory("ArgShotgunMod2Enabled"       )
-	&&	CheckInventory("ArgHeavyARMod1Enabled"       )
-	&&	CheckInventory("ArgHeavyARMod2Enabled"       )
-	&&	CheckInventory("ArgChaingunMod1Enabled"      )
-	&&	CheckInventory("ArgChaingunMod2Enabled"      )
-	&&	CheckInventory("ArgRocketLauncherMod1Enabled")
-	&&	CheckInventory("ArgRocketLauncherMod2Enabled")
-	&&	CheckInventory("ArgPlasmaRifleMod1Enabled"   )
-	&&	CheckInventory("ArgPlasmaRifleMod2Enabled"   )
-	&&	CheckInventory("ArgGaussCannonMod1Enabled"   )
-	&&	CheckInventory("ArgGaussCannonMod2Enabled"   )
-	;
+	// [XA] welcome to silly-assumption-ville. This ought to get
+	//      better once ACS can call out to ZScript.
+	return CheckInventory("ArgModTotal") == 12;
 }
 
 /*
@@ -189,8 +131,8 @@ script "UseModKit" (void) {
 			str modDesc2   = StrParam(l:StrParam(s:"ARG_MOD_DESC_", s:weaponBase, s:"2"));
 			str modIcon1   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"1"));
 			str modIcon2   = StrParam(l:StrParam(s:"ARG_MOD_ICON_", s:weaponBase, s:"2"));
-			str mod1Token  = StrParam(s:weapon, s:"Mod1Enabled");
-			str mod2Token  = StrParam(s:weapon, s:"Mod2Enabled");
+			str mod1Token  = "ArgMod1Enabled";
+			str mod2Token  = "ArgMod2Enabled";
 		
 			// If we ain't got no mods, short-circuit a bit.
 			// [XA] janky check against the language entry, heh
@@ -219,249 +161,6 @@ script "UseModKit" (void) {
 	// Take away the token in case the player aborted above.
 	ActivatorSound("items/modkit/dismiss", 255);
 	TakeInventory("ArgModKitToken", 1);
-}
-
-/*
- * 
- */
-script "EquipModCheck" (int mod) {
-
-	// Figure out if the desired mod has been enabled yet. If it is AND
-	// the Mod Kit interface is open, enable the mod and initiate
-	// a weapon swap. This is handled here rather than in the modkit script
-	// itself to use fire/altfire as the controls. Funky, but works.
-	str weapon = GetWeapon();
-	str modSelectedToken = StrParam(s:weapon, s:"ModSelected");
-	str modEnabledToken  = StrParam(s:weapon, s:"Mod", i:mod, s:"Enabled");
-	
-	if(CheckInventory("ArgModKitToken") > 0 && CheckInventory(modEnabledToken) == 0) {
-
-		// dismiss the Mod Kit interface (and remove the kit, "consuming" it).
-		TakeInventory("ArgModKitToken", 1);
-		TakeInventory("ArgModKit", 1);
-		ActivatorSound("items/modkit/apply", 255);
-		
-		// "gift" the mod and swap to it
-		GiveInventory(modEnabledToken , 1);
-		TakeInventory(modSelectedToken, 2);
-		GiveInventory(modSelectedToken, mod);
-
-		// make the calling weapon jump to the mod swap animation state.
-		SetResultValue(true);
-
-	} else {
-		// don't do a thing otherwise. continue firing, gents!
-		SetResultValue(false);
-	}
-}
-
-/*
- * Swaps the player's active weapon mod. This script just swaps the tokens;
- * the base ArgWeaponMod definition handles the state jumps and the initiation
- * of the swap animation.
- */
-script "SwapMod" (void) {
-
-	// Get the classes of the weapon tokens to figure out which
-	// mod is selected (and whether or not each mod has actually
-	// been picked up).
-	str weapon = GetWeapon();
-	str modSelectedToken = StrParam(s:weapon, s:"ModSelected");
-	str mod1EnabledToken = StrParam(s:weapon, s:"Mod1Enabled");
-	str mod2EnabledToken = StrParam(s:weapon, s:"Mod2Enabled");
-	
-	// determine which mod is actually selected
-	int modSelected = CheckInventory(modSelectedToken);
-	int mod1Enabled = CheckInventory(mod1EnabledToken);
-	int mod2Enabled = CheckInventory(mod2EnabledToken);
-	
-	int modToSelect = 0;
-	// swap to weapon 2 if 1 is selected; else switch to 1.
-	// [XA] the lack of a ternary conditional is quite confounding.
-	//      I need to switch to DH-ACC already. :P
-	if(modSelected == 0) {
-		if(mod1Enabled) {
-			modToSelect = 1;
-		} else if(mod2Enabled) {
-			modToSelect = 2;
-		}
-	} else if(modSelected == 1) {
-		if(mod2Enabled) {
-			modToSelect = 2;
-		}
-	} else {
-		if(mod1Enabled) {
-			modToSelect = 1;
-		}
-	}
-	
-	// Do the mod swap, assuming we have a valid one to swap to.
-	if(modToSelect > 0) {
-		TakeInventory(modSelectedToken, 2);
-		GiveInventory(modSelectedToken, modToSelect);
-		SetResultValue(true);
-	}
-	else {
-		SetResultValue(false);
-	}
-}
-
-/*
- * Checks if the specified mod is currently selected. Used for state jumps.
- */
-script "ModSelected" (int mod) {
-	SetResultValue(CheckInventory(StrParam(s:GetWeapon(), s:"ModSelected")) == mod);
-}
-
-/*
- * Nefarious mod cheat script. For testing, surely.
- */
-script "GimmeMods" (void) {
-	str weapon = GetWeapon();
-	str mod1EnabledToken = StrParam(s:weapon, s:"Mod1Enabled");
-	str mod2EnabledToken = StrParam(s:weapon, s:"Mod2Enabled");
-	GiveInventory(mod1EnabledToken, 1);
-	GiveInventory(mod2EnabledToken, 1);
-}
-
-/*
- * Start mod cooldown phase. This is done in a script so there
- * aren't a zillion ACS_NamedExecutes done in a 1-tic loop constantly.
- */
-script "StartModCooldown" (void) {
-	str weapon = GetWeapon();
-	str modCooldownToken = StrParam(s:weapon, s:"ModCooldown");
-	while(CheckInventory(modCooldownToken) > 0) {
-		TakeInventory(modCooldownToken, 1);
-		delay(1);
-	}
-}
-
-/*
- * Checks if mod cooldown is complete.
- */
-script "CheckModCooldown" (void) {
-	str weapon = GetWeapon();
-	str modCooldownToken = StrParam(s:weapon, s:"ModCooldown");
-	SetResultValue(CheckInventory(modCooldownToken) == 0);
-}
-
-/*
- * Clears a mod's cooldown entirely.
- */
-script "ClearModCooldown" (void) {
-	str weapon = GetWeapon();
-	str modCooldownToken = StrParam(s:weapon, s:"ModCooldown");
-	TakeInventory(modCooldownToken, 999);
-}
-
-/*
- * Simplified SynthFire: Primary
- */
-script "SynthFire" (void)
-{
-	SetResultValue(GetPlayerInput(-1, INPUT_BUTTONS) & BT_ATTACK);
-}
-
-/*
- * Simplified SynthFire: Alternate
- */
-script "SynthAltFire" (void)
-{
-	SetResultValue(GetPlayerInput(-1, INPUT_BUTTONS) & BT_ALTATTACK);
-}
-
-/*
- * GetTracer functions for sticky missiles (cheers, love!)
- */
-script "GetTracerX" (void) {
-	int projX = GetActorX(0);
-	SetActivator(0, AAPTR_TRACER);
-	int targX = GetActorX(0);
-	SetResultValue(((projX - targX) * 3 / 4) >> 16);
-}
-script "GetTracerY" (void) {
-	int projY = GetActorY(0);
-	SetActivator(0, AAPTR_TRACER);
-	int targY = GetActorY(0);
-	SetResultValue(((projY - targY) * 3 / 4) >> 16);
-}
-script "GetTracerZ" (void) {
-	int projZ = GetActorZ(0);
-	SetActivator(0, AAPTR_TRACER);
-	int targZ = GetActorZ(0);
-	SetResultValue(((projZ - targZ) * 3 / 4) >> 16);
-}
-
-/*
- * Extremely-useful utility function for saving the player's number in a uservar.
- */
-script "GetPlayerNumber" (void) {
-	SetActivatorToTarget(0);
-	SetResultValue(PlayerNumber());
-}
-
-/*
- * RAWGGIT LAWNCHAIR scripts
- */
-script "Mod1RocketFire" (int playerNum) {
-	// remote detonator. Need to snag the rockets' TID so things may happen.
-	int rocketTid = players[playerNum].rocketTid;
-	
-	// if the TID is the placeholder value (DEF_DUMMY_TID), assign a new one.
-	// this will of course break if played with CIF3. Assuming literally anything
-	// else in the mod is compatible with it at all... you crazy git. ;P
-	if(rocketTid == DEF_DUMMY_TID) {
-		rocketTid = UniqueTID(DEF_TID_START);
-		players[playerNum].rocketTid = rocketTid;
-	}
-	
-	// finally, don't forget to assign the TID to the rocket. :P
-	Thing_ChangeTID(0, rocketTid);
-}
-script "Mod1RocketDetonate" (void) {
-	// snag the TID, as before. Note that we actually user playerNum() here
-	// since this script is called from the weapon rather than the projectile.
-	int playerNum = PlayerNumber();
-	int rocketTid = players[playerNum].rocketTid;
-	
-	// Nuke the sucker.
-	if(SetActorState(rocketTid, "Detonate")) {
-		ActivatorSound("weapons/rocket/mod1yep", 255);
-	} else {
-		ActivatorSound("weapons/rocket/mod1nope", 255);
-	}
-}
-script "Mod1RocketExplode" (int playerNum) {
-	// la la la TID la la
-	int rocketTid = players[playerNum].rocketTid;
-	
-	// Wait a tic then check to see if there's anything else that has the TID.
-	// Otherwise, clean it up so we can get a fresh one later.
-	Delay(1);
-	if(ThingCount(T_NONE, rocketTid) == 0) {
-		players[playerNum].rocketTid = DEF_DUMMY_TID;
-	}
-}
-script "Mod2RocketLockStart" (void) {
-	int playerNum = PlayerNumber();
-	
-	// get the tid of the player's target. If it doesn't exist, assign it one.
-	SetActivator(0, AAPTR_PLAYER_GETTARGET);
-	int targetTid = ActivatorTID();
-	players[playerNum].targetTid     = (targetTid == 0) ? UniqueTID() : targetTid;
-	players[playerNum].targetTidOrig =  targetTid; // keep this around so we can set it back
-	Thing_ChangeTID(0, players[playerNum].targetTid);
-}
-script "Mod2RocketLockFire" (int playerNum) {
-	// simple script: just change the tracer to the stored tid.
-	SetPointer(AAPTR_TRACER, players[playerNum].targetTid);
-}
-script "Mod2RocketLockStop" (void) {
-	int playerNum = PlayerNumber();
-	
-	// remove tid from the player's (former) target.
-	Thing_ChangeTID(players[playerNum].targetTid, players[playerNum].targetTidOrig);
 }
 
 /*

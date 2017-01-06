@@ -1,0 +1,454 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Base Weapon Definitions
+//
+// --------------------------------------------------------------------------
+
+/*
+ * Base weapon class. Contains common functions and properties for all of
+ * ARGENT's weapons, naturally. Non-moddable weapons (e.g. pistol, SSG, BFG)
+ * inherit directly from this class.
+ */
+class ArgWeapon : DoomWeapon
+{
+	bool altSound;
+	
+	Default
+	{
+		Inventory.PickupSound "items/weapon";
+		Weapon.UpSound "weapons/swap";
+		Weapon.BobStyle "InverseSmooth";
+		Weapon.BobSpeed  2.00;
+		Weapon.BobRangeX 0.75;
+		Weapon.BobRangeY 0.50;
+		Weapon.SelectionOrder 9999999;
+		Scale 0.75;
+	
+		+WEAPON.NOALERT
+	}
+	States
+	{
+	Spawn:
+		TNT1 A 1;
+		Stop;
+	Ready:
+		TNT1 A 1 A_WeaponReady;
+		Loop;
+	Select:
+		"####" "#" 0 {
+			// [XA] remove this once the ACS menu is ousted
+			A_TakeInventory("ArgMod1Enabled");
+			A_TakeInventory("ArgMod2Enabled");
+		}
+	SelectLoop:
+		"####" "#" 1 Arg_A_Raise();
+		Loop;
+	Deselect:
+	DeselectLoop:
+		"####" "#" 1 Arg_A_Lower();
+		Loop;
+	Fire:
+		TNT1 A 1;
+		Goto Ready;
+	}
+	
+	/*
+	 * Double-speed A_Raise/A_Lower, for convenience.
+	 */
+	action void Arg_A_Lower() {
+		A_Lower();
+		A_Lower();
+	}
+	action void Arg_A_Raise() {
+		A_Raise();
+		A_Raise();
+	}
+	
+	/*
+	 * A_GunFlash extension, wrapping a whole bunch of cool
+	 * common stuff, like A_WeaponReady, A_PlaySound, and the like.
+	 */
+	enum Arg_A_GunFlashFlags {
+		ARG_GF_NOALERT  = 1, // Don't call A_AlertMonsters.
+		ARG_GF_ALTSOUND = 2, // Alternate firing sound between channels 5 and 6
+		ARG_GF_BOB      = 4, // Continue bobbing when firing (i.e. call A_WeaponReady)
+	}
+	action void Arg_A_GunFlash(statelabel flashstate = null, sound flashsound = "", int flags = 0, double recoil = 0) {
+		A_GunFlash(flashstate);
+		
+		if(!(flags & ARG_GF_NOALERT)) {
+			A_AlertMonsters();
+		}
+		if(flashsound != "") {
+			if(flags & ARG_GF_ALTSOUND) {
+				A_PlaySound(flashsound, invoker.altSound ? CHAN_6 : CHAN_5);
+				invoker.altSound = !invoker.altSound;
+			} else {
+				A_PlaySound(flashsound, CHAN_5);
+			}
+		}
+		if(flags & ARG_GF_BOB) {
+			A_WeaponReady(WRF_NOFIRE | WRF_NOFIRE);
+		}
+		if(recoil > 0) {
+			A_Recoil(recoil);
+		}
+	}
+	
+	/*
+	 * Convenient ammo-taker function. Since ARGENT weapons only use a single
+	 * ammo type, just subtract a bit from AmmoType1. Easy-peasy.
+	 */
+	action void Arg_A_TakeAmmo(int amount = 1)
+	{
+		A_TakeInventory(invoker.AmmoType1, amount, TIF_NOTAKEINFINITE);
+	}
+	
+	/*
+	 * Manually check if the player has ammo, to circumvent AMMO_OPTIONAL.
+	 */
+	action bool Arg_A_CheckAmmo(int amount = 0)
+	{
+		if(amount == 0) {
+			amount = invoker.AmmoUse1;
+		}
+		if(CountInv(invoker.AmmoType1) < amount) {
+			A_SelectWeapon("None", SWF_SELECTPRIORITY);
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/*
+	 * A certain function that would've been nice to have built-in for ages. ;)
+	 */
+	action state Arg_A_JumpIfNoAmmo(statelabel state = 'Ready', int amount = 1)
+	{
+		return (CountInv(invoker.AmmoType1) < amount) ? ResolveState(state) : ResolveState(null);
+	}
+	
+	/*
+	 * The inverse of the above, for completeness' sake.
+	 */
+	action state Arg_A_JumpIfAmmo(statelabel state = 'Ready', int amount = 1)
+	{
+		return (CountInv(invoker.AmmoType1) >= amount) ? ResolveState(state) : ResolveState(null);
+	}
+	
+	/*
+	 * Synth-fire convenience functions. Comes in both
+	 * check and jump variants. Note that the 'checks' need to be labeled
+	 * with "action" even though they kinda aren't; funky compat stuff.
+	 */
+	action bool Arg_SynthFire   (bool checkAmmo = false) {
+		return (GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK   ) && (!checkAmmo || CountInv(invoker.AmmoType1) > 0);
+	}
+	action bool Arg_SynthAltFire(bool checkAmmo = false) {
+		return (GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK) && (!checkAmmo || CountInv(invoker.AmmoType1) > 0);
+	}
+	action state Arg_A_SynthFire(statelabel label) {
+		return Arg_SynthFire() ? ResolveState(label) : ResolveState(null);
+	}
+	action state Arg_A_SynthAltFire(statelabel label) {
+		return Arg_SynthAltFire() ? ResolveState(label) : ResolveState(null);
+	}
+	
+	/*
+	 * Weapon Offset function alias. This does two things mainly:
+	 * - adjusts 'y' by 32 so that (0,0) is actually the origin, and
+	 * - adds a convenient parameter for random jitter, as that's common.
+	 */
+	action void Arg_A_WeaponOffset(double x, double y, double j = 0, double k = 0) {
+		k = (k == 0) ? j : k; // means you can't do x-only jitter, but meh
+		A_WeaponOffset(x + frandom(-j, j), 32.0 + y + frandom(-k, k), WOF_INTERPOLATE);
+	}
+}
+
+/*
+ * Cool Mod struct, containing info representing a weapon mod. Is cool.
+ */
+struct ArgMod
+{
+	// [XA] at some point, things like mod kit menu icons and text strings
+	//      (or at least the LANGUAGE references) will be placed here.
+	//      Needs an interface betwen ACS and ZScript first, though.
+	bool enabled;
+	int ammoUse;
+	ArgCounter cooldown;
+	ArgCounter charge;
+}
+
+/*
+ * Base class for moddable weapons, containing all the cool common code
+ * for swapping and equipping mods (as well as handling various facets
+ * of mod fires like the usual "altfire to charge, fire-to-fire" system).
+ * Bit complex, but most of the guts are nicely laid out here now.
+ *
+ * [XA] Well, they will be once I get the ACS bits converted to zscript :P.
+ */
+class ArgModWeapon : ArgWeapon
+{
+	/*
+	 * Mod definition & control.
+	 */
+	int modSelected;
+	ArgMod[3] mod; // mod[0] is used as a placeholder for "no mod selected."
+
+	Default
+	{
+		+WEAPON.NOALERT
+		+WEAPON.AMMO_OPTIONAL
+		+WEAPON.ALT_AMMO_OPTIONAL
+	}
+	States
+	{
+	
+	/* Ready Mod-Jump */
+	
+	Ready:
+		"####" "#" 0 {
+			A_ClearReFire();
+			return Arg_A_JumpMod("Mod1Ready", "Mod2Ready", "Mod0Ready");
+		}
+	Mod0Ready:
+	Mod1Ready:
+	Mod2Ready:
+	ReadyLoop:
+		"####" "#" 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		Loop;
+		
+	/* Select Mod-Jump */
+	
+	Select:
+		"####" "#" 0 {
+			Arg_A_RefreshModTokens();
+			return Arg_A_JumpMod("Mod1Select", "Mod2Select", "Mod0Select");
+		}
+	Mod0Select:
+	Mod1Select:
+	Mod2Select:
+		Goto SelectLoop;
+		
+	/* Fire Mod-Jump -- need to make sure we're not holding down altfire. */
+	
+	Fire:
+		"####" "#" 0 {
+			if(Arg_A_InstallMod(1)) {
+				return ResolveState("ModSwapDown");
+			} else if(!Arg_SynthAltFire() && Arg_A_CheckAmmo()) {
+				return ResolveState("Mod0Fire");
+			} else {
+				return ResolveState("DontFire");
+			}
+		}
+		Goto DontFire;
+	Mod0Fire:
+		"####" "#" 1;
+		Goto Ready;
+		
+	/* Deselect doesn't need a mod jump since it's just "####" anyway. */
+	
+	Deselect:
+		"####" "#" 0 {
+			A_ZoomFactor(1.0);
+			A_SetCrosshair(0);
+		}
+		Goto DeselectLoop;
+		
+	/* Mod Swapping. Uses the Reload bind for convenience. */
+	
+	Reload:
+		// call the swap function and start the animation if successful
+		"####" "#" 0 Arg_A_SwapMod();
+	ModSwapDown:
+		// lower the weapon and jump to the raise animation
+		"####" "########" 1 A_WeaponOffset(0.0, 12.0, WOF_KEEPX | WOF_ADD);
+		"####" "#" 0 {
+			Arg_A_ClearModCooldown();
+			return Arg_A_JumpMod("Mod1Raise", "Mod2Raise");
+		}
+	Mod1Raise:
+	Mod2Raise:
+	ModSwapUp:
+		// raise the weapon & start the swap animation
+		"####" "########" 1 A_WeaponOffset(0.0,-12.0, WOF_KEEPX | WOF_ADD);
+		"####" "#" 0 Arg_A_JumpMod("Mod1Swap", "Mod2Swap");
+	Mod1Swap:
+	Mod2Swap:
+	DontSwap:
+		"####" "#" 1 A_WeaponReady;
+		Goto Ready;
+		
+	/* Mod Firing. Maximum Dangertime. */
+	
+	AltFire:
+		"####" "#" 0 {
+			if(Arg_A_InstallMod(2)) {
+				return ResolveState("ModSwapDown");
+			} else if(Arg_A_CheckAmmo()) {
+				return Arg_A_JumpMod("Mod1UpCheck", "Mod2UpCheck", "DontFire", true);
+			} else {
+				return ResolveState("DontFire");
+			}
+		}
+	AltHold:
+		"####" "#" 0 Arg_A_JumpMod("Mod1Hold", "Mod2Hold");
+		Goto DontFire;
+	ModDown:
+		"####" "#" 0 Arg_A_JumpMod("Mod1Down", "Mod2Down");
+		Goto DontFire;
+	/* [TODO] remove these band-aids after ACS is ousted. */
+	Mod1UpCheck:
+		"####" "#" 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod[1].ammoUse);
+		"####" "#" 0 ResolveState("Mod1Up");
+	Mod2UpCheck:
+		"####" "#" 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod[2].ammoUse);
+		"####" "#" 0 ResolveState("Mod2Up");
+	/* [/TODO] */
+	Mod1Up:
+	Mod2Up:
+	Mod1Hold:
+	Mod2Hold:
+	Mod1Down:
+	Mod2Down:
+	DontFire:
+		"####" "#" 1 A_WeaponReady(WRF_NOFIRE);
+		Goto Ready;
+	Cooldown:
+		"####" "#" 0 {
+			A_ClearReFire();
+			Arg_A_StartModCooldown();
+		}
+		Goto Ready;
+	}
+	
+	/*
+	 * Overridden Tick function, for handiness's sake.
+	 */
+	override void Tick()
+	{
+		Super.Tick();
+		
+		// Subtract 1 from mod cooldown every tick, no matter
+		// what else happens. Huzzah!
+		let this = ArgModWeapon(self);
+		this.mod[1].cooldown.dec();
+		this.mod[2].cooldown.dec();
+	}
+	
+	/*
+	 * [XA] legacy function for ACS bridge support. Will go away once possible.
+	 */
+	action void Arg_A_RefreshModTokens()
+	{
+		A_TakeInventory("ArgMod1Enabled");
+		A_TakeInventory("ArgMod2Enabled");
+		if(invoker.mod[1].enabled) { A_GiveInventory("ArgMod1Enabled", 1); }
+		if(invoker.mod[2].enabled) { A_GiveInventory("ArgMod2Enabled", 1); }
+	}
+	
+	/*
+	 * Jump to one of two states depending on which mod is selected.
+	 * If no mods are selected, no state jump occurs.
+	 */
+	action state Arg_A_JumpMod(statelabel mod1label, statelabel mod2label, statelabel mod0label = null, bool checkCooldown = false) {
+		// Jump to either the mod 1 or mod 2 state depending on which exists.
+		// Optionally, check if cooldown is complete first.
+		if(invoker.modSelected == 1 && (!checkCooldown || invoker.mod[1].cooldown.get() == 0)) {
+			return ResolveState(mod1label);
+
+		} else if(invoker.modSelected == 2 && (!checkCooldown || invoker.mod[2].cooldown.get() == 0)) {
+			return ResolveState(mod2label);
+
+		} else {
+			return ResolveState(mod0label);
+		}
+	}
+	
+	/*
+	 * Attempt to install the specified mod. If already installed (or the
+	 * shop menu isn't opened), 'false' is returned; else 'true'.
+	 */
+	action bool Arg_A_InstallMod(int modToInstall) {
+
+		if(CountInv("ArgModKitToken") > 0 && !invoker.mod[modToInstall].enabled) {
+
+			// dismiss the Mod Kit interface (and remove the kit, "consuming" it).
+			A_TakeInventory("ArgModKitToken");
+			A_TakeInventory("ArgModKit", 1);
+			A_PlaySound("items/modkit/apply", CHAN_AUTO);
+		
+			// "gift" the mod and signal the calling state to jump to the
+			// mod swap animation.
+			invoker.mod[modToInstall].enabled = true;
+			invoker.modSelected = modToInstall;
+			
+			// [XA] remove this legacy stuff once possible.
+			A_GiveInventory("ArgModTotal", 1);
+			Arg_A_RefreshModTokens();
+
+			return true;
+
+		} else {
+			// don't do a thing otherwise. continue firing, gents!
+			return false;
+		}
+	}
+	
+	/*
+	 * Swap the currently-selected mod. 'Nuff said.
+	 */
+	action state Arg_A_SwapMod() {
+
+		// determine what to swap to. Hooray goofy extra logic for zero.
+		int modToSelect = 0;
+		if(invoker.modSelected == 1 && invoker.mod[2].enabled) {
+			modToSelect = 2;
+		} else if(invoker.modSelected == 2 && invoker.mod[1].enabled) {
+			modToSelect = 1;
+		} else {
+			if(invoker.mod[1].enabled) {
+				modToSelect = 1;
+			} else if(invoker.mod[2].enabled) {
+				modToSelect = 2;
+			}
+		}
+
+		// if we've successfully done a swap, initiate the animation.
+		if(modToSelect > 0) {
+			invoker.modSelected = modToSelect;
+			return ResolveState("ModSwapDown");
+		} else {
+			return ResolveState("DontSwap");
+		}
+	}
+	
+	/*
+	 * Start the cooldown cycle for the selected mod.
+	 */
+	action void Arg_A_StartModCooldown() {
+		if(invoker.modSelected > 0 && invoker.modSelected <= 2) {
+			invoker.mod[invoker.modSelected].cooldown.toMax();
+		}
+	}
+	
+	/*
+	 * Clear the cooldown cycle for the selected mod.
+	 * Generally done on weapon swap.
+	 */
+	action void Arg_A_ClearModCooldown() {
+		if(invoker.modSelected > 0 && invoker.modSelected <= 2) {
+			invoker.mod[invoker.modSelected].cooldown.toMin();
+		}
+	}
+}
+
+/*
+ * [XA] These tokens exist as a bridge to ACS, since the mod kit menu
+ *      is still being done there. This ought to go away once some
+ *      hudmessage equivalent exists in ZScript.
+ */
+class ArgModTotal    : ArgToken { Default { Inventory.MaxAmount 12; } }
+class ArgMod1Enabled : ArgToken {}
+class ArgMod2Enabled : ArgToken {}

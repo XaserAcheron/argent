@@ -1,0 +1,464 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Gauss Cannon
+//
+// --------------------------------------------------------------------------
+
+class ArgGaussCannon : ArgModWeapon
+{
+	const GAUSS_CROSSHAIR_ANIM1 = 74;
+	const GAUSS_CROSSHAIR_ANIM2 = 73;
+	const GAUSS_CROSSHAIR_ANIM3 = 72;
+	const GAUSS_CROSSHAIR_ANIM4 = 71;
+	const GAUSS_CROSSHAIR_IDLE  = 70;
+
+	override void BeginPlay()
+	{
+		Super.BeginPlay();
+		
+		mod[1].ammoUse = 30;
+		mod[1].charge.init(0, 30, 71);
+
+		mod[2].ammoUse = 40;
+		mod[2].charge.init(0, 62);
+	}
+
+	Default
+	{
+		Weapon.UpSound "weapons/gauss/equip";
+		Weapon.SelectionOrder 3;
+		Weapon.AmmoUse 20;
+		Weapon.AmmoGive 40;
+		Weapon.AmmoType "Cell";
+		Inventory.Icon "graphics/hud/weapon-gauss.png";
+		Inventory.PickupMessage "$ARG_GOT_GAUSS";
+		Tag "$ARG_TAG_GAUSS";
+		Obituary "$ARG_OB_GAUSS";
+		Decal "Scorch"; // need to put this on the weapon since it doesn't work on rail puffs; dammit Xaser D:
+	}
+	States
+	{
+	Spawn:
+		GAUS A -1;
+		Stop;
+	Ready:
+		GAUG A 0;
+		Goto Super::Ready;
+	Deselect:
+		"####" "#" 0 {
+			A_SetSpeed(1.0);
+			A_StopSound(CHAN_WEAPON);
+			invoker.mod[1].charge.toMin();
+			invoker.mod[2].charge.toMin();
+		}
+		Goto DeselectLoop;
+
+	/* Unmodded + Primary */
+
+	Mod0Select:
+		GAUG A 0;
+		Goto SelectLoop;
+	Mod0Ready:
+		GAUG FFFFFFFFEEDDCCBBAABBCCDDEE 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		Loop;
+	Mod0Fire:
+		"####" G 1 Bright {
+			Arg_A_WeaponOffset(0, 0);
+			Arg_A_GunFlash('Flash', "weapons/gauss/fire");
+			A_Recoil(7.5);
+			for(int i = 10; i > 0; i--) {
+				if(i == 1) {
+					A_RailAttack (10*random(1,8), 8, 1, "", "", RGF_SILENT | RGF_NOPIERCING, 4, "ArgGaussPuff", 0, 0, 0, 0, 16, 0, "ArgGaussTrail", 0);
+				} else {
+					A_RailAttack (10*random(1,8), 8, 0, "", "", RGF_SILENT | RGF_NOPIERCING, 4, "ArgGaussPaul", 0, 0, 0, 0, 16, 0, null           , 0);
+				}
+			}
+		}
+		"####" H 1 Bright Arg_A_WeaponOffset( 2.0,  2.0);
+		"####" I 1 Bright Arg_A_WeaponOffset( 4.0,  6.0);
+		"####" J 1 Bright Arg_A_WeaponOffset( 6.0, 10.0);
+		"####" K 1 Bright Arg_A_WeaponOffset( 8.0, 12.5);
+		"####" L 1 Bright Arg_A_WeaponOffset( 9.0, 14.5);
+		"####" M 1        Arg_A_WeaponOffset( 9.5, 15.5);
+		"####" M 1        Arg_A_WeaponOffset(10.0, 16.0);
+		"####" N 1        Arg_A_WeaponOffset( 9.0, 15.0);
+		"####" N 1        Arg_A_WeaponOffset( 8.0, 13.0);
+		"####" O 1        Arg_A_WeaponOffset( 6.5, 10.0);
+		"####" O 1        Arg_A_WeaponOffset( 5.0,  6.0);
+		"####" P 1        Arg_A_WeaponOffset( 3.0,  3.0);
+		"####" P 1        Arg_A_WeaponOffset( 2.0,  2.5);
+		"####" Q 1        Arg_A_WeaponOffset( 1.0,  1.0);
+		"####" Q 1        Arg_A_WeaponOffset( 0.5,  0.5);
+		"####" R 1        Arg_A_WeaponOffset( 0.0,  0.0);
+		"####" R 16 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH);
+		"####" ST 1 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH);
+		"####" A 17 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH);
+		"####" BCDE 2 A_WeaponReady(WRF_NOFIRE);
+		"####" A 0 A_Refire();
+		Goto Ready;
+	Flash:
+		TNT1 A 2 Bright A_Light(1);
+		TNT1 A 2 Bright A_Light(3);
+		TNT1 A 2 Bright A_Light(2);
+		TNT1 A 2 Bright A_Light(1);
+		Goto LightDone;
+
+	/* Mod 1: Precision Bolt */
+		
+	Mod1Select:
+		GA1G A 0;
+		Goto SelectLoop;
+	Mod1Raise:
+		// Override ModSwapUp so we can start the hand animation early.
+		GA1S A 1 Arg_A_WeaponOffset(0, 84);
+		GA1S A 1 Arg_A_WeaponOffset(0, 72);
+		GA1S A 1 Arg_A_WeaponOffset(0, 60);
+		GA1S B 1 Arg_A_WeaponOffset(0, 48);
+		GA1S C 1 Arg_A_WeaponOffset(0, 36);
+		GA1S D 1 Arg_A_WeaponOffset(0, 24);
+		GA1S E 1 Arg_A_WeaponOffset(0, 12);
+	Mod1Swap:
+		GA1S F 1 Arg_A_WeaponOffset(0,  0);
+		GA1S GHIJK 1;
+		GA1S L 3;
+		GA1S M 1;
+		GA1S N 1 A_PlaySound("weapons/gauss/mod1swap", CHAN_AUTO);
+		GA1S O 1 Arg_A_WeaponOffset( 68 - 67,  87 - 87); // [XA] i need to remove this silly math at some point :P
+		GA1S P 1 Arg_A_WeaponOffset(-23 + 27,  97 - 96);
+		GA1S P 1 Arg_A_WeaponOffset(-20 + 27, 100 - 96);
+		GA1S P 1 Arg_A_WeaponOffset(-18 + 27, 102 - 96);
+		GA1S P 1 Arg_A_WeaponOffset(-17 + 27, 103 - 96);
+		GA1S P 2 Arg_A_WeaponOffset(-16 + 27, 104 - 96);
+		GA1S P 1 Arg_A_WeaponOffset(-17 + 27, 103 - 96);
+		GA1S P 1 Arg_A_WeaponOffset(-19 + 27, 101 - 96);
+		GA1S P 1 Arg_A_WeaponOffset(-20 + 27, 100 - 96);
+		GA1S Q 1 Arg_A_WeaponOffset( 80 - 75,  92 - 90);
+		GA1S Q 1 Arg_A_WeaponOffset( 77 - 75,  91 - 90);
+		GA1S R 1 Arg_A_WeaponOffset( 73 - 73,  96 - 96);
+		GA1S S 1 Arg_A_WeaponOffset( 71 - 73,  96 - 96);
+		GA1S T 1 Arg_A_WeaponOffset( 41 - 45,  97 - 96);
+		GA1S U 1 Arg_A_WeaponOffset( 47 - 53,  99 - 96);
+		GA1S V 1 Arg_A_WeaponOffset( 51 - 59, 102 - 96);
+		GA1S W 1 Arg_A_WeaponOffset( 37 - 47, 105 - 96);
+		GA1S X 1 Arg_A_WeaponOffset( 22 - 33, 108 - 96);
+		GA1G A 1 Arg_A_WeaponOffset( 13 - 25, 110 - 96);
+		GA1G A 1 Arg_A_WeaponOffset( 14 - 25, 108 - 96);
+		GA1G A 1 Arg_A_WeaponOffset( 16 - 25, 105 - 96);
+		GA1G A 1 Arg_A_WeaponOffset( 20 - 25, 102 - 96);
+		GA1G A 1 Arg_A_WeaponOffset( 24 - 25,  97 - 96);
+		GA1G A 1 Arg_A_WeaponOffset( 25 - 25,  96 - 96);
+		GA1G BCDEFFFFFFFFFUUFFUUFFUUFFUU 1 A_WeaponReady(WRF_NOBOB|WRF_ALLOWRELOAD); // wow rage
+	Mod1Ready:
+		GA1G FFFFFFFFEEDDCCBBAABBCCDDEE 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		Loop;
+	Mod1Up:
+		GSCP A 1 Bright {
+			A_PlaySound("weapons/gauss/mod1charge", CHAN_5);
+			A_ZoomFactor(3.0);
+			A_SetCrosshair(GAUSS_CROSSHAIR_ANIM1);
+			invoker.mod[1].charge.inc(3); // to cover the first few states.
+		}
+		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_ANIM2);
+		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_ANIM3);
+		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_ANIM4);
+		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_IDLE );
+	Mod1Hold:
+		GSCP A 1 Bright {
+			invoker.mod[1].charge.inc();
+			if(invoker.mod[1].charge.val == invoker.mod[1].charge.over - 1) {
+				A_PlaySound("weapons/gauss/mod1hum", CHAN_5, 1.0, 1);
+			}
+			return Arg_A_SynthFire("Mod1Fire");
+		}
+		GSCP A 0 Bright A_Refire();
+	Mod1Down:
+		GSCP A 1 Bright {
+			invoker.mod[1].charge.toMin();
+//			A_PlaySound("weapons/gauss/mod1down", CHAN_5);
+			A_StopSound(CHAN_5);
+			A_ZoomFactor(1.0);
+		}
+		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_ANIM4);
+		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_ANIM3);
+		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_ANIM2);
+		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_ANIM1);
+		GSCP A 0 Bright A_SetCrosshair(0);
+		Goto Ready;
+	Mod1Fire:
+		GSCP A 1 Bright {
+			// goddamn charge damage damn -- n rounds of 7d8; equals 210%
+			// damage at full charge. Also take ammo -- note that we assume
+			// the number of iterations exactly equals the ammo usage.
+			for(int i = invoker.mod[1].charge.get(); i > 0; i--) {
+				// only spawn one trail, for sanity
+				if(i == 1) {
+					A_RailAttack (7*random(1,8), 0, 0, "", "", RGF_SILENT | RGF_NOPIERCING, 4, "ArgGaussPuff", 0, 0, 0, 0, 16, 0, "ArgGaussTrail", 0);
+				} else {
+					A_RailAttack (7*random(1,8), 0, 0, "", "", RGF_SILENT | RGF_NOPIERCING, 4, "ArgGaussPaul", 0, 0, 0, 0, 16, 0, null         , 0);
+				}
+				Arg_A_TakeAmmo();
+			}
+			invoker.mod[1].charge.toMin();
+			
+			// do the rest of the shooty stuff.
+			A_PlaySound("weapons/gauss/mod1fire", CHAN_5);
+			A_ZoomFactor(2.00);
+			A_AlertMonsters();
+			A_GunFlash();
+			
+			return ResolveState(null);
+		}
+		GSCP A 1 Bright A_ZoomFactor(2.10);
+		GSCP A 1 Bright A_ZoomFactor(2.20);
+		GSCP A 1 Bright A_ZoomFactor(2.30);
+		GSCP A 1 Bright A_ZoomFactor(2.40);
+		GSCP A 1 Bright A_ZoomFactor(2.50);
+		GSCP A 1 Bright A_ZoomFactor(2.60);
+		GSCP A 1 Bright A_ZoomFactor(2.70);
+		GSCP A 1 Bright A_ZoomFactor(2.80);
+		GSCP A 1 Bright A_ZoomFactor(2.90);
+		GSCP A 1 Bright A_ZoomFactor(3.00);
+		GSCP A 1 Bright A_ClearRefire;
+		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_ANIM4);
+		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_ANIM3);
+		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_ANIM2);
+		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_ANIM1);
+		GSCP A 1 Bright A_SetCrosshair(0);
+		GA1G A 0 A_ZoomFactor(1.00);
+		GA1G R 16 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH);
+		GA1G ST 1 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH);
+		GA1G A 17 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH);
+		GA1G BCDE 2 A_WeaponReady(WRF_NOFIRE);
+		Goto Ready;
+
+	/* Mod 2: Siege Mode */
+		
+	Mod2Select:
+		GA2G A 0;
+		Goto SelectLoop;
+	Mod2Raise:
+		// Override ModSwapUp so we can start the hand animation early.
+		GA2S A 1 Arg_A_WeaponOffset(0, 84);
+		GA2S A 1 Arg_A_WeaponOffset(0, 72);
+		GA2S A 1 Arg_A_WeaponOffset(0, 60);
+		GA2S B 1 Arg_A_WeaponOffset(0, 48);
+		GA2S C 1 Arg_A_WeaponOffset(0, 36);
+		GA2S D 1 Arg_A_WeaponOffset(0, 24);
+		GA2S E 1 Arg_A_WeaponOffset(0, 12);
+	Mod2Swap:
+		GA2S F 1 {
+			Arg_A_WeaponOffset(0, 0);
+			A_PlaySound("weapons/gauss/mod2swap", CHAN_AUTO);
+		}
+		GA2S GHIJKL 1;
+		GA2S M 3;
+		GA2S N 1;
+		GA2S O 1 Arg_A_WeaponOffset( 68 - 67,  87 - 87);
+		GA2S P 1 Arg_A_WeaponOffset(-23 + 27,  97 - 96);
+		GA2S Q 1 Arg_A_WeaponOffset(-20 + 27, 100 - 96);
+		GA2S R 1 Arg_A_WeaponOffset(-18 + 27, 102 - 96);
+		GA2S S 1 Arg_A_WeaponOffset(-17 + 27, 103 - 96);
+		GA2S S 2 Arg_A_WeaponOffset(-16 + 27, 104 - 96);
+		GA2S S 1 Arg_A_WeaponOffset(-17 + 27, 103 - 96);
+		GA2S S 1 Arg_A_WeaponOffset(-19 + 27, 101 - 96);
+		GA2S S 1 Arg_A_WeaponOffset(-20 + 27, 100 - 96);
+		GA2S T 1 Arg_A_WeaponOffset( 80 - 75,  92 - 90);
+		GA2S T 1 Arg_A_WeaponOffset( 77 - 75,  91 - 90);
+		GA2S U 1 Arg_A_WeaponOffset( 73 - 73,  96 - 96);
+		GA2S U 1 Arg_A_WeaponOffset( 71 - 73,  96 - 96);
+		GA2S V 1 Arg_A_WeaponOffset( 41 - 45,  97 - 96);
+		GA2S V 1 Arg_A_WeaponOffset( 47 - 53,  99 - 96);
+		GA2S W 1 Arg_A_WeaponOffset( 51 - 59, 102 - 96);
+		GA2S W 1 Arg_A_WeaponOffset( 37 - 47, 105 - 96);
+		GA2S X 1 Arg_A_WeaponOffset( 22 - 33, 108 - 96);
+		GA2S X 1 Arg_A_WeaponOffset( 13 - 25, 110 - 96);
+		GA2S Y 1 Arg_A_WeaponOffset( 14 - 25, 108 - 96);
+		GA2S Y 1 Arg_A_WeaponOffset( 16 - 25, 105 - 96);
+		GA2S Z 1 Arg_A_WeaponOffset( 20 - 25, 102 - 96);
+		GA2S Z 1 Arg_A_WeaponOffset( 24 - 25,  97 - 96);
+		GA2G A 1 Arg_A_WeaponOffset( 25 - 25,  96 - 96);
+		GA2G BCDEFFFFFFFFFUUFFUUFFUUFFUU 1 A_WeaponReady(WRF_NOBOB|WRF_ALLOWRELOAD);
+	Mod2Ready:
+		GA2G FFFFFFFFEEDDCCBBAA 1 A_WeaponReady(WRF_ALLOWRELOAD);
+	Mod2ReadyAlt:
+		GA2G BBCCDDEE 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		Goto Mod2Ready;
+	Mod2Up:
+		GA2G A 7 {
+			A_PlaySound("weapons/gauss/mod2charge", CHAN_5);
+			A_SetSpeed(0.15);
+			return ResolveState(null);
+		}
+		GA2G A 1 Arg_A_WeaponOffset(- 0.5, 0.0);
+		GA2G A 1 Arg_A_WeaponOffset(- 1.0, 0.0);
+		GA2G A 1 Arg_A_WeaponOffset(- 2.0, 0.0);
+		GA2G A 1 Arg_A_WeaponOffset(- 3.0, 0.0);
+		GA2G A 1 Arg_A_WeaponOffset(- 4.0, 0.0);
+		GA2G A 1 Arg_A_WeaponOffset(- 5.0, 0.5);
+		GA2G A 1 Arg_A_WeaponOffset(- 6.0, 1.0);
+		GA2G A 1 Arg_A_WeaponOffset(- 7.0, 2.0);
+		GA2M B 1 Arg_A_WeaponOffset(- 9.0, 4.0);
+		GA2M C 1 Arg_A_WeaponOffset(-11.0, 7.0);
+		GA2M D 1 Arg_A_WeaponOffset(-13.0, 8.0);
+		GA2M E 1 Arg_A_WeaponOffset(-12.0, 9.0);
+		GA2M F 1 Arg_A_WeaponOffset(-13.0, 8.0);
+		GA2M F 1 Arg_A_WeaponOffset(-11.0, 7.0);
+		GA2M F 1 Arg_A_WeaponOffset(- 9.0, 4.0);
+		GA2M F 1 Arg_A_WeaponOffset(- 7.0, 2.0);
+		GA2M F 1 Arg_A_WeaponOffset(- 6.0, 1.0);
+		GA2M F 1 Arg_A_WeaponOffset(- 5.0, 0.5);
+		GA2M F 1 Arg_A_WeaponOffset(- 4.0, 0.0);
+		GA2M F 1 Arg_A_WeaponOffset(- 3.0, 0.0);
+		GA2M F 1 Arg_A_WeaponOffset(- 2.0, 0.0);
+		GA2M F 1 Arg_A_WeaponOffset(- 1.0, 0.0);
+		GA2M F 1 Arg_A_WeaponOffset(- 0.5, 0.0);
+		GA2M F 4 Arg_A_WeaponOffset(  0.0, 0.0);
+		GA2M F 1 Arg_A_WeaponOffset(  0.5, 0.5);
+		GA2M G 1 Arg_A_WeaponOffset(  1.0, 1.0);
+		GA2M H 1 Arg_A_WeaponOffset(  2.0, 2.0);
+		GA2M I 1 Arg_A_WeaponOffset(  4.0, 4.0);
+		GA2M J 1 Arg_A_WeaponOffset(  6.0, 6.0);
+		GA2M K 1 Arg_A_WeaponOffset(  7.0, 7.0);
+	Mod2Hold:
+		GA2M LLLMMMNNNOOO 1 {
+			// only using charge for the sound counter. yay hax.
+			Arg_A_WeaponOffset(8, 8, 1);
+			invoker.mod[2].charge.inc();
+			if(invoker.mod[2].charge.get() == invoker.mod[2].charge.max - 1) {
+				A_PlaySound("weapons/gauss/mod2hum", CHAN_5, 1.0, 1);
+			}
+
+			// emulated reverse-A_Refire()
+			if(Arg_SynthAltFire()) {
+				return Arg_A_SynthFire("Mod2Fire");
+			} else {
+				return ResolveState("Mod2Down");
+			}
+		}
+		Loop;
+	Mod2Down:
+		GA2M J 1 {
+			A_SetSpeed(1.0);
+			invoker.mod[2].charge.toMin();
+//			A_PlaySound("weapons/gauss/mod2down", CHAN_5);
+			A_StopSound(CHAN_5);
+			A_ZoomFactor(1.0);
+		}
+		GA2M I 1 Arg_A_WeaponOffset(7.0, 7.0);
+		GA2M H 1 Arg_A_WeaponOffset(6.0, 6.0);
+		GA2M G 1 Arg_A_WeaponOffset(4.0, 4.0);
+		GA2M F 1 Arg_A_WeaponOffset(2.0, 2.0);
+		GA2M E 1 Arg_A_WeaponOffset(1.0, 1.0);
+		GA2M D 1 Arg_A_WeaponOffset(0.5, 0.5);
+		GA2M C 1 Arg_A_WeaponOffset(0.0, 0.0);
+		GA2M BA 1;
+		Goto Mod2ReadyAlt;
+	Mod2Fire:
+		GA2N A 1 Bright {
+			// fire several rail shots in a horizontal line to "thicken up" the shot.
+			// [XA] not looping this just yet, as I may remove this behavior in favor of
+			//      adding radius damage to the trail.
+			A_RailAttack (random(100, 120),-16, 0, "", "", RGF_SILENT, 0, "ArgGaussPaul"     , 0, 0, 0, 0, 0 , 0, null                , 0);
+			A_RailAttack (random(100, 120),-12, 0, "", "", RGF_SILENT, 0, "ArgGaussPaul"     , 0, 0, 0, 0, 0 , 0, null                , 0);
+			A_RailAttack (random(100, 120),- 8, 0, "", "", RGF_SILENT, 0, "ArgGaussPaul"     , 0, 0, 0, 0, 0 , 0, null                , 0);
+			A_RailAttack (random(100, 120),- 4, 0, "", "", RGF_SILENT, 0, "ArgGaussPaul"     , 0, 0, 0, 0, 0 , 0, null                , 0);
+			A_RailAttack (random(200, 240),  0, 0, "", "", RGF_SILENT,32, "ArgGaussSiegePuff", 0, 0, 0, 0, 16, 0, "ArgGaussSiegeTrail", 0);
+			A_RailAttack (random(100, 120),  4, 0, "", "", RGF_SILENT, 0, "ArgGaussPaul"     , 0, 0, 0, 0, 0 , 0, null                , 0);
+			A_RailAttack (random(100, 120),  8, 0, "", "", RGF_SILENT, 0, "ArgGaussPaul"     , 0, 0, 0, 0, 0 , 0, null                , 0);
+			A_RailAttack (random(100, 120), 12, 0, "", "", RGF_SILENT, 0, "ArgGaussPaul"     , 0, 0, 0, 0, 0 , 0, null                , 0);
+			A_RailAttack (random(100, 120), 16, 0, "", "", RGF_SILENT, 0, "ArgGaussPaul"     , 0, 0, 0, 0, 0 , 0, null                , 0);
+			
+			// wow, this firing function is way simpler than the other one.
+			invoker.mod[2].charge.toMin();
+			Arg_A_TakeAmmo(invoker.mod[2].ammoUse);
+			Arg_A_GunFlash('Mod2Flash', "weapons/gauss/mod2fire");
+			A_Recoil(15.0);
+			A_SetSpeed(1.0);
+			Arg_A_WeaponOffset(2, 2);
+		}
+		GA2N A 1 Bright Arg_A_WeaponOffset( 4.00,  4.0);
+		GA2N A 1 Bright Arg_A_WeaponOffset( 8.00,  8.0);
+		GA2N B 1 Bright Arg_A_WeaponOffset(12.00, 13.0);
+		GA2N C 1 Bright Arg_A_WeaponOffset(20.00, 20.0);
+		GA2N D 1 Bright Arg_A_WeaponOffset(24.00, 27.0);
+		GA2M F 1        Arg_A_WeaponOffset(25.00, 28.0);
+		GA2M F 1        Arg_A_WeaponOffset(25.50, 28.5);
+		GA2M F 1        Arg_A_WeaponOffset(25.75, 28.75);
+		GA2M E 1        Arg_A_WeaponOffset(25.50, 28.5);
+		GA2M D 1        Arg_A_WeaponOffset(25.00, 28.0);
+		GA2M C 1        Arg_A_WeaponOffset(24.00, 27.0);
+		GA2M B 1        Arg_A_WeaponOffset(22.00, 26.0);
+		GA2M A 1        Arg_A_WeaponOffset(19.00, 25.0);
+		GA2G A 1        Arg_A_WeaponOffset(16.00, 23.0);
+		GA2G A 1        Arg_A_WeaponOffset(14.00, 21.0);
+		GA2G A 1        Arg_A_WeaponOffset(12.00, 19.0);
+		GA2G A 1        Arg_A_WeaponOffset(10.00, 18.0);
+		GA2G A 1        Arg_A_WeaponOffset( 9.00, 15.0);
+		GA2G A 1        Arg_A_WeaponOffset( 8.00, 13.0);
+		GA2G A 1        Arg_A_WeaponOffset( 6.50, 10.0);
+		GA2G A 1        Arg_A_WeaponOffset( 5.00,  6.0);
+		GA2G A 1        Arg_A_WeaponOffset( 3.00,  3.0);
+		GA2G A 1        Arg_A_WeaponOffset( 2.00,  2.5);
+		GA2G A 1        Arg_A_WeaponOffset( 1.00,  1.0);
+		GA2G A 1        Arg_A_WeaponOffset( 0.50,  0.5);
+		GA2G A 1        Arg_A_WeaponOffset( 0.00,  0.0);
+		GA2G A 20 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH);
+		GA2G BCDE 2 A_WeaponReady(WRF_NOFIRE);
+		Goto Ready;
+	Mod2Flash:
+		TNT1 A 2 A_LightInverse();
+		Goto Flash;
+	}
+}
+
+class ArgGaussTrail : ArgTrail
+{
+	Default
+	{
+		RenderStyle 'Add';
+		Alpha 1.0;
+		Scale 0.5;
+	}
+	States
+	{
+	Spawn:
+		GAUT ABCD 2 Bright;
+		Stop;
+	}
+}
+
+class ArgGaussPuff : ArgPuff
+{
+	Default
+	{
+		RenderStyle 'Add';
+		DamageType "ArgGaussCannon";
+		Alpha 1.0;
+		Scale 0.75;	
+
+		+ALWAYSPUFF
+		+EXTREMEDEATH
+	}
+	States
+	{
+	Spawn:
+		GAUP A 2 Bright NoDelay A_PlaySound("weapons/gauss/impact");
+		GAUP BCDEF 2 Bright;
+		Stop;
+	}
+}
+
+class ArgGaussPaul : ArgGaussPuff
+{
+	// it's Paul!
+	States
+	{
+	Spawn:
+		TNT1 A 0;
+		Stop;
+	}
+}
+
+// [TODO] make these
+class ArgGaussSiegeTrail : ArgGaussTrail { }
+class ArgGaussSiegePuff  : ArgGaussPuff  { }

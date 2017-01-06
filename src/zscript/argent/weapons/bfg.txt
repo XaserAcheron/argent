@@ -1,0 +1,374 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: BFG9000
+//
+// --------------------------------------------------------------------------
+
+class ArgBFG9000 : ArgWeapon replaces BFG9000
+{
+	int ammouse_classic;
+	int ammouse_modern ;
+		
+	Default
+	{
+		Weapon.UpSound "weapons/bfg/equip";
+		Weapon.SelectionOrder 11;
+		Inventory.Icon "graphics/hud/weapon-bfg.png";
+		Inventory.PickupMessage "$ARG_GOT_BFG";
+		Tag "$ARG_TAG_BFG";
+	}
+	
+	/*
+	 * Handy function to set the ammotype based on cvar stuffs. Whoa!
+	 */
+	void SetAmmoType()
+	{
+		let this = ArgBFG9000(self);
+		if(GetCvar("arg_bfgammotype")) {
+			// use custom "bfg cells" ammo type.
+			this.AmmoType1 = 'ArgBFGAmmo';
+			this.AmmoUse1  = 1;
+			this.AmmoGive1 = 1;
+			this.ammouse_classic = 1;
+			this.ammouse_modern  = 1;
+			
+		} else {
+			// use regular ol' cells
+			this.AmmoType1 = 'Cell';
+			this.AmmoUse1  = 40;
+			this.AmmoGive1 = 40;
+			this.ammouse_classic = 40;
+			this.ammouse_modern  = 80;
+		}
+	}
+
+	/*
+	 * Determine ammotype at runtime! This function is executed
+	 * when a BFG spawns in-map, modifying the actor on the fly. Cool stuff!
+	 */
+	override void BeginPlay()
+	{
+		super.BeginPlay();
+		let this = ArgBFG9000(self);
+		if(this) {
+			this.SetAmmoType();
+		}
+	}
+	
+	/*
+	 * Recalculate the ammotype on map start if we've got a certain token in-inventory.
+	 *
+	 * [XA] This doesn't quite seem to work flawlessly; the status bar doesn't update
+	 *      unless you drop & pickup the weapon -- SBARINFO bug?
+	 */
+	override void Tick()
+	{
+		super.Tick();
+
+		if(self.owner && self.owner.CountInv("ArgBFG9000AmmoToken") > 0) {
+			let this = ArgBFG9000(self);
+			if(this) {
+				this.SetAmmoType();
+				if(this.owner) {
+					this.owner.A_TakeInventory("ArgBFG9000AmmoToken");
+				}
+			}
+		}
+	}
+	
+	States
+	{
+	Spawn:
+		BFGP A -1;
+		Stop;
+	Ready:
+		BFGG A 1 Bright A_WeaponReady;
+		Loop;
+	Select:
+		BFGG A 0 Bright;
+		Goto SelectLoop;
+	Deselect:
+		BFGG A 0 Bright;
+		Goto DeselectLoop;
+	Fire:
+		BFGG A 1 Bright Arg_A_ChargeBFG();
+		BFGG B 1 Bright { Arg_A_WeaponOffset(0, 0, 0.1); A_Quake(1, 8, 0, 8, ""); }
+		BFGG C 1 Bright   Arg_A_WeaponOffset(0, 0, 0.1);
+		BFGG D 1 Bright   Arg_A_WeaponOffset(0, 0, 0.2);
+		BFGG C 1 Bright   Arg_A_WeaponOffset(0, 0, 0.2);
+		BFGG D 1 Bright   Arg_A_WeaponOffset(0, 0, 0.3);
+		BFGG E 1 Bright   Arg_A_WeaponOffset(0, 0, 0.3);
+		BFGG F 1 Bright   Arg_A_WeaponOffset(0, 0, 0.4);
+		BFGG G 1 Bright { Arg_A_WeaponOffset(0, 0, 0.4); A_Quake(2, 8, 0, 8, ""); A_GunFlash(); A_AlertMonsters(); }
+		BFGG H 1 Bright   Arg_A_WeaponOffset(0, 0, 0.5);
+		BFGG I 1 Bright   Arg_A_WeaponOffset(0, 0, 0.5);
+		BFGG J 1 Bright   Arg_A_WeaponOffset(0, 0, 0.6);
+		BFGG I 1 Bright   Arg_A_WeaponOffset(0, 0, 0.6);
+		BFGG J 1 Bright   Arg_A_WeaponOffset(0, 0, 0.7);
+		BFGG K 1 Bright   Arg_A_WeaponOffset(0, 0, 0.8);
+		BFGG L 1 Bright   Arg_A_WeaponOffset(0, 0, 0.9);
+		BFGF A 1 Bright { Arg_A_WeaponOffset(0, 0, 1.0); A_Quake(3, 3, 0, 8, ""); }
+		BFGF B 1 Bright   Arg_A_WeaponOffset(0, 0, 0.0);
+		BFGF C 0 Bright Arg_A_FireBFG();
+		BFGF C 1 Bright A_ZoomFactor(0.91, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+		BFGF D 1 Bright A_ZoomFactor(0.92, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+		Goto FireEnd;
+	FireAlt: 
+		BFGA A 1 Bright A_ZoomFactor(0.91, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+		BFGA B 1 Bright A_ZoomFactor(0.92, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+	FireEnd: 
+		BFGF E 1 Bright A_ZoomFactor(0.93, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+		BFGF F 1 Bright A_ZoomFactor(0.94, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+		BFGF G 1 Bright A_ZoomFactor(0.95, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+		BFGF H 1 Bright A_ZoomFactor(0.96, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+		BFGF I 1 Bright A_ZoomFactor(0.97, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+		BFGF J 1 Bright A_ZoomFactor(0.98, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+		BFGF K 1 Bright A_ZoomFactor(0.99, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+		BFGF L 1 Bright A_ZoomFactor(1.00, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+		BFGF MN 1 Bright;
+		BFGG A 8 Bright;
+		Goto Ready;
+	Flash:
+		TNT1 A 4 Bright A_Light( 1);
+		TNT1 A 2 Bright A_Light( 2);
+		TNT1 A 1 Bright A_Light(-2);
+		TNT1 A 1 Bright A_Light( 2);
+		TNT1 A 1 Bright A_Light( 3);
+		TNT1 A 1 Bright A_Light(-1);
+		TNT1 A 2 Bright A_Light( 4);
+		TNT1 A 2 Bright A_Light(-2);
+		TNT1 A 2 Bright A_Light( 3);
+		TNT1 A 2 Bright A_Light( 2);
+		TNT1 A 2 Bright A_Light( 1);
+		Goto LightDone;
+	}
+	
+	/*
+	 * BFG charge sequence n' ammo check. Insert "lazer" meme here.
+	 */
+	action void Arg_A_ChargeBFG() {
+		// overly complex ammo check function ohno
+		// [TODO] perhaps just get rid of this nonsense and make the
+		//        classic/modern mode switch also get set in BeginPlay.
+		if((GetCvar("arg_classicbfg") == true  && CountInv(invoker.AmmoType1) < invoker.ammouse_classic)
+		 ||(GetCvar("arg_classicbfg") == false && CountInv(invoker.AmmoType1) < invoker.ammouse_modern )) {
+			A_SelectWeapon("None", SWF_SELECTPRIORITY);
+		} else {
+			A_PlaySound("weapons/bfg/fire", CHAN_AUTO);
+		}
+	}
+	
+	/*
+	 * BFG firin' function. Let 'er rip!
+	 */
+	action state Arg_A_FireBFG() {
+		A_ZoomFactor(0.90, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
+		if(GetCvar("arg_classicbfg") == true) {
+			A_FireProjectile("ArgThatDamnDragonAteMyBalls", 0, 0);
+			A_TakeInventory(invoker.AmmoType1, invoker.ammouse_classic);
+		} else {
+			A_FireProjectile("ArgIveGotBallsOfSteel", 0, 0);
+			A_TakeInventory(invoker.AmmoType1, invoker.ammouse_modern);
+		}
+		return A_Jump(64, "FireAlt");
+	}
+}
+
+class ArgBFG9000AmmoToken : ArgToken { } // [TODO] remove
+
+// classic mode
+
+class ArgThatDamnDragonAteMyBalls : BFGBall
+{
+	Default
+	{
+		Scale 0.66;
+		DeathSound "weapons/bfg/explode";
+		Decal "BFGLightning";
+		DamageType "ArgBFG9000";
+		Obituary "$ARG_OB_BFG";
+
+		+SKYEXPLODE
+		+EXTREMEDEATH
+	}
+	States
+	{
+	Spawn:
+		BFS1 A 0 NoDelay {
+			A_SpawnItemEx("ArgBFGOrbiter1", 0,  00.000, -16.000, 0, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_ORIGINATOR|SXF_SETMASTER);
+			A_SpawnItemEx("ArgBFGOrbiter2", 0, -13.856,  08.000, 0, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_ORIGINATOR|SXF_SETMASTER);
+			A_SpawnItemEx("ArgBFGOrbiter3", 0,  13.856,  08.000, 0, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_ORIGINATOR|SXF_SETMASTER);
+		}
+		BFS1 C 0 Bright { return ResolveState("Fly"); }
+	Fly:
+		BFS1 AAAABBBB 1 Bright A_SpawnItemEx("ArgBFGTrail", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
+		Loop;
+	Death:
+		BFE1 AAAAAAAAAAAAAAAA 0 Bright A_SpawnItemEx("ArgBFGTrail", 0, frandom(-10,10), frandom(-10,10), 0, frandom(-5,5), frandom(-5,5), 0, SXF_CLIENTSIDE, 0);
+		BFE1 A 2 Bright { A_SetScale(1.0); A_KillChildren("Normal", KILS_KILLMISSILES|KILS_NOMONSTERS); }
+		BFE1 BAB 2 Bright;
+		BFE1 C 0 Bright { return ResolveState("SuperDeath"); }
+	SuperDeath:
+		BFE1 C 4 Bright A_BFGSpray("ArgBFGSpray");
+		BFE1 DEF 4 Bright;
+		Stop;
+	}
+}
+
+class ArgBFGOrbiter1 : ArgTrail
+{
+	Default
+	{
+		Scale 0.25;
+		Renderstyle 'Add';
+		WeaveIndexXY 0;
+		WeaveIndexZ  48;
+		Damage 0;
+
+		+MISSILE
+		+NOINTERACTION
+	}
+	States
+	{
+	Spawn:
+		BFS1 AABB 1 Bright NoDelay {
+			A_SpawnItemEx("ArgBFGTrailSmall", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
+			A_Warp(AAPTR_MASTER, 0, 0, 0, 0, WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE);
+			A_Weave(2, 2, 8.0, 8.0);
+		}
+		Loop;
+	Death:
+		TNT1 AAAAAAAA 0 A_SpawnItemEx("ArgBFGTrailSmall", 0, frandom(-5,5), frandom(-5,5), 0, frandom(-2.5,2.5), frandom(-2.5,2.5), 0, SXF_CLIENTSIDE, 0);
+		TNT1 A 1;
+		Stop;
+	}
+}
+class ArgBFGOrbiter2 : ArgBFGOrbiter1 { Default { WeaveIndexXY 21; WeaveIndexZ  5; } }
+class ArgBFGOrbiter3 : ArgBFGOrbiter1 { Default { WeaveIndexXY 42; WeaveIndexZ 26; } }
+
+class ArgBFGTrail : ArgTrailNoPhysics
+{
+	Default
+	{
+		Renderstyle 'Add';
+		Alpha 0.75;
+		Scale 0.75;
+	}
+	States
+	{
+	Spawn:
+		BTRL ABCD 3 Bright;
+		Stop;
+	}
+}
+class ArgBFGTrailSmall : ArgBFGTrail { Default { Scale 0.5; } }
+
+class ArgBFGSpray : Actor
+{
+	Default
+	{
+		RenderStyle 'Add';
+		Alpha 0.75;
+
+		+NOBLOCKMAP
+		+NOGRAVITY
+		+BLOODSPLATTER
+		+EXTREMEDEATH
+	}
+	States
+	{
+	Spawn:
+		BFE2 A 0;
+		BFE2 A 0 A_PlaySound("weapons/bfg/spray");
+		BFE2 AAAAAAAAAAAAAAAA         0        A_SpawnItemEx("ArgBFGTrailSmall", frandom(-10,10), frandom(-10,10), frandom(-10,10), frandom(-2.5,2.5), frandom(-5.0,5.0), frandom(-5.0,5.0), 0, SXF_CLIENTSIDE, 0);
+		BFE2 AAAAAABBBBBBCCCCCCDDDDDD 1 Bright A_SpawnItemEx("ArgBFGTrailSmall", frandom(-10,10), frandom(-10,10), frandom(-10,10), frandom(-2.5,2.5), frandom(-2.5,2.5), frandom(-2.5,2.5), 0, SXF_CLIENTSIDE, 0);
+		Stop;
+	}
+}
+
+// modern mode
+
+class ArgIveGotBallsOfSteel : ArgThatDamnDragonAteMyBalls
+{
+	States
+	{
+	Fly:
+		BFS1 AAAABBBB 1 Bright {
+			A_SpawnItemEx("ArgBFGTrail", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0, 30, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0, 90, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,150, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,210, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,270, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,330, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+		}
+		Loop;
+	SuperDeath:
+		BFE1 C 4 Bright {
+			A_BFGSpray("ArgBFGSpray", 20, 40, 360, 1024, 32, 0, BFGF_MISSILEORIGIN);
+			A_RadiusDamageSelf(48, 96, RDSF_BFGDAMAGE, "ArgBFGSpray");
+		}
+		BFE1 DEF 4 Bright;
+		Stop;
+	}
+}
+
+class ArgBFGZapper : Actor
+{
+	Default
+	{
+		Radius 2;
+		Height 2;
+		Speed 0;
+		MinMissileChance 0;
+		Projectile;
+		RenderStyle 'Add';
+		Obituary "$ARG_OB_BFGZAP";
+		AttackSound "weapons/bfg/zap";
+		MissileHeight 0;
+
+		+NOINTERACTION
+		+ISMONSTER
+		+FRIENDLY
+	}
+	States
+	{
+	Spawn:
+		TNT1 A 1 NoDelay A_LookEx(LOF_NOSOUNDCHECK, 0, 1024, 0, 60, "See");
+		Stop;
+	See:
+		TNT1 A 1 {
+			A_FaceTarget();
+			A_CustomRailgun(20, 0, "", "", RGF_SILENT | RGF_NOPIERCING, 1, 32, "ArgBFGSprayZ", 0, 0, 0, 0, 4, 0, "ArgBFGZapperTrail");
+		}
+		Goto Death;
+	Death:
+		TNT1 A 0;
+		Stop;
+	}
+}
+
+class ArgBFGSprayZ : ArgBFGSpray
+{
+	Default
+	{
+		Damagetype "ArgBFGZapper";
+	}
+}
+
+class ArgBFGZapperTrail : ArgTrailNoPhysics
+{
+	Default
+	{
+		Renderstyle 'Add';
+		Alpha 0.75;
+		Scale 0.75;
+	}
+	States
+	{
+	Spawn:
+		BFE2 D 2 Bright;
+		BTRL D 1 Bright;
+		Stop;
+	}
+}

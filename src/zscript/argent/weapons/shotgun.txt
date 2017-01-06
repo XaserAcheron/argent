@@ -1,0 +1,322 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Combat Shotgun
+//
+// --------------------------------------------------------------------------
+
+class ArgShotgun : ArgModWeapon replaces Shotgun
+{
+	override void BeginPlay()
+	{
+		Super.BeginPlay();
+		
+		mod[1].ammoUse = 3;
+		mod[1].cooldown.init(0, 90);
+
+		mod[2].ammoUse = 2;
+		mod[2].cooldown.init(0, 90);
+	}
+	
+	Default
+	{
+		Weapon.SelectionOrder 6;
+		Weapon.AmmoUse 1;
+		Weapon.AmmoGive 8;
+		Weapon.AmmoType "Shell";
+		Inventory.Icon "graphics/hud/weapon-shotgun.png";
+		Inventory.PickupMessage "$ARG_GOT_SHOTGUN";
+		Tag "$ARG_TAG_SHOTGUN";
+		Obituary "$ARG_OB_SHOTGUN";
+		DamageType "ArgShotgun";
+	}
+	States
+	{
+	Spawn:
+		SHTP A -1;
+		Stop;
+	Ready:
+		SHTG A 0;
+		Goto Super::Ready;
+
+	/* Unmodded + Primary */
+
+	Mod0Select:
+		SHTG A 0;
+		Goto SelectLoop;
+	Mod0Ready:
+		SHTG A 0;
+		Goto ReadyLoop;
+	Mod0Fire:
+		"####" B 1 Bright {
+			Arg_A_GunFlash('Flash', "weapons/shotgun/fire");
+			A_FireBullets(5, 2, 7, 5, "ArgBulletPuff");
+		}
+		"####" C 1 Bright Arg_A_WeaponOffset(4.0, 2.0);
+	Mod0FireAnim:
+		"####" D 1 Arg_A_WeaponOffset( 8.0, 2.0);
+		"####" E 1 Arg_A_WeaponOffset(12.0, 2.0);
+		"####" F 1 Arg_A_WeaponOffset(16.0, 2.0);
+		"####" F 1 Arg_A_WeaponOffset(17.0, 4.0);
+		"####" E 1 Arg_A_WeaponOffset(15.0, 6.0);
+		"####" D 1 Arg_A_WeaponOffset(12.5, 8.0);
+		"####" A 1 Arg_A_WeaponOffset(10.0, 6.0); 
+		"####" A 1 Arg_A_WeaponOffset( 8.0, 4.5); 
+		"####" A 1 Arg_A_WeaponOffset( 6.0, 3.0);
+		"####" A 1 Arg_A_WeaponOffset( 5.0, 2.0);
+		"####" G 1 Arg_A_WeaponOffset( 3.2, 1.0);
+		"####" I 1 Arg_A_WeaponOffset( 2.4, 2.0);
+		"####" J 1 Arg_A_WeaponOffset( 3.6, 3.0);
+		"####" K 1 Arg_A_WeaponOffset( 4.8, 4.0);
+		"####" L 1 Arg_A_WeaponOffset( 6.0, 5.0);
+		"####" L 3 Arg_A_WeaponOffset( 7.2, 6.0);
+		"####" L 1 Arg_A_WeaponOffset( 6.0, 5.0);
+		"####" K 1 Arg_A_WeaponOffset( 4.8, 4.0);
+		"####" I 1 Arg_A_WeaponOffset( 3.6, 3.0);
+		"####" H 1 Arg_A_WeaponOffset( 2.4, 2.0);
+		"####" G 1 Arg_A_WeaponOffset( 1.2, 1.0);
+		"####" A 6 Arg_A_WeaponOffset( 0.0, 0.0);
+		"####" A 0 A_Refire();
+		Goto Ready;
+	Flash:
+		TNT1 A 2 Bright A_Light(1);
+		TNT1 A 4 Bright A_Light(2);
+		TNT1 A 2 Bright A_Light(1);
+		Goto LightDone;
+		
+	/* Mod 1: Charged Burst */
+		
+	Mod1Select:
+		SH1G A 0;
+		Goto SelectLoop;
+	Mod1Raise:
+		SH0G A 0 {
+			A_PlaySound("weapons/shotgun/mod1swap", CHAN_AUTO);
+			A_WeaponOffset(-15.0, 0.0, WOF_KEEPY);
+		}
+		Goto ModSwapUp;
+	Mod1Swap:
+		SH0G A 3;
+		SH1S ABC 1;
+		SH1S D 1 Arg_A_WeaponOffset(-14.5, 0.0);
+		SH1S E 1 Arg_A_WeaponOffset(-14.0, 0.0);
+		SH1S F 1 Arg_A_WeaponOffset(-13.0, 0.0);
+		SH1S G 1 Arg_A_WeaponOffset(-12.0, 0.0);
+		SH1S H 1 Arg_A_WeaponOffset(- 8.0, 0.0);
+		SH1S H 1 Arg_A_WeaponOffset(- 3.0, 0.5);
+		SH1S H 1 Arg_A_WeaponOffset(- 1.0, 1.0);
+		SH1S H 1 Arg_A_WeaponOffset(- 0.5, 0.5);
+		SH1S H 1 Arg_A_WeaponOffset(  0.0, 0.0);
+		SH1S H 1 Arg_A_WeaponOffset(  0.0, 0.0);
+		SH1S I 1 Arg_A_WeaponOffset(  1.0, 1.0);
+		SH1S J 1 Arg_A_WeaponOffset(  2.0, 2.0);
+		SH1S K 1 Arg_A_WeaponOffset(  3.0, 3.0);
+		SH1S L 1 Arg_A_WeaponOffset(  4.0, 4.0);
+		SH1S M 1 Arg_A_WeaponOffset(  5.0, 5.0);
+		SH1S M 1 Arg_A_WeaponOffset(  4.0, 4.0);
+		SH1S M 1 Arg_A_WeaponOffset(  3.0, 3.0);
+		SH1S M 1 Arg_A_WeaponOffset(  2.0, 2.0);
+		SH1S M 1 Arg_A_WeaponOffset(  1.0, 1.0);
+		SH1S M 3 Arg_A_WeaponOffset(  0.0, 0.0);
+		SH1S N 1 Arg_A_WeaponOffset(  0.0, 0.0);
+		SH1S N 1 Arg_A_WeaponOffset(  0.0, 0.0);
+		SH1S O 2 Arg_A_WeaponOffset(  0.0, 0.0);
+		SH1S P 2;
+	Mod1Ready:
+		SH1G A 0;
+		Goto ReadyLoop;
+	Mod1Up:
+		SH1G A 1 {
+			A_PlaySound("weapons/shotgun/mod1up", CHAN_AUTO);
+			A_WeaponOffset(-2.0, 32.0);
+		}
+		SH1G A 1 Arg_A_WeaponOffset(- 4.0, 0.0);
+		SH1M A 1 Arg_A_WeaponOffset(- 8.0, 0.0);
+		SH1M C 1 Arg_A_WeaponOffset(-10.0, 0.0);
+		SH1M C 1 Arg_A_WeaponOffset(-11.0, 0.0);
+		SH1M DE 2;
+	Mod1Hold:
+		SH1M E 1 Arg_A_SynthFire('Mod1Fire');
+		SH1M E 0 A_Refire();
+	Mod1Down:
+		SH1M B 1 { Arg_A_WeaponOffset(-10.0, 0.0); A_PlaySound("weapons/shotgun/mod1down", CHAN_AUTO); }
+		SH1M A 1   Arg_A_WeaponOffset(- 8.0, 0.0);
+		SH1G A 1   Arg_A_WeaponOffset(- 4.0, 0.0);
+		SH1G A 1   Arg_A_WeaponOffset(- 2.0, 0.0);
+		SH1G A 1   Arg_A_WeaponOffset(  0.0, 0.0);
+		Goto Ready;
+	Mod1Fire:
+		SH1N A 1 Bright {
+			Arg_A_GunFlash('Flash', "weapons/shotgun/mod1fire");
+			Arg_A_TakeAmmo();
+			A_FireBullets(2.5, 1, 7, 5, "ArgBulletPuff");
+		}
+		SH1N B 1 Arg_A_WeaponOffset(8.0, 4.0);
+		SH1N C 1 Arg_A_WeaponOffset(4.0, 2.0);
+		SH1N D 1 Bright {
+			Arg_A_GunFlash('Flash');
+			Arg_A_TakeAmmo();
+			A_FireBullets(2.5, 1, 7, 5, "ArgBulletPuff");
+			Arg_A_WeaponOffset(4.0, 2.0);
+		}
+		SH1N E 1 Arg_A_WeaponOffset(12.0, 6.0);
+		SH1N F 1 Arg_A_WeaponOffset( 8.0, 4.0);
+		SH1N G 1 Bright {
+			Arg_A_GunFlash('Flash');
+			Arg_A_TakeAmmo();
+			A_FireBullets(2.5, 1, 7, 5, "ArgBulletPuff");
+			Arg_A_WeaponOffset(8.0, 4.0);
+		}
+		SH1N H 1 Arg_A_WeaponOffset(13.0, 8.0);
+		SH1G E 1 Arg_A_WeaponOffset(14.0, 8.0);
+		SH1G F 1 Arg_A_WeaponOffset(16.0, 8.0);
+		SH1G F 1 Arg_A_WeaponOffset(17.0, 8.0);
+		SH1G E 1 Arg_A_WeaponOffset(15.0, 8.0);
+		SH1G D 1 Arg_A_WeaponOffset(12.5, 8.0);
+		SH1G A 1 Arg_A_WeaponOffset(10.0, 6.0);
+		SH1G A 1 Arg_A_WeaponOffset( 8.0, 4.5);
+		SH1G A 1 Arg_A_WeaponOffset( 6.0, 3.0);
+		SH1G A 1 Arg_A_WeaponOffset( 5.0, 2.0); 
+		SH1G A 1 Arg_A_WeaponOffset( 3.0, 1.0);
+		SH1G A 1 Arg_A_WeaponOffset( 1.0, 0.5);
+		SH1G A 6 Arg_A_WeaponOffset( 0.0, 0.0);
+		Goto Cooldown;
+		
+	/* Mod 2: Explosive Shot */
+
+	Mod2Select:
+		SH2G A 0;
+		Goto SelectLoop;
+	Mod2Raise:
+		SH2S A 0 A_WeaponOffset(-10.0, 0.0, WOF_KEEPY);
+		Goto ModSwapUp;
+	Mod2Swap:
+		SH2S B 3 A_PlaySound("weapons/shotgun/mod2swap", CHAN_AUTO);
+		SH2S CDEFG 1 ;
+		SH2S H 1 Arg_A_WeaponOffset(-9.5, 0.0);
+		SH2S I 1 Arg_A_WeaponOffset(-9.0, 0.0);
+		SH2S J 1 Arg_A_WeaponOffset(-8.0, 0.0);
+		SH2S K 1 Arg_A_WeaponOffset(-6.0, 0.0);
+		SH2S L 1 Arg_A_WeaponOffset(-4.0, 0.0);
+		SH2S L 6 Arg_A_WeaponOffset(-3.0, 0.0);
+		SH2S M 1 Arg_A_WeaponOffset(-2.0, 1.0);
+		SH2S N 1 Arg_A_WeaponOffset(-1.0, 2.0);
+		SH2S O 1 Arg_A_WeaponOffset( 0.0, 3.0);
+		SH2S O 1 Arg_A_WeaponOffset( 1.0, 4.0);
+		SH2S O 1 Arg_A_WeaponOffset( 2.0, 5.0);
+		SH2S O 1 Arg_A_WeaponOffset( 1.0, 4.0);
+		SH2S O 4 Arg_A_WeaponOffset( 0.0, 3.0);
+		SH2S P 1 Arg_A_WeaponOffset( 2.0, 3.5);
+		SH2S P 1 Arg_A_WeaponOffset( 4.0, 5.0);
+		SH2G A 1 Arg_A_WeaponOffset( 3.0, 3.0);
+		SH2G A 1 Arg_A_WeaponOffset( 2.0, 2.0);
+		SH2G A 1 Arg_A_WeaponOffset( 1.0, 1.0);
+	Mod2Ready:
+		SH2G A 0;
+		Goto ReadyLoop;
+	Mod2Up:
+		SH2G A 1 {
+			A_PlaySound("weapons/shotgun/mod2up", CHAN_AUTO);
+			A_WeaponOffset(-2.0, 32.0);
+		}
+		SH2G A 1 Arg_A_WeaponOffset(- 4.0, 0.0);
+		SH2M A 1 Arg_A_WeaponOffset(- 8.0, 0.0);
+		SH2M B 1 Arg_A_WeaponOffset(-10.0, 0.0);
+		SH2M B 1 Arg_A_WeaponOffset(-11.0, 0.0);
+	Mod2Hold:
+		SH2M B 1 Arg_A_SynthFire('Mod2Fire');
+		SH2M B 0 A_Refire();
+	Mod2Down:
+		SH2M B 1 { Arg_A_WeaponOffset(-10.0, 0.0); A_PlaySound("weapons/shotgun/mod2down", CHAN_AUTO); }
+		SH2M A 1   Arg_A_WeaponOffset(- 8.0, 0.0);
+		SH2G A 1   Arg_A_WeaponOffset(- 4.0, 0.0);
+		SH2G A 1   Arg_A_WeaponOffset(- 2.0, 0.0);
+		SH2G A 1   Arg_A_WeaponOffset(  0.0, 0.0);
+		Goto Ready;
+	Mod2Fire:
+		SH2N A 1 Bright {
+			Arg_A_GunFlash('Flash', "weapons/shotgun/mod2fire");
+			Arg_A_TakeAmmo(invoker.mod[2].ammoUse);
+			A_FireProjectile("ArgShotgunExplosiveShot", 0, 0, 4,-4, FPF_AIMATANGLE , 5);
+		}
+		SH2M B 1 Bright Arg_A_WeaponOffset(4.0, 34.0);
+		// technically copypasta'd pump sequence, but it's the easiest way
+		// to avoid being able to trigger the cooldown script twice, so...
+		SH2G D 1 Arg_A_WeaponOffset( 8.0, 2.0);
+		SH2G E 1 Arg_A_WeaponOffset(12.0, 2.0);
+		SH2G F 1 Arg_A_WeaponOffset(16.0, 2.0);
+		SH2G F 1 Arg_A_WeaponOffset(17.0, 4.0);
+		SH2G E 1 Arg_A_WeaponOffset(15.0, 6.0);
+		SH2G D 1 Arg_A_WeaponOffset(12.5, 8.0);
+		SH2G A 1 Arg_A_WeaponOffset(10.0, 6.0); 
+		SH2G A 1 Arg_A_WeaponOffset( 8.0, 4.5); 
+		SH2G A 1 Arg_A_WeaponOffset( 6.0, 3.0);
+		SH2G A 1 Arg_A_WeaponOffset( 5.0, 2.0);
+		SH2G G 1 Arg_A_WeaponOffset( 3.2, 1.0);
+		SH2G I 1 Arg_A_WeaponOffset( 2.4, 2.0);
+		SH2G J 1 Arg_A_WeaponOffset( 3.6, 3.0);
+		SH2G K 1 Arg_A_WeaponOffset( 4.8, 4.0);
+		SH2G L 1 Arg_A_WeaponOffset( 6.0, 5.0);
+		SH2G L 3 Arg_A_WeaponOffset( 7.2, 6.0);
+		SH2G L 1 Arg_A_WeaponOffset( 6.0, 5.0);
+		SH2G K 1 Arg_A_WeaponOffset( 4.8, 4.0);
+		SH2G I 1 Arg_A_WeaponOffset( 3.6, 3.0);
+		SH2G H 1 Arg_A_WeaponOffset( 2.4, 2.0);
+		SH2G G 1 Arg_A_WeaponOffset( 1.2, 1.0);
+		SH2G A 6 Arg_A_WeaponOffset( 0.0, 0.0);
+		Goto Cooldown;
+	}
+}
+
+class ArgShotgunExplosiveShot : Actor
+{
+	Default
+	{
+		Projectile;
+		Radius 8;
+		Height 8;
+		Damage 10;
+		Speed 50;
+		DamageType "ArgShotgunExplosiveShot";
+		DeathSound "weapons/shotgun/mod2hit";
+		Decal "Scorch";
+		Obituary "$ARG_OB_SHOTGUN";
+
+		-NOGRAVITY
+		+EXTREMEDEATH
+	}
+	States
+	{
+	Spawn:
+		SSHT A 1 Bright A_SpawnItemEx("ArgShotgunExplosiveShotTrail", 0, 0, 0, 0, frandom(-0.33, 0.33), frandom(-0.33, 0.33));
+		Loop;
+	Death:
+		SEXP A 2 Bright {
+			A_Explode(50, 128, 1);
+			A_Explode(50, 144, 0, 0, 128);
+			A_NoGravity();
+		}
+		SEXP BC 3 Bright;
+		SEXP DEF 2 Bright;
+		SEXP G 2 Bright A_SetTranslucent(0.7);
+		SEXP H 2 Bright A_SetTranslucent(0.6);
+		SEXP I 2 Bright A_SetTranslucent(0.5);
+		SEXP J 2 Bright A_SetTranslucent(0.4);
+		Stop;
+	}
+}
+
+class ArgShotgunExplosiveShotTrail : ArgTrail
+{
+	Default
+	{
+		RenderStyle 'Add';
+		Alpha 0.5;
+		Scale 0.25;
+	}
+	States
+	{
+	Spawn:
+		RTRL HHABCDEFG 1 Bright;
+		Stop;
+	}
+}

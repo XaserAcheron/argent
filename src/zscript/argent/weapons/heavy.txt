@@ -1,0 +1,349 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Heavy Assault Rifle
+//
+// --------------------------------------------------------------------------
+
+class ArgHeavyAR : ArgModWeapon replaces Chaingun
+{
+	const HEAVY_CROSSHAIR_ANIM1 = 41;
+	const HEAVY_CROSSHAIR_ANIM2 = 42;
+	const HEAVY_CROSSHAIR_ANIM3 = 43;
+	const HEAVY_CROSSHAIR_ANIM4 = 44;
+	const HEAVY_CROSSHAIR_IDLE  = 45;
+
+	override void BeginPlay()
+	{
+		Super.BeginPlay();
+		
+		mod[1].ammoUse = 3;
+		mod[1].cooldown.init(0, 90);
+
+		mod[2].ammoUse = 2;
+		mod[2].cooldown.init(0, 90);
+	}
+
+	Default {
+		Weapon.SelectionOrder 5;
+		Weapon.AmmoUse 1;
+		Weapon.AmmoGive 20;
+		Weapon.AmmoType "Clip";
+		Inventory.Icon "graphics/hud/weapon-heavy.png";
+		Inventory.PickupMessage "$ARG_GOT_HEAVY";
+		Tag "$ARG_TAG_HEAVY";
+		Obituary "$ARG_OB_HEAVY";
+		DamageType "ArgHeavyAR";
+	}
+	States
+	{
+	Spawn:
+		HARP A -1;
+		Stop;
+	Ready:
+		HARG A 0;
+		Goto Super::Ready;
+	Select:
+		HARG A 0 { invoker.mod[1].cooldown.unlock(); }
+		Goto Super::Select;
+		
+	/* Unmodded + Primary */
+	
+	Mod0Select:
+		HARG A 0;
+		Goto SelectLoop;
+	Mod0Ready:
+		HARG A 0;
+		Goto ReadyLoop;
+	Mod0Fire:
+		"####" B 1 Bright {
+			Arg_A_GunFlash('Flash', "weapons/heavy/fire", ARG_GF_ALTSOUND);
+			A_FireBullets(2.0, 1.0, -1, 7, "ArgBulletPuff");
+		}
+		"####" C 1 Bright Arg_A_WeaponOffset(1, 1, 0.25);
+		"####" D 1 Bright Arg_A_WeaponOffset(3, 2, 0.25);
+		"####" A 1        Arg_A_WeaponOffset(2, 1, 0.25);
+		"####" A 1        Arg_A_WeaponOffset(1, 0, 0.25);
+		"####" A 0 A_Refire();
+		Goto Ready;
+	Flash:
+		TNT1 A 1 Bright A_Light(2);
+		TNT1 A 1 Bright A_Light(1);
+		Goto LightDone;
+		
+	/* Mod 1: Micro Missiles */
+		
+	Mod1Select:
+		HA1G A 0;
+		Goto SelectLoop;
+	Mod1Raise:
+		HA0G A 0;
+		Goto ModSwapUp;
+	Mod1Swap:
+		HA1S A 1 A_PlaySound("weapons/heavy/mod1swap", CHAN_AUTO);
+		HA1S BCD 1;
+		HA1S E 2;
+		HA1S F 8;
+		HA1S GHIJK 1;
+		HA1S K 7;
+		HA1S LMN 2;
+	Mod1Ready:
+		HA1G A 0;
+		Goto ReadyLoop;
+	Mod1Up:
+		HA1M A 1 {
+			invoker.mod[1].cooldown.lock();
+			A_PlaySound("weapons/heavy/mod1up", CHAN_AUTO);
+		}
+		HA1M BCDE 1;
+		HA1M G 0;
+	Mod1Hold:
+		"####" "#" 1 Arg_A_SynthFire("Mod1Fire");
+		"####" "#" 0 A_Refire();
+	Mod1Down:
+		HA1M E 1 A_PlaySound("weapons/heavy/mod1down", CHAN_AUTO);
+		HA1M DCBA 1;
+		HA1M A 0 { invoker.mod[1].cooldown.unlock(); }
+		Goto Ready;
+	Mod1Fire:
+		HA1N A 0 Bright {
+			// extra ammo check, so we'll know to break out of sustained fire
+			// if we run out of juice.
+			if(!Arg_A_CheckAmmo(invoker.mod[1].ammoUse)) { return ResolveState("Mod1Down"); }
+			
+			Arg_A_TakeAmmo(invoker.mod[1].ammoUse);
+			Arg_A_GunFlash('Flash', "weapons/heavy/missile", ARG_GF_ALTSOUND);
+			A_FireProjectile("ArgMicroMissile", 0, 0, 4, 4);
+			
+			// Jump to whatever part of the animation we happen to be on.
+			// [TODO] this whenever it's possible :|
+//			int animStage = invoker.mod[1].cooldown.get() / (invoker.mod[1].cooldown.max/6) + 1;
+//			string animLabel = "Mod1Anim" .. animStage;
+//			return ResolveState(animLabel);
+			if(invoker.mod[1].cooldown.get() >= (invoker.mod[1].cooldown.max/6) * 5) { return ResolveState("Mod1Anim6"); }
+			if(invoker.mod[1].cooldown.get() >= (invoker.mod[1].cooldown.max/6) * 4) { return ResolveState("Mod1Anim5"); }
+			if(invoker.mod[1].cooldown.get() >= (invoker.mod[1].cooldown.max/6) * 3) { return ResolveState("Mod1Anim4"); }
+			if(invoker.mod[1].cooldown.get() >= (invoker.mod[1].cooldown.max/6) * 2) { return ResolveState("Mod1Anim3"); }
+			if(invoker.mod[1].cooldown.get() >= (invoker.mod[1].cooldown.max/6) * 1) { return ResolveState("Mod1Anim2"); }
+			return ResolveState(null);
+		}
+	Mod1Anim1:
+		HA1N A 1 Bright;
+		HA1N B 1 Bright Arg_A_WeaponOffset(3, 2, 0.25);
+		HA1N C 1        Arg_A_WeaponOffset(2, 1, 0.25);
+		HA1N C 1        Arg_A_WeaponOffset(1, 0, 0.25);
+		HA1N C 1        Arg_A_WeaponOffset(1, 0, 0.25);
+		Goto Mod1AnimEnd;
+	Mod1Anim2:
+		HA1N D 1 Bright;
+		HA1N E 1 Bright Arg_A_WeaponOffset(3, 2, 0.25);
+		HA1N F 1        Arg_A_WeaponOffset(2, 1, 0.25);
+		HA1N F 1        Arg_A_WeaponOffset(1, 0, 0.25);
+		HA1N F 1        Arg_A_WeaponOffset(1, 0, 0.25);
+		Goto Mod1AnimEnd;
+	Mod1Anim3:
+		HA1N G 1 Bright;
+		HA1N H 1 Bright Arg_A_WeaponOffset(3, 2, 0.25);
+		HA1N I 1        Arg_A_WeaponOffset(2, 1, 0.25);
+		HA1N I 1        Arg_A_WeaponOffset(1, 0, 0.25);
+		HA1N I 1        Arg_A_WeaponOffset(1, 0, 0.25);
+		Goto Mod1AnimEnd;
+	Mod1Anim4:
+		HA1N J 1 Bright;
+		HA1N K 1 Bright Arg_A_WeaponOffset(3, 2, 0.25);
+		HA1N L 1        Arg_A_WeaponOffset(2, 1, 0.25);
+		HA1N L 1        Arg_A_WeaponOffset(1, 0, 0.25);
+		HA1N L 1        Arg_A_WeaponOffset(1, 0, 0.25);
+		Goto Mod1AnimEnd;
+	Mod1Anim5:
+		HA1N M 1 Bright;
+		HA1N N 1 Bright Arg_A_WeaponOffset(3, 2, 0.25);
+		HA1N O 1        Arg_A_WeaponOffset(2, 1, 0.25);
+		HA1N O 1        Arg_A_WeaponOffset(1, 0, 0.25);
+		HA1N O 1        Arg_A_WeaponOffset(1, 0, 0.25);
+		Goto Mod1AnimEnd;
+	Mod1Anim6:
+		HA1N P 1 Bright;
+		HA1N Q 1 Bright Arg_A_WeaponOffset(3, 2, 0.25);
+		HA1M F 1        Arg_A_WeaponOffset(2, 1, 0.25);
+		HA1M F 1        Arg_A_WeaponOffset(1, 0, 0.25);
+		HA1M F 1        Arg_A_WeaponOffset(1, 0, 0.25);
+	Mod1AnimEnd:
+		"####" "#" 0 {
+			invoker.mod[1].cooldown.inc(invoker.mod[1].cooldown.max/6);
+			if(invoker.mod[1].cooldown.get() <= (invoker.mod[1].cooldown.max/6)*5 && Arg_A_CheckAmmo(invoker.mod[1].ammoUse)) {
+				return A_Refire();
+			}
+			return;
+		}
+		Goto Mod1Down;
+		
+	/* Mod 2: Tactical Scope */
+	
+	Mod2Select:
+		HA2G A 0;
+		Goto SelectLoop;
+	Mod2Raise:
+		HA0G A 0;
+		Goto ModSwapUp;
+	Mod2Swap:
+		HA0G A 1 A_PlaySound("weapons/heavy/mod2swap", CHAN_AUTO);
+		HA2S ABCD 1;
+		HA2S E 2;
+		HA2S F 9;
+		HA2S G 2;
+		HA2S H 11;
+		HA2S HIJKLMN 1;
+	Mod2Ready:
+		HA2G A 0;
+		Goto ReadyLoop;
+	Mod2Up:
+		HSCP A 1 Bright {
+			A_PlaySound("weapons/heavy/mod2up", CHAN_AUTO);
+			A_ZoomFactor(2.0);
+			A_SetCrosshair(HEAVY_CROSSHAIR_ANIM1);
+		}
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM2);
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM3);
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM4);
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_IDLE );
+	Mod2Hold:
+		HSCP A 1 Bright Arg_A_SynthFire("Mod2Fire");
+		HSCP A 0 Bright A_Refire();
+	Mod2Down:
+		HSCP A 1 {
+			A_PlaySound("weapons/heavy/mod2down", CHAN_AUTO);
+			A_ZoomFactor(1.0);
+		}
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM4);
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM3);
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM2);
+		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM1);
+		HSCP A 0 Bright A_SetCrosshair(0);
+		Goto Ready;
+	Mod2Fire:
+		HSCP A 1 Bright {
+			Arg_A_TakeAmmo(invoker.mod[2].ammoUse);
+			Arg_A_GunFlash('Flash', "weapons/heavy/altfire", ARG_GF_ALTSOUND);
+			A_FireBullets(0, 0, 1, 14, "ArgBulletPuff");
+			A_ZoomFactor(1.80);
+			return Arg_A_JumpIfNoAmmo("Mod2Down");
+		}
+		HSCP A 1 Bright A_ZoomFactor(1.85);
+		HSCP A 1 Bright A_ZoomFactor(1.90);
+		HSCP A 1 Bright A_ZoomFactor(1.95);
+		HSCP A 3 Bright A_ZoomFactor(2.00);
+		HA2G A 0 A_Refire();
+		Goto Mod2Down;
+	}
+}
+
+class ArgMicroMissile : Actor
+{	
+	Vector3 hitOffset;
+
+	Default
+	{
+		Radius 8;
+		Height 16;
+		Speed 30;
+		Damage 0;
+		Scale 0.33;
+		Projectile;
+		DamageType "ArgHeavyARMissile";
+		Decal "PlasmaScorchLower";
+	
+		+CAUSEPAIN
+		+BLOODSPLATTER
+		+SEEKERMISSILE
+		+EXTREMEDEATH
+	}
+	States
+	{
+	Spawn:
+		HMIS AAA 1 Bright Arg_A_MicroMissileTrail();
+		HMIS A   1 Bright Arg_A_MicroMissileSeek();
+		HMIS AAA 1 Bright Arg_A_MicroMissileTrail();
+		HMIS A   1 Bright Arg_A_MicroMissileSeek();
+		HMIS AAA 1 Bright Arg_A_MicroMissileTrail();
+		HMIS A   1 Bright Arg_A_MicroMissileSeek();
+	Flight:
+		HMIS A   1 Bright Arg_A_MicroMissileSeek();
+		HMIS AA  1 Bright Arg_A_MicroMissileTrail();
+		HMIS A   1 Bright Arg_A_MicroMissileSeek(10, false);
+		HMIS A   1 Bright Arg_A_MicroMissileTrail();
+		Loop;
+	XDeath:
+		HMIS A 0 Bright Arg_A_MicroMissileSticky();
+		Goto Stick;
+	Death:
+		HMIS A 0 Bright {
+			A_ClearTarget();
+			A_SpawnItemEx("ArgBulletPuff");
+		}
+	Stick:
+		HMIS AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 1 Bright Arg_A_MicroMissileWarp();
+	Explode:
+		REXP A 2 Bright {
+			A_Stop();
+			A_SetScale(0.5);
+			A_SetTranslucent(0.75);
+			A_Explode(50, 64);
+			A_PlaySound("weapons/heavy/explode", CHAN_VOICE);
+		}
+		REXP B 2 Bright;
+		REXP C 2 Bright A_SetTranslucent(0.7);
+		REXP D 2 Bright A_SetTranslucent(0.6);
+		REXP E 2 Bright A_SetTranslucent(0.5);
+		REXP F 2 Bright A_SetTranslucent(0.4);
+		Stop;
+	}
+	
+	/*
+	 * Micro Missile Trail n' Seek functions. Thanks to el zee -- the basis
+	 * for this was borrowed from the ROTT TC's Drunk Missile.
+	 */
+	action void Arg_A_MicroMissileTrail() {
+		A_SpawnItemEx("ArgMicroMissileTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+	}
+	action void Arg_A_MicroMissileSeek(float threshold = 5, bool velShift = true) {
+		Arg_A_MicroMissileTrail();
+		A_SeekerMissile(threshold, 20, 0, 50, 5);
+		if(velShift) {
+			A_ChangeVelocity(5.0, frandom(-2.5, 2.5), frandom(-2.5, 2.5), 1);
+		}
+	}
+	action void Arg_A_MicroMissileSticky() {
+		let this = ArgMicroMissile(self);
+		
+		// set the tracer to the stuck target.
+		// [TODO] retire this old hack and come up with a better method of doing this.
+		A_SeekerMissile(90, 90, SMF_LOOK, 256, 1);
+
+		// store the relative offset for use in A_Warp later. Note that we'll
+		// treat the actor as 3/4 its actual size (except for z) so the missiles
+		// will physically "stick" inside the actor they hit.
+		this.hitOffset = this.tracer.Vec3To(this);
+		this.hitOffset.x = this.hitOffset.x * 3 / 4;
+		this.hitOffset.y = this.hitOffset.y * 3 / 4;
+	}
+	action void Arg_A_MicroMissileWarp() {
+		let this = ArgMicroMissile(self);
+		A_Warp(AAPTR_TRACER, this.hitOffset.x, this.hitOffset.y, this.hitOffset.z, 0, WARPF_ABSOLUTEOFFSET|WARPF_USECALLERANGLE|WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE);
+	}
+}
+
+class ArgMicroMissileTrail : ArgTrail
+{
+	Default
+	{
+		RenderStyle 'Add';
+		Alpha 0.5;
+		Scale 0.15;
+	}
+	States
+	{
+	Spawn:
+		RTRL HHACEG 1 Bright;
+		Stop;
+	}
+}
