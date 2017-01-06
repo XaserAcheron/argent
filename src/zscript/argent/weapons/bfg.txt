@@ -17,18 +17,13 @@ class ArgBFG9000 : ArgWeapon replaces BFG9000
 		Inventory.PickupMessage "$ARG_GOT_BFG";
 		Tag "$ARG_TAG_BFG";
 	}
-
+	
 	/*
-	 * Determine ammotype at runtime! This function is executed
-	 * when a BFG spawns in-map, modifying the actor on the fly. Cool stuff!
-	 *
-	 * [TODO] also make this trigger on map start. May still need
-	 *        a hand from ACS on this bit.
+	 * Handy function to set the ammotype based on cvar stuffs. Whoa!
 	 */
-	override void BeginPlay()
+	void SetAmmoType()
 	{
 		let this = ArgBFG9000(self);
-		
 		if(GetCvar("arg_bfgammotype")) {
 			// use custom "bfg cells" ammo type.
 			this.AmmoType1 = 'ArgBFGAmmo';
@@ -44,6 +39,40 @@ class ArgBFG9000 : ArgWeapon replaces BFG9000
 			this.AmmoGive1 = 40;
 			this.ammouse_classic = 40;
 			this.ammouse_modern  = 80;
+		}
+	}
+
+	/*
+	 * Determine ammotype at runtime! This function is executed
+	 * when a BFG spawns in-map, modifying the actor on the fly. Cool stuff!
+	 */
+	override void BeginPlay()
+	{
+		super.BeginPlay();
+		let this = ArgBFG9000(self);
+		if(this) {
+			this.SetAmmoType();
+		}
+	}
+	
+	/*
+	 * Recalculate the ammotype on map start if we've got a certain token in-inventory.
+	 *
+	 * [XA] This doesn't quite seem to work flawlessly; the status bar doesn't update
+	 *      unless you drop & pickup the weapon -- SBARINFO bug?
+	 */
+	override void Tick()
+	{
+		super.Tick();
+
+		if(self.owner && self.owner.CountInv("ArgBFG9000AmmoToken") > 0) {
+			let this = ArgBFG9000(self);
+			if(this) {
+				this.SetAmmoType();
+				if(this.owner) {
+					this.owner.A_TakeInventory("ArgBFG9000AmmoToken");
+				}
+			}
 		}
 	}
 	

@@ -24,30 +24,10 @@ script "ArgentInit" enter {
 	SetActorProperty(0, APROP_SPEED, 1.0);
 	TakeInventory("ArgModKitToken", 1);
 	
-	// BFG management. Give the player a token item to determine whether we
-	// want to use regular cells or BFG cells; we want to check for this item
-	// in the weapon defs rather than the cvar directly since we want to
-	// only fully-change this setting on map-start.
-/*
-	// [XA] this technically is no longer used, but I'm keeping it around
-	//      for a short bit as I need to do something here to make the zscript
-	//      code do this bit on map start properly.
-	if(GetCvar("arg_bfgammotype") == true) {
-		// use bfg cells
-		GiveInventory("ArgBFG9000AmmoToken", 1);
-		// select correct weapon
-		if(StrICmp(GetWeapon(), "ArgBFG9000") == 0) {
-			SetWeapon("ArgBFG9000Alt");
-		}
-	} else {
-		// use regular cells
-		TakeInventory("ArgBFG9000AmmoToken", 1);
-		// select correct weapon
-		if(StrICmp(GetWeapon(), "ArgBFG9000Alt") == 0) {
-			SetWeapon("ArgBFG9000");
-		}
-	}
-*/
+	// Give the player a BFG token on map start to signal zscript to
+	// recalculate the BFG's ammotype. This will eventually be replaced
+	// with a direct zscript function call once that's a thing.
+	GiveInventory("ArgBFG9000AmmoToken", 1);
 }
 
 /*
