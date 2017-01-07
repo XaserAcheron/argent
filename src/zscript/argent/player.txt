@@ -13,6 +13,8 @@ class ArgPlayer : DoomPlayer
 	Actor lockTarget; // current lock-on burst target
 	
 	override void BeginPlay() {
+		super.BeginPlay();
+
 		numRockets = 0;
 		for(int i = 0; i < MAX_ROCKETS; i++) {
 			rockets[i] = null;

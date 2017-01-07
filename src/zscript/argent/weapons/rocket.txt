@@ -380,6 +380,8 @@ class ArgRocketDetonate : ArgRocket
 	 *      which I'll wait on for a bit.
 	 */
 	override void PostBeginPlay() {
+		super.PostBeginPlay();
+
 		// [XA] Presently, if for you have more than the max number of rockets
 		//      out, the most recently fired one will not be detonate-able.
 		//      This is kinda dumb, but this situation is hella rare so I'm
