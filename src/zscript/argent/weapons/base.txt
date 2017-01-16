@@ -324,7 +324,27 @@ class ArgModWeapon : ArgWeapon
 	}
 	
 	/*
-	 * Overridden Tick function, for handiness's sake.
+	 * Overridden BeginPlay function, for special shit.
+	 */
+	override void BeginPlay()
+	{
+		Super.BeginPlay();
+		
+		// Set MinSelAmmo1 to 1 for all mod weapons to thwart +AMMO_OPTIONAL;
+		// this is a special value that tells BestWeapon (the "switch to
+		// highest-priority weapon when running out of ammo" function) to
+		// ENSURE that you have at least 1 unit of ammo before picking it.
+		// It is NOT checked when selecting the weapon manually, which is
+		// precisely what we want since weapons need to be selectable to mod them.
+		
+		// Oddly, this value isn't exposed via a property, so we've got to
+		// set it in a function. Welpo.
+		let this = ArgModWeapon(self);
+		this.MinSelAmmo1 = 1;
+	}
+	
+	/*
+	 * Overridden Tick function, for extra-special shit.
 	 */
 	override void Tick()
 	{
