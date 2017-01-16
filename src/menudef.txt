@@ -65,6 +65,7 @@ OptionMenu "ArgentMenu"
 	StaticText 	""
 	StaticText 	"User Preferences"             , 1
 	Option      "HUD Style"                    , "arg_classichud"    , "ModernClassic"
+	Option      "SSG Sprite Style"             , "arg_classicssg"    , "ModernClassic"
 //	Option      "Altfire Style"                , "arg_classicaltfire", "ModernClassic"
 	StaticText 	""
 	StaticText 	"Mod Controls"                 , 1

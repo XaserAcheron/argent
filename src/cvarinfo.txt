@@ -7,3 +7,4 @@ server bool arg_poweruphaste = true;
 server bool arg_powerupregen = false;
 
 user bool arg_classichud = false;
+user bool arg_classicssg = false;
