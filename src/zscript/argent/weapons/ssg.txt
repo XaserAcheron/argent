@@ -53,8 +53,66 @@ class ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 		NSGG A 0 A_ZoomFactor(1.0);
 		Goto DeselectLoop;
 	ModernFire:
-		// [TODO] this
-		Goto ClassicFire;
+		NSGG B 2 Bright Arg_A_FireSSG();
+		NSGG C 1 Arg_A_WeaponOffset(  0,   0);
+		NSGG C 1 Arg_A_WeaponOffset(  6,   7);
+		NSGG C 1 Arg_A_WeaponOffset(  9,   9);
+		NSGG C 1 Arg_A_WeaponOffset( 14,  13);
+		NSGG C 1{Arg_A_WeaponOffset( 15,  13); A_JumpIfNoAmmo("ModernEmpty"); }
+		NSGG C 1 Arg_A_WeaponOffset( 13,  11);
+		NSGG C 1 Arg_A_WeaponOffset(  8,   6);
+		NSGG C 1 Arg_A_WeaponOffset(  3,   2);
+		NSGG C 1 Arg_A_WeaponOffset(- 4,   7);
+		NSGG C 1 Arg_A_WeaponOffset(-11,  10);
+		NSGG C 1 Arg_A_WeaponOffset(-18,  14);
+		NSGG C 1 Arg_A_WeaponOffset(-20,  17);
+		NSGG D 1 Arg_A_WeaponOffset(-21,  18);
+		NSGG D 1 Arg_A_WeaponOffset(-21,  18);
+		NSGG E 1 Arg_A_WeaponOffset(-22,  19);
+		NSGG E 1 Arg_A_WeaponOffset(-25,  18);
+		NSGG F 1 Arg_A_WeaponOffset(-32,  13);
+		NSGG F 1 Arg_A_WeaponOffset(-38,   8);
+		NSGG F 1 Arg_A_WeaponOffset(-43,   5);
+		NSGG F 1 Arg_A_WeaponOffset(-45,   3);
+		NSGG F 1 Arg_A_WeaponOffset(-47,   2);
+		NSGG F 1 Arg_A_WeaponOffset(-48,   1);
+		NSGG F 1 Arg_A_WeaponOffset(-48,   0);
+		NSGG F 1 Arg_A_WeaponOffset(-48,   0);
+		NSGG F 1 Arg_A_WeaponOffset(-49,   0);
+		NSGG G 1 Arg_A_WeaponOffset(-51,   0);
+		NSGG H 1 Arg_A_WeaponOffset(-54,   0);
+		NSGG I 1 Arg_A_WeaponOffset(-59,   0);
+		NSGG J 1 Arg_A_WeaponOffset(-62,   1);
+		NSGG K 1 Arg_A_WeaponOffset(-63,   3);
+		NSGG K 1 Arg_A_WeaponOffset(-63,   4);
+		NSGG K 1 Arg_A_WeaponOffset(-63,   5);
+		NSGG L 1 Arg_A_WeaponOffset(-63,   3);
+		NSGG M 1 Arg_A_WeaponOffset(-63,   1);
+		NSGG N 1 Arg_A_WeaponOffset(-62,   0);
+		NSGG O 1 Arg_A_WeaponOffset(-60,   0);
+		NSGG P 1 Arg_A_WeaponOffset(-58, - 4);
+		NSGG P 1 Arg_A_WeaponOffset(-55, - 8);
+		NSGG Q 1 Arg_A_WeaponOffset(-48, -15);
+		NSGG Q 1 Arg_A_WeaponOffset(-36, -18);
+		NSGG R 1 Arg_A_WeaponOffset(-29, -15);
+		NSGG R 1 Arg_A_WeaponOffset(-29, -13);
+		NSGG R 1 Arg_A_WeaponOffset(-23, -11);
+		NSGG R 1 Arg_A_WeaponOffset(-18, - 9);
+		NSGG S 1 Arg_A_WeaponOffset(-15, - 7);
+		NSGG S 1 Arg_A_WeaponOffset(-10, - 4);
+		NSGG S 1 Arg_A_WeaponOffset(- 5, - 2);
+		NSGG A 1 Arg_A_WeaponOffset(- 2,   0);
+		NSGG A 0{Arg_A_WeaponOffset(  0,   0); A_Refire(); }
+		Goto Ready;
+	ModernEmpty:
+		SSGG C 1 Arg_A_WeaponOffset( 15,  13);
+		SSGG C 1 Arg_A_WeaponOffset( 14,  13);
+		SSGG C 1 Arg_A_WeaponOffset(  9,   9);
+		SSGG B 1 Arg_A_WeaponOffset(  6,   7);
+		SSGG B 1 Arg_A_WeaponOffset(  0,   0);
+		SSGG A 1;
+		SSGG A 0 A_CheckReload();
+		Goto Ready;
 	ModernAltfire:
 		// [TODO] this
 		Goto ClassicAltfire;

@@ -53,7 +53,6 @@ OptionMenu "ArgentMenu"
 	Title       "ARGENT Options"
 	StaticText 	""
 	StaticText 	"Game Settings"                , 1
-	Option      "SSG Style"                    , "arg_classicssg"    , "ModernClassic"
 	Option      "BFG Style"                    , "arg_classicbfg"    , "ModernClassic"
 	Option      "BFG Ammo Type"                , "arg_bfgammotype"   , "BFGAmmoType"
 //	Option      "Berserk Style"                , "arg_powerupzerk"   , "ClassicModern"
@@ -66,6 +65,7 @@ OptionMenu "ArgentMenu"
 	StaticText 	""
 	StaticText 	"User Preferences"             , 1
 	Option      "HUD Style"                    , "arg_classichud"    , "ModernClassic"
+	Option      "SSG Sprite Style"             , "arg_classicssg"    , "ModernClassic"
 //	Option      "Altfire Style"                , "arg_classicaltfire", "ModernClassic"
 	StaticText 	""
 	StaticText 	"Mod Controls"                 , 1
