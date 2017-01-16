@@ -1,4 +1,5 @@
 server bool arg_alwaysgib    = false;
+server bool arg_classicssg   = false;
 server bool arg_classicbfg   = false;
 server bool arg_bfgammotype  = true;
 server bool arg_powerupzerk  = true;

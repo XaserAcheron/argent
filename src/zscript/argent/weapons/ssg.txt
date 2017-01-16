@@ -26,22 +26,59 @@ class ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 		SSGP A -1;
 		Stop;
 	Ready:
-		SSGG A 1 A_WeaponReady();
-		Loop;
+		SSGG A 0 Arg_A_JumpSSG('ModernReady', 'ClassicReady');
 	Select:
+		SSGG A 0 Arg_A_JumpSSG('ModernSelect', 'ClassicSelect');
+	Deselect:
+		SSGG A 0 Arg_A_JumpSSG('ModernDeselect', 'ClassicDeselect');
+	Fire:
+		SSGG A 0 Arg_A_JumpSSG('ModernFire', 'ClassicFire');
+	Altfire:
+		SSGG A 0 Arg_A_JumpSSG('ModernAltfire', 'ClassicAltfire');
+	Flash:
+		TNT1 A 4 Bright A_Light(2);
+		TNT1 A 3 Bright A_Light(1);
+		Goto LightDone;
+
+	/*
+	 * Modern Sprites
+	 */
+	ModernReady:
+		NSGG A 1 A_WeaponReady();
+		Goto Ready;
+	ModernSelect:
+		NSGG A 0;
+		Goto SelectLoop;
+	ModernDeselect:
+		NSGG A 0 A_ZoomFactor(1.0);
+		Goto DeselectLoop;
+	ModernFire:
+		// [TODO] this
+		Goto ClassicFire;
+	ModernAltfire:
+		// [TODO] this
+		Goto ClassicAltfire;
+
+	/*
+	 * Classic Sprites (Neccronixis's original; not Doom2's ;)
+	 */
+	ClassicReady:
+		SSGG A 1 A_WeaponReady();
+		Goto Ready;
+	ClassicSelect:
 		SSGG A 0;
 		Goto SelectLoop;
-	Deselect:
+	ClassicDeselect:
 		SSGG A 0 A_ZoomFactor(1.0);
 		Goto DeselectLoop;
-	Fire:
+	ClassicFire:
 		SSGF A 2 Bright Arg_A_FireSSG();
-	FireAnim:
+	ClassicFireAnim:
 		SSGG B 1 Arg_A_WeaponOffset(  0,   0);
 		SSGG B 1 Arg_A_WeaponOffset(  6, - 7);
 		SSGG C 1 Arg_A_WeaponOffset(  9, - 9);
 		SSGG C 1 Arg_A_WeaponOffset( 14, -13);
-		SSGG C 1{Arg_A_WeaponOffset( 15, -13); A_JumpIfNoAmmo("ImOutOfAmmo"); }
+		SSGG C 1{Arg_A_WeaponOffset( 15, -13); A_JumpIfNoAmmo("ClassicEmpty"); }
 		SSGG C 1 Arg_A_WeaponOffset( 13, -11);
 		SSGG C 1 Arg_A_WeaponOffset(  8, - 6);
 		SSGG D 1 Arg_A_WeaponOffset(  3,   2);
@@ -87,7 +124,7 @@ class ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 		SSGG B 1 Arg_A_WeaponOffset(- 6,   0);
 		SSGG A 0{Arg_A_WeaponOffset(0, 0); A_Refire(); }
 		Goto Ready;
-	ImOutOfAmmo:
+	ClassicEmpty:
 		SSGG C 1 Arg_A_WeaponOffset( 15,  13);
 		SSGG C 1 Arg_A_WeaponOffset( 14,  13);
 		SSGG C 1 Arg_A_WeaponOffset(  9,   9);
@@ -96,37 +133,36 @@ class ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 		SSGG A 1;
 		SSGG A 0 A_CheckReload();
 		Goto Ready;
-	Flash:
-		TNT1 A 4 Bright A_Light2();
-		TNT1 A 3 Bright A_Light1();
-		Goto LightDone;
-	AltFire:
-		SSGA A 1 {
-			A_PlaySound("weapons/ssg/aimup", CHAN_AUTO);
-			A_ZoomFactor(1.25);
-			Arg_A_WeaponOffset(-2.5, 0);
-		}
+	ClassicAltfire:
+		SSGA A 1 Arg_A_SSGAltUp();
 		SSGA A 1 Arg_A_WeaponOffset(- 5.0, 0);
 		SSGA B 1 Arg_A_WeaponOffset(-10.0, 0);
 		SSGA B 1 Arg_A_WeaponOffset(-12.0,-1);
 		SSGA B 5 Arg_A_WeaponOffset(-13.0,-2);
-	AltHoldIsh:
-		SSGA B 1 Arg_A_SynthFire("AltShoot");
-		SSGA B 0 A_Refire("AltHoldIsh");
-	AltDown:
-		SSGA B 1 {
-			A_PlaySound("weapons/ssg/aimdown", CHAN_AUTO);
-			A_ZoomFactor(1.0);
-			Arg_A_WeaponOffset(-12.0, -1);
-		}
+	ClassicAltHold:
+		SSGA B 1 Arg_A_SynthFire("ClassicAltShoot");
+		SSGA B 0 A_Refire("ClassicAltHold");
+	ClassicAltDown:
+		SSGA B 1 Arg_A_SSGAltDown();
 		SSGA B 1 Arg_A_WeaponOffset(-10.0, 0);
 		SSGA A 1 Arg_A_WeaponOffset(- 5.0, 0);
 		SSGA A 1 Arg_A_WeaponOffset(- 2.2, 0);
 		Goto Ready;
-	AltShoot:
+	ClassicAltShoot:
 		SSGB A 2 Bright Arg_A_FireSSG(6.0, 3.0);
 		SSGB A 0 Arg_A_WeaponOffset(0, 0);
-		Goto FireAnim;
+		Goto ClassicFireAnim;
+	}
+	
+	/*
+	 * Conditional state-jump based on modern/classic flags. Fosho.
+	 */
+	action state Arg_A_JumpSSG(statelabel modern, statelabel classic) {
+		if(GetCvar("arg_classicssg") > 0) {
+			return ResolveState(classic);
+		} else {
+			return ResolveState(modern);
+		}
 	}
 	
 	/*
@@ -136,5 +172,19 @@ class ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 		A_ZoomFactor(1.0);
 		A_FireBullets(spread_horz, spread_vert, 20, 5, "ArgBulletPuff");
 		Arg_A_GunFlash('Flash', (CountInv(invoker.AmmoType1) > 0) ? "weapons/ssg/fire" : "weapons/ssg/firelast");
+	}
+	
+	/*
+	 * ARGENT SSG altfire ups/downs, for code reuse's sake
+	 */
+	action void Arg_A_SSGAltUp() {
+		A_PlaySound("weapons/ssg/aimup", CHAN_AUTO);
+		A_ZoomFactor(1.25);
+		Arg_A_WeaponOffset(-2.5, 0);
+	}
+	action void Arg_A_SSGAltDown() {
+		A_PlaySound("weapons/ssg/aimdown", CHAN_AUTO);
+		A_ZoomFactor(1.0);
+		Arg_A_WeaponOffset(-12.0, -1);
 	}
 }
