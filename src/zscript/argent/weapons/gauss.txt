@@ -16,7 +16,7 @@ class ArgGaussCannon : ArgModWeapon
 	{
 		Super.BeginPlay();
 		
-		mod[1].ammoUse = 30;
+		mod[1].ammoUse = 20;
 		mod[1].charge.init(0, 30, 71);
 
 		mod[2].ammoUse = 40;
@@ -168,7 +168,12 @@ class ArgGaussCannon : ArgModWeapon
 			if(invoker.mod[1].charge.val == invoker.mod[1].charge.over - 1) {
 				A_PlaySound("weapons/gauss/mod1hum", CHAN_5, 1.0, 1);
 			}
-			return Arg_A_SynthFire("Mod1Fire");
+			// only allow fire when reaching half-charge, at a minimum.
+			if(invoker.mod[1].charge.val >= invoker.mod[1].charge.max / 2) {
+				return Arg_A_SynthFire("Mod1Fire");
+			} else {
+				return ResolveState(null);
+			}
 		}
 		GSCP A 0 Bright A_Refire();
 	Mod1Down:
@@ -187,8 +192,8 @@ class ArgGaussCannon : ArgModWeapon
 	Mod1Fire:
 		GSCP A 1 Bright {
 			// goddamn charge damage damn -- n rounds of 7d8; equals 210%
-			// damage at full charge. Also take ammo -- note that we assume
-			// the number of iterations exactly equals the ammo usage.
+			// damage at full charge. Also take ammo -- just do a flat "fee"
+			// of 20 cells since this more or less matches how the game works.
 			for(int i = invoker.mod[1].charge.get(); i > 0; i--) {
 				// only spawn one trail, for sanity
 				if(i == 1) {
@@ -196,8 +201,8 @@ class ArgGaussCannon : ArgModWeapon
 				} else {
 					A_RailAttack (7*random(1,8), 0, 0, "", "", RGF_SILENT | RGF_NOPIERCING, 4, "ArgGaussPaul", 0, 0, 0, 0, 16, 0, null         , 0);
 				}
-				Arg_A_TakeAmmo();
 			}
+			Arg_A_TakeAmmo(invoker.mod[1].ammoUse);
 			invoker.mod[1].charge.toMin();
 			
 			// do the rest of the shooty stuff.
@@ -459,6 +464,21 @@ class ArgGaussPaul : ArgGaussPuff
 	}
 }
 
-// [TODO] make these
-class ArgGaussSiegeTrail : ArgGaussTrail { }
+class ArgGaussSiegeTrail : ArgGaussTrail
+{
+	States
+	{
+	Spawn:
+		GAUT A 0 NoDelay {
+		
+			// Do just enough radius damage to sploosh tiny folk. I may
+			// revisit this later with a custom formula that hits enemies only
+			// once per-rail, rather than once per-particle, but that's a bit complex.
+			A_Explode(10, 96, 0, 0, 96);
+		}
+		Goto Super::Spawn;
+	}
+}
+
+// [XA] TBH, I'm not 100% sure what I wanna do with the puff, if anything. Welpo.
 class ArgGaussSiegePuff  : ArgGaussPuff  { }
