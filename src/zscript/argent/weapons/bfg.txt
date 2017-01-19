@@ -204,8 +204,14 @@ class ArgThatDamnDragonAteMyBalls : BFGBall
 		BFS1 AAAABBBB 1 Bright A_SpawnItemEx("ArgBFGTrail", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
 		Loop;
 	Death:
-		BFE1 AAAAAAAAAAAAAAAA 0 Bright A_SpawnItemEx("ArgBFGTrail", 0, frandom(-10,10), frandom(-10,10), 0, frandom(-5,5), frandom(-5,5), 0, SXF_CLIENTSIDE, 0);
-		BFE1 A 2 Bright { A_SetScale(1.0); A_KillChildren("Normal", KILS_KILLMISSILES|KILS_NOMONSTERS); }
+		BFE1 A 2 Bright {
+			for(int i = 0; i < 20; i++) {
+				A_SpawnItemEx("ArgBFGImpactFX", 0, frandom(-10,10), frandom(-10,10), 0, frandom(-4,4), frandom(-4,4), 0, SXF_CLIENTSIDE, 0);
+			}
+			A_SetScale(1.0);
+			A_Quake(2, 5, 0, 384);
+			A_KillChildren("Normal", KILS_KILLMISSILES|KILS_NOMONSTERS);
+		}
 		BFE1 BAB 2 Bright;
 		BFE1 C 0 Bright { return ResolveState("SuperDeath"); }
 	SuperDeath:
@@ -261,7 +267,22 @@ class ArgBFGTrail : ArgTrailNoPhysics
 		Stop;
 	}
 }
-class ArgBFGTrailSmall : ArgBFGTrail { Default { Scale 0.5; } }
+class ArgBFGTrailSmall : ArgBFGTrail
+{
+	Default
+	{
+		Scale 0.5;
+	}
+}
+class ArgBFGImpactFX : ArgBFGTrail
+{
+	States
+	{
+	Spawn:
+		BTRL AAAAAAAABBBBCCCCDDDD 1 Bright A_FadeOut(0.025);
+		Stop;
+	}
+}
 
 class ArgBFGSpray : Actor
 {
@@ -290,17 +311,27 @@ class ArgBFGSpray : Actor
 
 class ArgIveGotBallsOfSteel : ArgThatDamnDragonAteMyBalls
 {
+	Default
+	{
+		Speed 20;
+	}
 	States
 	{
 	Fly:
 		BFS1 AAAABBBB 1 Bright {
 			A_SpawnItemEx("ArgBFGTrail", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0, 30, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0, 90, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,150, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,210, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,270, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,330, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0, 15, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0, 45, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0, 75, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,105, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,135, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,165, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,195, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,225, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,255, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,285, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,315, CMF_AIMDIRECTION | CMF_TRACKOWNER);
+			A_SpawnProjectile("ArgBFGZapper", -8, 0,345, CMF_AIMDIRECTION | CMF_TRACKOWNER);
 		}
 		Loop;
 	SuperDeath:
@@ -334,12 +365,12 @@ class ArgBFGZapper : Actor
 	States
 	{
 	Spawn:
-		TNT1 A 1 NoDelay A_LookEx(LOF_NOSOUNDCHECK, 0, 1024, 0, 60, "See");
+		TNT1 A 1 NoDelay A_LookEx(LOF_NOSOUNDCHECK, 0, 1024, 0, 30, "See");
 		Stop;
 	See:
 		TNT1 A 1 {
 			A_FaceTarget();
-			A_CustomRailgun(20, 0, "", "", RGF_SILENT | RGF_NOPIERCING, 1, 32, "ArgBFGSprayZ", 0, 0, 0, 0, 4, 0, "ArgBFGZapperTrail");
+			A_CustomRailgun(25, 0, "", "", RGF_SILENT | RGF_NOPIERCING, 1, 32, "ArgBFGSprayZ", 0, 0, 0, 0, 4, 0, "ArgBFGZapperTrail");
 		}
 		Goto Death;
 	Death:
