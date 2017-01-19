@@ -287,7 +287,7 @@ class ArgMicroMissile : Actor
 			A_Stop();
 			A_SetScale(0.5);
 			A_SetTranslucent(0.75);
-			A_Explode(50, 64);
+			A_Explode(60, 96, 0, 0, 64);
 			A_PlaySound("weapons/heavy/explode", CHAN_VOICE);
 		}
 		REXP B 2 Bright;
