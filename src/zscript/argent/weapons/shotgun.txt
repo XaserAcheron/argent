@@ -145,27 +145,13 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 		SH1G A 1   Arg_A_WeaponOffset(  0.0, 0.0);
 		Goto Ready;
 	Mod1Fire:
-		SH1N A 1 Bright {
-			Arg_A_GunFlash('Flash', "weapons/shotgun/mod1fire");
-			Arg_A_TakeAmmo();
-			A_FireBullets(2.5, 1, 7, 5, "ArgBulletPuff");
-		}
+		SH1N A 1 Bright Arg_A_FireShotgunBurst();
 		SH1N B 1 Arg_A_WeaponOffset(8.0, 4.0);
 		SH1N C 1 Arg_A_WeaponOffset(4.0, 2.0);
-		SH1N D 1 Bright {
-			Arg_A_GunFlash('Flash');
-			Arg_A_TakeAmmo();
-			A_FireBullets(2.5, 1, 7, 5, "ArgBulletPuff");
-			Arg_A_WeaponOffset(4.0, 2.0);
-		}
+		SH1N D 1 Bright Arg_A_FireShotgunBurst(4.0, 2.0, false);
 		SH1N E 1 Arg_A_WeaponOffset(12.0, 6.0);
 		SH1N F 1 Arg_A_WeaponOffset( 8.0, 4.0);
-		SH1N G 1 Bright {
-			Arg_A_GunFlash('Flash');
-			Arg_A_TakeAmmo();
-			A_FireBullets(2.5, 1, 7, 5, "ArgBulletPuff");
-			Arg_A_WeaponOffset(8.0, 4.0);
-		}
+		SH1N G 1 Bright Arg_A_FireShotgunBurst(8.0, 4.0, false);
 		SH1N H 1 Arg_A_WeaponOffset(13.0, 8.0);
 		SH1G E 1 Arg_A_WeaponOffset(14.0, 8.0);
 		SH1G F 1 Arg_A_WeaponOffset(16.0, 8.0);
@@ -265,6 +251,16 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 		SH2G A 6 Arg_A_WeaponOffset( 0.0, 0.0);
 		Goto Cooldown;
 	}
+	
+	/*
+	 * Shotgun Charged Burst fire.
+	 */
+	action void Arg_A_FireShotgunBurst(float offsetx = 0, float offsety = 0, bool sound = true) {
+		A_FireBullets(2.5, 1, 7, 7, "ArgBulletPuff", 0);
+		Arg_A_GunFlash('Flash', sound ? "weapons/shotgun/mod1fire" : "");
+		Arg_A_TakeAmmo();
+		Arg_A_WeaponOffset(offsetx, offsety);
+	}
 }
 
 class ArgShotgunExplosiveShot : Actor
@@ -274,7 +270,7 @@ class ArgShotgunExplosiveShot : Actor
 		Projectile;
 		Radius 8;
 		Height 8;
-		Damage 10;
+		Damage 15;
 		Speed 50;
 		DamageType "ArgShotgunExplosiveShot";
 		DeathSound "weapons/shotgun/mod2hit";
@@ -292,7 +288,7 @@ class ArgShotgunExplosiveShot : Actor
 	Death:
 		SEXP A 2 Bright {
 			A_Explode(50, 128, 1);
-			A_Explode(50, 144, 0, 0, 128);
+			A_Explode(50, 192, 0, 0, 128);
 			A_NoGravity();
 		}
 		SEXP BC 3 Bright;
