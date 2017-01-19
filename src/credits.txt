@@ -9,6 +9,7 @@ Sprites:
 	- Xaser (gibs, pistol charge, misc edits)
 	- Rogue Entertainment (blood spray)
 	- Amuscaria (plasma stun bomb projectile)
+	- Minigunner (smooth explosion sprites)
 	- ??? (puff sprites)
 	- ??? (puff smoke)
 	- ??? (floor blood splatter)
@@ -30,6 +31,7 @@ Testing n' Bugreports
 	- ravage
 	- Princess Viscra Maelstrom
 	- zrrion the insect
+	- Atendega (the SSG-meister)
 
 Misc:
 	- some mobile phone background from somewhere I can't seem to locate
