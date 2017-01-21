@@ -50,6 +50,9 @@ class ArgWeapon : DoomWeapon
 	Fire:
 		TNT1 A 1;
 		Goto Ready;
+	DeadLowered:
+		TNT1 A 1;
+		Loop;
 	}
 	
 	/*

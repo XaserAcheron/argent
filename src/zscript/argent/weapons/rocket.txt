@@ -10,6 +10,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	const MAX_ROCKETS = 50; // ought to be enough for anybody ;)
 
 	int numRockets; // number of detonate-able rockets in flight
+	int highRocketIndex; // highest detonate-able rocket index; this is the above minus decrementing on death.
 	Actor[MAX_ROCKETS] rockets; // list of detonate-able rockets in flight
 	Actor lockTarget; // current lock-on burst target
 
@@ -48,6 +49,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 			A_StopSound(CHAN_5);
 			invoker.mod[2].charge.toMin();
 			Arg_A_RocketLockClear();
+			A_ClearOverlays(ROCKET_OVERLAY_LAYER, ROCKET_OVERLAY_LAYER);
 		}
 		Goto DeselectLoop;
 
@@ -137,14 +139,22 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RK1G A 0 A_Overlay(ROCKET_OVERLAY_LAYER, "Mod1Overlay");
 		Goto ReadyLoop;
 	Mod1Overlay:
-		TNT1 A 1 Arg_A_SynthAltFire("Mod1Detonate");
+		RK1X A 0 Bright Arg_A_SynthAltFire("Mod1Detonate");
+		RK1X A 1 Bright Arg_A_RocketOverlay();
 		Loop;
-	Mod1Detonate:
-		TNT1 A 0 Arg_A_DetonateRockets();
-	Mod1DetonateHold:
-		TNT1 A 4;
-		TNT1 A 0 Arg_A_SynthAltFire("Mod1DetonateHold");
+	Mod1OverlayActive:
+		RK1X C 1 Bright;
 		Goto Mod1Overlay;
+	Mod1Detonate:
+		RK1X A 0 Bright Arg_A_DetonateRockets();
+		RK1X B 3 Bright;
+	Mod1DetonateHold:
+		RK1X A 2 Bright;
+		RK1X A 0 Bright Arg_A_SynthAltFire("Mod1DetonateHold");
+		Goto Mod1Overlay;
+	Mod1DetonateSuccess:
+		RK1X BCBC 2 Bright;
+		Goto Mod1DetonateHold;
 
 	/* Mod 2: Lock-on Burst */
 	
@@ -289,9 +299,11 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		if (rocket)
 		{
 			// do some additional handling on the rocket based on the selected mod.
-			if(invoker.modSelected == 1 && invoker.numRockets < invoker.MAX_ROCKETS) {
+			if(invoker.modSelected == 1 && invoker.highRocketIndex < invoker.MAX_ROCKETS) {
 				// Remote Detonate: register the missile for future detonation.
-				invoker.rockets[invoker.numRockets] = rocket;
+				rocket.theThingThatLaunchedMe = invoker;
+				invoker.rockets[invoker.highRocketIndex] = rocket;
+				invoker.highRocketIndex++;
 				invoker.numRockets++;
 			}
 			if(invoker.modSelected == 2 && invoker && invoker.lockTarget) {
@@ -303,15 +315,25 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	}
 	
 	/*
+	 * Super-Special Overlay Control. Of specialness.
+	 */
+	action state Arg_A_RocketOverlay() {
+		if(invoker.numRockets > 0) {
+			return ResolveState('Mod1OverlayActive');
+		} else {
+			return ResolveState(null);
+		}
+	}
+	
+	/*
 	 * Remote-detonates all rockets. Aww yeah!
 	 */
-	action void Arg_A_DetonateRockets() {
+	action state Arg_A_DetonateRockets() {
 		bool didDetonate = false;
 
 		// pretty simple stuff. just loop through the rocket array
 		// and detonate anything we see.
-		// [TODO] move this to the weapon
-		for(int i = 0; i < invoker.numRockets; i++) {
+		for(int i = 0; i < invoker.highRocketIndex; i++) {
 			let rocket = ArgRocket(invoker.rockets[i]);
 			if(rocket && !rocket.detonated) {
 				didDetonate = true;
@@ -319,9 +341,16 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 			}
 			invoker.rockets[i] = null;
 		}
+		invoker.highRocketIndex = 0;
 		invoker.numRockets = 0;
 
-		A_PlaySound(didDetonate ? "weapons/rocket/mod1yep" : "weapons/rocket/mod1nope", CHAN_7);
+		if(didDetonate) {
+			A_PlaySound("weapons/rocket/mod1yep", CHAN_7);
+			return ResolveState('Mod1DetonateSuccess');
+		} else {
+			A_PlaySound("weapons/rocket/mod1nope", CHAN_7);
+			return ResolveState(null);
+		}
 	}
 	
 	/*
@@ -348,6 +377,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 class ArgRocket : ArgRocketBase
 {
 	bool detonated;
+	ArgRocketLauncher theThingThatLaunchedMe;
 
 	Default
 	{
@@ -390,6 +420,13 @@ class ArgRocket : ArgRocketBase
 			detonated = true;
 			A_SetScale(1.0);
 			A_Explode(200, 128, 1);
+			
+			let this = ArgRocket(self);
+			if(this && this.theThingThatLaunchedMe) {
+				this.theThingThatLaunchedMe.numRockets--;
+			} else {
+				A_PrintBold("FUCK");
+			}
 		}
 		Goto Super::Boom;
 	}
