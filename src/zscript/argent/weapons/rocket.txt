@@ -7,6 +7,11 @@
 class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 {
 	const ROCKET_OVERLAY_LAYER = 2;
+	const MAX_ROCKETS = 50; // ought to be enough for anybody ;)
+
+	int numRockets; // number of detonate-able rockets in flight
+	Actor[MAX_ROCKETS] rockets; // list of detonate-able rockets in flight
+	Actor lockTarget; // current lock-on burst target
 
 	override void BeginPlay()
 	{
@@ -137,7 +142,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	Mod1Detonate:
 		TNT1 A 0 Arg_A_DetonateRockets();
 	Mod1DetonateHold:
-		TNT1 A 2;
+		TNT1 A 4;
 		TNT1 A 0 Arg_A_SynthAltFire("Mod1DetonateHold");
 		Goto Mod1Overlay;
 
@@ -278,23 +283,21 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	 * the action functions only return a pointer in the GZD devbuilds.
 	 */
 	action void Arg_A_FireRocket(float spawnofs_xy = 0, float spawnheight = 0, bool noautoaim = false) {
-		let player = ArgPlayer(self);
 		
 		Vector2 spawnOffset = AngleToVector(self.angle, spawnofs_xy);
 		let rocket = ArgRocket(SpawnPlayerMissile('ArgRocket', self.angle, spawnOffset.x, spawnOffset.y, spawnheight, noautoaim:noautoaim));
 		if (rocket)
 		{
 			// do some additional handling on the rocket based on the selected mod.
-			// [TODO] move these player properties to the weapon once we have it working.
-			if(invoker.modSelected == 1 && player.numRockets < player.MAX_ROCKETS) {
+			if(invoker.modSelected == 1 && invoker.numRockets < invoker.MAX_ROCKETS) {
 				// Remote Detonate: register the missile for future detonation.
-				player.rockets[player.numRockets] = rocket;
-				player.numRockets++;
+				invoker.rockets[invoker.numRockets] = rocket;
+				invoker.numRockets++;
 			}
-			if(invoker.modSelected == 2 && player && player.lockTarget) {
+			if(invoker.modSelected == 2 && invoker && invoker.lockTarget) {
 				// Lock-On Burst: set the lock target if we've got one.
 				rocket.bSeekerMissile = true;
-				rocket.tracer = player.lockTarget;
+				rocket.tracer = invoker.lockTarget;
 			}
 		}
 	}
@@ -303,40 +306,34 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	 * Remote-detonates all rockets. Aww yeah!
 	 */
 	action void Arg_A_DetonateRockets() {
-		let player = ArgPlayer(self);
-		if(player) {
-			bool didDetonate = false;
+		bool didDetonate = false;
 
-			// pretty simple stuff. just loop through the rocket array
-			// and detonate anything we see.
-			// [TODO] move this to the weapon
-			for(int i = 0; i < player.numRockets; i++) {
-				let rocket = ArgRocket(player.rockets[i]);
-				if(rocket && !rocket.detonated) {
-					didDetonate = true;
-					rocket.SetStateLabel('Detonate');
-				}
-				player.rockets[i] = null;
+		// pretty simple stuff. just loop through the rocket array
+		// and detonate anything we see.
+		// [TODO] move this to the weapon
+		for(int i = 0; i < invoker.numRockets; i++) {
+			let rocket = ArgRocket(invoker.rockets[i]);
+			if(rocket && !rocket.detonated) {
+				didDetonate = true;
+				rocket.SetStateLabel('Detonate');
 			}
-			player.numRockets = 0;
-
-			A_PlaySound(didDetonate ? "weapons/rocket/mod1yep" : "weapons/rocket/mod1nope", CHAN_7);
+			invoker.rockets[i] = null;
 		}
+		invoker.numRockets = 0;
+
+		A_PlaySound(didDetonate ? "weapons/rocket/mod1yep" : "weapons/rocket/mod1nope", CHAN_7);
 	}
 	
 	/*
 	 * Set target lock.
 	 */
 	action void Arg_A_RocketLockOn() {
-		let player = ArgPlayer(self);
-		if(player) {
-			// get the target currently under the player's crosshair (if any)
-			// and store it in the player var so we can use it later.
-			FTranslatedLineTarget t;
-			AimLineAttack(self.angle, MISSILERANGE, t, 0.0, ALF_PORTALRESTRICT);
-			if(t.linetarget) {
-				player.lockTarget = t.linetarget;
-			}
+		// get the target currently under the player's crosshair (if any)
+		// and store it in the player var so we can use it later.
+		FTranslatedLineTarget t;
+		AimLineAttack(self.angle, MISSILERANGE, t, 0.0, ALF_PORTALRESTRICT);
+		if(t.linetarget) {
+			invoker.lockTarget = t.linetarget;
 		}
 	}
 	
@@ -344,10 +341,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	 * Clear target lock.
 	 */
 	action void Arg_A_RocketLockClear() {
-		let player = ArgPlayer(self);
-		if(player) {
-			player.lockTarget = null;
-		}
+		invoker.lockTarget = null;
 	}
 }
 
