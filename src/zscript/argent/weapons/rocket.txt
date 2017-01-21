@@ -57,11 +57,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	Mod0Fire:
 		"####" B 1 Bright {
 			Arg_A_GunFlash('Flash', "weapons/rocket/fire");
-			if(invoker.modSelected == 1) {
-				A_FireProjectile("ArgRocketDetonate", 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
-			} else {
-				A_FireProjectile("ArgRocket"        , 0, 1, 4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
-			}
+			Arg_A_FireRocket(4.0 + frandom(-0.50, 0.50), frandom(-0.50, 0.50));
 			Arg_A_WeaponOffset(6.0, 3.0);
 		}
 		"####" C 1 Arg_A_WeaponOffset(16.0,  8.0);
@@ -141,7 +137,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	Mod1Detonate:
 		TNT1 A 0 Arg_A_DetonateRockets();
 	Mod1DetonateHold:
-		TNT1 A 1;
+		TNT1 A 2;
 		TNT1 A 0 Arg_A_SynthAltFire("Mod1DetonateHold");
 		Goto Mod1Overlay;
 
@@ -214,7 +210,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 			invoker.mod[2].charge.toMin();
 			A_GunFlash();
 			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
-			A_FireProjectile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
+			Arg_A_FireRocket(4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50), true);
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
 			A_AlertMonsters();
 			Arg_A_WeaponOffset(6.0, 3.0);
@@ -226,7 +222,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RK2G D 1 Bright {
 			A_GunFlash();
 			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
-			A_FireProjectile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
+			Arg_A_FireRocket(4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50), true);
 			A_PlaySound("weapons/rocket/altfire", CHAN_6);
 			A_AlertMonsters();
 			Arg_A_WeaponOffset(12.0, 6.0);
@@ -237,7 +233,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RK2G B 1 Bright {
 			A_GunFlash();
 			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
-			A_FireProjectile("ArgRocketLockOn", 0, 0, 4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50));
+			Arg_A_FireRocket(4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50), true);
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
 			A_AlertMonsters();
 			Arg_A_WeaponOffset(14.0, 7.0);
@@ -277,6 +273,33 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	}
 	
 	/*
+	 * Fires a rocket. Temporarily calls SpawnPlayerMissile directly instead of
+	 * A_FireProjectile, as we need a pointer to the spawned missile and
+	 * the action functions only return a pointer in the GZD devbuilds.
+	 */
+	action void Arg_A_FireRocket(float spawnofs_xy = 0, float spawnheight = 0, bool noautoaim = false) {
+		let player = ArgPlayer(self);
+		
+		Vector2 spawnOffset = AngleToVector(self.angle, spawnofs_xy);
+		let rocket = ArgRocket(SpawnPlayerMissile('ArgRocket', self.angle, spawnOffset.x, spawnOffset.y, spawnheight, noautoaim:noautoaim));
+		if (rocket)
+		{
+			// do some additional handling on the rocket based on the selected mod.
+			// [TODO] move these player properties to the weapon once we have it working.
+			if(invoker.modSelected == 1 && player.numRockets < player.MAX_ROCKETS) {
+				// Remote Detonate: register the missile for future detonation.
+				player.rockets[player.numRockets] = rocket;
+				player.numRockets++;
+			}
+			if(invoker.modSelected == 2 && player && player.lockTarget) {
+				// Lock-On Burst: set the lock target if we've got one.
+				rocket.bSeekerMissile = true;
+				rocket.tracer = player.lockTarget;
+			}
+		}
+	}
+	
+	/*
 	 * Remote-detonates all rockets. Aww yeah!
 	 */
 	action void Arg_A_DetonateRockets() {
@@ -284,10 +307,11 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		if(player) {
 			bool didDetonate = false;
 
-			// pretty simple stuff. just loop through the player's rocket array
+			// pretty simple stuff. just loop through the rocket array
 			// and detonate anything we see.
+			// [TODO] move this to the weapon
 			for(int i = 0; i < player.numRockets; i++) {
-				let rocket = ArgRocketDetonate(player.rockets[i]);
+				let rocket = ArgRocket(player.rockets[i]);
 				if(rocket && !rocket.detonated) {
 					didDetonate = true;
 					rocket.SetStateLabel('Detonate');
@@ -329,6 +353,8 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 
 class ArgRocket : ArgRocketBase
 {
+	bool detonated;
+
 	Default
 	{
 		Radius 9;
@@ -339,24 +365,7 @@ class ArgRocket : ArgRocketBase
 	
 		+EXTREMEDEATH
 	}
-}
 
-class ArgRocketLockOn : ArgRocket
-{
-	/*
-	 * On spawn, set the rocket's tracer to the player's lock-on target.
-	 */
-	override void PostBeginPlay() {
-		let player = ArgPlayer(self.target);
-		if(player && player.lockTarget) {
-			self.tracer = player.lockTarget;
-		}
-	}
-
-	Default
-	{
-		+SEEKERMISSILE
-	}
 	States
 	{
 	Spawn:
@@ -365,53 +374,17 @@ class ArgRocketLockOn : ArgRocket
 	Seek: 
 		MISL A 1 Bright A_SeekerMissile(5, 10);
 		Goto Spawn;
-	}
-}
-
-class ArgRocketDetonate : ArgRocket
-{
-	bool detonated;
-	
-	/*
-	 * On spawn, add the rocket to the player array so we can nuke it later.
-	 *
-	 * [XA] normally I'd like to do this when spawning the rocket, but
-	 *      I'd have to replicate a bunch of A_FireProjectile to do so,
-	 *      which I'll wait on for a bit.
-	 */
-	override void PostBeginPlay() {
-		super.PostBeginPlay();
-
-		// [XA] Presently, if for you have more than the max number of rockets
-		//      out, the most recently fired one will not be detonate-able.
-		//      This is kinda dumb, but this situation is hella rare so I'm
-		//      taking the lazy-Xaser route. D:
-		let player = ArgPlayer(self.target);
-		if(player && player.numRockets < player.MAX_ROCKETS) {
-			player.rockets[player.numRockets] = self;
-			player.numRockets++;
-		}
-	}
-	
-	/*
-	 * FastProjectile trail effect override: don't spawn a trail if we've gone boom.
-	 */
-	override void Effect() {
-		if(!detonated) {
-			super.Effect();
-		}
-	}
-
-	States
-	{
 	Detonate:
-		REXP A 4 Bright {
+		REXP A 2 Bright {
 			detonated = true;
 			A_Stop();
 			A_SetScale(1.0);
+			A_PlaySound("weapons/rocket/explode", CHAN_VOICE);
+		}
+		REXP B 2 Bright {
+			A_SetScale(1.1, 1.0);
 			A_Explode(120, 224, 0, 0, 96);
 			A_Explode(120, 224, 1, 0, 96);
-			A_PlaySound("weapons/rocket/explode", CHAN_VOICE);
 		}
 		REXP C 3 Bright { A_SetScale(1.2, 1.0); A_SetTranslucent(0.7); }
 		REXP D 2 Bright { A_SetScale(1.4, 1.0); A_SetTranslucent(0.6); }
@@ -425,5 +398,14 @@ class ArgRocketDetonate : ArgRocket
 			A_Explode(200, 128, 1);
 		}
 		Goto Super::Boom;
+	}
+	
+	/*
+	 * FastProjectile trail effect override: don't spawn a trail if we've gone boom.
+	 */
+	override void Effect() {
+		if(!detonated) {
+			super.Effect();
+		}
 	}
 }
