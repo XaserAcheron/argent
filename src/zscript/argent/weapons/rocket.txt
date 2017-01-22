@@ -424,8 +424,6 @@ class ArgRocket : ArgRocketBase
 			let this = ArgRocket(self);
 			if(this && this.theThingThatLaunchedMe) {
 				this.theThingThatLaunchedMe.numRockets--;
-			} else {
-				A_PrintBold("FUCK");
 			}
 		}
 		Goto Super::Boom;
