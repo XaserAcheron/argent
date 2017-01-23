@@ -139,6 +139,8 @@ class ArgRocketTrail : ArgTrail
  * maximum; also includes a special "end" value that can be set higher than
  * the max to allow for "over-max" -- this is often used in argent to control
  * a looping sound after the charge has already hit its theoretical maximum.
+ *
+ * [XA] I may deprecate and remove this, since it's pretty over-engineered.
  */
 struct ArgCounter
 {
@@ -225,5 +227,66 @@ struct ArgCounter
 			return h;
 		}
 		return m;
+	}
+}
+
+/*
+ * Enums for Common stuff
+ */
+enum Arg_TossGibsFlags
+{
+	ARG_TG_FALL   = 1, // Call A_NoBlocking after tossing gibs.
+	ARG_TG_SOUND  = 2, // Play gibbing sound effect after tossing gibs.
+	ARG_TG_SCREAM = 4, // Play scream sound effect after tossing gibs.
+};
+
+/*
+ * Class for static common functions.
+ */
+class ArgCommon
+{
+	/*
+	 * Convenience function; jumps to XDeath if the Always Gib cvar is set.
+	 */
+	static state GibCheck(Actor this)
+	{
+		return this.GetCvar("arg_alwaysgib") ? this.ResolveState("XDeath") : this.ResolveState(null);
+	}
+
+	/*
+	 * Gib tossing action. Throws up to 'count' actors of 'type' from the calling
+	 * actor using the specified height/speed values (varied a bit for random's sake).
+	 * Includes a couple of convenience flags to chain additional actions.
+	 */
+	static void TossGibs(Actor this, class<Actor> type, int count, int flags, double spawndist, double spawnheight, double xspeed, double yspeed)
+	{
+		// Randomly subtract 1 or 2 from the count to vary the number of gibs a bit.
+		count = count - random(0, 2);
+		
+		for(int i = 0; i < count; i++) {
+			this.A_SpawnItemEx(type
+			,	frandom(-spawndist, spawndist)
+			,	frandom(-spawndist, spawndist)
+			,	spawnheight + frandom(-2, 2)
+			,	xspeed * frandom(-1.0, 1.0)
+			,	xspeed * frandom(-1.0, 1.0)
+			,	yspeed * frandom( 0.5, 1.5)
+			,	0
+			,	SXF_USEBLOODCOLOR
+			,	0
+			);
+		}
+		
+		// Do optional flaggy stuff.
+		if(flags & ARG_TG_FALL) {
+			this.A_NoBlocking();
+		}
+		if(flags & ARG_TG_SOUND) {
+			this.A_PlaySound("effects/splat", CHAN_AUTO);
+			this.A_PlaySound("effects/gibs", CHAN_AUTO);
+		}
+		if(flags & ARG_TG_SCREAM) {
+			this.A_Scream();
+		}
 	}
 }
