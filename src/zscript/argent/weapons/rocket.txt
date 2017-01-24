@@ -294,6 +294,7 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	 */
 	action void Arg_A_FireRocket(float spawnofs_xy = 0, float spawnheight = 0, bool noautoaim = false) {
 		
+		Arg_A_TakeAmmo();
 		Vector2 spawnOffset = AngleToVector(self.angle, spawnofs_xy);
 		let rocket = ArgRocket(SpawnPlayerMissile('ArgRocket', self.angle, spawnOffset.x, spawnOffset.y, spawnheight, noautoaim:noautoaim));
 		if (rocket)
