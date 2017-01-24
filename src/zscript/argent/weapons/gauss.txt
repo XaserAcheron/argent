@@ -179,8 +179,7 @@ class ArgGaussCannon : ArgModWeapon
 	Mod1Down:
 		GSCP A 1 Bright {
 			invoker.mod[1].charge.toMin();
-//			A_PlaySound("weapons/gauss/mod1down", CHAN_5);
-			A_StopSound(CHAN_5);
+			A_PlaySound("weapons/gauss/mod1down", CHAN_5);
 			A_ZoomFactor(1.0);
 		}
 		GSCP A 1 Bright A_SetCrosshair(GAUSS_CROSSHAIR_ANIM4);
@@ -345,8 +344,7 @@ class ArgGaussCannon : ArgModWeapon
 		GA2M J 1 {
 			A_SetSpeed(1.0);
 			invoker.mod[2].charge.toMin();
-//			A_PlaySound("weapons/gauss/mod2down", CHAN_5);
-			A_StopSound(CHAN_5);
+			A_PlaySound("weapons/gauss/mod2down", CHAN_5);
 			A_ZoomFactor(1.0);
 		}
 		GA2M I 1 Arg_A_WeaponOffset(7.0, 7.0);
