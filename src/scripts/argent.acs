@@ -14,8 +14,6 @@
 #library "argent"
 #include "zcommon.acs"
 
-#define DEF_STUN_SECONDS 5
-
 /*
  * Init script. Gotta set those defaults to something sane.
  */ 
