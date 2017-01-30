@@ -326,10 +326,7 @@ class ArgStunBomb : ArgPlasma
 		PBOM ABCD 1 Bright;
 		Loop;
 	Death:
-		PBOM E 0 Bright {
-			A_NoGravity();
-			A_RadiusGive("ArgStunner", 160, RGF_MONSTERS);
-		} 
+		PBOM E 0 Bright Arg_A_StunBombHit(160);
 		PBOM EE 1 Bright Arg_A_StunBombFX("4444FF", 40);
 		PBOM EF 1 Bright Arg_A_StunBombFX("8888FF", 48);
 		PBOM FF 1 Bright Arg_A_StunBombFX("AAAAFF", 56);
@@ -339,6 +336,31 @@ class ArgStunBomb : ArgPlasma
 		PBOM I 3 Bright;
 		Stop;
 	}
+	
+	/*
+	 * Stun Bomb effect. Kicks off the magic stun effect by dropping some
+	 * dangerous zappy actors into the fray.
+	 */
+	action void Arg_A_StunBombHit(float stunrad) {
+		A_NoGravity();
+
+		// iterate over all monsters within our radius and spawn in
+		// a nefarious ArgNeuralStunner to keep them at bay.
+		BlockThingsIterator it = BlockThingsIterator.create(self, stunrad);
+		while(it.Next()) {
+			// only stun living monsters within line of sight.
+			if(it.thing
+			&& it.thing.bIsMonster
+			&& it.thing.health > 0
+			&& it.thing.CheckSight(self)
+			) {
+				let stunner = ArgNeuralStunner(Spawn("ArgNeuralStunner", self.pos));
+				stunner.stunTarget = it.thing;
+				// that's it; the ArgNeuralStunner actor will do the rest of the
+				// grunt work and remove itself when the stunning time is up.
+			}
+		}
+	} 
 	
 	/*
 	 * spiffy zappy FX function
@@ -364,22 +386,88 @@ class ArgStunBombPuff : ArgPuff
 	}
 }
 
-class ArgStunner : CustomInventory
+/*
+ * Super-special-stun-effect actor. One of these is spawned per stun target
+ * and handles sending its victim into its Pain.Stun state repeatedly.
+ * Rather goofy but useful monster-independent implementation. Whoop!
+ */
+class ArgNeuralStunner : Actor
 {
+	Actor stunTarget;
+	int stunCounter;
+	
+	const DEF_STUN_SECONDS = 5;
+
 	Default
 	{
-		-INVENTORY.INVBAR
+		RenderStyle 'None';
+		+NOINTERACTION
 	}
 	States
 	{
 	Spawn:
-		TNT1 A 0;
+		TNT1 A 35 NoDelay Arg_A_StunEffect;
+		TNT1 A 0 Arg_A_StunCountdown();
 		Stop;
-	Pickup:
-		// [XA] This is one of the few remaining cases where ACS is the right
-		//      tool for the job, since we need to do some delays in a loop.
-		TNT1 A 1 ACS_NamedExecuteAlways("NeuralStunner");
-		Stop;
+	}
+	
+	/*
+	 * Keep the target stunned every tic by thrusting it
+	 * in its spawn state. Assuming the actor's alive, of course.
+	 */
+	override void Tick() {
+		super.Tick();
+		
+		if(self.stunTarget && self.stunTarget.health > 0) {
+			// repeatedly force the actor into its pain state because SADISM
+			State painState = self.stunTarget.FindState('Pain.Stun');
+			if(painState) {
+				self.stunTarget.SetState(painState);
+			}
+		}
+	}
+	
+	/*
+	 * Spawn some zappy stun FX at the target's location.
+	 */
+	action void Arg_A_StunEffect() {
+		let this = ArgNeuralStunner(self);
+
+		// don't zap dead people; it's rude
+		if(this.stunTarget && this.stunTarget.health > 0) {
+			Vector3 fxPos = this.stunTarget.pos + (0, 0, this.stunTarget.height / 2);
+			if(this.stunTarget.radius <= 28.0) {
+				Spawn("ArgStunEffect", fxPos);
+			} else if (this.stunTarget.radius <= 56.0) {
+				Spawn("ArgStunEffectLarge", fxPos);
+			} else {
+				Spawn("ArgStunEffectHuge", fxPos);
+			}
+		}
+	}
+	
+	/*
+	 * Check to see if we should continue stunning. This is really
+	 * more of a "StunCountUp" function, but whatevs. :P
+	 */
+	action state Arg_A_StunCountdown() {
+		let this = ArgNeuralStunner(self);
+		
+		// snag the stun seconds, using the default in case
+		// the actor doesn't define one of its own.
+		int stunSeconds = this.stunTarget.Stamina;
+		if( stunSeconds == 0 ) {
+			stunSeconds = DEF_STUN_SECONDS;
+		}
+
+		// increment first since the 1-second delay occurs BEFORE this function call.
+		this.stunCounter++;
+		if(this.stunTarget && this.stunTarget.health > 0 && stunSeconds > this.stunCounter) {
+			return ResolveState('Spawn');
+		} else {
+			// remove the actor; this goes straight to a Stop directive.
+			return ResolveState(null);
+		}
 	}
 }
 
