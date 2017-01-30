@@ -224,7 +224,6 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RK2G C 1 Bright {
 			invoker.mod[2].charge.toMin();
 			A_GunFlash();
-			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
 			Arg_A_FireRocket(4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50), true);
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
 			A_AlertMonsters();
@@ -236,7 +235,6 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RK2G F 1 Arg_A_WeaponOffset(20.0, 10.0);
 		RK2G D 1 Bright {
 			A_GunFlash();
-			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
 			Arg_A_FireRocket(4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50), true);
 			A_PlaySound("weapons/rocket/altfire", CHAN_6);
 			A_AlertMonsters();
@@ -247,7 +245,6 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		RK2G G 1 Arg_A_WeaponOffset(22.0, 11.0);
 		RK2G B 1 Bright {
 			A_GunFlash();
-			A_TakeInventory("ArgRocketAmmo", 1, TIF_NOTAKEINFINITE);
 			Arg_A_FireRocket(4.0 + frandom(-2.50, 0.50), frandom(-2.50, 0.50), true);
 			A_PlaySound("weapons/rocket/fire", CHAN_5);
 			A_AlertMonsters();
