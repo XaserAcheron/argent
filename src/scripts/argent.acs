@@ -21,11 +21,6 @@ script "ArgentInit" enter {
 	// Reset a couple of player properties.
 	SetActorProperty(0, APROP_SPEED, 1.0);
 	TakeInventory("ArgModKitToken", 1);
-	
-	// Give the player a BFG token on map start to signal zscript to
-	// recalculate the BFG's ammotype. This will eventually be replaced
-	// with a direct zscript function call once that's a thing.
-	GiveInventory("ArgBFG9000AmmoToken", 1);
 }
 
 /*
