@@ -131,15 +131,15 @@ statusbar normal // Standard Doom Status bar
 	drawswitchableimage keyslot 3 && 6, "nullimage", "STKEYS1", "STKEYS4", "STKEYS7", 399, 461;
 	drawswitchableimage keyslot 1 && 4, "nullimage", "STKEYS2", "STKEYS5", "STKEYS8", 399, 471;
 
-	drawnumber 3, INDEXFONT, gold, ammo Clip      , 448, 453;
-	drawnumber 3, INDEXFONT, gold, ammo Shell     , 448, 459;
-	drawnumber 3, INDEXFONT, gold, ammo RocketAmmo, 448, 465;
-	drawnumber 3, INDEXFONT, gold, ammo Cell      , 448, 471;
+	drawnumber 3, INDEXFONT, gold, ammo Clip         , 448, 453;
+	drawnumber 3, INDEXFONT, gold, ammo Shell        , 448, 459;
+	drawnumber 3, INDEXFONT, gold, ammo ArgRocketAmmo, 448, 465;
+	drawnumber 3, INDEXFONT, gold, ammo Cell         , 448, 471;
 
-	drawnumber 3, INDEXFONT, gold, ammocapacity Clip      , 474, 453;
-	drawnumber 3, INDEXFONT, gold, ammocapacity Shell     , 474, 459;
-	drawnumber 3, INDEXFONT, gold, ammocapacity RocketAmmo, 474, 465;
-	drawnumber 3, INDEXFONT, gold, ammocapacity Cell      , 474, 471;
+	drawnumber 3, INDEXFONT, gold, ammocapacity Clip         , 474, 453;
+	drawnumber 3, INDEXFONT, gold, ammocapacity Shell        , 474, 459;
+	drawnumber 3, INDEXFONT, gold, ammocapacity ArgRocketAmmo, 474, 465;
+	drawnumber 3, INDEXFONT, gold, ammocapacity Cell         , 474, 471;
 	gamemode deathmatch, teamgame
 	{
 		drawnumber 2, HUDFONT_DOOM, untranslated, frags, 298, 451;
