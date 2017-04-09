@@ -28,3 +28,8 @@
 #include "zscript/argent/weapons/bfg.txt"
 
 #include "zscript/argent/items/powerups.txt"
+
+#include "zscript/argent/items/equipment/base.txt"
+#include "zscript/argent/items/equipment/grenade.txt"
+#include "zscript/argent/items/equipment/hologram.txt"
+#include "zscript/argent/items/equipment/siphon.txt"

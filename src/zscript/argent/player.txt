@@ -6,6 +6,8 @@
 
 class ArgPlayer : DoomPlayer
 {
+	ArgEquipment activeEquipment; // temp.storage location
+
 	Default
 	{
 		Player.DisplayName "Doom Marine";

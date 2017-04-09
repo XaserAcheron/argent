@@ -14,6 +14,11 @@ ARG_TAG_PLASMA   = "Plasma Rifle";
 ARG_TAG_GAUSS    = "Gauss Cannon";
 ARG_TAG_BFG      = "BFG 9000";
 
+ARG_TAG_MODKIT   = "Mod Kit";
+ARG_TAG_GRENADE  = "Frag Grenade";
+ARG_TAG_HOLOGRAM = "Hologram";
+ARG_TAG_SIPHON   = "Siphon Grenade";
+
 ARG_GOT_FIST     = "You got the twin birth-mounted meat-pounders!";
 ARG_GOT_CHAINSAW = "You got the chainsaw! Rip and tear!";
 ARG_GOT_PISTOL   = "You got the pea shooter! Pew pew!";

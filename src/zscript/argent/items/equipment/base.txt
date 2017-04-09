@@ -1,0 +1,92 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Base Equipment Definitions
+//
+// --------------------------------------------------------------------------
+
+class ArgEquipment : CustomInventory
+{
+	Default
+	{
+		Scale 0.66;
+		Inventory.PickupMessage "$ARG_GOT_MOD_KIT";
+		Inventory.PickupSound "items/modkit/pickup";
+		Inventory.MaxAmount 1;
+		Inventory.Icon "";
+
+		+INVENTORY.UNTOSSABLE
+		+INVENTORY.KEEPDEPLETED
+		+INVENTORY.FANCYPICKUPSOUND
+		+INVENTORY.INVBAR
+	}
+
+	States
+	{
+	Use:
+		TNT1 A 0 Arg_A_UseEquipment();
+		Stop;
+	}
+	
+	States(Weapon)
+	{
+	UseEquipment:
+		EQPG A 1   A_WeaponOffset(-120,-25);
+		EQPG A 1   A_WeaponOffset(- 90,-20, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(- 60,-15, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(- 40,-10, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(- 20,  0, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(-  5, 10, WOF_INTERPOLATE);
+		EQPG B 1 { A_WeaponOffset(  10, 20, WOF_INTERPOLATE); Arg_A_DoEquipmentAction(); }
+		EQPG B 1   A_WeaponOffset(  20, 35, WOF_INTERPOLATE);
+		EQPG B 1   A_WeaponOffset(  30, 50, WOF_INTERPOLATE);
+		EQPG B 1   A_WeaponOffset(  40, 70, WOF_INTERPOLATE);
+		EQPG B 1   A_WeaponOffset(  50, 90, WOF_INTERPOLATE);
+		TNT1 A 0 ResolveState("Ready"); // resolves to weapon's Ready state
+		Stop;
+	}
+
+	/*
+	 * Use equipment. This sets the player's weapon state to the item-defined
+	 * "UseEquipment" state, which is pretty rad.
+	 */
+	action bool Arg_A_UseEquipment() {
+
+		// Temporarily save a reference to the invoker (ArgEqupiment) in the
+		// player class so we can access it in Arg_A_DoEquipmentAction later (in which
+		// the invoker is the weapon; i.e. we have no direct equipment reference anymore).
+		let argPlayer = ArgPlayer(self);
+		if(argPlayer) {
+			argPlayer.activeEquipment = invoker;
+		}
+
+		// [TODO] only jump if the player's weapon is in its ready state.
+		if(player && player.ReadyWeapon) {
+			player.SetPsprite(PSP_WEAPON, ResolveState("UseEquipment"));
+	
+			return false; // [TODO] switch this back when done testing stuff
+//			return true; // remove from inventory
+		} else {
+			return false; // ...or don't.
+		}
+	}
+	
+	/*
+	 * Do the actual equipment action (i.e. throw grenade, spawn hologram, etc.)
+	 * Though this is called by the weapon, we proxy the call to the equipment
+	 * class since the virtual function we want is there. Ugly guts, prettier face.
+	 */
+	action(Weapon) void Arg_A_DoEquipmentAction() {
+		let argPlayer = ArgPlayer(self);
+		if(argPlayer && argPlayer.activeEquipment && self.player && self.player.ReadyWeapon) {
+			argPlayer.activeEquipment.Arg_EquipmentAction(self, self.player.ReadyWeapon);
+		}
+	}
+
+	/*
+	 * Overrideable equipment action. Parameters simulate an action on the weapon.
+	 */
+	virtual void Arg_EquipmentAction(Actor self, Weapon invoker) {
+		// [TODO] log an error here if this is called directly.
+		self.A_PrintBold("[TODO] Base Equipment Action");
+	}
+}

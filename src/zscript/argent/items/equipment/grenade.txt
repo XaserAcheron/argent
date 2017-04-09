@@ -1,0 +1,18 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Frag Grenade
+//
+// --------------------------------------------------------------------------
+
+class ArgEquipmentGrenade : ArgEquipment
+{
+	Default
+	{
+		Inventory.Icon "graphics/hud/equip-icon-grenade.png";
+		Tag "$ARG_TAG_GRENADE";
+	}
+	override void Arg_EquipmentAction(Actor self, Weapon invoker) {
+		self.A_PrintBold("[TODO] Frag Grenade Action");
+		self.A_SpawnItemEx("ArgModKit");
+	}
+}

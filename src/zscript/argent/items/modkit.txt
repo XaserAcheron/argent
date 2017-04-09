@@ -13,6 +13,7 @@ class ArgModKit : CustomInventory replaces Backpack
 		Inventory.PickupSound "items/modkit/pickup";
 		Inventory.MaxAmount 999;
 		Inventory.Icon "graphics/hud/equip-icon-modkit.png";
+		Tag "$ARG_TAG_MODKIT";
 
 		+INVENTORY.FANCYPICKUPSOUND
 		+INVENTORY.INVBAR
