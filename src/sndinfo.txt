@@ -243,10 +243,22 @@ $volume items/powerups/quad    0.8
 $volume items/powerups/regen   0.8
 $volume items/powerups/invuln  0.8
 
-items/modkit/pickup         "sounds/items/modkit/pickup.flac"
-items/modkit/use            "sounds/items/modkit/use.flac"
-items/modkit/dismiss        "sounds/items/modkit/dismiss.flac"
-items/modkit/apply          "sounds/items/modkit/apply.flac"
+items/modkit/pickup             "sounds/items/modkit/pickup.flac"
+items/modkit/use                "sounds/items/modkit/use.flac"
+items/modkit/dismiss            "sounds/items/modkit/dismiss.flac"
+items/modkit/apply              "sounds/items/modkit/apply.flac"
+
+items/equipment/regen           "sounds/items/equipment/regen.flac"
+items/equipment/grenade/pin     "sounds/items/equipment/grenade-pin.flac"
+items/equipment/grenade/throw   "sounds/items/equipment/grenade-throw.flac"
+items/equipment/grenade/bounce  "sounds/items/equipment/grenade-bounce.ogg"
+items/equipment/grenade/arm     "sounds/items/equipment/grenade-arm.ogg"
+items/equipment/grenade/explode "sounds/items/equipment/grenade-explode.flac"
+items/equipment/hologram        "sounds/items/equipment/hologram.ogg"
+items/equipment/siphon          "sounds/items/equipment/siphon.flac"
+$volume items/equipment/grenade/arm     0.66
+$volume items/equipment/grenade/bounce  0.8
+$volume items/equipment/grenade/explode 1.2
 
 misc/secret                "sounds/secret.flac"
 $volume misc/secret  0.8
