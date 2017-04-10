@@ -14,20 +14,31 @@ class ArgEquipmentGrenade : ArgEquipment
 	States(Weapon)
 	{
 	UseEquipmentGeneric:
-		"####" "#" 0 A_FireProjectile("ArgFragGrenade", 0, 1, -6, -8, FPF_NOAUTOAIM, -10);
+		"####" "#" 0 {
+			// [TODO] abstract this even further into a custom property O:
+			A_PlaySound("items/equipment/grenade/throw", CHAN_WEAPON);
+			A_FireProjectile("ArgFragGrenade", 0, 0, -6, -8, FPF_NOAUTOAIM, -10);
+		}
 		Goto UseEquipmentEnd;
 	}
 }
 
 class ArgFragGrenade : Actor
 {
+	int fuse;
+
+	const FUSE_TICS   = 60;
+	const SOUND_TICS  = 25;
+	const SPEED_LIMIT = 3.0;
+
 	Default
 	{
 		Projectile;
 		Damage 0;
-		Speed 25;
+		Speed 30;
 		Radius 9;
-		BounceFactor 0.6;
+		Scale 0.66;
+		BounceFactor 0.5;
 		BounceSound "items/equipment/grenade/bounce";
 
 		-NOGRAVITY
@@ -35,17 +46,25 @@ class ArgFragGrenade : Actor
 		+BOUNCEONFLOORS
 		+BOUNCEONCEILINGS
 		+BOUNCEONACTORS
+		+ALLOWBOUNCEONACTORS // gorrammit zdoom
+		+CANBOUNCEWATER
 	}
 	States
 	{
 	Spawn:
-		EGRT ABCDEFGH 3 Bright;
+		EGRT AAAHHHGGGFFFEEEDDDCCCBBB 1 Bright Arg_A_GrenadeMove();
+		Loop;
+	Stopped:
+		EGRT C 1 Bright Arg_A_GrenadeStop();
 		Loop;
 	Death:
 		REXP A 4 Bright {
+			A_Stop();
+			A_NoGravity();
 			A_SetScale(1.5);
-			A_Explode(128, 64 , 1);
-			A_Explode(256, 192, 0);
+			A_Explode(64 , 160, 1);
+			A_Explode(256, 320, 0, 128);
+			A_PlaySound("items/equipment/grenade/explode", CHAN_VOICE);
 		}
 		REXP B 3 Bright;
 		REXP C 3 Bright A_SetTranslucent(0.7);
@@ -53,5 +72,41 @@ class ArgFragGrenade : Actor
 		REXP E 2 Bright A_SetTranslucent(0.5);
 		REXP F 2 Bright A_SetTranslucent(0.4);
 		Stop;
+	}
+
+	/*
+	 * Grenade "Tick" action. Not actually a Tick() override, since we need
+	 * to do a state jump when the grenade's fuse is out.
+	 */
+	action state Arg_A_GrenadeTick() {
+		let this = ArgFragGrenade(self);
+		if(this) {
+			if(this.fuse >= FUSE_TICS) {
+				return ResolveState("Death");
+			} else if(this.fuse == SOUND_TICS) {
+				A_PlaySound("items/equipment/grenade/arm", CHAN_5);
+			}
+			this.fuse += 1;
+		}
+		return ResolveState(null);
+	}
+
+	/*
+	 *
+	 */
+	action state Arg_A_GrenadeMove() {
+		if(self.pos.z - self.floorz <= 4.0 && vel.Length() < SPEED_LIMIT) {
+			return ResolveState("Stopped");
+		} else {
+			return Arg_A_GrenadeTick();
+		}
+	}
+
+	/*
+	 *
+	 */
+	action state Arg_A_GrenadeStop() {
+		A_Stop(); // gotta call this repeatedly to halt all of Doom's "Physics"(tm). :<
+		return Arg_A_GrenadeTick();
 	}
 }
