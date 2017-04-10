@@ -11,8 +11,47 @@ class ArgEquipmentGrenade : ArgEquipment
 		Inventory.Icon "graphics/hud/equip-icon-grenade.png";
 		Tag "$ARG_TAG_GRENADE";
 	}
-	override void Arg_EquipmentAction(Actor self, Weapon invoker) {
-		self.A_PrintBold("[TODO] Frag Grenade Action");
-		self.A_SpawnItemEx("ArgModKit");
+	States(Weapon)
+	{
+	UseEquipmentGeneric:
+		"####" "#" 0 A_FireProjectile("ArgFragGrenade", 0, 1, -6, -8, FPF_NOAUTOAIM, -10);
+		Goto UseEquipmentEnd;
+	}
+}
+
+class ArgFragGrenade : Actor
+{
+	Default
+	{
+		Projectile;
+		Damage 0;
+		Speed 25;
+		Radius 9;
+		BounceFactor 0.6;
+		BounceSound "items/equipment/grenade/bounce";
+
+		-NOGRAVITY
+		+BOUNCEONWALLS
+		+BOUNCEONFLOORS
+		+BOUNCEONCEILINGS
+		+BOUNCEONACTORS
+	}
+	States
+	{
+	Spawn:
+		EGRT ABCDEFGH 3 Bright;
+		Loop;
+	Death:
+		REXP A 4 Bright {
+			A_SetScale(1.5);
+			A_Explode(128, 64 , 1);
+			A_Explode(256, 192, 0);
+		}
+		REXP B 3 Bright;
+		REXP C 3 Bright A_SetTranslucent(0.7);
+		REXP D 2 Bright A_SetTranslucent(0.6);
+		REXP E 2 Bright A_SetTranslucent(0.5);
+		REXP F 2 Bright A_SetTranslucent(0.4);
+		Stop;
 	}
 }
