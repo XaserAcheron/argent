@@ -6,6 +6,16 @@
 
 class ArgEquipment : CustomInventory
 {
+	sound pPreSound;
+	sound pProjectileSound;
+	class<Actor> pProjectileType;
+	float pProjectilePitch;
+
+	property PreSound       : pPreSound;
+	property ProjectileSound: pProjectileSound;
+	property ProjectileType : pProjectileType;
+	property ProjectilePitch: pProjectilePitch;
+
 	Default
 	{
 		Scale 0.66;
@@ -13,6 +23,9 @@ class ArgEquipment : CustomInventory
 		Inventory.PickupSound "items/modkit/pickup";
 		Inventory.MaxAmount 1;
 		Inventory.Icon "";
+		
+		ArgEquipment.ProjectileSound 'items/equipment/grenade/throw';
+		ArgEquipment.ProjectilePitch -10;
 
 		+INVENTORY.UNTOSSABLE
 		+INVENTORY.KEEPDEPLETED
@@ -30,20 +43,17 @@ class ArgEquipment : CustomInventory
 	States(Weapon)
 	{
 	UseEquipment:
-		EQPG A 1 A_WeaponOffset(-120,-25);
-		EQPG A 1 A_WeaponOffset(- 90,-20, WOF_INTERPOLATE);
-		EQPG A 1 A_WeaponOffset(- 60,-15, WOF_INTERPOLATE);
-		EQPG A 1 A_WeaponOffset(- 40,-10, WOF_INTERPOLATE);
-		EQPG A 1 A_WeaponOffset(- 20,  0, WOF_INTERPOLATE);
-		EQPG A 1 A_WeaponOffset(-  5, 10, WOF_INTERPOLATE);
-		EQPG A 0 Arg_A_EquipmentState("UseEquipmentGeneric");
-	UseEquipmentGeneric:
-	UseEquipmentEnd:
-		EQPG B 1 A_WeaponOffset(  10, 20, WOF_INTERPOLATE);
-		EQPG B 1 A_WeaponOffset(  20, 35, WOF_INTERPOLATE);
-		EQPG B 1 A_WeaponOffset(  30, 50, WOF_INTERPOLATE);
-		EQPG B 1 A_WeaponOffset(  40, 70, WOF_INTERPOLATE);
-		EQPG B 1 A_WeaponOffset(  50, 90, WOF_INTERPOLATE);
+		EQPG A 1 { A_WeaponOffset(-120,-25); Arg_A_EquipmentPreAction(); }
+		EQPG A 1   A_WeaponOffset(- 90,-20, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(- 60,-15, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(- 40,-10, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(- 20,  0, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(-  5, 10, WOF_INTERPOLATE);
+		EQPG B 1 { A_WeaponOffset(  10, 20, WOF_INTERPOLATE); Arg_A_EquipmentGeneric(); }
+		EQPG B 1   A_WeaponOffset(  20, 35, WOF_INTERPOLATE);
+		EQPG B 1   A_WeaponOffset(  30, 50, WOF_INTERPOLATE);
+		EQPG B 1   A_WeaponOffset(  40, 70, WOF_INTERPOLATE);
+		EQPG B 1   A_WeaponOffset(  50, 90, WOF_INTERPOLATE);
 		TNT1 A 0 ResolveState("Ready"); // resolves to weapon's Ready state
 		Stop;
 	}
@@ -69,6 +79,28 @@ class ArgEquipment : CustomInventory
 //			return true; // remove from inventory
 		} else {
 			return false; // ...or don't.
+		}
+	}
+	
+	/*
+	 * Generic pre-action, for grenades and the like.
+	 */
+	action(Weapon) void Arg_A_EquipmentPreAction() {
+		let argPlayer = ArgPlayer(self);
+		if(argPlayer && argPlayer.activeEquipment && argPlayer.activeEquipment.pPreSound) {
+			A_PlaySound(argPlayer.activeEquipment.pPreSound, CHAN_5);
+		}
+	}
+
+	/*
+	 * Generic "Throw Equipment" action, for grenades n' siphons n' such.
+	 */
+	action(Weapon) void Arg_A_EquipmentGeneric() {
+		let argPlayer = ArgPlayer(self);
+		if(argPlayer && argPlayer.activeEquipment) {
+			ArgEquipment equip = argPlayer.activeEquipment;
+			A_PlaySound(equip.pProjectileSound, CHAN_6);
+			A_FireProjectile(equip.pProjectileType, 0, 0, -8, -8, FPF_NOAUTOAIM, equip.pProjectilePitch);
 		}
 	}
 

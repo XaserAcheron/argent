@@ -10,16 +10,9 @@ class ArgEquipmentGrenade : ArgEquipment
 	{
 		Inventory.Icon "graphics/hud/equip-icon-grenade.png";
 		Tag "$ARG_TAG_GRENADE";
-	}
-	States(Weapon)
-	{
-	UseEquipmentGeneric:
-		"####" "#" 0 {
-			// [TODO] abstract this even further into a custom property O:
-			A_PlaySound("items/equipment/grenade/throw", CHAN_WEAPON);
-			A_FireProjectile("ArgFragGrenade", 0, 0, -6, -8, FPF_NOAUTOAIM, -10);
-		}
-		Goto UseEquipmentEnd;
+		
+		ArgEquipment.PreSound 'items/equipment/grenade/pin';
+		ArgEquipment.ProjectileType 'ArgFragGrenade';
 	}
 }
 
