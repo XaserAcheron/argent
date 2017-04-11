@@ -61,8 +61,8 @@ class ArgEquipment : CustomInventory
 			argPlayer.activeEquipment = invoker;
 		}
 
-		// [TODO] only jump if the player's weapon is in its ready state.
-		if(player && player.ReadyWeapon) {
+		// only jump if the player's active weapon is in its ready state.
+		if(player && player.ReadyWeapon && (player.WeaponState & ARG_WF_WEAPONREADY)) {
 			player.SetPsprite(PSP_WEAPON, ResolveState("UseEquipment"));
 	
 			return false; // [TODO] switch this back when done testing stuff
