@@ -62,9 +62,19 @@ class ArgStatusBar : DoomStatusBar
 		DrawImage("graphics/hud/base-right.png",(-167, -62), DI_ITEM_OFFSETS);
 
 		// health
-		DrawString(self.ArgLargeFont, FormatNumber(self.CPlayer.health, 3), (64, -43), DI_TEXT_ALIGN_RIGHT);
-		DrawBar("graphics/hud/bar-health-1.png", "graphics/hud/bar-health-1x.png", self.CPlayer.health, 100, (79, -41), 0, SHADER_HORZ, DI_ITEM_OFFSETS);
-		DrawBar("graphics/hud/bar-health-2.png", "graphics/hud/bar-health-2x.png", self.CPlayer.health, 200, ( 0, -41), 0, SHADER_HORZ, DI_ITEM_OFFSETS);
+		int health = self.CPlayer.health;
+		DrawString(self.ArgLargeFont, FormatNumber(health, 3), (64, -43), DI_TEXT_ALIGN_RIGHT);
+		DrawBar("graphics/hud/bar-health-1.png", "graphics/hud/bar-health-1x.png", health, 100, (79, -41), 0, SHADER_HORZ, DI_ITEM_OFFSETS);
+		DrawBar("graphics/hud/bar-health-2.png", "graphics/hud/bar-health-2x.png", health, 200, ( 0, -41), 0, SHADER_HORZ, DI_ITEM_OFFSETS);
+
+		// armor
+		int armor = GetArmorAmount();
+		bool hasBlueArmor = (self.GetArmorSavePercent() >= 50);
+		DrawImage(hasBlueArmor ? "graphics/hud/armor-blue.png" : "graphics/hud/armor-green.png",(68, -57), DI_ITEM_OFFSETS);
+		DrawString(self.ArgSmallFont, FormatNumber(armor, 3), (64, -55), DI_TEXT_ALIGN_RIGHT);
+		DrawBar("graphics/hud/bar-armor-1.png", "graphics/hud/bar-armor-1x.png", armor, 100, (79, -55), 0, SHADER_HORZ, DI_ITEM_OFFSETS);
+		DrawBar("graphics/hud/bar-armor-2.png", "graphics/hud/bar-armor-2x.png", armor, 200, ( 0, -55), 0, SHADER_HORZ, DI_ITEM_OFFSETS);
+
 
 		// [TODO] the rest of this
 	}
