@@ -74,7 +74,20 @@ class ArgStatusBar : DoomStatusBar
 		DrawString(self.ArgSmallFont, FormatNumber(armor, 3), (64, -55), DI_TEXT_ALIGN_RIGHT);
 		DrawBar("graphics/hud/bar-armor-1.png", "graphics/hud/bar-armor-1x.png", armor, 100, (79, -55), 0, SHADER_HORZ, DI_ITEM_OFFSETS);
 		DrawBar("graphics/hud/bar-armor-2.png", "graphics/hud/bar-armor-2x.png", armor, 200, ( 0, -55), 0, SHADER_HORZ, DI_ITEM_OFFSETS);
-
+		
+		// ammo
+		let ammo = Ammo(GetCurrentAmmo());
+		if(ammo) {
+			DrawString(self.ArgLargeFont, FormatNumber(ammo.Amount, 3), (-96, -58), DI_TEXT_ALIGN_RIGHT);
+//			DrawInventoryIcon(ammo, (-162, -57), DI_ITEM_OFFSETS); // [TODO] this properly, instead of HUD hacks.
+			let backpack = CPlayer.mo.FindInventory("BackpackItem", true);
+			if(backpack) {
+				DrawBar("graphics/hud/bar-ammo-1a.png", "graphics/hud/bar-ammo-1xa.png", ammo.Amount, ammo.MaxAmount        , (-228, -41), 0, SHADER_HORZ | SHADER_REVERSE, DI_ITEM_OFFSETS);
+				DrawBar("graphics/hud/bar-ammo-2.png" , "graphics/hud/bar-ammo-2x.png" , ammo.Amount, ammo.BackpackMaxAmount, (-162, -41), 0, SHADER_HORZ | SHADER_REVERSE, DI_ITEM_OFFSETS);
+			} else {
+				DrawBar("graphics/hud/bar-ammo-1.png", "graphics/hud/bar-ammo-1x.png", ammo.Amount, ammo.MaxAmount, (-162, -41), 0, SHADER_HORZ | SHADER_REVERSE, DI_ITEM_OFFSETS);
+			}
+		}
 
 		// [TODO] the rest of this
 	}
