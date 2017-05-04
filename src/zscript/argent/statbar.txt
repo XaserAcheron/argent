@@ -6,9 +6,28 @@
 
 class ArgStatusBar : DoomStatusBar
 {
-	// constants are useful.
+	HUDFont ArgLargeFont;
+	HUDFont ArgSmallFont;
+
 	const ARG_HUD_WIDTH   = 480;
 	const ARG_HUD_HEIGHT  = 360;
+
+	/*
+	 * Init Fonts n' stuff.
+	 */
+	override void Init() {
+		Super.Init();
+
+		self.ArgLargeFont = self.Arg_CreateFont("hudfont-large");
+		self.ArgSmallFont = self.Arg_CreateFont("hudfont-small");
+	}
+
+	/*
+	 * Create Font shortcut, for niceness' sake.
+	 */
+	HUDFont Arg_CreateFont(Font font, int widthChar = "0", bool monospace = true) {
+		return HUDFont.Create(font, font.GetCharWidth(widthChar), monospace);
+	}
 
 	/*
 	 * Draw entry point. This inherits from Doom's status bar so we can show the
@@ -41,6 +60,11 @@ class ArgStatusBar : DoomStatusBar
 
 		DrawImage("graphics/hud/base-left.png" ,(  24, -62), DI_ITEM_OFFSETS);
 		DrawImage("graphics/hud/base-right.png",(-167, -62), DI_ITEM_OFFSETS);
+
+		// health
+		DrawString(self.ArgLargeFont, FormatNumber(self.CPlayer.health, 3), (64, -43), DI_TEXT_ALIGN_RIGHT);
+		DrawBar("graphics/hud/bar-health-1.png", "graphics/hud/bar-health-1x.png", self.CPlayer.health, 100, (79, -41), 0, SHADER_HORZ, DI_ITEM_OFFSETS);
+		DrawBar("graphics/hud/bar-health-2.png", "graphics/hud/bar-health-2x.png", self.CPlayer.health, 200, ( 0, -41), 0, SHADER_HORZ, DI_ITEM_OFFSETS);
 
 		// [TODO] the rest of this
 	}
