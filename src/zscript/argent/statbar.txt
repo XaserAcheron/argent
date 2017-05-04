@@ -1,0 +1,54 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Status Bar
+//
+// --------------------------------------------------------------------------
+
+class ArgStatusBar : DoomStatusBar
+{
+	// constants are useful.
+	const STATBAR_HEIGHT = 32;
+	const CLASSIC_WIDTH  = 320;
+	const CLASSIC_HEIGHT = 200;
+	const MODERN_WIDTH   = 640;
+	const MODERN_HEIGHT  = 480;
+
+	/*
+	 * Draw entry point. This inherits from Doom's status bar so we can show the
+	 * classic HUD if the use opts for it.
+	 */ 
+	override void Draw(int state, double TicFrac)
+	{
+		Super.Draw(state, TicFrac);
+
+		if (state == HUD_StatusBar)
+		{
+			self.SetSize(STATBAR_HEIGHT, CLASSIC_WIDTH, CLASSIC_HEIGHT);
+			self.BeginStatusBar();
+			self.DrawMainBar(TicFrac);
+		}
+		else if (state == HUD_Fullscreen)
+		{
+			CVar cv = CVar.FindCvar("arg_classicHUD");
+			int useClassicHUD = (cv) ? cv.GetInt() : false;
+			
+			if(useClassicHUD) {
+				self.SetSize(STATBAR_HEIGHT, CLASSIC_WIDTH, CLASSIC_HEIGHT);
+				self.BeginHUD();
+				self.DrawFullScreenStuff();
+			} else {
+				self.SetSize(STATBAR_HEIGHT, MODERN_WIDTH, MODERN_HEIGHT);
+				self.BeginHUD();
+				self.DrawArgentHUD();
+			}
+		}
+	}
+	
+	/*
+	 * "Modern" ARGENT HUD.
+	 */
+	protected void DrawArgentHUD() {
+		// [TODO] real stuff
+		self.DrawFullScreenStuff();
+	}
+}

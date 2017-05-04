@@ -2,6 +2,7 @@ gameinfo
 {
 	playerclasses = "ArgPlayer"
 	norandomplayerclass = true
+	statusbarclass = "ArgStatusBar"
 	intermissionmusic = "music/inter.mid"
 	titlemusic = "music/title.mid"
 	finalemusic = "music/finale.mid"

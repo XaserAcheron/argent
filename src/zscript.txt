@@ -1,5 +1,8 @@
+version "2.5"
+
 #include "zscript/argent/base.txt"
 #include "zscript/argent/player.txt"
+#include "zscript/argent/statbar.txt"
 #include "zscript/argent/misc.txt"
 #include "zscript/argent/enemies.txt"
 
