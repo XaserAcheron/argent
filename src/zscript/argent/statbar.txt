@@ -98,6 +98,12 @@ class ArgStatusBar : DoomStatusBar
 		
 		// [TODO] mod icons at some point -- these will sit next to the ammo icons.
 		
+		// weapon icon
+		let weapon = ArgWeapon(CPlayer.ReadyWeapon);
+		if(weapon) {
+			DrawInventoryIcon(weapon, (-95, -59), DI_ITEM_OFFSETS);
+		}
+		
 		// equipment
 		// [TODO] the rest of this; since right now we just have the mod kit,
 		//        we don't have to worry about the full inventory bar just yet.
@@ -107,6 +113,14 @@ class ArgStatusBar : DoomStatusBar
 			DrawString(self.ArgSmallFont, FormatNumber(CPlayer.mo.InvSel.Amount, 3), (-169, -31), DI_TEXT_ALIGN_RIGHT);
 		}
 
-		// [TODO] the rest of this
+		// keys -- uggo copypasta since I guess that's how we do this now
+		Vector2 keypos = (28, -71);
+		for(let i = CPlayer.mo.Inv; i != null; i = i.Inv) {
+			if (i is "Key" && i.Icon.IsValid()) {
+				DrawTexture(i.Icon, keypos, DI_ITEM_OFFSETS);
+				Vector2 size = TexMan.GetScaledSize(i.Icon);
+				keypos.X += size.X + 2;
+			}
+		}
 	}
 }
