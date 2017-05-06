@@ -6,17 +6,6 @@
 
 class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 {
-	override void BeginPlay()
-	{
-		Super.BeginPlay();
-		
-		mod[1].ammoUse = 0; // pointless, but may as well be explicit. shit.
-		mod[1].charge.init(0, 120);
-
-		mod[2].ammoUse = 2;
-		mod[2].cooldown.init(0, 200);
-	}
-
 	Default
 	{
 		Weapon.SelectionOrder 4;
@@ -26,6 +15,12 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		Inventory.Icon "graphics/hud/weapon-plasma.png";
 		Inventory.PickupMessage "$ARG_GOT_PLASMA";
 		Tag "$ARG_TAG_PLASMA";
+
+		ArgModWeapon.Mod1AmmoUse 0; // pointless, but may as well be explicit. shit.
+		ArgModWeapon.Mod2Charge 120, 0;
+
+		ArgModWeapon.Mod2AmmoUse 2;
+		ArgModWeapon.Mod2Cooldown 200, 0;
 	}
 	States
 	{

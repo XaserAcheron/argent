@@ -12,17 +12,6 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 	const HEAVY_CROSSHAIR_ANIM4 = 44;
 	const HEAVY_CROSSHAIR_IDLE  = 45;
 
-	override void BeginPlay()
-	{
-		Super.BeginPlay();
-		
-		mod[1].ammoUse = 3;
-		mod[1].cooldown.init(0, 90);
-
-		mod[2].ammoUse = 2;
-		mod[2].cooldown.init(0, 90);
-	}
-
 	Default {
 		Weapon.SelectionOrder 5;
 		Weapon.AmmoUse 1;
@@ -33,6 +22,12 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 		Tag "$ARG_TAG_HEAVY";
 		Obituary "$ARG_OB_HEAVY";
 		DamageType "ArgHeavyAR";
+
+		ArgModWeapon.Mod1AmmoUse 3;
+		ArgModWeapon.Mod1Cooldown 90, 0;
+
+		ArgModWeapon.Mod2AmmoUse 2;
+		ArgModWeapon.Mod2Cooldown 90, 0;
 	}
 	States
 	{

@@ -198,8 +198,39 @@ class ArgModWeapon : ArgWeapon
 	int modSelected;
 	ArgMod[3] mod; // mod[0] is used as a placeholder for "no mod selected."
 
+	int  init_mod1_ammoUse; // custom property drivers
+	int  init_mod1_cooldown;
+	int  init_mod1_cooldown_over;
+	int  init_mod1_charge;
+	int  init_mod1_charge_over;
+
+	int  init_mod2_ammoUse;
+	int  init_mod2_cooldown;
+	int  init_mod2_cooldown_over;
+	int  init_mod2_charge;
+	int  init_mod2_charge_over;
+
+	property Mod1AmmoUse : init_mod1_ammoUse;
+	property Mod1Cooldown: init_mod1_cooldown, init_mod1_cooldown_over;
+	property Mod1Charge  : init_mod1_charge, init_mod1_charge_over;
+
+	property Mod2AmmoUse : init_mod2_ammoUse;
+	property Mod2Cooldown: init_mod2_cooldown, init_mod2_cooldown_over;
+	property Mod2Charge  : init_mod2_charge, init_mod2_charge_over;
+
+	/*
+	 * Actor States n' Defaults
+	 */
 	Default
 	{
+		ArgModWeapon.Mod1AmmoUse 1;
+		ArgModWeapon.Mod1Cooldown 0, 0;
+		ArgModWeapon.Mod1Charge 0, 0;
+
+		ArgModWeapon.Mod2AmmoUse 1;
+		ArgModWeapon.Mod2Cooldown 0, 0;
+		ArgModWeapon.Mod2Charge 0, 0;
+
 		+WEAPON.NOALERT
 		+WEAPON.AMMO_OPTIONAL
 		+WEAPON.ALT_AMMO_OPTIONAL
@@ -332,6 +363,15 @@ class ArgModWeapon : ArgWeapon
 	override void BeginPlay()
 	{
 		Super.BeginPlay();
+		
+		// Initialize mods from properties
+		mod[1].ammoUse        = init_mod1_ammoUse;
+		mod[1].cooldown.init(0, init_mod1_cooldown, max(init_mod1_cooldown_over, init_mod1_cooldown));
+		mod[1].charge.init  (0, init_mod1_charge  , max(init_mod1_charge_over  , init_mod1_charge  ));
+
+		mod[2].ammoUse        = init_mod2_ammoUse;
+		mod[2].cooldown.init(0, init_mod2_cooldown, max(init_mod2_cooldown_over, init_mod2_cooldown));
+		mod[2].charge.init  (0, init_mod2_charge  , max(init_mod2_charge_over  , init_mod2_charge  ));
 		
 		// Set MinSelAmmo1 to 1 for all mod weapons to thwart +AMMO_OPTIONAL;
 		// this is a special value that tells BestWeapon (the "switch to

@@ -6,17 +6,6 @@
 
 class ArgShotgun : ArgModWeapon replaces Shotgun
 {
-	override void BeginPlay()
-	{
-		Super.BeginPlay();
-		
-		mod[1].ammoUse = 3;
-		mod[1].cooldown.init(0, 90);
-
-		mod[2].ammoUse = 2;
-		mod[2].cooldown.init(0, 90);
-	}
-	
 	Default
 	{
 		Weapon.SelectionOrder 6;
@@ -28,6 +17,12 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 		Tag "$ARG_TAG_SHOTGUN";
 		Obituary "$ARG_OB_SHOTGUN";
 		DamageType "ArgShotgun";
+
+		ArgModWeapon.Mod1AmmoUse 3;
+		ArgModWeapon.Mod1Cooldown 90, 0;
+
+		ArgModWeapon.Mod2AmmoUse 2;
+		ArgModWeapon.Mod2Cooldown 90, 0;
 	}
 	States
 	{
