@@ -88,6 +88,15 @@ class ArgStatusBar : DoomStatusBar
 				DrawBar("graphics/hud/bar-ammo-1.png", "graphics/hud/bar-ammo-1x.png", ammo.Amount, ammo.MaxAmount, (-162, -41), 0, SHADER_HORZ | SHADER_REVERSE, DI_ITEM_OFFSETS);
 			}
 		}
+		
+		// equipment
+		// [TODO] the rest of this; since right now we just have the mod kit,
+		//        we don't have to worry about the full inventory bar just yet.
+		if(CPlayer.mo.FindInventory("ArgModKit")) { // this check will vanish when the equipment system exists.
+			DrawImage("graphics/hud/equip-box-selected.png" ,(-204, -46), DI_ITEM_OFFSETS);
+			DrawInventoryIcon(CPlayer.mo.InvSel, (-204, -46), DI_ITEM_OFFSETS);
+			DrawString(self.ArgSmallFont, FormatNumber(CPlayer.mo.InvSel.Amount, 3), (-169, -31), DI_TEXT_ALIGN_RIGHT);
+		}
 
 		// [TODO] the rest of this
 	}
