@@ -89,6 +89,15 @@ class ArgStatusBar : DoomStatusBar
 			}
 		}
 		
+		// ammo icons -- [TODO] replace this legacy jank-hack with a real thing.
+		if(Clip         (GetCurrentAmmo())) { DrawImage("graphics/hud/icon-bullets.png", (-162, -57), DI_ITEM_OFFSETS); }
+		if(Shell        (GetCurrentAmmo())) { DrawImage("graphics/hud/icon-shells.png" , (-162, -57), DI_ITEM_OFFSETS); }
+		if(ArgRocketAmmo(GetCurrentAmmo())) { DrawImage("graphics/hud/icon-rockets.png", (-162, -57), DI_ITEM_OFFSETS); }
+		if(Cell         (GetCurrentAmmo())) { DrawImage("graphics/hud/icon-cells.png"  , (-162, -57), DI_ITEM_OFFSETS); }
+		if(ArgBFGAmmo   (GetCurrentAmmo())) { DrawImage("graphics/hud/icon-bfgammo.png", (-162, -57), DI_ITEM_OFFSETS); }
+		
+		// [TODO] mod icons at some point -- these will sit next to the ammo icons.
+		
 		// equipment
 		// [TODO] the rest of this; since right now we just have the mod kit,
 		//        we don't have to worry about the full inventory bar just yet.
