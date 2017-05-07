@@ -21,6 +21,16 @@ class ArgChaingun : ArgModWeapon
 		Tag "$ARG_TAG_CHAINGUN";
 		Obituary "$ARG_OB_CHAINGUN";
 		DamageType "ArgChaingun";
+
+		ArgModWeapon.Mod1Tag "$ARG_MOD_TAG_CHAINGUN_1";
+		ArgModWeapon.Mod1Description "$ARG_MOD_DESC_CHAINGUN_1";
+		ArgModWeapon.Mod1Icon "$ARG_MOD_ICON_CHAINGUN_1";
+		ArgModWeapon.Mod1Pic "$ARG_MOD_PIC_CHAINGUN_1"; 
+
+		ArgModWeapon.Mod2Tag "$ARG_MOD_TAG_CHAINGUN_2";
+		ArgModWeapon.Mod2Description "$ARG_MOD_DESC_CHAINGUN_2";
+		ArgModWeapon.Mod2Icon "$ARG_MOD_ICON_CHAINGUN_2";
+		ArgModWeapon.Mod2Pic "$ARG_MOD_PIC_CHAINGUN_2"; 
 	}
 	States
 	{

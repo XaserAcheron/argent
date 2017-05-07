@@ -18,9 +18,18 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 		Obituary "$ARG_OB_SHOTGUN";
 		DamageType "ArgShotgun";
 
+
+		ArgModWeapon.Mod1Tag "$ARG_MOD_TAG_SHOTGUN_1";
+		ArgModWeapon.Mod1Description "$ARG_MOD_DESC_SHOTGUN_1";
+		ArgModWeapon.Mod1Icon "$ARG_MOD_ICON_SHOTGUN_1";
+		ArgModWeapon.Mod1Pic "$ARG_MOD_PIC_SHOTGUN_1"; 
 		ArgModWeapon.Mod1AmmoUse 3;
 		ArgModWeapon.Mod1Cooldown 90, 0;
 
+		ArgModWeapon.Mod2Tag "$ARG_MOD_TAG_SHOTGUN_2";
+		ArgModWeapon.Mod2Description "$ARG_MOD_DESC_SHOTGUN_2";
+		ArgModWeapon.Mod2Icon "$ARG_MOD_ICON_SHOTGUN_2";
+		ArgModWeapon.Mod2Pic "$ARG_MOD_PIC_SHOTGUN_2"; 
 		ArgModWeapon.Mod2AmmoUse 2;
 		ArgModWeapon.Mod2Cooldown 90, 0;
 	}

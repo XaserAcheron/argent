@@ -16,9 +16,17 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		Inventory.PickupMessage "$ARG_GOT_PLASMA";
 		Tag "$ARG_TAG_PLASMA";
 
+		ArgModWeapon.Mod1Tag "$ARG_MOD_TAG_PLASMA_1";
+		ArgModWeapon.Mod1Description "$ARG_MOD_DESC_PLASMA_1";
+		ArgModWeapon.Mod1Icon "$ARG_MOD_ICON_PLASMA_1";
+		ArgModWeapon.Mod1Pic "$ARG_MOD_PIC_PLASMA_1"; 
 		ArgModWeapon.Mod1AmmoUse 0; // pointless, but may as well be explicit. shit.
-		ArgModWeapon.Mod2Charge 120, 0;
+		ArgModWeapon.Mod1Charge 120, 0;
 
+		ArgModWeapon.Mod2Tag "$ARG_MOD_TAG_PLASMA_2";
+		ArgModWeapon.Mod2Description "$ARG_MOD_DESC_PLASMA_2";
+		ArgModWeapon.Mod2Icon "$ARG_MOD_ICON_PLASMA_2";
+		ArgModWeapon.Mod2Pic "$ARG_MOD_PIC_PLASMA_2"; 
 		ArgModWeapon.Mod2AmmoUse 2;
 		ArgModWeapon.Mod2Cooldown 200, 0;
 	}
