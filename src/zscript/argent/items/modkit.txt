@@ -6,6 +6,8 @@
 
 class ArgModKit : CustomInventory replaces Backpack
 {
+	bool active;
+
 	Default
 	{
 		Scale 0.66;
@@ -24,8 +26,47 @@ class ArgModKit : CustomInventory replaces Backpack
 		MODK A 30;
 		Loop;
 	Use:
-		TNT1 A 0 ACS_NamedExecuteAlways("UseModKit");
-		Fail; // remove the actor via ACS, not here. :P
+		TNT1 A 0 Arg_A_UseModKit();
+		Stop;
+	}
+	
+	/*
+	 * Mod Kit Interface of Awesome.
+	 */
+	action bool Arg_A_UseModKit()
+	{
+		// First, check if we already have all mods. If so, trade the kit for
+		// a backpack and return.
+		// [TODO] replace ArgModTotal with a player variable
+		// [TODO] remove this shortcut entirely when Equipment arrives.
+		if(self.CountInv("ArgModTotal") == 12) {
+			A_GiveInventory("Backpack", 1);
+			A_TakeInventory("ArgModKit", 1);
+			A_PlaySound("items/modkit/pickup", CHAN_AUTO);
+			return true; // remove the item.
+
+		} else if (invoker.active) {
+			// kit already active. Deactivate it.
+			invoker.active = false;
+
+		} else {
+			// kit not yet active. Activate it.
+			invoker.active = true;
+		}
+		return false; // do not remove if just activating/deactivating the kit.
+	}
+	
+	/*
+	 * SPOOOOOON!
+	 */
+	override void Tick()
+	{
+		Super.Tick();
+		let player = ArgPlayer(self.owner);
+
+		// allow players to dismiss the mod kit menu by pressing 'use'
+		if(self.active && player && (player.GetPlayerInput(INPUT_BUTTONS) & BT_USE)) {
+			self.active = false;
+		}
 	}
 }
-class ArgModKitToken : ArgToken {} // Used to check if the mod menu is open.

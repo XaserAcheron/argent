@@ -435,10 +435,12 @@ class ArgModWeapon : ArgWeapon
 	 */
 	action bool Arg_A_InstallMod(int modToInstall) {
 
-		if(CountInv("ArgModKitToken") > 0 && !invoker.mod[modToInstall].enabled) {
+		let modkit = ArgModKit(self.FindInventory("ArgModKit"));
+		if(modkit && modkit.active && !invoker.mod[modToInstall].enabled) {
 
 			// dismiss the Mod Kit interface (and remove the kit, "consuming" it).
-			A_TakeInventory("ArgModKitToken");
+			// [TODO] move some of this to the mod kit itself.
+			modkit.active = false;
 			A_TakeInventory("ArgModKit", 1);
 			A_PlaySound("items/modkit/apply", CHAN_AUTO);
 		

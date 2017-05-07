@@ -9,8 +9,10 @@ class ArgStatusBar : DoomStatusBar
 	HUDFont ArgLargeFont;
 	HUDFont ArgSmallFont;
 
-	const ARG_HUD_WIDTH   = 480;
-	const ARG_HUD_HEIGHT  = 360;
+	const ARG_HUD_WIDTH    = 480;
+	const ARG_HUD_HEIGHT   = 360;
+	const ARG_MODUI_WIDTH  = 640;
+	const ARG_MODUI_HEIGHT = 480;
 
 	/*
 	 * Init Fonts n' stuff.
@@ -50,6 +52,14 @@ class ArgStatusBar : DoomStatusBar
 			Super.Draw(HUD_None, TicFrac); // handles crosshair n' whatnot.
 			self.BeginHUD(1.0, false, ARG_HUD_WIDTH, ARG_HUD_HEIGHT);
 			self.DrawArgentHUD();
+		}
+		
+		// Draw the mod kit UI if we're currently using the item.
+		// [TODO] replace inventory check with a uservar check
+		let modkit = ArgModKit(CPlayer.mo.FindInventory("ArgModKit"));
+		if(modkit && modkit.active) {
+			self.BeginHUD(1.0, false, ARG_MODUI_WIDTH, ARG_MODUI_HEIGHT);
+			self.DrawArgentModUI();
 		}
 	}
 
@@ -122,5 +132,13 @@ class ArgStatusBar : DoomStatusBar
 				keypos.X += size.X + 2;
 			}
 		}
+	}
+
+	/*
+	 * ARGENT Mod-Kit Interface
+	 */
+	protected void DrawArgentModUI() {
+		// [TODO] this for real
+		DrawImage("graphics/hud/base-right.png" ,(  24, -62), DI_ITEM_OFFSETS);
 	}
 }
