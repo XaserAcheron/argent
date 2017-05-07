@@ -37,9 +37,9 @@ class ArgModKit : CustomInventory replaces Backpack
 	{
 		// First, check if we already have all mods. If so, trade the kit for
 		// a backpack and return.
-		// [TODO] replace ArgModTotal with a player variable
 		// [TODO] remove this shortcut entirely when Equipment arrives.
-		if(self.CountInv("ArgModTotal") == 12) {
+		let player = ArgPlayer(self);
+		if(player && player.modTotal >= player.MOD_MAX) {
 			A_GiveInventory("Backpack", 1);
 			A_TakeInventory("ArgModKit", 1);
 			A_PlaySound("items/modkit/pickup", CHAN_AUTO);

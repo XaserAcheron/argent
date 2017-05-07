@@ -35,11 +35,7 @@ class ArgWeapon : DoomWeapon
 		TNT1 A 1 A_WeaponReady;
 		Loop;
 	Select:
-		"####" "#" 0 {
-			// [XA] remove this once the ACS menu is ousted
-			A_TakeInventory("ArgMod1Enabled");
-			A_TakeInventory("ArgMod2Enabled");
-		}
+		"####" "#" 0;
 	SelectLoop:
 		"####" "#" 1 Arg_A_Raise();
 		Loop;
@@ -255,10 +251,7 @@ class ArgModWeapon : ArgWeapon
 	/* Select Mod-Jump */
 	
 	Select:
-		"####" "#" 0 {
-			Arg_A_RefreshModTokens();
-			return Arg_A_JumpMod("Mod1Select", "Mod2Select", "Mod0Select");
-		}
+		"####" "#" 0 Arg_A_JumpMod("Mod1Select", "Mod2Select", "Mod0Select");
 	Mod0Select:
 	Mod1Select:
 	Mod2Select:
@@ -401,17 +394,6 @@ class ArgModWeapon : ArgWeapon
 	}
 	
 	/*
-	 * [XA] legacy function for ACS bridge support. Will go away once possible.
-	 */
-	action void Arg_A_RefreshModTokens()
-	{
-		A_TakeInventory("ArgMod1Enabled");
-		A_TakeInventory("ArgMod2Enabled");
-		if(invoker.mod[1].enabled) { A_GiveInventory("ArgMod1Enabled", 1); }
-		if(invoker.mod[2].enabled) { A_GiveInventory("ArgMod2Enabled", 1); }
-	}
-	
-	/*
 	 * Jump to one of two states depending on which mod is selected.
 	 * If no mods are selected, no state jump occurs.
 	 */
@@ -449,9 +431,11 @@ class ArgModWeapon : ArgWeapon
 			invoker.mod[modToInstall].enabled = true;
 			invoker.modSelected = modToInstall;
 			
-			// [XA] remove this legacy stuff once possible.
-			A_GiveInventory("ArgModTotal", 1);
-			Arg_A_RefreshModTokens();
+			// increase the total mod count
+			let player = ArgPlayer(self);
+			if(player) {
+				player.modTotal++;
+			}
 
 			return true;
 
@@ -508,12 +492,3 @@ class ArgModWeapon : ArgWeapon
 		}
 	}
 }
-
-/*
- * [XA] These tokens exist as a bridge to ACS, since the mod kit menu
- *      is still being done there. This ought to go away once some
- *      hudmessage equivalent exists in ZScript.
- */
-class ArgModTotal    : ArgToken { Default { Inventory.MaxAmount 12; } }
-class ArgMod1Enabled : ArgToken {}
-class ArgMod2Enabled : ArgToken {}
