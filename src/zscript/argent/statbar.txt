@@ -53,20 +53,20 @@ class ArgStatusBar : DoomStatusBar
 		// ARGENT "Modern" HUD.
 		} else if (state == HUD_Fullscreen) {
 			Super.Draw(HUD_None, TicFrac); // handles crosshair n' whatnot.
-			self.DrawArgentHUD();
+			self.DrawArgentHUD(state, ticFrac);
 		}
 		
 		// Draw the mod kit UI if we're currently using the item.
 		let modkit = ArgModKit(CPlayer.mo.FindInventory("ArgModKit"));
 		if(modkit && modkit.active) {
-			self.DrawArgentModUI();
+			self.DrawArgentModUI(state, ticFrac);
 		}
 	}
 
 	/*
 	 * ARGENT "Modern" HUD.
 	 */
-	protected void DrawArgentHUD() {
+	protected void DrawArgentHUD(int state, double TicFrac) {
 		self.BeginHUD(1.0, false, ARG_HUD_WIDTH, ARG_HUD_HEIGHT);
 
 		DrawImage("graphics/hud/base-left.png" ,(  24, -62), DI_ITEM_OFFSETS);
@@ -138,7 +138,7 @@ class ArgStatusBar : DoomStatusBar
 	/*
 	 * ARGENT Mod-Kit Interface
 	 */
-	protected void DrawArgentModUI() {
+	protected void DrawArgentModUI(int state, double ticFrac) {
 		self.BeginHUD(1.0, true, ARG_MODUI_WIDTH, ARG_MODUI_HEIGHT);
 
 		// set virtual offsets
@@ -192,7 +192,12 @@ class ArgStatusBar : DoomStatusBar
 		DrawString(self.ArgTextFont, inst, (x + 160, 400), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED);
 	}
 	protected void DrawArgentModFooter(string text1, string text2, int time) {
-		// [TODO] this
+		// [TODO] support timed messages
+
+		// australian rules footy box
+		DrawImage("graphics/hud/mod-footer.png" ,(320, 434), DI_ITEM_HCENTER|DI_ITEM_VOFFSET);
+		DrawString(self.ArgTextFont, text1, (320, 440), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER);
+		DrawString(self.ArgTextFont, text2, (320, 456), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED);
 	}
 
 	/*
