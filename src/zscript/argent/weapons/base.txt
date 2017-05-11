@@ -384,10 +384,18 @@ class ArgModWeapon : ArgWeapon
 		mod[1].ammoUse        = init_mod1_ammoUse;
 		mod[1].cooldown.init(0, init_mod1_cooldown, max(init_mod1_cooldown_over, init_mod1_cooldown));
 		mod[1].charge.init  (0, init_mod1_charge  , max(init_mod1_charge_over  , init_mod1_charge  ));
+		mod[1].tag            = StringTable.Localize(init_mod1_tag);
+		mod[1].description    = StringTable.Localize(init_mod1_description);
+		mod[1].icon           = StringTable.Localize(init_mod1_icon);
+		mod[1].pic            = StringTable.Localize(init_mod1_pic);
 
 		mod[2].ammoUse        = init_mod2_ammoUse;
 		mod[2].cooldown.init(0, init_mod2_cooldown, max(init_mod2_cooldown_over, init_mod2_cooldown));
 		mod[2].charge.init  (0, init_mod2_charge  , max(init_mod2_charge_over  , init_mod2_charge  ));
+		mod[2].tag            = StringTable.Localize(init_mod2_tag);
+		mod[2].description    = StringTable.Localize(init_mod2_description);
+		mod[2].icon           = StringTable.Localize(init_mod2_icon);
+		mod[2].pic            = StringTable.Localize(init_mod2_pic);
 		
 		// Set MinSelAmmo1 to 1 for all mod weapons to thwart +AMMO_OPTIONAL;
 		// this is a special value that tells BestWeapon (the "switch to
