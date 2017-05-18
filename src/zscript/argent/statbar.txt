@@ -59,7 +59,7 @@ class ArgStatusBar : DoomStatusBar
 			Super.Draw(HUD_None, TicFrac); // handles crosshair n' whatnot.
 			self.DrawArgentHUD(state, ticFrac);
 		}
-		
+
 		// Draw the mod kit UI if we're currently using the item.
 		let modkit = ArgModKit(CPlayer.mo.FindInventory("ArgModKit"));
 		if(modkit && modkit.active) {
@@ -94,7 +94,7 @@ class ArgStatusBar : DoomStatusBar
 		DrawString(self.ArgSmallFont, FormatNumber(armor, 3), (64, -55), DI_TEXT_ALIGN_RIGHT);
 		DrawBar("graphics/hud/bar-armor-1.png", "graphics/hud/bar-armor-1x.png", armor, 100, (79, -55), 0, SHADER_HORZ, DI_ITEM_OFFSETS);
 		DrawBar("graphics/hud/bar-armor-2.png", "graphics/hud/bar-armor-2x.png", armor, 200, ( 0, -55), 0, SHADER_HORZ, DI_ITEM_OFFSETS);
-		
+
 		// ammo
 		let ammo = Ammo(GetCurrentAmmo());
 		if(ammo) {
@@ -108,22 +108,22 @@ class ArgStatusBar : DoomStatusBar
 				DrawBar("graphics/hud/bar-ammo-1.png", "graphics/hud/bar-ammo-1x.png", ammo.Amount, ammo.MaxAmount, (-162, -41), 0, SHADER_HORZ | SHADER_REVERSE, DI_ITEM_OFFSETS);
 			}
 		}
-		
+
 		// ammo icons -- [TODO] replace this legacy jank-hack with a real thing.
 		if(Clip         (GetCurrentAmmo())) { DrawImage("graphics/hud/icon-bullets.png", (-162, -57), DI_ITEM_OFFSETS); }
 		if(Shell        (GetCurrentAmmo())) { DrawImage("graphics/hud/icon-shells.png" , (-162, -57), DI_ITEM_OFFSETS); }
 		if(ArgRocketAmmo(GetCurrentAmmo())) { DrawImage("graphics/hud/icon-rockets.png", (-162, -57), DI_ITEM_OFFSETS); }
 		if(Cell         (GetCurrentAmmo())) { DrawImage("graphics/hud/icon-cells.png"  , (-162, -57), DI_ITEM_OFFSETS); }
 		if(ArgBFGAmmo   (GetCurrentAmmo())) { DrawImage("graphics/hud/icon-bfgammo.png", (-162, -57), DI_ITEM_OFFSETS); }
-		
+
 		// [TODO] mod icons at some point -- these will sit next to the ammo icons.
-		
+
 		// weapon icon
 		let weapon = ArgWeapon(CPlayer.ReadyWeapon);
 		if(weapon) {
 			DrawInventoryIcon(weapon, (-95, -59), DI_ITEM_OFFSETS);
 		}
-		
+
 		// equipment
 		// [TODO] the rest of this; since right now we just have the mod kit,
 		//        we don't have to worry about the full inventory bar just yet.
