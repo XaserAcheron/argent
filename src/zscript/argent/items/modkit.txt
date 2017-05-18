@@ -29,7 +29,7 @@ class ArgModKit : CustomInventory replaces Backpack
 		TNT1 A 0 Arg_A_UseModKit();
 		Stop;
 	}
-	
+
 	/*
 	 * Mod Kit Interface of Awesome.
 	 */
@@ -47,15 +47,17 @@ class ArgModKit : CustomInventory replaces Backpack
 
 		} else if (invoker.active) {
 			// kit already active. Deactivate it.
+			A_PlaySound("items/modkit/dismiss", CHAN_AUTO);
 			invoker.active = false;
 
 		} else {
 			// kit not yet active. Activate it.
+			A_PlaySound("items/modkit/use", CHAN_AUTO);
 			invoker.active = true;
 		}
 		return false; // do not remove if just activating/deactivating the kit.
 	}
-	
+
 	/*
 	 * SPOOOOOON!
 	 */
@@ -66,6 +68,7 @@ class ArgModKit : CustomInventory replaces Backpack
 
 		// allow players to dismiss the mod kit menu by pressing 'use'
 		if(self.active && player && (player.GetPlayerInput(INPUT_BUTTONS) & BT_USE)) {
+			player.A_PlaySound("items/modkit/dismiss", CHAN_AUTO);
 			self.active = false;
 		}
 	}
