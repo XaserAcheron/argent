@@ -10,10 +10,14 @@ class ArgStatusBar : DoomStatusBar
 	HUDFont ArgSmallFont;
 	HUDFont ArgTextFont;
 
-	const ARG_HUD_WIDTH    = 480;
-	const ARG_HUD_HEIGHT   = 360;
-	const ARG_MODUI_WIDTH  = 640;
-	const ARG_MODUI_HEIGHT = 480;
+	const ARG_HUD_WIDTH      = 480;
+	const ARG_HUD_HEIGHT     = 360;
+	const ARG_MODUI_WIDTH    = 640;
+	const ARG_MODUI_HEIGHT   = 480;
+	const ARG_MODUI_HOLDTICS = 105; // used only for the backpack message.
+	const ARG_MODUI_FADETICS =   7;
+
+	int modtic; // show modscreen menu until gametic == modtic. for fadeouts, etc.
 
 	/*
 	 * Init Fonts n' stuff.
@@ -59,6 +63,11 @@ class ArgStatusBar : DoomStatusBar
 		// Draw the mod kit UI if we're currently using the item.
 		let modkit = ArgModKit(CPlayer.mo.FindInventory("ArgModKit"));
 		if(modkit && modkit.active) {
+			// extend the mod UI's lifespan a bit
+			self.modtic = gametic + ARG_MODUI_FADETICS;
+		}
+		if(gametic <= self.modtic) {
+			// show the mod UI if it's alive
 			self.DrawArgentModUI(state, ticFrac);
 		}
 	}
@@ -150,26 +159,29 @@ class ArgStatusBar : DoomStatusBar
 		Vector2 oldDrawOffset = self.drawOffset;
 		self.drawOffset = ((vwidth-ARG_MODUI_WIDTH)/2, (vheight-ARG_MODUI_HEIGHT)/2);
 
+		// determine translucency by lerping modtic-gametic (for fadeout effect)
+		double modAlpha = clamp(0.0, (self.modtic - gametic - TicFrac + 1) / double(ARG_MODUI_FADETICS), 1.0);
+
 		// figure out if we've got a moddable weapon
 		let modWeapon = ArgModWeapon(CPlayer.ReadyWeapon);
 		if(modWeapon) {
 			// draw mod panels, allowing for selection and stuff.
 			// [TODO] make the mods classes so this can be referenced better
-			self.DrawArgentModPanel(  0, modWeapon.mod[1].tag, modWeapon.mod[1].description, modWeapon.mod[1].pic, "+attack"   , modWeapon.mod[1].enabled);
-			self.DrawArgentModPanel(320, modWeapon.mod[2].tag, modWeapon.mod[2].description, modWeapon.mod[2].pic, "+altattack", modWeapon.mod[2].enabled);
+			self.DrawArgentModPanel(  0, modWeapon.mod[1].tag, modWeapon.mod[1].description, modWeapon.mod[1].pic, "+attack"   , modWeapon.mod[1].enabled, modAlpha);
+			self.DrawArgentModPanel(320, modWeapon.mod[2].tag, modWeapon.mod[2].description, modWeapon.mod[2].pic, "+altattack", modWeapon.mod[2].enabled, modAlpha);
 
 		} else {
 			// weapon isn't moddable; display this onscreen.
-			self.DrawArgentModPanel(160, "No Mods Available", "No mods available for this weapon.", "graphics/hud/mod-pic-nope.png", "", false);
+			self.DrawArgentModPanel(160, "No Mods Available", "No mods available for this weapon.", "graphics/hud/mod-pic-nope.png", "", false, modAlpha);
 		}
 		
 		// Draw footer with instructions n' such.
-		self.DrawArgentModFooter("Switch weapons to browse mods.", "Press '" .. self.GetKeyName("+use") .. "' to exit.", 0);
+		self.DrawArgentModFooter("Switch weapons to browse mods.", "Press '" .. self.GetKeyName("+use") .. "' to exit.", modAlpha);
 		
 		// clear virtual offset
 		self.drawOffset = oldDrawOffset;
 	}
-	protected void DrawArgentModPanel(int x, string tag, string desc, string pic, string key, bool modEnabled) {
+	protected void DrawArgentModPanel(int x, string tag, string desc, string pic, string key, bool modEnabled, double modAlpha) {
 		// determine text color & installation instructions
 		string inst = "";
 		int textColor = Font.CR_UNTRANSLATED;
@@ -183,21 +195,21 @@ class ArgStatusBar : DoomStatusBar
 		}
 
 		// draw background n' icon
-		DrawImage("graphics/hud/mod-base.png" ,(x, 0), DI_ITEM_OFFSETS);
-		DrawImage(pic,(x + 160, 180), DI_ITEM_CENTER, picAlpha);
+		DrawImage("graphics/hud/mod-base.png" ,(x, 0), DI_ITEM_OFFSETS, modAlpha);
+		DrawImage(pic,(x + 160, 180), DI_ITEM_CENTER, picAlpha * modAlpha);
 		
 		// draw some strings, because we support that theory i guess
-		DrawString(self.ArgTextFont, tag , (x + 160,  30), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor);
-		DrawString(self.ArgTextFont, desc, (x + 160, 310), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor, 1.0, 320);
-		DrawString(self.ArgTextFont, inst, (x + 160, 400), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED);
+		DrawString(self.ArgTextFont, tag , (x + 160,  30), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor  , modAlpha);
+		DrawString(self.ArgTextFont, desc, (x + 160, 310), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor  , modAlpha, 320);
+		DrawString(self.ArgTextFont, inst, (x + 160, 400), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED, modAlpha);
 	}
-	protected void DrawArgentModFooter(string text1, string text2, int time) {
+	protected void DrawArgentModFooter(string text1, string text2, double modAlpha) {
 		// [TODO] support timed messages
 
 		// australian rules footy box
-		DrawImage("graphics/hud/mod-footer.png" ,(320, 434), DI_ITEM_HCENTER|DI_ITEM_VOFFSET);
-		DrawString(self.ArgTextFont, text1, (320, 440), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER);
-		DrawString(self.ArgTextFont, text2, (320, 456), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED);
+		DrawImage("graphics/hud/mod-footer.png" ,(320, 434), DI_ITEM_HCENTER|DI_ITEM_VOFFSET, modAlpha);
+		DrawString(self.ArgTextFont, text1, (320, 440), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_UNTRANSLATED, modAlpha);
+		DrawString(self.ArgTextFont, text2, (320, 456), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED         , modAlpha);
 	}
 
 	/*
