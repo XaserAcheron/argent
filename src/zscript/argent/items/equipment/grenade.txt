@@ -20,18 +20,19 @@ class ArgFragGrenade : Actor
 {
 	int fuse;
 
-	const FUSE_TICS   = 60;
-	const SOUND_TICS  = 25;
+	const FUSE_TICS   = 45;
+	const SOUND_TICS  = 10;
 	const SPEED_LIMIT = 3.0;
 
 	Default
 	{
 		Projectile;
 		Damage 0;
-		Speed 30;
+		Speed 40;
 		Radius 9;
 		Scale 0.66;
-		BounceFactor 0.5;
+		BounceFactor 0.33;
+		WallBounceFactor 0.33;
 		BounceSound "items/equipment/grenade/bounce";
 
 		-NOGRAVITY
