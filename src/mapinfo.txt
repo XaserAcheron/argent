@@ -3,6 +3,7 @@ gameinfo
 	playerclasses = "ArgPlayer"
 	norandomplayerclass = true
 	statusbarclass = "ArgStatusBar"
+	addeventhandlers = "ArgEventHandler"
 	intermissionmusic = "music/inter.mid"
 	titlemusic = "music/title.mid"
 	finalemusic = "music/finale.mid"

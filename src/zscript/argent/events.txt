@@ -1,0 +1,27 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Event Handlers
+//
+// --------------------------------------------------------------------------
+
+class ArgEventHandler : StaticEventHandler
+{
+	override void PlayerEntered(PlayerEvent e)
+	{
+		let player = ArgPlayer(players[e.PlayerNumber].mo);
+		if(player) {
+			// always reset the player's speed back to normal on map start.
+			// this way you don't get stuck 
+			// [TODO] maybe make this a bit smarter and don't assume
+			//        the player's speed is always 1.0, just in case another mod
+			//        decides to change it or whatnot.
+			player.speed = 1.0;
+
+			// dismiss any active modkit menus
+			let modkit = ArgModKit(player.FindInventory('ArgModKit'));
+			if(modkit) {
+				modkit.active = false;
+			}
+		}
+	}
+}

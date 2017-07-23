@@ -204,8 +204,6 @@ class ArgStatusBar : DoomStatusBar
 		DrawString(self.ArgTextFont, inst, (x + 160, 400), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED, modAlpha);
 	}
 	protected void DrawArgentModFooter(string text1, string text2, double modAlpha) {
-		// [TODO] support timed messages
-
 		// australian rules footy box
 		DrawImage("graphics/hud/mod-footer.png" ,(320, 434), DI_ITEM_HCENTER|DI_ITEM_VOFFSET, modAlpha);
 		DrawString(self.ArgTextFont, text1, (320, 440), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_UNTRANSLATED, modAlpha);
