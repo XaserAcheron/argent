@@ -259,7 +259,7 @@ enum Arg_WeaponState // technically a copypasta of some internal non-exposed enu
 /*
  * Class for static common functions.
  */
-class ArgCommon
+class ArgCommon play
 {
 	/*
 	 * Convenience function; jumps to XDeath if the Always Gib cvar is set.

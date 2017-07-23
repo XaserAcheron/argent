@@ -50,48 +50,64 @@ ARG_GOT_QUAD    = "Quad Damage!";
 ARG_GOT_REGEN   = "Regeneration!";
 ARG_GOT_INVULN  = "Invulnerability! Holy shit!";
 ARG_GOT_MOD_KIT = "Weapon Mod Kit!";
-
 ARG_GOT_BFGCELL = "Picked up a bfg cell.";
 
-// [XA] Pretty hacky way of doing mod data, for now; it's based on the weapon
-//      actor name. Gonna revisit this in the inevitable ZScript conversion.
-//      Having proper properties (heh) for this in an actor would be great.
+ARG_MOD_TAG_SHOTGUN_1   = "Charged Burst";
+ARG_MOD_DESC_SHOTGUN_1  = "Argent-powered compression reloader.\n\nFires a volley of three shells in\nquick succession, with tighter\nspread than a standard shot.";
+ARG_MOD_ICON_SHOTGUN_1  = "graphics/hud/weapon-shotgun.png";
+ARG_MOD_PIC_SHOTGUN_1   = "graphics/hud/weapon-shotgun.png";
 
-ARG_MOD_TAG_Shotgun1        = "Charged Burst";
-ARG_MOD_TAG_Shotgun2        = "Explosive Shot";
-ARG_MOD_TAG_HeavyAR1        = "Micro Missiles";
-ARG_MOD_TAG_HeavyAR2        = "Tactical Scope";
-ARG_MOD_TAG_Chaingun1       = "Gatling Rotator";
-ARG_MOD_TAG_Chaingun2       = "Mobile Turret";
-ARG_MOD_TAG_RocketLauncher1 = "Remote Detonator";
-ARG_MOD_TAG_RocketLauncher2 = "Lock-on Burst";
-ARG_MOD_TAG_PlasmaRifle1    = "Heat Blast";
-ARG_MOD_TAG_PlasmaRifle2    = "Stun Bomb";
-ARG_MOD_TAG_GaussCannon1    = "Precision Bolt";
-ARG_MOD_TAG_GaussCannon2    = "Siege Mode";
+ARG_MOD_TAG_SHOTGUN_2   = "Explosive Shot";
+ARG_MOD_DESC_SHOTGUN_2  = "Experimental octanitrocubane ammunition.\n\nFires an arcing explosive round with\na wide area of effect. Highly effective\nagainst multiple targets.";
+ARG_MOD_ICON_SHOTGUN_2  = "graphics/hud/weapon-shotgun.png";
+ARG_MOD_PIC_SHOTGUN_2   = "graphics/hud/weapon-shotgun.png";
 
-ARG_MOD_DESC_Shotgun1        = "Argent-powered compression reloader.\n\nFires a volley of three shells in\nquick succession, with tighter\nspread than a standard shot.";
-ARG_MOD_DESC_Shotgun2        = "Experimental octanitrocubane ammunition.\n\nFires an arcing explosive round with\na wide area of effect. Highly effective\nagainst multiple targets.";
-ARG_MOD_DESC_HeavyAR1        = "Side-mounted missile rack.\n\nFires a volley of six HMX missiles \nwhich stick to targets and explode\n after a short delay for heavy damage.";
-ARG_MOD_DESC_HeavyAR2        = "High-precision telescopic sight.\n\nEngaging the scope increases\naccuracy and muzzle velocity,\nincreasing damage per shot.";
-ARG_MOD_DESC_Chaingun1       = "Firing crucible release override.\n\nSpins up the chaingun barrels\nprior to firing, allowing for\nrapid threat response.";
-ARG_MOD_DESC_Chaingun2       = "Dual compression piston chamber.\n\nTransforms the weapon into a\ntri-barreled bullet hose, at the\ncost of reduced mobility.";
-ARG_MOD_DESC_RocketLauncher1 = "Wireless fuse ignition system.\n\nDetonates rockets mid-flight.\nUse with caution, as no safety interlocks\nare present to prevent self-injury.";
-ARG_MOD_DESC_RocketLauncher2 = "Laser guidance system.\n\nLocks on to a target. Firing while\nlocked unleashes a salvo of three\nrockets which home in on the target.";
-ARG_MOD_DESC_PlasmaRifle1    = "Muzzle-mounted thermal crucible. \n\nAccumulates heat energy while\nfiring, which can be unleashed in\na devastating close-range blast.";
-ARG_MOD_DESC_PlasmaRifle2    = "Electromagnetic field generator.\n\nFires an unstable projectile which\nwill stun-lock targets within its\nimpact radius for several seconds.";
-ARG_MOD_DESC_GaussCannon1    = "Tactical engagement package.\n\nThis long-range scope is equipped with\na focus module which builds charge,\nincreasing damage potential while aiming.";
-ARG_MOD_DESC_GaussCannon2    = "Argon gas ionizer.\n\nAdds a devastating beam effect to fired\nprojectiles, piercing targets. Operator\nmust remain stationary while charging.";
+ARG_MOD_TAG_HEAVY_1     = "Micro Missiles";
+ARG_MOD_DESC_HEAVY_1    = "Side-mounted missile rack.\n\nFires a volley of six HMX missiles \nwhich stick to targets and explode\n after a short delay for heavy damage.";
+ARG_MOD_ICON_HEAVY_1    = "graphics/hud/weapon-heavy.png";
+ARG_MOD_PIC_HEAVY_1     = "graphics/hud/weapon-heavy.png";
 
-ARG_MOD_ICON_Shotgun1        = "graphics/hud/weapon-shotgun.png";
-ARG_MOD_ICON_Shotgun2        = "graphics/hud/weapon-shotgun.png";
-ARG_MOD_ICON_HeavyAR1        = "graphics/hud/weapon-heavy.png";
-ARG_MOD_ICON_HeavyAR2        = "graphics/hud/weapon-heavy.png";
-ARG_MOD_ICON_Chaingun1       = "graphics/hud/weapon-chaingun.png";
-ARG_MOD_ICON_Chaingun2       = "graphics/hud/weapon-chaingun.png";
-ARG_MOD_ICON_RocketLauncher1 = "graphics/hud/weapon-rocket.png";
-ARG_MOD_ICON_RocketLauncher2 = "graphics/hud/weapon-rocket.png";
-ARG_MOD_ICON_PlasmaRifle1    = "graphics/hud/weapon-plasma.png";
-ARG_MOD_ICON_PlasmaRifle2    = "graphics/hud/weapon-plasma.png";
-ARG_MOD_ICON_GaussCannon1    = "graphics/hud/weapon-gauss.png";
-ARG_MOD_ICON_GaussCannon2    = "graphics/hud/weapon-gauss.png";
+ARG_MOD_TAG_HEAVY_2     = "Tactical Scope";
+ARG_MOD_DESC_HEAVY_2    = "High-precision telescopic sight.\n\nEngaging the scope increases\naccuracy and muzzle velocity,\nincreasing damage per shot.";
+ARG_MOD_ICON_HEAVY_2    = "graphics/hud/weapon-heavy.png";
+ARG_MOD_PIC_HEAVY_2     = "graphics/hud/weapon-heavy.png";
+
+ARG_MOD_TAG_CHAINGUN_1  = "Gatling Rotator";
+ARG_MOD_DESC_CHAINGUN_1 = "Firing crucible release override.\n\nSpins up the chaingun barrels\nprior to firing, allowing for\nrapid threat response.";
+ARG_MOD_ICON_CHAINGUN_1 = "graphics/hud/weapon-chaingun.png";
+ARG_MOD_PIC_CHAINGUN_1  = "graphics/hud/weapon-chaingun.png";
+
+ARG_MOD_TAG_CHAINGUN_2  = "Mobile Turret";
+ARG_MOD_DESC_CHAINGUN_2 = "Dual compression piston chamber.\n\nTransforms the weapon into a\ntri-barreled bullet hose, at the\ncost of reduced mobility.";
+ARG_MOD_ICON_CHAINGUN_2 = "graphics/hud/weapon-chaingun.png";
+ARG_MOD_PIC_CHAINGUN_2  = "graphics/hud/weapon-chaingun.png";
+
+ARG_MOD_TAG_ROCKET_1    = "Remote Detonator";
+ARG_MOD_DESC_ROCKET_1   = "Wireless fuse ignition system.\n\nDetonates rockets mid-flight.\nUse with caution, as no safety interlocks\nare present to prevent self-injury.";
+ARG_MOD_ICON_ROCKET_1   = "graphics/hud/weapon-rocket.png";
+ARG_MOD_PIC_ROCKET_1    = "graphics/hud/weapon-rocket.png";
+
+ARG_MOD_TAG_ROCKET_2    = "Lock-on Burst";
+ARG_MOD_DESC_ROCKET_2   = "Laser guidance system.\n\nLocks on to a target. Firing while\nlocked unleashes a salvo of three\nrockets which home in on the target.";
+ARG_MOD_ICON_ROCKET_2   = "graphics/hud/weapon-rocket.png";
+ARG_MOD_PIC_ROCKET_2    = "graphics/hud/weapon-rocket.png";
+
+ARG_MOD_TAG_PLASMA_1    = "Heat Blast";
+ARG_MOD_DESC_PLASMA_1   = "Muzzle-mounted thermal crucible. \n\nAccumulates heat energy while\nfiring, which can be unleashed in\na devastating close-range blast.";
+ARG_MOD_ICON_PLASMA_1   = "graphics/hud/weapon-plasma.png";
+ARG_MOD_PIC_PLASMA_1   = "graphics/hud/weapon-plasma.png";
+
+ARG_MOD_TAG_PLASMA_2    = "Stun Bomb";
+ARG_MOD_DESC_PLASMA_2   = "Electromagnetic field generator.\n\nFires an unstable projectile which\nwill stun-lock targets within its\nimpact radius for several seconds.";
+ARG_MOD_ICON_PLASMA_2   = "graphics/hud/weapon-plasma.png";
+ARG_MOD_PIC_PLASMA_2    = "graphics/hud/weapon-plasma.png";
+
+ARG_MOD_TAG_GAUSS_1     = "Precision Bolt";
+ARG_MOD_DESC_GAUSS_1    = "Tactical engagement package.\n\nThis long-range scope is equipped with\na focus module which builds charge,\nincreasing damage potential while aiming.";
+ARG_MOD_ICON_GAUSS_1    = "graphics/hud/weapon-gauss.png";
+ARG_MOD_PIC_GAUSS_1     = "graphics/hud/weapon-gauss.png";
+
+ARG_MOD_TAG_GAUSS_2     = "Siege Mode";
+ARG_MOD_DESC_GAUSS_2    = "Argon gas ionizer.\n\nAdds a devastating beam effect to fired\nprojectiles, piercing targets. Operator\nmust remain stationary while charging.";
+ARG_MOD_ICON_GAUSS_2    = "graphics/hud/weapon-gauss.png";
+ARG_MOD_PIC_GAUSS_2     = "graphics/hud/weapon-gauss.png";

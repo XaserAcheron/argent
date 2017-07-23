@@ -12,17 +12,6 @@ class ArgGaussCannon : ArgModWeapon
 	const GAUSS_CROSSHAIR_ANIM4 = 71;
 	const GAUSS_CROSSHAIR_IDLE  = 70;
 
-	override void BeginPlay()
-	{
-		Super.BeginPlay();
-		
-		mod[1].ammoUse = 20;
-		mod[1].charge.init(0, 30, 71);
-
-		mod[2].ammoUse = 40;
-		mod[2].charge.init(0, 62);
-	}
-
 	Default
 	{
 		Weapon.UpSound "weapons/gauss/equip";
@@ -35,6 +24,21 @@ class ArgGaussCannon : ArgModWeapon
 		Tag "$ARG_TAG_GAUSS";
 		Obituary "$ARG_OB_GAUSS";
 		Decal "Scorch"; // need to put this on the weapon since it doesn't work on rail puffs; dammit Xaser D:
+
+
+		ArgModWeapon.Mod1Tag "$ARG_MOD_TAG_GAUSS_1";
+		ArgModWeapon.Mod1Description "$ARG_MOD_DESC_GAUSS_1";
+		ArgModWeapon.Mod1Icon "$ARG_MOD_ICON_GAUSS_1";
+		ArgModWeapon.Mod1Pic "$ARG_MOD_PIC_GAUSS_1"; 
+		ArgModWeapon.Mod1AmmoUse 20;
+		ArgModWeapon.Mod1Charge 30, 71;
+
+		ArgModWeapon.Mod2Tag "$ARG_MOD_TAG_GAUSS_2";
+		ArgModWeapon.Mod2Description "$ARG_MOD_DESC_GAUSS_2";
+		ArgModWeapon.Mod2Icon "$ARG_MOD_ICON_GAUSS_2";
+		ArgModWeapon.Mod2Pic "$ARG_MOD_PIC_GAUSS_2";
+		ArgModWeapon.Mod2AmmoUse 40;
+		ArgModWeapon.Mod2Charge 62, 0;
 	}
 	States
 	{

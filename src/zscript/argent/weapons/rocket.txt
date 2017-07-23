@@ -13,16 +13,6 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 	int highRocketIndex; // highest detonate-able rocket index; this is the above minus decrementing on death.
 	Actor[MAX_ROCKETS] rockets; // list of detonate-able rockets in flight
 	Actor lockTarget; // current lock-on burst target
-
-	override void BeginPlay()
-	{
-		Super.BeginPlay();
-
-		mod[1].ammoUse = 1;
-
-		mod[2].ammoUse = 3;
-		mod[2].charge.init(0, 20);
-	}
 	
 	Default
 	{
@@ -33,6 +23,20 @@ class ArgRocketLauncher : ArgModWeapon replaces RocketLauncher
 		Inventory.Icon "graphics/hud/weapon-rocket.png";
 		Inventory.PickupMessage "$ARG_GOT_ROCKET";
 		Tag "$ARG_TAG_ROCKET";
+
+
+		ArgModWeapon.Mod1Tag "$ARG_MOD_TAG_ROCKET_1";
+		ArgModWeapon.Mod1Description "$ARG_MOD_DESC_ROCKET_1";
+		ArgModWeapon.Mod1Icon "$ARG_MOD_ICON_ROCKET_1";
+		ArgModWeapon.Mod1Pic "$ARG_MOD_PIC_ROCKET_1";
+		ArgModWeapon.Mod1AmmoUse 1;
+
+		ArgModWeapon.Mod2Tag "$ARG_MOD_TAG_ROCKET_2";
+		ArgModWeapon.Mod2Description "$ARG_MOD_DESC_ROCKET_2";
+		ArgModWeapon.Mod2Icon "$ARG_MOD_ICON_ROCKET_2";
+		ArgModWeapon.Mod2Pic "$ARG_MOD_PIC_ROCKET_2";
+		ArgModWeapon.Mod2AmmoUse 3;
+		ArgModWeapon.Mod2Charge 20, 0;
 
 		+WEAPON.NOAUTOFIRE
 	}

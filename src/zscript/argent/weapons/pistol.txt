@@ -10,6 +10,7 @@ class ArgPistol : ArgWeapon replaces Pistol
 	
 	override void BeginPlay()
 	{
+		Super.BeginPlay();
 		charge.init(0, 45, 68);
 	}
 
