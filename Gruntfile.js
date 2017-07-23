@@ -10,7 +10,6 @@ module.exports = function (grunt) {
 		dir: {
 			src: 'src',
 			dest: 'dist',
-			gdcc: 'gdcc',
 		},
 		scripts: [
 			'argent.acs'
@@ -21,18 +20,6 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 		conf: config,
 
-		shell: {
-			compile: {
-				command: config.scripts.map(function(script) {
-					return [
-						'"./<%= conf.dir.gdcc %>/gdcc-acc"',
-						'--lib-path <%= conf.dir.gdcc %>/lib',
-						'./<%= conf.dir.src %>/scripts/' + script,
-						'--output ./<%= conf.dir.src %>/acs/' + script.replace('.acs', '.o')
-					].join(' ');
-				}).join('&&')
-			}
-		},
 		compress: {
 			main: {
 				options: {
@@ -63,8 +50,7 @@ module.exports = function (grunt) {
 	});
 	
 	// task aliases
-	grunt.registerTask('build', ['shell:compile', 'compress', 'copy:main']);
-	grunt.registerTask('dist', ['shell:compile', 'compress', 'copy:main', 'copy:dist']);
-	grunt.registerTask('compile', ['shell:compile']);
+	grunt.registerTask('build', ['compress', 'copy:main']);
+	grunt.registerTask('dist', ['compress', 'copy:main', 'copy:dist']);
 	grunt.registerTask('default', ['build']);
 };
