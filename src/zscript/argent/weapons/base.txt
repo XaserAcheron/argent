@@ -35,11 +35,7 @@ class ArgWeapon : DoomWeapon
 		TNT1 A 1 A_WeaponReady;
 		Loop;
 	Select:
-		"####" "#" 0 {
-			// [XA] remove this once the ACS menu is ousted
-			A_TakeInventory("ArgMod1Enabled");
-			A_TakeInventory("ArgMod2Enabled");
-		}
+		"####" "#" 0;
 	SelectLoop:
 		"####" "#" 1 Arg_A_Raise();
 		Loop;
@@ -173,10 +169,11 @@ class ArgWeapon : DoomWeapon
  */
 struct ArgMod
 {
-	// [XA] at some point, things like mod kit menu icons and text strings
-	//      (or at least the LANGUAGE references) will be placed here.
-	//      Needs an interface betwen ACS and ZScript first, though.
 	bool enabled;
+	string tag;
+	string description;
+	string icon;
+	string pic;
 	int ammoUse;
 	ArgCounter cooldown;
 	ArgCounter charge;
@@ -187,8 +184,6 @@ struct ArgMod
  * for swapping and equipping mods (as well as handling various facets
  * of mod fires like the usual "altfire to charge, fire-to-fire" system).
  * Bit complex, but most of the guts are nicely laid out here now.
- *
- * [XA] Well, they will be once I get the ACS bits converted to zscript :P.
  */
 class ArgModWeapon : ArgWeapon
 {
@@ -198,8 +193,63 @@ class ArgModWeapon : ArgWeapon
 	int modSelected;
 	ArgMod[3] mod; // mod[0] is used as a placeholder for "no mod selected."
 
+	int    init_mod1_ammoUse; // custom property drivers
+	int    init_mod1_cooldown;
+	int    init_mod1_cooldown_over;
+	int    init_mod1_charge;
+	int    init_mod1_charge_over;
+	string init_mod1_tag;
+	string init_mod1_description;
+	string init_mod1_icon;
+	string init_mod1_pic;
+
+	int    init_mod2_ammoUse;
+	int    init_mod2_cooldown;
+	int    init_mod2_cooldown_over;
+	int    init_mod2_charge;
+	int    init_mod2_charge_over;
+	string init_mod2_tag;
+	string init_mod2_description;
+	string init_mod2_icon;
+	string init_mod2_pic;
+
+	property Mod1AmmoUse    : init_mod1_ammoUse;
+	property Mod1Cooldown   : init_mod1_cooldown, init_mod1_cooldown_over;
+	property Mod1Charge     : init_mod1_charge, init_mod1_charge_over;
+	property Mod1Tag        : init_mod1_tag;
+	property Mod1Description: init_mod1_description;
+	property Mod1Icon       : init_mod1_icon;
+	property Mod1Pic        : init_mod1_pic;
+
+	property Mod2AmmoUse    : init_mod2_ammoUse;
+	property Mod2Cooldown   : init_mod2_cooldown, init_mod2_cooldown_over;
+	property Mod2Charge     : init_mod2_charge, init_mod2_charge_over;
+	property Mod2Tag        : init_mod2_tag;
+	property Mod2Description: init_mod2_description;
+	property Mod2Icon       : init_mod2_icon;
+	property Mod2Pic        : init_mod2_pic;
+
+	/*
+	 * Actor States n' Defaults
+	 */
 	Default
 	{
+		ArgModWeapon.Mod1AmmoUse 1;
+		ArgModWeapon.Mod1Cooldown 0, 0;
+		ArgModWeapon.Mod1Charge 0, 0;
+		ArgModWeapon.Mod1Tag "Mod 1";
+		ArgModWeapon.Mod1Description "THIS SURE IS A MOD";
+		ArgModWeapon.Mod1Icon "";
+		ArgModWeapon.Mod1Pic "";
+
+		ArgModWeapon.Mod2AmmoUse 1;
+		ArgModWeapon.Mod2Cooldown 0, 0;
+		ArgModWeapon.Mod2Charge 0, 0;
+		ArgModWeapon.Mod2Tag "Mod 1";
+		ArgModWeapon.Mod2Description "THIS SURE IS A MOD";
+		ArgModWeapon.Mod2Icon "";
+		ArgModWeapon.Mod2Pic "";
+
 		+WEAPON.NOALERT
 		+WEAPON.AMMO_OPTIONAL
 		+WEAPON.ALT_AMMO_OPTIONAL
@@ -224,10 +274,7 @@ class ArgModWeapon : ArgWeapon
 	/* Select Mod-Jump */
 	
 	Select:
-		"####" "#" 0 {
-			Arg_A_RefreshModTokens();
-			return Arg_A_JumpMod("Mod1Select", "Mod2Select", "Mod0Select");
-		}
+		"####" "#" 0 Arg_A_JumpMod("Mod1Select", "Mod2Select", "Mod0Select");
 	Mod0Select:
 	Mod1Select:
 	Mod2Select:
@@ -333,6 +380,23 @@ class ArgModWeapon : ArgWeapon
 	{
 		Super.BeginPlay();
 		
+		// Initialize mods from properties
+		mod[1].ammoUse        = init_mod1_ammoUse;
+		mod[1].cooldown.init(0, init_mod1_cooldown, max(init_mod1_cooldown_over, init_mod1_cooldown));
+		mod[1].charge.init  (0, init_mod1_charge  , max(init_mod1_charge_over  , init_mod1_charge  ));
+		mod[1].tag            = StringTable.Localize(init_mod1_tag);
+		mod[1].description    = StringTable.Localize(init_mod1_description);
+		mod[1].icon           = StringTable.Localize(init_mod1_icon);
+		mod[1].pic            = StringTable.Localize(init_mod1_pic);
+
+		mod[2].ammoUse        = init_mod2_ammoUse;
+		mod[2].cooldown.init(0, init_mod2_cooldown, max(init_mod2_cooldown_over, init_mod2_cooldown));
+		mod[2].charge.init  (0, init_mod2_charge  , max(init_mod2_charge_over  , init_mod2_charge  ));
+		mod[2].tag            = StringTable.Localize(init_mod2_tag);
+		mod[2].description    = StringTable.Localize(init_mod2_description);
+		mod[2].icon           = StringTable.Localize(init_mod2_icon);
+		mod[2].pic            = StringTable.Localize(init_mod2_pic);
+		
 		// Set MinSelAmmo1 to 1 for all mod weapons to thwart +AMMO_OPTIONAL;
 		// this is a special value that tells BestWeapon (the "switch to
 		// highest-priority weapon when running out of ammo" function) to
@@ -361,17 +425,6 @@ class ArgModWeapon : ArgWeapon
 	}
 	
 	/*
-	 * [XA] legacy function for ACS bridge support. Will go away once possible.
-	 */
-	action void Arg_A_RefreshModTokens()
-	{
-		A_TakeInventory("ArgMod1Enabled");
-		A_TakeInventory("ArgMod2Enabled");
-		if(invoker.mod[1].enabled) { A_GiveInventory("ArgMod1Enabled", 1); }
-		if(invoker.mod[2].enabled) { A_GiveInventory("ArgMod2Enabled", 1); }
-	}
-	
-	/*
 	 * Jump to one of two states depending on which mod is selected.
 	 * If no mods are selected, no state jump occurs.
 	 */
@@ -395,10 +448,12 @@ class ArgModWeapon : ArgWeapon
 	 */
 	action bool Arg_A_InstallMod(int modToInstall) {
 
-		if(CountInv("ArgModKitToken") > 0 && !invoker.mod[modToInstall].enabled) {
+		let modkit = ArgModKit(self.FindInventory("ArgModKit"));
+		if(modkit && modkit.active && !invoker.mod[modToInstall].enabled) {
 
 			// dismiss the Mod Kit interface (and remove the kit, "consuming" it).
-			A_TakeInventory("ArgModKitToken");
+			// [TODO] move some of this to the mod kit itself.
+			modkit.active = false;
 			A_TakeInventory("ArgModKit", 1);
 			A_PlaySound("items/modkit/apply", CHAN_AUTO);
 		
@@ -407,9 +462,11 @@ class ArgModWeapon : ArgWeapon
 			invoker.mod[modToInstall].enabled = true;
 			invoker.modSelected = modToInstall;
 			
-			// [XA] remove this legacy stuff once possible.
-			A_GiveInventory("ArgModTotal", 1);
-			Arg_A_RefreshModTokens();
+			// increase the total mod count
+			let player = ArgPlayer(self);
+			if(player) {
+				player.modTotal++;
+			}
 
 			return true;
 
@@ -466,12 +523,3 @@ class ArgModWeapon : ArgWeapon
 		}
 	}
 }
-
-/*
- * [XA] These tokens exist as a bridge to ACS, since the mod kit menu
- *      is still being done there. This ought to go away once some
- *      hudmessage equivalent exists in ZScript.
- */
-class ArgModTotal    : ArgToken { Default { Inventory.MaxAmount 12; } }
-class ArgMod1Enabled : ArgToken {}
-class ArgMod2Enabled : ArgToken {}

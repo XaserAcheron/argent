@@ -5,20 +5,9 @@ import zipfile
 
 from glob import iglob
 
-GDCC_DIR = "gdcc"
 SRC_DIR = "src"
 DIST_DIR = "dist"
 DIST_FNAME = "xa-argen"
-
-def compileacs ():
-    print ("-- Compiling ACS files --")
-    for filename in iglob (os.path.join (SRC_DIR, "scripts", "*.acs")):
-        print ("Compiling {filename}".format (filename=filename))
-        cmd = subprocess.run ([os.path.join (GDCC_DIR, "gdcc-acc"),
-                               "--lib-path", os.path.join (GDCC_DIR, "lib"),
-                               filename,
-                               "--output", filename.replace(".acs", ".o").replace("scripts", "acs")])
-        cmd.check_returncode()
 
 def makepkg ():
     destination = os.path.join (DIST_DIR, DIST_FNAME + ".pk3")

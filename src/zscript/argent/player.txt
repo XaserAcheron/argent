@@ -6,6 +6,9 @@
 
 class ArgPlayer : DoomPlayer
 {
+	int modTotal;
+	const MOD_MAX = 12; // [TODO] this better, if possible
+
 	Default
 	{
 		Player.DisplayName "Doom Marine";
