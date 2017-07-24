@@ -7,6 +7,7 @@
 class ArgModKit : CustomInventory replaces Backpack
 {
 	bool active;
+	int merchPage;
 
 	Default
 	{
@@ -57,6 +58,60 @@ class ArgModKit : CustomInventory replaces Backpack
 			invoker.active = true;
 		}
 		return false; // do not remove if just activating/deactivating the kit.
+	}
+	
+	/*
+	 * Cycle forward/backward through the list of merch grantable by the kit.
+	 */
+	action bool Arg_A_CycleModKit()
+	{
+		if(invoker.active) {
+			A_PrintBold("[TODO] cycle da kit");
+			return true;
+
+		} else {
+			return false;
+		}
+	}
+	
+	/*
+	 * Apply the mod-kit (if applicable ;), granting the specified piece of merch.
+	 *
+	 * Yeah, "Use" vs "Apply" is a bit confusing, but the former term is "Use
+	 * in the Inventory sense, so there you go. ;)
+	 */
+	action bool, bool Arg_A_ApplyModKit(int index, ArgModWeapon weapon)
+	{
+		if(invoker.active && invoker.merchPage > 0) {
+			// Install merch.
+			A_PrintBold("[TODO] install merch");
+			return false, false;
+
+		} else if(invoker.active && weapon && !weapon.mod[index].enabled) {
+			// Install a mod.
+
+			// "gift" the mod and signal the calling state to jump to the
+			// mod swap animation.
+			weapon.mod[index].enabled = true;
+			weapon.modSelected = index;
+
+			// increase the total mod count
+			// [TODO] remove at some point.
+			let player = ArgPlayer(self);
+			if(player) {
+				player.modTotal++;
+			}
+
+			// dismiss the Mod Kit interface
+			invoker.active = false;
+
+			// signal the calling weapon to consume the kit and
+			// begin a mod swap animation.
+			return true, true;
+
+		} else {
+			return false, false;
+		}
 	}
 
 	/*
