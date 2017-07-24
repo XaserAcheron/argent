@@ -24,6 +24,7 @@ class ArgEquipment : CustomInventory
 		Inventory.MaxAmount 1;
 		Inventory.Icon "";
 		
+		ArgEquipment.ProjectileType 'ArgNothing';
 		ArgEquipment.ProjectileSound 'items/equipment/grenade/throw';
 		ArgEquipment.ProjectilePitch -10;
 
@@ -42,6 +43,9 @@ class ArgEquipment : CustomInventory
 	
 	States(Weapon)
 	{
+	UseEquipmentStart:
+		"####" "########" 1 A_WeaponOffset(0.0, 12.0, WOF_KEEPX | WOF_ADD | WOF_INTERPOLATE);
+		"####" A 0 Arg_A_UseEquipmentStart();
 	UseEquipment:
 		EQPG A 1 { A_WeaponOffset(-120,-25); Arg_A_EquipmentPreAction(); }
 		EQPG A 1   A_WeaponOffset(- 90,-20, WOF_INTERPOLATE);
@@ -54,7 +58,13 @@ class ArgEquipment : CustomInventory
 		EQPG B 1   A_WeaponOffset(  30, 50, WOF_INTERPOLATE);
 		EQPG B 1   A_WeaponOffset(  40, 70, WOF_INTERPOLATE);
 		EQPG B 1   A_WeaponOffset(  50, 90, WOF_INTERPOLATE);
-		TNT1 A 0 ResolveState("Ready"); // resolves to weapon's Ready state
+	UseEquipmentEnd:
+		"####" A 0 Arg_A_UseEquipmentEnd();
+		// [TODO] at some point support a raise animation; right now it isn't
+		//        possible to store & retrieve the sprite graphic generically
+		//        for psprites. :<
+//		"####" "########" 1 A_WeaponOffset(0.0,-12.0, WOF_KEEPX | WOF_ADD | WOF_INTERPOLATE);
+		"####" A 0 ResolveState("Ready"); // resolves to weapon's Ready state
 		Stop;
 	}
 
@@ -73,7 +83,7 @@ class ArgEquipment : CustomInventory
 
 		// only jump if the player's active weapon is in its ready state.
 		if(player && player.ReadyWeapon && (player.WeaponState & ARG_WF_WEAPONREADY)) {
-			player.SetPsprite(PSP_WEAPON, ResolveState("UseEquipment"));
+			player.SetPsprite(PSP_WEAPON, ResolveState("UseEquipmentStart"));
 	
 			return false; // [TODO] switch this back when done testing stuff
 //			return true; // remove from inventory
@@ -81,7 +91,22 @@ class ArgEquipment : CustomInventory
 			return false; // ...or don't.
 		}
 	}
-	
+
+	/*
+	 * Start equipment PSPrite animation.
+	 */
+	action(Weapon) state Arg_A_UseEquipmentStart() {
+		A_WeaponOffset(0.0, 0.0);
+		return ResolveState("UseEquipment");
+	}
+
+	/*
+	 * End equipment PSPrite animation.
+	 */
+	action(Weapon) void Arg_A_UseEquipmentEnd() {
+		A_WeaponOffset(0.0, 108.0);
+	}
+
 	/*
 	 * Generic pre-action, for grenades and the like.
 	 */
