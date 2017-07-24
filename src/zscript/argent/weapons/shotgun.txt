@@ -223,11 +223,7 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 		SH2G A 1   Arg_A_WeaponOffset(  0.0, 0.0);
 		Goto Ready;
 	Mod2Fire:
-		SH2N A 1 Bright {
-			Arg_A_GunFlash('Flash', "weapons/shotgun/mod2fire");
-			Arg_A_TakeAmmo(invoker.mod[2].ammoUse);
-			A_FireProjectile("ArgShotgunExplosiveShot", 0, 0, 4,-4, FPF_AIMATANGLE , 5);
-		}
+		SH2N A 1 Bright Arg_A_FireExplosiveShot();
 		SH2M B 1 Bright Arg_A_WeaponOffset(4.0, 34.0);
 		// technically copypasta'd pump sequence, but it's the easiest way
 		// to avoid being able to trigger the cooldown script twice, so...
@@ -264,6 +260,15 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 		Arg_A_GunFlash('Flash', sound ? "weapons/shotgun/mod1fire" : "");
 		Arg_A_TakeAmmo();
 		Arg_A_WeaponOffset(offsetx, offsety);
+	}
+	
+	/*
+	 * Shotgun Explosive Shot fire.
+	 */
+	action void Arg_A_FireExplosiveShot() {
+		Arg_A_GunFlash('Flash', "weapons/shotgun/mod2fire");
+		Arg_A_TakeAmmo(invoker.mod[2].ammoUse);
+		A_FireProjectile("ArgShotgunExplosiveShot", 0, 0, 4,-4, FPF_AIMATANGLE ,-5);
 	}
 }
 
