@@ -15,6 +15,7 @@ ARG_TAG_GAUSS    = "Gauss Cannon";
 ARG_TAG_BFG      = "BFG 9000";
 
 ARG_TAG_MODKIT   = "Mod Kit";
+ARG_TAG_BACKPACK = "Ammo Pack";
 ARG_TAG_GRENADE  = "Frag Grenade";
 ARG_TAG_HOLOGRAM = "Hologram";
 ARG_TAG_SIPHON   = "Siphon Grenade";
@@ -111,3 +112,19 @@ ARG_MOD_TAG_GAUSS_2     = "Siege Mode";
 ARG_MOD_DESC_GAUSS_2    = "Argon gas ionizer.\n\nAdds a devastating beam effect to fired\nprojectiles, piercing targets. Operator\nmust remain stationary while charging.";
 ARG_MOD_ICON_GAUSS_2    = "graphics/hud/weapon-gauss.png";
 ARG_MOD_PIC_GAUSS_2     = "graphics/hud/weapon-gauss.png";
+
+ARG_MERCH_DESC_BACKPACK = "It's a backpack. [DESCRIPTION HERE]";
+ARG_MERCH_ICON_BACKPACK = "graphics/hud/weapon-fist.png";
+ARG_MERCH_PIC_BACKPACK  = "graphics/hud/weapon-fist.png";
+
+ARG_MERCH_DESC_GRENADE  = "It's a GRENADE. [DESCRIPTION HERE]";
+ARG_MERCH_ICON_GRENADE  = "graphics/hud/weapon-fist.png";
+ARG_MERCH_PIC_GRENADE   = "graphics/hud/weapon-fist.png";
+
+ARG_MERCH_DESC_HOLOGRAM = "It's a HOLOGRAM. [DESCRIPTION HERE]";
+ARG_MERCH_ICON_HOLOGRAM = "graphics/hud/weapon-fist.png";
+ARG_MERCH_PIC_HOLOGRAM  = "graphics/hud/weapon-fist.png";
+
+ARG_MERCH_DESC_SIPHON   = "It's a SIPHON. [DESCRIPTION HERE]";
+ARG_MERCH_ICON_SIPHON   = "graphics/hud/weapon-fist.png";
+ARG_MERCH_PIC_SIPHON    = "graphics/hud/weapon-fist.png";

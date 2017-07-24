@@ -165,21 +165,6 @@ class ArgWeapon : DoomWeapon
 }
 
 /*
- * Cool Mod struct, containing info representing a weapon mod. Is cool.
- */
-struct ArgMod
-{
-	bool enabled;
-	string tag;
-	string description;
-	string icon;
-	string pic;
-	int ammoUse;
-	ArgCounter cooldown;
-	ArgCounter charge;
-}
-
-/*
  * Base class for moddable weapons, containing all the cool common code
  * for swapping and equipping mods (as well as handling various facets
  * of mod fires like the usual "altfire to charge, fire-to-fire" system).
@@ -379,6 +364,9 @@ class ArgModWeapon : ArgWeapon
 	override void BeginPlay()
 	{
 		Super.BeginPlay();
+		mod[0] = new('ArgMod'); // [TODO] remove this awful placeholder :P
+		mod[1] = new('ArgMod');
+		mod[2] = new('ArgMod');
 		
 		// Initialize mods from properties
 		mod[1].ammoUse        = init_mod1_ammoUse;

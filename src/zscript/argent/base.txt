@@ -257,10 +257,43 @@ enum Arg_WeaponState // technically a copypasta of some internal non-exposed enu
 };
 
 /*
- * Class for static common functions.
+ * Singleton class for global variables; also houses common staticfunctions .
  */
-class ArgCommon play
+class ArgCommon : Thinker
 {
+	Array<ArgMerch> merch;
+
+	/*
+	 * Init global variables.
+	 */
+	ArgCommon Init()
+	{
+		// set up the merch array; this lists all the stuff "for sale" in the
+		// mod kit menu that aren't mods -- e.g. backpack, equipment, etc.
+		merch.push(ArgMerch.Create('Backpack'            , '$ARG_TAG_BACKPACK', '$ARG_MERCH_DESC_BACKPACK', '$ARG_MERCH_ICON_BACKPACK', '$ARG_MERCH_PIC_BACKPACK' ));
+		merch.push(ArgMerch.Create('ArgEquipmentGrenade' , '$ARG_TAG_GRENADE' , '$ARG_MERCH_DESC_GRENADE' , '$ARG_MERCH_ICON_GRENADE' , '$ARG_MERCH_PIC_GRENADE'  ));
+		merch.push(ArgMerch.Create('ArgEquipmentHologram', '$ARG_TAG_HOLOGRAM', '$ARG_MERCH_DESC_HOLOGRAM', '$ARG_MERCH_ICON_HOLOGRAM', '$ARG_MERCH_PIC_HOLOGRAM' ));
+		merch.push(ArgMerch.Create('ArgEquipmentSiphon'  , '$ARG_TAG_SIPHON'  , '$ARG_MERCH_DESC_SIPHON'  , '$ARG_MERCH_ICON_SIPHON'  , '$ARG_MERCH_PIC_SIPHON'   ));
+		
+		// do some housekeeping n' return
+		ChangeStatNum(STAT_STATIC);
+		return self;
+	}
+
+	/*
+	 * Get ArgCommon singleton to access global variables.
+	 */
+	static ArgCommon Get()
+	{
+		ThinkerIterator it = ThinkerIterator.Create("ArgCommon", STAT_STATIC);
+		let p = ArgCommon(it.Next());
+		if (p == null)
+		{
+			p = new("ArgCommon").Init();
+		}
+		return p;
+	}
+
 	/*
 	 * Convenience function; jumps to XDeath if the Always Gib cvar is set.
 	 */

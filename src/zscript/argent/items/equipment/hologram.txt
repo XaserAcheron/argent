@@ -3,3 +3,12 @@
 // ARGENT: Hologram
 //
 // --------------------------------------------------------------------------
+
+class ArgEquipmentHologram : ArgEquipment
+{
+	Default
+	{
+		Inventory.Icon "graphics/hud/equip-icon-hologram.png";
+		Tag "$ARG_TAG_HOLOGRAM";
+	}
+}
