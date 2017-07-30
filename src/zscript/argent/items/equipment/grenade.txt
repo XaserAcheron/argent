@@ -80,8 +80,7 @@ class ArgFragGrenade : Actor
 	 */
 	override bool CanCollideWith(Actor other, bool passive)
 	{
-		if(other != target) { // don't do a thing if it's the player.
-//			A_PrintBold("OBUNC");
+		if(other != target) { // don't do a thing if "colliding" with the player.
 			self.vel = self.vel * self.actorbouncefactor;
 		}
 		return true;
