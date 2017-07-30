@@ -125,7 +125,7 @@ class ArgEquipment : CustomInventory
 		if(argPlayer && argPlayer.activeEquipment) {
 			ArgEquipment equip = argPlayer.activeEquipment;
 			A_PlaySound(equip.pProjectileSound, CHAN_6);
-			A_FireProjectile(equip.pProjectileType, 0, 0, -8, -8, FPF_NOAUTOAIM, equip.pProjectilePitch);
+			A_FireProjectile(equip.pProjectileType, 0, 0, 0, -8, FPF_NOAUTOAIM, equip.pProjectilePitch);
 		}
 	}
 
