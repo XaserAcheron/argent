@@ -9,15 +9,17 @@ class ArgStatusBar : DoomStatusBar
 	HUDFont ArgLargeFont;
 	HUDFont ArgSmallFont;
 	HUDFont ArgTextFont;
+	
+	ArgMerch emptyMod;
 
 	const ARG_HUD_WIDTH      = 480;
 	const ARG_HUD_HEIGHT     = 360;
-	const ARG_MODUI_WIDTH    = 640;
-	const ARG_MODUI_HEIGHT   = 480;
-	const ARG_MODUI_HOLDTICS = 105; // used only for the backpack message.
-	const ARG_MODUI_FADETICS =   7;
+	const ARG_MERCH_WIDTH    = 640;
+	const ARG_MERCH_HEIGHT   = 480;
+	const ARG_MERCH_HOLDTICS = 105; // used only for the backpack message.
+	const ARG_MERCH_FADETICS =   7;
 
-	int modtic; // show modscreen menu until gametic == modtic. for fadeouts, etc.
+	int merchTic; // show modscreen menu until gametic == merchTic. for fadeouts, etc.
 
 	/*
 	 * Init Fonts n' stuff.
@@ -28,6 +30,11 @@ class ArgStatusBar : DoomStatusBar
 		self.ArgLargeFont = self.Arg_CreateFont("hudfont-large");
 		self.ArgSmallFont = self.Arg_CreateFont("hudfont-small");
 		self.ArgTextFont  = self.Arg_CreateFont("ARGFONT", false);
+		
+		self.emptyMod = new('ArgMerch');
+		self.emptyMod.tag         = "No Mods Available";
+		self.emptyMod.description = "No mods available for this weapon.";
+		self.emptyMod.pic         = "graphics/hud/mod-pic-nope.png";
 	}
 
 	/*
@@ -64,11 +71,11 @@ class ArgStatusBar : DoomStatusBar
 		let modkit = ArgModKit(CPlayer.mo.FindInventory("ArgModKit"));
 		if(modkit && modkit.active) {
 			// extend the mod UI's lifespan a bit
-			self.modtic = gametic + ARG_MODUI_FADETICS;
+			self.merchTic = gametic + ARG_MERCH_FADETICS;
 		}
-		if(gametic <= self.modtic) {
+		if(gametic <= self.merchTic) {
 			// show the mod UI if it's alive
-			self.DrawArgentModUI(state, ticFrac);
+			self.DrawArgentMerchUI(state, ticFrac);
 		}
 	}
 
@@ -145,10 +152,10 @@ class ArgStatusBar : DoomStatusBar
 	}
 
 	/*
-	 * ARGENT Mod-Kit Interface
+	 * ARGENT Merch (Mod-Kit) Interface
 	 */
-	protected void DrawArgentModUI(int state, double ticFrac) {
-		self.BeginHUD(1.0, true, ARG_MODUI_WIDTH, ARG_MODUI_HEIGHT);
+	protected void DrawArgentMerchUI(int state, double ticFrac) {
+		self.BeginHUD(1.0, true, ARG_MERCH_WIDTH, ARG_MERCH_HEIGHT);
 
 		// set virtual offsets
 		let scalevec = GetHUDScale();
@@ -157,57 +164,58 @@ class ArgStatusBar : DoomStatusBar
 		int vheight = screen.GetHeight() / scale;
 
 		Vector2 oldDrawOffset = self.drawOffset;
-		self.drawOffset = ((vwidth-ARG_MODUI_WIDTH)/2, (vheight-ARG_MODUI_HEIGHT)/2);
+		self.drawOffset = ((vwidth-ARG_MERCH_WIDTH)/2, (vheight-ARG_MERCH_HEIGHT)/2);
 
-		// determine translucency by lerping modtic-gametic (for fadeout effect)
-		double modAlpha = clamp(0.0, (self.modtic - gametic - TicFrac + 1) / double(ARG_MODUI_FADETICS), 1.0);
+		// determine translucency by lerping merchTic-gametic (for fadeout effect)
+		double alpha = clamp(0.0, (self.merchTic - gametic - TicFrac + 1) / double(ARG_MERCH_FADETICS), 1.0);
 
 		// figure out if we've got a moddable weapon
 		let modWeapon = ArgModWeapon(CPlayer.ReadyWeapon);
 		if(modWeapon) {
 			// draw mod panels, allowing for selection and stuff.
-			// [TODO] make the mods classes so this can be referenced better
-			self.DrawArgentModPanel(  0, modWeapon.mod[1].tag, modWeapon.mod[1].description, modWeapon.mod[1].pic, "+attack"   , modWeapon.mod[1].enabled, modAlpha);
-			self.DrawArgentModPanel(320, modWeapon.mod[2].tag, modWeapon.mod[2].description, modWeapon.mod[2].pic, "+altattack", modWeapon.mod[2].enabled, modAlpha);
+			self.DrawArgentMerchPanel(  0, modWeapon.mod[1], "+attack"   , alpha);
+			self.DrawArgentMerchPanel(320, modWeapon.mod[2], "+altattack", alpha);
 
 		} else {
 			// weapon isn't moddable; display this onscreen.
-			self.DrawArgentModPanel(160, "No Mods Available", "No mods available for this weapon.", "graphics/hud/mod-pic-nope.png", "", false, modAlpha);
+			self.DrawArgentMerchPanel(160, self.emptyMod, "", alpha);
 		}
 		
 		// Draw footer with instructions n' such.
-		self.DrawArgentModFooter("Switch weapons to browse mods.", "Press '" .. self.GetKeyName("+use") .. "' to exit.", modAlpha);
+		self.DrawArgentMerchFooter("Switch weapons to browse mods.", "Press '" .. self.GetKeyName("+use") .. "' to exit.", alpha);
 		
 		// clear virtual offset
 		self.drawOffset = oldDrawOffset;
 	}
-	protected void DrawArgentModPanel(int x, string tag, string desc, string pic, string key, bool modEnabled, double modAlpha) {
+	protected void DrawArgentMerchPanel(int x, ArgMerch merch, string key, double alpha) {
 		// determine text color & installation instructions
-		string inst = "";
+		string instructions = "";
 		int textColor = Font.CR_UNTRANSLATED;
 		double picAlpha = 1.0;
-		if(modEnabled) {
-			inst = "This mod is already installed.";
+
+		let mod = ArgMod(merch);
+		if(mod && mod.enabled) {
+			instructions = "This mod is already installed.";
 			textColor = Font.CR_BLACK;
 			picAlpha = 0.333;
 		} else if (key != "") {
-			inst = "'" .. self.GetKeyName(key) .."' to install";
+			instructions = "'" .. self.GetKeyName(key) .."' to install";
 		}
 
 		// draw background n' icon
-		DrawImage("graphics/hud/mod-base.png" ,(x, 0), DI_ITEM_OFFSETS, modAlpha);
-		DrawImage(pic,(x + 160, 180), DI_ITEM_CENTER, picAlpha * modAlpha);
+		DrawImage("graphics/hud/mod-base.png" ,(x, 0), DI_ITEM_OFFSETS, alpha);
+		DrawImage(merch.pic,(x + 160, 180), DI_ITEM_CENTER, picAlpha * alpha);
 		
 		// draw some strings, because we support that theory i guess
-		DrawString(self.ArgTextFont, tag , (x + 160,  30), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor  , modAlpha);
-		DrawString(self.ArgTextFont, desc, (x + 160, 310), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor  , modAlpha, 320);
-		DrawString(self.ArgTextFont, inst, (x + 160, 400), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED, modAlpha);
+		DrawString(self.ArgTextFont, merch.tag        , (x + 160,  30), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor  , alpha);
+		DrawString(self.ArgTextFont, merch.description, (x + 160, 310), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor  , alpha, 320);
+		DrawString(self.ArgTextFont, instructions     , (x + 160, 400), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED, alpha);
 	}
-	protected void DrawArgentModFooter(string text1, string text2, double modAlpha) {
+	protected void DrawArgentMerchFooter(string text1, string text2, double alpha) {
 		// australian rules footy box
-		DrawImage("graphics/hud/mod-footer.png" ,(320, 434), DI_ITEM_HCENTER|DI_ITEM_VOFFSET, modAlpha);
-		DrawString(self.ArgTextFont, text1, (320, 440), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_UNTRANSLATED, modAlpha);
-		DrawString(self.ArgTextFont, text2, (320, 456), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED         , modAlpha);
+		DrawImage("graphics/hud/mod-footer.png" ,(320, 434), DI_ITEM_HCENTER|DI_ITEM_VOFFSET, alpha);
+		DrawString(self.ArgTextFont, text1, (320, 440), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_UNTRANSLATED, alpha);
+		DrawString(self.ArgTextFont, text2, (320, 456), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED         , alpha);
 	}
 
 	/*
