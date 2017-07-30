@@ -31,17 +31,15 @@ class ArgFragGrenade : Actor
 		Speed 40;
 		Radius 9;
 		Scale 0.66;
+		BounceType 'Hexen';
+		BounceSound 'items/equipment/grenade/bounce';
 		BounceFactor 0.33;
-		WallBounceFactor 0.33;
-		BounceSound "items/equipment/grenade/bounce";
+		WallBounceFactor 0.66;
 
 		-NOGRAVITY
-		+BOUNCEONWALLS
-		+BOUNCEONFLOORS
-		+BOUNCEONCEILINGS
+		+CANBOUNCEWATER
 		+BOUNCEONACTORS
 		+ALLOWBOUNCEONACTORS // gorrammit zdoom
-		+CANBOUNCEWATER
 	}
 	States
 	{
@@ -49,8 +47,8 @@ class ArgFragGrenade : Actor
 		EGRT AAAHHHGGGFFFEEEDDDCCCBBB 1 Bright Arg_A_GrenadeMove();
 		Loop;
 	Stopped:
-		EGRT C 1 Bright Arg_A_GrenadeStop();
-		Loop;
+		EGRT C 1 Bright Arg_A_GrenadeTick();
+		Wait;
 	Death:
 		REXP A 4 Bright {
 			A_Stop();
@@ -86,21 +84,24 @@ class ArgFragGrenade : Actor
 	}
 
 	/*
-	 *
+	 * Move the 'nade. Basically just GrenadeTick with a "stop moving" check.
 	 */
 	action state Arg_A_GrenadeMove() {
 		if(self.pos.z - self.floorz <= 4.0 && vel.Length() < SPEED_LIMIT) {
-			return ResolveState("Stopped");
+			return Arg_A_GrenadeStop();
 		} else {
 			return Arg_A_GrenadeTick();
 		}
 	}
 
 	/*
-	 *
+	 * Stops the grenade and prevents it from ever bouncing again. How sad.
 	 */
 	action state Arg_A_GrenadeStop() {
-		A_Stop(); // gotta call this repeatedly to halt all of Doom's "Physics"(tm). :<
-		return Arg_A_GrenadeTick();
+		A_Stop();
+		A_ChangeLinkFlags(blockmap: false);
+		bMISSILE = false;
+		bTHRUACTORS = true;
+		return ResolveState("Stopped");
 	}
 }
