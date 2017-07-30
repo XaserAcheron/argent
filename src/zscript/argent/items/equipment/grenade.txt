@@ -19,6 +19,9 @@ class ArgEquipmentGrenade : ArgEquipment
 class ArgFragGrenade : Actor
 {
 	int fuse;
+	float actorbouncefactor;
+	
+	property ActorBounceFactor: actorbouncefactor;
 
 	const FUSE_TICS   = 45;
 	const SOUND_TICS  = 10;
@@ -29,12 +32,18 @@ class ArgFragGrenade : Actor
 		Projectile;
 		Damage 0;
 		Speed 40;
-		Radius 9;
+		Radius 4;
+		Height 8;
 		Scale 0.66;
 		BounceType 'Hexen';
 		BounceSound 'items/equipment/grenade/bounce';
 		BounceFactor 0.33;
 		WallBounceFactor 0.66;
+		ArgFragGrenade.ActorBounceFactor 0.33;
+
+		// note that this ActorBounceFactor mock-property gets applied on top
+		// of WallBounceFactor/BounceFactor (the former if hitting the side of
+		// an enemy, the latter if hitting the top), due to internal behavior.
 
 		-NOGRAVITY
 		+CANBOUNCEWATER
@@ -65,12 +74,25 @@ class ArgFragGrenade : Actor
 		REXP F 2 Bright A_SetTranslucent(0.4);
 		Stop;
 	}
+	
+	/*
+	 * Collision stuff; implements ActorBounceFactor.
+	 */
+	override bool CanCollideWith(Actor other, bool passive)
+	{
+		if(other != target) { // don't do a thing if it's the player.
+//			A_PrintBold("OBUNC");
+			self.vel = self.vel * self.actorbouncefactor;
+		}
+		return true;
+	}
 
 	/*
 	 * Grenade "Tick" action. Not actually a Tick() override, since we need
 	 * to do a state jump when the grenade's fuse is out.
 	 */
-	action state Arg_A_GrenadeTick() {
+	action state Arg_A_GrenadeTick()
+	{
 		let this = ArgFragGrenade(self);
 		if(this) {
 			if(this.fuse >= FUSE_TICS) {
@@ -86,7 +108,8 @@ class ArgFragGrenade : Actor
 	/*
 	 * Move the 'nade. Basically just GrenadeTick with a "stop moving" check.
 	 */
-	action state Arg_A_GrenadeMove() {
+	action state Arg_A_GrenadeMove()
+	{
 		if(self.pos.z - self.floorz <= 4.0 && vel.Length() < SPEED_LIMIT) {
 			return Arg_A_GrenadeStop();
 		} else {
@@ -97,7 +120,8 @@ class ArgFragGrenade : Actor
 	/*
 	 * Stops the grenade and prevents it from ever bouncing again. How sad.
 	 */
-	action state Arg_A_GrenadeStop() {
+	action state Arg_A_GrenadeStop()
+	{
 		A_Stop();
 		A_ChangeLinkFlags(blockmap: false);
 		bMISSILE = false;
