@@ -279,8 +279,9 @@ class ArgModWeapon : ArgWeapon
 	
 	Fire:
 		"####" "#" 0 {
-			if(Arg_A_InstallMod(1)) {
-				return ResolveState("ModSwapDown");
+			state installState = Arg_A_InstallMod(1);
+			if(installState) {
+				return installState;
 			} else if(!Arg_SynthAltFire() && Arg_A_CheckAmmo()) {
 				return ResolveState("Mod0Fire");
 			} else {
@@ -324,13 +325,17 @@ class ArgModWeapon : ArgWeapon
 	DontSwap:
 		"####" "#" 1 A_WeaponReady;
 		Goto Ready;
+	DontSwapDelay:
+		"####" "########" 1 A_WeaponReady(WRF_NOFIRE);
+		Goto Ready;
 		
 	/* Mod Firing. Maximum Dangertime. */
 	
 	AltFire:
 		"####" "#" 0 {
-			if(Arg_A_InstallMod(2)) {
-				return ResolveState("ModSwapDown");
+			state installState = Arg_A_InstallMod(2);
+			if(installState) {
+				return installState;
 			} else if(Arg_A_CheckAmmo()) {
 				return Arg_A_JumpMod("Mod1UpCheck", "Mod2UpCheck", "DontFire", true);
 			} else {
@@ -367,7 +372,7 @@ class ArgModWeapon : ArgWeapon
 		}
 		Goto Ready;
 	}
-	
+
 	/*
 	 * Overridden BeginPlay function, for special shit.
 	 */
@@ -407,7 +412,7 @@ class ArgModWeapon : ArgWeapon
 		let this = ArgModWeapon(self);
 		this.MinSelAmmo1 = 1;
 	}
-	
+
 	/*
 	 * Overridden Tick function, for extra-special shit.
 	 */
@@ -421,7 +426,7 @@ class ArgModWeapon : ArgWeapon
 		this.mod[1].cooldown.dec();
 		this.mod[2].cooldown.dec();
 	}
-	
+
 	/*
 	 * Jump to one of two states depending on which mod is selected.
 	 * If no mods are selected, no state jump occurs.
@@ -439,27 +444,29 @@ class ArgModWeapon : ArgWeapon
 			return ResolveState(mod0label);
 		}
 	}
-	
+
 	/*
 	 * Attempt to install the specified mod. If already installed (or the
-	 * shop menu isn't opened), 'false' is returned; else 'true'.
+	 * shop menu isn't opened), no state jump occurs.
 	 */
-	action bool Arg_A_InstallMod(int modToInstall) {
+	action state Arg_A_InstallMod(int modToInstall) {
 
 		let modkit = ArgModKit(self.FindInventory("ArgModKit"));
 		if(modkit) {
-			bool consumeKit, doJump;
-			[consumeKit, doJump] = modkit.Arg_A_ApplyModKit(modToInstall, invoker);
-			if(consumeKit) {
+			bool success, isMerch;
+			[success, isMerch] = modkit.Arg_A_ApplyModKit(modToInstall, invoker);
+			if(success) {
 				// consume the mod kit and play some fun soundage.
 				// [TODO] screen flash effect here.
 				A_TakeInventory("ArgModKit", 1);
 				A_PlaySound("items/modkit/apply", CHAN_AUTO);
+				return isMerch ? ResolveState("DontSwapDelay") : ResolveState("ModSwapDown");
+			} else {
+				return null;
 			}
-			return doJump;
 		} else {
 			// don't do a thing otherwise. continue firing, gents!
-			return false;
+			return null;
 		}
 	}
 

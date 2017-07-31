@@ -10,7 +10,6 @@ class ArgStatusBar : DoomStatusBar
 	HUDFont ArgSmallFont;
 	HUDFont ArgTextFont;
 
-	ArgCommon common;
 	ArgMerch emptyMod;
 
 	const ARG_HUD_WIDTH      = 480;
@@ -53,12 +52,9 @@ class ArgStatusBar : DoomStatusBar
 	override void Draw(int state, double TicFrac) {
 		CVar cv = CVar.FindCvar("arg_classicHUD");
 		int useClassicHUD = (cv) ? cv.GetInt() : false;
-
-		// Init common var reference.
-		// [TODO] move this to Init() if possible.
-		if(!self.common) {
-			self.common = ArgCommon.GetUI();
-		}
+		
+		// Allow inventory usage at all times.
+		CPlayer.inventoryTics = 0;
 
 		// Classic: just pass through to Doom's base status bar drawer. 'Nuff said.
 		if(useClassicHUD) {
@@ -181,8 +177,8 @@ class ArgStatusBar : DoomStatusBar
 		// either show the selected merch or mods, depending on what page we're on.
 		if(modkit.merchPage > 0) {
 			// draw merch panels
-			ArgMerch leftMerch  = modkit.common.MerchForPage(modkit.merchPage, 0);
-			ArgMerch rightMerch = modkit.common.MerchForPage(modkit.merchPage, 1);
+			ArgMerch leftMerch  = modkit.common.MerchForPage(modkit.merchPage, 1);
+			ArgMerch rightMerch = modkit.common.MerchForPage(modkit.merchPage, 2);
 			if(rightMerch) {
 				self.DrawArgentMerchPanel(  0, leftMerch , "+attack"   , alpha);
 				self.DrawArgentMerchPanel(320, rightMerch, "+altattack", alpha);

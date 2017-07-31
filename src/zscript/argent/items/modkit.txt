@@ -65,6 +65,7 @@ class ArgModKit : CustomInventory replaces Backpack
 			// kit not yet active. Activate it.
 			A_PlaySound("items/modkit/use", CHAN_AUTO);
 			invoker.active = true;
+			invoker.merchPage = 0; // reset it on open for sanity's sake.
 		}
 		return false; // do not remove if just activating/deactivating the kit.
 	}
@@ -101,8 +102,13 @@ class ArgModKit : CustomInventory replaces Backpack
 	{
 		if(invoker.active && invoker.merchPage > 0) {
 			// Install merch.
-			A_PrintBold("[TODO] install merch");
-			return false, false;
+			ArgPlayer argPlayer = ArgPlayer(invoker.owner);
+			ArgMerch merchToGive = invoker.common.MerchForPage(invoker.merchPage, index);
+			if(argPlayer && merchToGive && merchToGive.giveclass) {
+				bool granted = argPlayer.Arg_GrantEquipment(merchToGive.giveclass);
+				invoker.active = !granted;
+				return granted, granted;
+			}
 
 		} else if(invoker.active && weapon && !weapon.mod[index].enabled) {
 			// Install a mod.
@@ -124,11 +130,10 @@ class ArgModKit : CustomInventory replaces Backpack
 
 			// signal the calling weapon to consume the kit and
 			// begin a mod swap animation.
-			return true, true;
+			return true, false;
 
-		} else {
-			return false, false;
 		}
+		return false, false;
 	}
 
 	/*

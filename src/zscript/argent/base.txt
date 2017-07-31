@@ -322,13 +322,14 @@ class ArgCommon : Thinker
 	/*
 	 * Non-static function: return the merch item for a particular page.
 	 */
-	clearscope ArgMerch MerchForPage(int page, int pageItem = 0) {
+	clearscope ArgMerch MerchForPage(int page, int pageItem = 1) {
+		// treat pages & items as 1-indexed, since that's how they work elsewhere.
 		int maxPage = MerchPageCount();
-		if(page > 0 // treat pages as 1-indexed, since that's how they work elsewhere.
+		if(page > 0
 		&& page <= maxPage
-		&& pageItem >= 0
-		&& pageItem < MERCH_PER_PAGE) {
-			int merchIndex = (page-1) * MERCH_PER_PAGE + pageItem; 
+		&& pageItem > 0
+		&& pageItem <= MERCH_PER_PAGE) {
+			int merchIndex = (page-1) * MERCH_PER_PAGE + (pageItem-1);
 			if(merchIndex >= 0 && merchIndex < merch.Size()) {
 				return merch[merchIndex];
 			}

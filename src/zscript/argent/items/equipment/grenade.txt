@@ -8,6 +8,7 @@ class ArgEquipmentGrenade : ArgEquipment
 {
 	Default
 	{
+		Inventory.MaxAmount 3;
 		Inventory.Icon "graphics/hud/equip-icon-grenade.png";
 		Tag "$ARG_TAG_GRENADE";
 		

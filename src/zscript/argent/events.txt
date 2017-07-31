@@ -6,14 +6,17 @@
 
 class ArgEventHandler : StaticEventHandler
 {
+	/*
+	 * Do stuff when the world exists.
+	 */
 	override void WorldLoaded(WorldEvent e)
 	{
-		// initialize common vars
+		// initialize common vars so it's accessible in UI scope.
 		ArgCommon._Init();
 	}
 
 	/*
-	 *
+	 * Do stuff for each player spawned in the map.
 	 */
 	override void PlayerEntered(PlayerEvent e)
 	{

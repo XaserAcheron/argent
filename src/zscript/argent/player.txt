@@ -41,4 +41,20 @@ class ArgPlayer : DoomPlayer
 		PLAY W -1;
 		Stop;
 	}
+	
+	/*
+	 * Grant a piece of merch to the player. This is done here since Weird Things(tm)
+	 * were happening when trying to gift an inventory item from another item
+	 * (probably some self pointer shenanigans).
+	 */
+	bool Arg_GrantEquipment(class<Inventory> equipment, int amount = 1)
+	{
+		// [TODO] make sure we don't gift over the max amount.
+		// [TODO] more fancy stuff here.
+		if(equipment) {
+			GiveInventory(equipment, amount);
+			return true;
+		}
+		return false;
+	}
 }
