@@ -154,6 +154,16 @@ class ArgWeapon : DoomWeapon
 	}
 	
 	/*
+	 * Slightly more generic versions of the above.
+	 */
+	action bool Arg_Buttons(int button) {
+		return (GetPlayerInput(INPUT_BUTTONS) & button);
+	}
+	action bool Arg_OldButtons(int button) {
+		return (GetPlayerInput(INPUT_OLDBUTTONS) & button);
+	}
+	
+	/*
 	 * Weapon Offset function alias. This does two things mainly:
 	 * - adjusts 'y' by 32 so that (0,0) is actually the origin, and
 	 * - adds a convenient parameter for random jitter, as that's common.
@@ -460,8 +470,10 @@ class ArgModWeapon : ArgWeapon
 	
 		// first, cycle through the mod kit if we're in the menu.
 		let modkit = ArgModKit(self.FindInventory("ArgModKit"));
-		if(modkit && modkit.Arg_A_CycleModKit()) {
-			// [TODO] play cycle sound.
+		if(modkit && modkit.active) {
+			if(!Arg_OldButtons(BT_RELOAD) && modkit.Arg_A_CycleModKit()) {
+				// [TODO] play cycle sound.
+			}
 			return ResolveState("DontSwap");
 
 		} else {

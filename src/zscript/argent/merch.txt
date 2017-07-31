@@ -24,10 +24,10 @@ class ArgMerch
 	{
 		let merch = new('ArgMerch');
 		merch.giveclass   = giveclass;
-		merch.tag         = tag;
-		merch.description = description;
-		merch.icon        = icon;
-		merch.pic         = pic;
+		merch.tag         = StringTable.Localize(tag);
+		merch.description = StringTable.Localize(description);
+		merch.icon        = StringTable.Localize(icon);
+		merch.pic         = StringTable.Localize(pic);
 		return merch;
 	}
 }

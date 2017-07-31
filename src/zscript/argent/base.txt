@@ -257,11 +257,13 @@ enum Arg_WeaponState // technically a copypasta of some internal non-exposed enu
 };
 
 /*
- * Singleton class for global variables; also houses common staticfunctions .
+ * Singleton class for global variables; also houses common static functions.
  */
 class ArgCommon : Thinker
 {
 	Array<ArgMerch> merch;
+	
+	const MERCH_PER_PAGE = 2;
 
 	/*
 	 * Init global variables.
@@ -279,6 +281,10 @@ class ArgCommon : Thinker
 		ChangeStatNum(STAT_STATIC);
 		return self;
 	}
+	static ArgCommon _Init()
+	{
+		return new("ArgCommon").Init();
+	}
 
 	/*
 	 * Get ArgCommon singleton to access global variables.
@@ -289,9 +295,45 @@ class ArgCommon : Thinker
 		let p = ArgCommon(it.Next());
 		if (p == null)
 		{
-			p = new("ArgCommon").Init();
+			p = ArgCommon._Init();
 		}
 		return p;
+	}
+
+	/*
+	 * UI-safe version of Get(). Note that this does not guarantee that the
+	 * object exists on the first tic, since it's dependent on the WorldLoaded
+	 * event being called first. Uggo.
+	 */
+	static clearscope ArgCommon GetUI()
+	{
+		ThinkerIterator it = ThinkerIterator.Create("ArgCommon", STAT_STATIC);
+		let p = ArgCommon(it.Next());
+		return p;
+	}
+	
+	/*
+	 * Non-static function: return the number of pages of merch that exist.
+	 */
+	clearscope int MerchPageCount() {
+		return ceil(1.0 * merch.Size() / MERCH_PER_PAGE);
+	}
+
+	/*
+	 * Non-static function: return the merch item for a particular page.
+	 */
+	clearscope ArgMerch MerchForPage(int page, int pageItem = 0) {
+		int maxPage = MerchPageCount();
+		if(page > 0 // treat pages as 1-indexed, since that's how they work elsewhere.
+		&& page <= maxPage
+		&& pageItem >= 0
+		&& pageItem < MERCH_PER_PAGE) {
+			int merchIndex = (page-1) * MERCH_PER_PAGE + pageItem; 
+			if(merchIndex >= 0 && merchIndex < merch.Size()) {
+				return merch[merchIndex];
+			}
+		}
+		return null;
 	}
 
 	/*

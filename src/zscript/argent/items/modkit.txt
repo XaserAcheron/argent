@@ -8,6 +8,7 @@ class ArgModKit : CustomInventory replaces Backpack
 {
 	bool active;
 	int merchPage;
+	ArgCommon common;
 
 	Default
 	{
@@ -30,6 +31,14 @@ class ArgModKit : CustomInventory replaces Backpack
 	Use:
 		TNT1 A 0 Arg_A_UseModKit();
 		Stop;
+	}
+	
+	/*
+	 * Keep a handy reference to ArgCommon before doing anything else.
+	 */
+	override void BeginPlay() {
+		self.common = ArgCommon.Get();
+		Super.BeginPlay();
 	}
 
 	/*
@@ -59,21 +68,29 @@ class ArgModKit : CustomInventory replaces Backpack
 		}
 		return false; // do not remove if just activating/deactivating the kit.
 	}
-	
+
 	/*
 	 * Cycle forward/backward through the list of merch grantable by the kit.
 	 */
 	action bool Arg_A_CycleModKit()
 	{
 		if(invoker.active) {
-			A_PrintBold("[TODO] cycle da kit");
-			return true;
+			// increment the merch page by one; or go back to zero if we're
+			// on the last page. Zero is used as the "show mods instead of
+			// merch" value, so we're operating on 1-based indices for merch.
+			int maxPage = invoker.common.MerchPageCount();
+			if(invoker.merchPage < maxPage) {
+				invoker.merchPage++;
+			} else {
+				invoker.merchPage = 0;
+			}
+			return true; // signals the calling weapon to play a sound.
 
 		} else {
 			return false;
 		}
 	}
-	
+
 	/*
 	 * Apply the mod-kit (if applicable ;), granting the specified piece of merch.
 	 *

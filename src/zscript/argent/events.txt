@@ -6,6 +6,15 @@
 
 class ArgEventHandler : StaticEventHandler
 {
+	override void WorldLoaded(WorldEvent e)
+	{
+		// initialize common vars
+		ArgCommon._Init();
+	}
+
+	/*
+	 *
+	 */
 	override void PlayerEntered(PlayerEvent e)
 	{
 		let player = ArgPlayer(players[e.PlayerNumber].mo);

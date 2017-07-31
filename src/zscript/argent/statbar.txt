@@ -9,7 +9,8 @@ class ArgStatusBar : DoomStatusBar
 	HUDFont ArgLargeFont;
 	HUDFont ArgSmallFont;
 	HUDFont ArgTextFont;
-	
+
+	ArgCommon common;
 	ArgMerch emptyMod;
 
 	const ARG_HUD_WIDTH      = 480;
@@ -53,6 +54,12 @@ class ArgStatusBar : DoomStatusBar
 		CVar cv = CVar.FindCvar("arg_classicHUD");
 		int useClassicHUD = (cv) ? cv.GetInt() : false;
 
+		// Init common var reference.
+		// [TODO] move this to Init() if possible.
+		if(!self.common) {
+			self.common = ArgCommon.GetUI();
+		}
+
 		// Classic: just pass through to Doom's base status bar drawer. 'Nuff said.
 		if(useClassicHUD) {
 			Super.Draw(state, TicFrac);
@@ -73,9 +80,9 @@ class ArgStatusBar : DoomStatusBar
 			// extend the mod UI's lifespan a bit
 			self.merchTic = gametic + ARG_MERCH_FADETICS;
 		}
-		if(gametic <= self.merchTic) {
+		if(modkit && gametic <= self.merchTic) {
 			// show the mod UI if it's alive
-			self.DrawArgentMerchUI(state, ticFrac);
+			self.DrawArgentMerchUI(state, ticFrac, modkit);
 		}
 	}
 
@@ -132,13 +139,12 @@ class ArgStatusBar : DoomStatusBar
 		}
 
 		// equipment
-		// [TODO] the rest of this; since right now we just have the mod kit,
-		//        we don't have to worry about the full inventory bar just yet.
-		if(CPlayer.mo.FindInventory("ArgModKit")) { // this check will vanish when the equipment system exists.
+		if(CPlayer.mo.InvSel) {
 			DrawImage("graphics/hud/equip-box-selected.png" ,(-204, -46), DI_ITEM_OFFSETS);
 			DrawInventoryIcon(CPlayer.mo.InvSel, (-204, -46), DI_ITEM_OFFSETS);
 			DrawString(self.ArgSmallFont, FormatNumber(CPlayer.mo.InvSel.Amount, 3), (-169, -31), DI_TEXT_ALIGN_RIGHT);
 		}
+		// [TODO] display all the inventory that ain't selected.
 
 		// keys -- uggo copypasta since I guess that's how we do this now
 		Vector2 keypos = (28, -71);
@@ -154,7 +160,7 @@ class ArgStatusBar : DoomStatusBar
 	/*
 	 * ARGENT Merch (Mod-Kit) Interface
 	 */
-	protected void DrawArgentMerchUI(int state, double ticFrac) {
+	protected void DrawArgentMerchUI(int state, double ticFrac, ArgModKit modkit) {
 		self.BeginHUD(1.0, true, ARG_MERCH_WIDTH, ARG_MERCH_HEIGHT);
 
 		// set virtual offsets
@@ -169,9 +175,22 @@ class ArgStatusBar : DoomStatusBar
 		// determine translucency by lerping merchTic-gametic (for fadeout effect)
 		double alpha = clamp(0.0, (self.merchTic - gametic - TicFrac + 1) / double(ARG_MERCH_FADETICS), 1.0);
 
-		// figure out if we've got a moddable weapon
+		// figure out if we've got a moddable weapon; we'll need that later.
 		let modWeapon = ArgModWeapon(CPlayer.ReadyWeapon);
-		if(modWeapon) {
+		
+		// either show the selected merch or mods, depending on what page we're on.
+		if(modkit.merchPage > 0) {
+			// draw merch panels
+			ArgMerch leftMerch  = modkit.common.MerchForPage(modkit.merchPage, 0);
+			ArgMerch rightMerch = modkit.common.MerchForPage(modkit.merchPage, 1);
+			if(rightMerch) {
+				self.DrawArgentMerchPanel(  0, leftMerch , "+attack"   , alpha);
+				self.DrawArgentMerchPanel(320, rightMerch, "+altattack", alpha);
+			} else if (leftMerch) {
+				self.DrawArgentMerchPanel(160, leftMerch , "+attack"   , alpha);
+			}
+
+		} else if(modWeapon) {
 			// draw mod panels, allowing for selection and stuff.
 			self.DrawArgentMerchPanel(  0, modWeapon.mod[1], "+attack"   , alpha);
 			self.DrawArgentMerchPanel(320, modWeapon.mod[2], "+altattack", alpha);
@@ -180,10 +199,10 @@ class ArgStatusBar : DoomStatusBar
 			// weapon isn't moddable; display this onscreen.
 			self.DrawArgentMerchPanel(160, self.emptyMod, "", alpha);
 		}
-		
+
 		// Draw footer with instructions n' such.
 		self.DrawArgentMerchFooter("Switch weapons to browse mods.", "Press '" .. self.GetKeyName("+use") .. "' to exit.", alpha);
-		
+
 		// clear virtual offset
 		self.drawOffset = oldDrawOffset;
 	}
@@ -205,7 +224,7 @@ class ArgStatusBar : DoomStatusBar
 		// draw background n' icon
 		DrawImage("graphics/hud/mod-base.png" ,(x, 0), DI_ITEM_OFFSETS, alpha);
 		DrawImage(merch.pic,(x + 160, 180), DI_ITEM_CENTER, picAlpha * alpha);
-		
+
 		// draw some strings, because we support that theory i guess
 		DrawString(self.ArgTextFont, merch.tag        , (x + 160,  30), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor  , alpha);
 		DrawString(self.ArgTextFont, merch.description, (x + 160, 310), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor  , alpha, 320);
