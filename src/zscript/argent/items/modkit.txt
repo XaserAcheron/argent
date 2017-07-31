@@ -46,17 +46,7 @@ class ArgModKit : CustomInventory replaces Backpack
 	 */
 	action bool Arg_A_UseModKit()
 	{
-		// First, check if we already have all mods. If so, trade the kit for
-		// a backpack and return.
-		// [TODO] remove this shortcut entirely when Equipment arrives.
-		let player = ArgPlayer(self);
-		if(player && player.modTotal >= player.MOD_MAX) {
-			A_GiveInventory("Backpack", 1);
-			A_TakeInventory("ArgModKit", 1);
-			A_PlaySound("items/modkit/pickup", CHAN_AUTO);
-			return true; // remove the item.
-
-		} else if (invoker.active) {
+		if (invoker.active) {
 			// kit already active. Deactivate it.
 			A_PlaySound("items/modkit/dismiss", CHAN_AUTO);
 			invoker.active = false;
@@ -117,13 +107,6 @@ class ArgModKit : CustomInventory replaces Backpack
 			// mod swap animation.
 			weapon.mod[index].enabled = true;
 			weapon.modSelected = index;
-
-			// increase the total mod count
-			// [TODO] remove at some point.
-			let player = ArgPlayer(self);
-			if(player) {
-				player.modTotal++;
-			}
 
 			// dismiss the Mod Kit interface
 			invoker.active = false;
