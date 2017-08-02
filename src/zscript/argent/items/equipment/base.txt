@@ -11,10 +11,15 @@ class ArgEquipment : CustomInventory
 	class<Actor> pProjectileType;
 	float pProjectilePitch;
 
+	int rechargeAmount; // max amount of units we can recharge; initially zero.
+	int rechargeDelay;  // duration in tics until we recharge 1 unit.
+	int rechargeTics;   // current recharge tic.
+
 	property PreSound       : pPreSound;
 	property ProjectileSound: pProjectileSound;
 	property ProjectileType : pProjectileType;
 	property ProjectilePitch: pProjectilePitch;
+	property RechargeDelay  : rechargeDelay;
 
 	Default
 	{
@@ -27,6 +32,7 @@ class ArgEquipment : CustomInventory
 		ArgEquipment.ProjectileType 'ArgNothing';
 		ArgEquipment.ProjectileSound 'items/equipment/grenade/throw';
 		ArgEquipment.ProjectilePitch -10;
+		ArgEquipment.RechargeDelay -5; // negative means seconds; positive means tics.
 
 		+INVENTORY.UNTOSSABLE
 		+INVENTORY.IGNORESKILL
@@ -85,9 +91,8 @@ class ArgEquipment : CustomInventory
 		// only jump if the player's active weapon is in its ready state.
 		if(player && player.ReadyWeapon && (player.WeaponState & ARG_WF_WEAPONREADY)) {
 			player.SetPsprite(PSP_WEAPON, ResolveState("UseEquipmentStart"));
-	
-			return false; // [TODO] switch this back when done testing stuff
-//			return true; // remove from inventory
+
+			return true; // remove from inventory
 		} else {
 			return false; // ...or don't.
 		}
@@ -144,5 +149,25 @@ class ArgEquipment : CustomInventory
 			return argPlayer.activeEquipment.ResolveState(stateName);
 		}
 		return ResolveState(null);
+	}
+	
+	/*
+	 * Recharge inventory. Increases the recharge counter by a tic and
+	 * grants a cool bonus item when it hits the max.
+	 */
+	void Arg_Recharge() {
+		if(self.Amount < self.rechargeAmount) {
+		
+			// get recharge delay in tics (i.e. convert negative numbers to seconds).
+			int rechargeDelayTics = (self.rechargeDelay < 0) ? (self.rechargeDelay*-35) : self.rechargeDelay;
+
+			// give one unit of charge and see if we've hit the delay.
+			// if so, gift an actual unit of equipment. Hooray charginess!
+			self.rechargeTics++;
+			if(self.rechargeTics >= rechargeDelayTics) {
+				self.Amount++;
+				self.rechargeTics = 0;
+			}
+		}
 	}
 }
