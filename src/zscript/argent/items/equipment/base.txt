@@ -152,19 +152,23 @@ class ArgEquipment : CustomInventory
 	}
 	
 	/*
+	 * Get recharge delay in tics (i.e. convert negative numbers from seconds).
+	 */
+	clearscope int Arg_RechargeDelayTics() {
+		return (self.rechargeDelay < 0) ? (self.rechargeDelay*-35) : self.rechargeDelay;
+	}
+
+	/*
 	 * Recharge inventory. Increases the recharge counter by a tic and
 	 * grants a cool bonus item when it hits the max.
 	 */
 	void Arg_Recharge() {
 		if(self.Amount < self.rechargeAmount) {
-		
-			// get recharge delay in tics (i.e. convert negative numbers to seconds).
-			int rechargeDelayTics = (self.rechargeDelay < 0) ? (self.rechargeDelay*-35) : self.rechargeDelay;
 
 			// give one unit of charge and see if we've hit the delay.
 			// if so, gift an actual unit of equipment. Hooray charginess!
 			self.rechargeTics++;
-			if(self.rechargeTics >= rechargeDelayTics) {
+			if(self.rechargeTics >= self.Arg_RechargeDelayTics()) {
 				self.Amount++;
 				self.rechargeTics = 0;
 			}
