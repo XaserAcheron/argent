@@ -50,7 +50,7 @@ class ArgWeapon : DoomWeapon
 		TNT1 A 1;
 		Loop;
 	}
-	
+
 	/*
 	 * Double-speed A_Raise/A_Lower, for convenience.
 	 */
@@ -62,7 +62,7 @@ class ArgWeapon : DoomWeapon
 		A_Raise();
 		A_Raise();
 	}
-	
+
 	/*
 	 * A_GunFlash extension, wrapping a whole bunch of cool
 	 * common stuff, like A_WeaponReady, A_PlaySound, and the like.
@@ -93,7 +93,7 @@ class ArgWeapon : DoomWeapon
 			A_Recoil(recoil);
 		}
 	}
-	
+
 	/*
 	 * Convenient ammo-taker function. Since ARGENT weapons only use a single
 	 * ammo type, just subtract a bit from AmmoType1. Easy-peasy.
@@ -102,7 +102,7 @@ class ArgWeapon : DoomWeapon
 	{
 		A_TakeInventory(invoker.AmmoType1, amount, TIF_NOTAKEINFINITE);
 	}
-	
+
 	/*
 	 * Manually check if the player has ammo, to circumvent AMMO_OPTIONAL.
 	 */
@@ -118,7 +118,7 @@ class ArgWeapon : DoomWeapon
 			return true;
 		}
 	}
-	
+
 	/*
 	 * A certain function that would've been nice to have built-in for ages. ;)
 	 */
@@ -278,16 +278,7 @@ class ArgModWeapon : ArgWeapon
 	/* Fire Mod-Jump -- need to make sure we're not holding down altfire. */
 	
 	Fire:
-		"####" "#" 0 {
-			state installState = Arg_A_InstallMod(1);
-			if(installState) {
-				return installState;
-			} else if(!Arg_SynthAltFire() && Arg_A_CheckAmmo()) {
-				return ResolveState("Mod0Fire");
-			} else {
-				return ResolveState("DontFire");
-			}
-		}
+		"####" "#" 0 Arg_A_TryFire();
 		Goto DontFire;
 	Mod0Fire:
 		"####" "#" 1;
@@ -306,14 +297,11 @@ class ArgModWeapon : ArgWeapon
 	
 	Reload:
 		// call the swap function and start the animation if successful
-		"####" "#" 0 Arg_A_SwapMod();
+		"####" "#" 0 Arg_A_TrySwapMod();
 	ModSwapDown:
 		// lower the weapon and jump to the raise animation
 		"####" "########" 1 A_WeaponOffset(0.0, 12.0, WOF_KEEPX | WOF_ADD);
-		"####" "#" 0 {
-			Arg_A_ClearModCooldown();
-			return Arg_A_JumpMod("Mod1Raise", "Mod2Raise");
-		}
+		"####" "#" 0 Arg_A_StartModRaise();
 	Mod1Raise:
 	Mod2Raise:
 	ModSwapUp:
@@ -323,39 +311,22 @@ class ArgModWeapon : ArgWeapon
 	Mod1Swap:
 	Mod2Swap:
 	DontSwap:
-		"####" "#" 1 A_WeaponReady;
+		"####" "#" 1 A_WeaponReady();
 		Goto Ready;
-	DontSwapDelay:
+	MerchDelay:
 		"####" "########" 1 A_WeaponReady(WRF_NOFIRE);
 		Goto Ready;
 		
 	/* Mod Firing. Maximum Dangertime. */
 	
 	AltFire:
-		"####" "#" 0 {
-			state installState = Arg_A_InstallMod(2);
-			if(installState) {
-				return installState;
-			} else if(Arg_A_CheckAmmo()) {
-				return Arg_A_JumpMod("Mod1UpCheck", "Mod2UpCheck", "DontFire", true);
-			} else {
-				return ResolveState("DontFire");
-			}
-		}
+		"####" "#" 0 Arg_A_TryAltFire();
 	AltHold:
 		"####" "#" 0 Arg_A_JumpMod("Mod1Hold", "Mod2Hold");
 		Goto DontFire;
 	ModDown:
 		"####" "#" 0 Arg_A_JumpMod("Mod1Down", "Mod2Down");
 		Goto DontFire;
-	/* [TODO] remove these band-aids after ACS is ousted. */
-	Mod1UpCheck:
-		"####" "#" 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod[1].ammoUse);
-		"####" "#" 0 ResolveState("Mod1Up");
-	Mod2UpCheck:
-		"####" "#" 0 Arg_A_JumpIfNoAmmo('Ready', invoker.mod[2].ammoUse);
-		"####" "#" 0 ResolveState("Mod2Up");
-	/* [/TODO] */
 	Mod1Up:
 	Mod2Up:
 	Mod1Hold:
@@ -366,10 +337,7 @@ class ArgModWeapon : ArgWeapon
 		"####" "#" 1 A_WeaponReady(WRF_NOFIRE);
 		Goto Ready;
 	Cooldown:
-		"####" "#" 0 {
-			A_ClearReFire();
-			Arg_A_StartModCooldown();
-		}
+		"####" "#" 0 Arg_A_StartModCooldown();
 		Goto Ready;
 	}
 
@@ -446,10 +414,40 @@ class ArgModWeapon : ArgWeapon
 	}
 
 	/*
+	 * Try to fire -- fail if we're already holding down altfire though, and
+	 * leap to the mod install state if we've got a merch menu open instead.
+	 */
+	action state Arg_A_TryFire() {
+		state installState = Arg_A_TryInstallMod(1);
+		if(installState) {
+			return installState;
+		} else if(!Arg_SynthAltFire() && Arg_A_CheckAmmo()) {
+			return ResolveState("Mod0Fire");
+		} else {
+			return ResolveState("DontFire");
+		}
+	}
+
+	/*
+	 * Try to altfire -- same as above for altfire, effectively. We may abort
+	 * to install a mod or do other shiz.
+	 */
+	action state Arg_A_TryAltFire() {
+		state installState = Arg_A_TryInstallMod(2);
+		if(installState) {
+			return installState;
+		} else if(Arg_A_CheckAmmo()) {
+			return Arg_A_JumpMod("Mod1Up", "Mod2Up", "DontFire", true);
+		} else {
+			return ResolveState("DontFire");
+		}
+	}
+
+	/*
 	 * Attempt to install the specified mod. If already installed (or the
 	 * shop menu isn't opened), no state jump occurs.
 	 */
-	action state Arg_A_InstallMod(int modToInstall) {
+	action state Arg_A_TryInstallMod(int modToInstall) {
 
 		let modkit = ArgModKit(self.FindInventory("ArgModKit"));
 		if(modkit) {
@@ -460,7 +458,7 @@ class ArgModWeapon : ArgWeapon
 				// [TODO] screen flash effect here.
 				A_TakeInventory("ArgModKit", 1);
 				A_PlaySound("items/modkit/apply", CHAN_AUTO);
-				return isMerch ? ResolveState("DontSwapDelay") : ResolveState("ModSwapDown");
+				return isMerch ? ResolveState("MerchDelay") : ResolveState("ModSwapDown");
 			} else {
 				return null;
 			}
@@ -471,9 +469,10 @@ class ArgModWeapon : ArgWeapon
 	}
 
 	/*
-	 * Swap the currently-selected mod. 'Nuff said.
+	 * Try n' swap the currently-selected mod. If successful (i.e. we have
+	 * mods and the merch menu isn't up), jump to the mod swap state.
 	 */
-	action state Arg_A_SwapMod() {
+	action state Arg_A_TrySwapMod() {
 	
 		// first, cycle through the mod kit if we're in the menu.
 		let modkit = ArgModKit(self.FindInventory("ArgModKit"));
@@ -513,6 +512,7 @@ class ArgModWeapon : ArgWeapon
 	 * Start the cooldown cycle for the selected mod.
 	 */
 	action void Arg_A_StartModCooldown() {
+		A_ClearReFire();
 		if(invoker.modSelected > 0 && invoker.modSelected <= 2) {
 			invoker.mod[invoker.modSelected].cooldown.toMax();
 		}
@@ -526,5 +526,13 @@ class ArgModWeapon : ArgWeapon
 		if(invoker.modSelected > 0 && invoker.modSelected <= 2) {
 			invoker.mod[invoker.modSelected].cooldown.toMin();
 		}
+	}
+	
+	/*
+	 * Start the mod raise animation.
+	 */
+	action state Arg_A_StartModRaise() {
+		Arg_A_ClearModCooldown();
+		return Arg_A_JumpMod("Mod1Raise", "Mod2Raise");
 	}
 }
