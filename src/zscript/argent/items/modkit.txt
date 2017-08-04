@@ -88,8 +88,10 @@ class ArgModKit : CustomInventory replaces Backpack
 	 * Yeah, "Use" vs "Apply" is a bit confusing, but the former term is "Use
 	 * in the Inventory sense, so there you go. ;)
 	 */
-	action bool, bool Arg_A_ApplyModKit(int index, ArgModWeapon weapon)
+	action bool, bool Arg_A_ApplyModKit(int index, ArgWeapon weapon)
 	{
+		let modWeapon = ArgModWeapon(weapon);
+
 		if(invoker.active && invoker.merchPage > 0) {
 			// Install merch.
 			ArgPlayer argPlayer = ArgPlayer(invoker.owner);
@@ -100,13 +102,13 @@ class ArgModKit : CustomInventory replaces Backpack
 				return granted, granted;
 			}
 
-		} else if(invoker.active && weapon && !weapon.mod[index].enabled) {
+		} else if(invoker.active && modWeapon && !modWeapon.mod[index].enabled) {
 			// Install a mod.
 
 			// "gift" the mod and signal the calling state to jump to the
 			// mod swap animation.
-			weapon.mod[index].enabled = true;
-			weapon.modSelected = index;
+			modWeapon.mod[index].enabled = true;
+			modWeapon.modSelected = index;
 
 			// dismiss the Mod Kit interface
 			invoker.active = false;

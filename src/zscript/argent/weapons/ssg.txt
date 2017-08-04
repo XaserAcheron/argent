@@ -62,7 +62,7 @@ class ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 	 * Modern Sprites
 	 */
 	ModernReady:
-		NSGG A 1 A_WeaponReady();
+		NSGG A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Goto Ready;
 	ModernSelect:
 		NSGG A 0;
@@ -143,7 +143,7 @@ class ArgSuperShotgun : ArgWeapon replaces SuperShotgun
 	 * Classic Sprites (Neccronixis's original; not Doom2's ;)
 	 */
 	ClassicReady:
-		SSGG A 1 A_WeaponReady();
+		SSGG A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Goto Ready;
 	ClassicSelect:
 		SSGG A 0;

@@ -25,7 +25,7 @@ class ArgFist : ArgWeapon replaces Fist
 		PUNG A -1;
 		Stop;
 	Ready:
-		PUNG A 1 A_WeaponReady();
+		PUNG A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 	Select:
 		PUNG A 0;
