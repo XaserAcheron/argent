@@ -46,6 +46,10 @@ class ArgWeapon : DoomWeapon
 	Fire:
 		TNT1 A 1;
 		Goto Ready;
+	AltFire:
+		"####" "#" 1 A_WeaponReady(WRF_NOFIRE);
+		"####" "#" 0 ResolveState("Ready");
+		Goto Ready;
 	DeadLowered:
 		TNT1 A 1;
 		Loop;
@@ -60,6 +64,28 @@ class ArgWeapon : DoomWeapon
 		"####" "########" 1 A_WeaponReady(WRF_NOFIRE);
 		"####" "#" 0 ResolveState("Ready");
 		Goto Ready;
+	}
+
+	/*
+	 * Overridden Fire/Altfire overrides, for convenient merch-apply interception.
+	 */
+	override State GetAtkState(bool hold)
+	{
+		state installState = Arg_TryInstallMerch(1);
+		if(installState) {
+			return installState;
+		} else {
+			return Super.GetAtkState(hold);
+		}
+	}
+	override State GetAltAtkState(bool hold)
+	{
+		state installState = Arg_TryInstallMerch(2);
+		if(installState) {
+			return installState;
+		} else {
+			return Super.GetAltAtkState(hold);
+		}
 	}
 
 	/*
@@ -163,7 +189,7 @@ class ArgWeapon : DoomWeapon
 	action state Arg_A_SynthAltFire(statelabel label) {
 		return Arg_SynthAltFire() ? ResolveState(label) : ResolveState(null);
 	}
-	
+
 	/*
 	 * Slightly more generic versions of the above.
 	 */
@@ -173,7 +199,7 @@ class ArgWeapon : DoomWeapon
 	action bool Arg_OldButtons(int button) {
 		return (GetPlayerInput(INPUT_OLDBUTTONS) & button);
 	}
-	
+
 	/*
 	 * Weapon Offset function alias. This does two things mainly:
 	 * - adjusts 'y' by 32 so that (0,0) is actually the origin, and
@@ -204,20 +230,20 @@ class ArgWeapon : DoomWeapon
 	 * Attempt to install the specified mod/merch. If already installed (or the
 	 * shop menu isn't opened), no state jump occurs.
 	 *
-	 * This unusually appears in the base weapon definition since merch items
-	 * may be bought even for non-moddalbe weapons.
+	 * This function is called from virtuals, not states, so it is not marked `action`.
 	 */
-	action state Arg_A_TryInstallMod(int modToInstall) {
+	state Arg_TryInstallMerch(int modToInstall) {
 
-		let modkit = ArgModKit(self.FindInventory("ArgModKit"));
-		if(modkit) {
+		let owner  = self.owner;
+		let modkit = ArgModKit(owner.FindInventory("ArgModKit"));
+		if(owner && modkit) {
 			bool success, isMerch;
-			[success, isMerch] = modkit.Arg_A_ApplyModKit(modToInstall, invoker);
+			[success, isMerch] = modkit.Arg_A_ApplyModKit(modToInstall, self);
 			if(success) {
 				// consume the mod kit and play some fun soundage.
 				// [TODO] screen flash effect here.
-				A_TakeInventory("ArgModKit", 1);
-				A_PlaySound("items/modkit/apply", CHAN_AUTO);
+				owner.A_TakeInventory("ArgModKit", 1);
+				owner.A_PlaySound("items/modkit/apply", CHAN_AUTO);
 				return isMerch ? ResolveState("WeaponDelay") : ResolveState("ModSwapDown");
 			} else {
 				return null;
@@ -468,10 +494,7 @@ class ArgModWeapon : ArgWeapon
 	 * leap to the mod install state if we've got a merch menu open instead.
 	 */
 	action state Arg_A_TryFire() {
-		state installState = Arg_A_TryInstallMod(1);
-		if(installState) {
-			return installState;
-		} else if(!Arg_SynthAltFire() && Arg_A_CheckAmmo()) {
+		if(!Arg_SynthAltFire() && Arg_A_CheckAmmo()) {
 			return ResolveState("Mod0Fire");
 		} else {
 			return ResolveState("DontFire");
@@ -483,10 +506,7 @@ class ArgModWeapon : ArgWeapon
 	 * to install a mod or do other shiz.
 	 */
 	action state Arg_A_TryAltFire() {
-		state installState = Arg_A_TryInstallMod(2);
-		if(installState) {
-			return installState;
-		} else if(Arg_A_CheckAmmo()) {
+		if(Arg_A_CheckAmmo()) {
 			return Arg_A_JumpMod("Mod1Up", "Mod2Up", "DontFire", true);
 		} else {
 			return ResolveState("DontFire");
