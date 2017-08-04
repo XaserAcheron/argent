@@ -137,20 +137,6 @@ class ArgStatusBar : DoomStatusBar
 
 		// inventory n' equipment
 		DrawArgentInventory((-204, -46), 3, DI_ITEM_OFFSETS);
-/*
-		if(CPlayer.mo.InvSel) {
-			let equipment = ArgEquipment(CPlayer.mo.InvSel);
-			if(!equipment) {
-				DrawImage("graphics/hud/equip-box-selected.png" ,(-204, -46), DI_ITEM_OFFSETS);
-			} else if (equipment.Amount < equipment.rechargeAmount) {
-				DrawBar("graphics/hud/equip-box-maxed.png", "graphics/hud/equip-box.png", equipment.rechargeTics, equipment.Arg_RechargeDelayTics(), (-204, -46), 0, SHADER_VERT | SHADER_REVERSE, DI_ITEM_OFFSETS);
-			} else {
-				DrawImage("graphics/hud/equip-box-maxed.png" ,(-204, -46), DI_ITEM_OFFSETS);
-			}
-			DrawInventoryIcon(CPlayer.mo.InvSel, (-204, -46), DI_ITEM_OFFSETS);
-			DrawString(self.ArgSmallFont, FormatNumber(CPlayer.mo.InvSel.Amount, 3), (-169, -31), DI_TEXT_ALIGN_RIGHT);
-		}
-*/
 
 		// keys -- uggo copypasta since I guess that's how we do this now
 		Vector2 keypos = (28, -71);
