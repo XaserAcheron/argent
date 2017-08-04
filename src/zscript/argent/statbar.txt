@@ -18,6 +18,7 @@ class ArgStatusBar : DoomStatusBar
 	const ARG_MERCH_HEIGHT   = 480;
 	const ARG_MERCH_HOLDTICS = 105; // used only for the backpack message.
 	const ARG_MERCH_FADETICS =   7;
+	const ARG_INV_BOXWIDTH   =  32;
 
 	int merchTic; // show modscreen menu until gametic == merchTic. for fadeouts, etc.
 
@@ -134,7 +135,9 @@ class ArgStatusBar : DoomStatusBar
 			DrawInventoryIcon(weapon, (-95, -59), DI_ITEM_OFFSETS);
 		}
 
-		// equipment
+		// inventory n' equipment
+		DrawArgentInventory((-204, -46), 3, DI_ITEM_OFFSETS);
+/*
 		if(CPlayer.mo.InvSel) {
 			let equipment = ArgEquipment(CPlayer.mo.InvSel);
 			if(!equipment) {
@@ -147,7 +150,7 @@ class ArgStatusBar : DoomStatusBar
 			DrawInventoryIcon(CPlayer.mo.InvSel, (-204, -46), DI_ITEM_OFFSETS);
 			DrawString(self.ArgSmallFont, FormatNumber(CPlayer.mo.InvSel.Amount, 3), (-169, -31), DI_TEXT_ALIGN_RIGHT);
 		}
-		// [TODO] display all the inventory that ain't selected.
+*/
 
 		// keys -- uggo copypasta since I guess that's how we do this now
 		Vector2 keypos = (28, -71);
@@ -156,6 +159,61 @@ class ArgStatusBar : DoomStatusBar
 				DrawTexture(i.Icon, keypos, DI_ITEM_OFFSETS);
 				Vector2 size = TexMan.GetScaledSize(i.Icon);
 				keypos.X += size.X + 2;
+			}
+		}
+	}
+
+	/*
+	 * ARGENT Inventory Bar
+	 */
+	protected void DrawArgentInventory(Vector2 position, int numfields, int flags = 0)
+	{
+		Vector2 boxofs  = (ARG_INV_BOXWIDTH, 0);
+		Vector2 itemPos = position;
+		Vector2 numPos  = itemPos + boxofs + (3, 15); // TODO constant-ify this
+
+		// start at selected inventory, then draw the rest in order until we run out.
+		Inventory item = CPlayer.mo.InvSel;
+		Inventory firstInv = CPlayer.mo.FirstInv();
+		float iconAlpha = 1.0;
+
+		// draw up to 'numfields' inventory items, or until we run out of 'em.
+		for(int i = 0; item && i < numfields; i++) {
+
+			// show the inventory amount and (if we've got a piece of equipment
+			// selected) the recharge meter via fancy box graphic-ness.
+			if(item == CPlayer.mo.InvSel) {
+				let equipment = ArgEquipment(item);
+				if(!equipment) {
+					DrawImage("graphics/hud/equip-box-selected.png" ,itemPos, flags);
+				} else if (equipment.Amount < equipment.rechargeAmount) {
+					DrawBar("graphics/hud/equip-box-maxed.png", "graphics/hud/equip-box.png", equipment.rechargeTics, equipment.Arg_RechargeDelayTics(), itemPos, 0, SHADER_VERT | SHADER_REVERSE, flags);
+				} else {
+					DrawImage("graphics/hud/equip-box-maxed.png" ,itemPos, flags);
+				}
+				DrawString(self.ArgSmallFont, FormatNumber(item.Amount, 3), numPos, DI_TEXT_ALIGN_RIGHT);
+
+			} else {
+				// draw a regular ol' box for non-selected inventory.
+				DrawImage("graphics/hud/equip-box.png" ,itemPos, flags);
+				iconAlpha = 0.5;
+			}
+
+			// drawl it
+			DrawInventoryIcon(item, itemPos, flags, iconAlpha);
+
+			// now cycle forward and draw the next item.
+			// if we hit the 'end' of the inventory chain, loop around.
+			item = item.NextInv();
+			if(!item) {
+				item = firstInv;
+			}
+			itemPos = itemPos - boxofs;
+
+			// if we're back at the start (selected inventory) again, abort
+			// early so we don't draw a duplicate.
+			if(item == CPlayer.mo.InvSel) {
+				item = null;
 			}
 		}
 	}
