@@ -215,13 +215,22 @@ class ArgStatusBar : DoomStatusBar
 		int textColor = Font.CR_UNTRANSLATED;
 		double picAlpha = 1.0;
 
+		// grey out the box if we're maxed out.
 		let mod = ArgMod(merch);
+		let equipment = ArgEquipment(CPlayer.mo.FindInventory(merch.giveclass));
+
 		if(mod && mod.enabled) {
 			instructions = "This mod is already installed.";
 			textColor = Font.CR_BLACK;
 			picAlpha = 0.333;
+
+		} else if (equipment && equipment.rechargeAmount == equipment.MaxAmount) {
+			instructions = "This item is already maxed out.";
+			textColor = Font.CR_BLACK;
+			picAlpha = 0.333;
+
 		} else if (key != "") {
-			instructions = "'" .. self.GetKeyName(key) .."' to install";
+			instructions = "'" .. self.GetKeyName(key) .. "' to " .. (mod ? "install" : "purchase");
 		}
 
 		// draw background n' icon
