@@ -113,11 +113,11 @@ ARG_MOD_DESC_GAUSS_2    = "Argon gas ionizer.\n\nAdds a devastating beam effect 
 ARG_MOD_ICON_GAUSS_2    = "graphics/hud/weapon-gauss.png";
 ARG_MOD_PIC_GAUSS_2     = "graphics/hud/weapon-gauss.png";
 
-ARG_MERCH_DESC_BACKPACK = "It's a backpack. [DESCRIPTION HERE]";
+ARG_MERCH_DESC_BACKPACK = "Increases storage capacity.\n\nThough not a piece of standard-\nissue equipment, it is favored among\noperatives with a heavy trigger finger.";
 ARG_MERCH_ICON_BACKPACK = "graphics/hud/weapon-fist.png";
 ARG_MERCH_PIC_BACKPACK  = "graphics/hud/weapon-fist.png";
 
-ARG_MERCH_DESC_GRENADE  = "It's a GRENADE. [DESCRIPTION HERE]";
+ARG_MERCH_DESC_GRENADE  = "Standard-issue high explosive.\n\nUAC-enhanced 'Comp-D' explosive pack\nencased in a steel alloy shell. Provides\na 5 meter radius of lethal damage.";
 ARG_MERCH_ICON_GRENADE  = "graphics/hud/weapon-fist.png";
 ARG_MERCH_PIC_GRENADE   = "graphics/hud/weapon-fist.png";
 
