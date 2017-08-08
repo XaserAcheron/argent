@@ -32,7 +32,7 @@ class ArgEquipment : CustomInventory
 		ArgEquipment.ProjectileType 'ArgNothing';
 		ArgEquipment.ProjectileSound 'items/equipment/grenade/throw';
 		ArgEquipment.ProjectilePitch -10;
-		ArgEquipment.RechargeDelay -5; // negative means seconds; positive means tics.
+		ArgEquipment.RechargeDelay -15; // negative means seconds; positive means tics.
 
 		+INVENTORY.UNTOSSABLE
 		+INVENTORY.IGNORESKILL
