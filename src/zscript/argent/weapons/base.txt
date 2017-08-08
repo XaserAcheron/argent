@@ -218,7 +218,7 @@ class ArgWeapon : DoomWeapon
 		let modkit = ArgModKit(self.FindInventory("ArgModKit"));
 		if(modkit && modkit.active) {
 			if(!Arg_OldButtons(BT_RELOAD) && modkit.Arg_A_CycleModKit()) {
-				// [TODO] play cycle sound.
+				A_PlaySound("items/modkit/cycle", CHAN_AUTO);
 			}
 			return ResolveState("WeaponIdle");
 		} else {

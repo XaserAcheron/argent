@@ -245,6 +245,7 @@ $volume items/powerups/invuln  0.8
 
 items/modkit/pickup             "sounds/items/modkit/pickup.flac"
 items/modkit/use                "sounds/items/modkit/use.flac"
+items/modkit/cycle              "sounds/items/modkit/cycle.flac"
 items/modkit/dismiss            "sounds/items/modkit/dismiss.flac"
 items/modkit/apply              "sounds/items/modkit/apply.flac"
 
