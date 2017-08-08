@@ -15,8 +15,7 @@ class ArgStatusBar : DoomStatusBar
 	const ARG_HUD_WIDTH      = 480;
 	const ARG_HUD_HEIGHT     = 360;
 	const ARG_MERCH_WIDTH    = 640;
-	const ARG_MERCH_HEIGHT   = 480;
-	const ARG_MERCH_HOLDTICS = 105; // used only for the backpack message.
+	const ARG_MERCH_HEIGHT   = 360;
 	const ARG_MERCH_FADETICS =   7;
 	const ARG_INV_BOXWIDTH   =  32;
 
@@ -25,7 +24,8 @@ class ArgStatusBar : DoomStatusBar
 	/*
 	 * Init Fonts n' stuff.
 	 */
-	override void Init() {
+	override void Init()
+	{
 		Super.Init();
 
 		self.ArgLargeFont = self.Arg_CreateFont("hudfont-large");
@@ -41,7 +41,8 @@ class ArgStatusBar : DoomStatusBar
 	/*
 	 * Create Font shortcut, for niceness' sake.
 	 */
-	HUDFont Arg_CreateFont(Font font, bool monospace = true) {
+	HUDFont Arg_CreateFont(Font font, bool monospace = true)
+	{
 		int width = monospace ? font.getCharWidth("0") : 0;
 		return HUDFont.Create(font, width, monospace);
 	}
@@ -50,7 +51,8 @@ class ArgStatusBar : DoomStatusBar
 	 * Draw entry point. This inherits from Doom's status bar so we can show the
 	 * classic HUD if the use opts for it.
 	 */ 
-	override void Draw(int state, double TicFrac) {
+	override void Draw(int state, double TicFrac)
+	{
 		CVar cv = CVar.FindCvar("arg_classicHUD");
 		int useClassicHUD = (cv) ? cv.GetInt() : false;
 		
@@ -86,7 +88,8 @@ class ArgStatusBar : DoomStatusBar
 	/*
 	 * ARGENT "Modern" HUD.
 	 */
-	protected void DrawArgentHUD(int state, double TicFrac) {
+	protected void DrawArgentHUD(int state, double TicFrac)
+	{
 		self.BeginHUD(1.0, false, ARG_HUD_WIDTH, ARG_HUD_HEIGHT);
 
 		DrawImage("graphics/hud/base-left.png" ,(  24, -62), DI_ITEM_OFFSETS);
@@ -207,8 +210,9 @@ class ArgStatusBar : DoomStatusBar
 	/*
 	 * ARGENT Merch (Mod-Kit) Interface
 	 */
-	protected void DrawArgentMerchUI(int state, double ticFrac, ArgModKit modkit) {
-		self.BeginHUD(1.0, true, ARG_MERCH_WIDTH, ARG_MERCH_HEIGHT);
+	protected void DrawArgentMerchUI(int state, double ticFrac, ArgModKit modkit)
+	{
+		self.BeginHUD(1.0, false, ARG_MERCH_WIDTH, ARG_MERCH_HEIGHT);
 
 		// set virtual offsets
 		let scalevec = GetHUDScale();
@@ -249,11 +253,18 @@ class ArgStatusBar : DoomStatusBar
 
 		// Draw footer with instructions n' such.
 		self.DrawArgentMerchFooter("Switch weapons to browse mods.", "Press '" .. self.GetKeyName("+use") .. "' to exit.", alpha);
+		
+		// Also draw a header because those are cool too.
+		int currentPage = modkit.merchPage + 1;
+		int pageCount = modkit.common.MerchPageCount() + 1;
+		self.DrawArgentMerchHeader("Page " .. currentPage .." of " .. pageCount ..".", "Press '" .. self.GetKeyName("+reload") .. "' to cycle pages.", alpha);
 
 		// clear virtual offset
 		self.drawOffset = oldDrawOffset;
 	}
-	protected void DrawArgentMerchPanel(int x, ArgMerch merch, string key, double alpha) {
+
+	protected void DrawArgentMerchPanel(int x, ArgMerch merch, string key, double alpha)
+	{
 		// determine text color & installation instructions
 		string instructions = "";
 		int textColor = Font.CR_UNTRANSLATED;
@@ -279,24 +290,35 @@ class ArgStatusBar : DoomStatusBar
 
 		// draw background n' icon
 		DrawImage("graphics/hud/mod-base.png" ,(x, 0), DI_ITEM_OFFSETS, alpha);
-		DrawImage(merch.pic,(x + 160, 180), DI_ITEM_CENTER, picAlpha * alpha);
+		DrawImage(merch.pic,(x + 160, 136), DI_ITEM_CENTER, picAlpha * alpha);
 
 		// draw some strings, because we support that theory i guess
-		DrawString(self.ArgTextFont, merch.tag        , (x + 160,  30), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor  , alpha);
-		DrawString(self.ArgTextFont, merch.description, (x + 160, 310), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor  , alpha, 320);
-		DrawString(self.ArgTextFont, instructions     , (x + 160, 400), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED, alpha);
+		DrawString(self.ArgTextFont, merch.tag        , (x + 160,  58), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor  , alpha);
+		DrawString(self.ArgTextFont, merch.description, (x + 160, 202), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, textColor  , alpha, 320);
+		DrawString(self.ArgTextFont, instructions     , (x + 160, 292), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED, alpha);
 	}
-	protected void DrawArgentMerchFooter(string text1, string text2, double alpha) {
+
+	protected void DrawArgentMerchHeader(string text1, string text2, double alpha)
+	{
+		// dynamite headdy box
+		DrawImage("graphics/hud/mod-header.png" ,(320, 0), DI_ITEM_HCENTER|DI_ITEM_VOFFSET, alpha);
+		DrawString(self.ArgTextFont, text1, (320, 6 ), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_GOLD, alpha);
+		DrawString(self.ArgTextFont, text2, (320, 22), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED , alpha);
+	}
+
+	protected void DrawArgentMerchFooter(string text1, string text2, double alpha)
+	{
 		// australian rules footy box
-		DrawImage("graphics/hud/mod-footer.png" ,(320, 434), DI_ITEM_HCENTER|DI_ITEM_VOFFSET, alpha);
-		DrawString(self.ArgTextFont, text1, (320, 440), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_UNTRANSLATED, alpha);
-		DrawString(self.ArgTextFont, text2, (320, 456), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED         , alpha);
+		DrawImage("graphics/hud/mod-footer.png" ,(320, 318), DI_ITEM_HCENTER|DI_ITEM_VOFFSET, alpha);
+		DrawString(self.ArgTextFont, text1, (320, 324), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_UNTRANSLATED, alpha);
+		DrawString(self.ArgTextFont, text2, (320, 340), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED         , alpha);
 	}
 
 	/*
 	 * Quick function to get a key name from a command.
 	 */
-	protected string GetKeyName(string command) {
+	protected string GetKeyName(string command)
+	{
 		int k1, k2;
 		[k1, k2] = Bindings.GetKeysForCommand(command);
 		return KeyBindings.NameKeys(k1, k2);
