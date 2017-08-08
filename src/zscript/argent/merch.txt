@@ -1,0 +1,45 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Merch -- Mods n' Equipment, that is.
+//
+// --------------------------------------------------------------------------
+
+/*
+ * Merch class! This basically represents a thing that can be "purchased"
+ * using a Mod kit. Mods are a distinct subclass, while Equipment simply
+ * uses an array of these to create the index of stuff to buy. Rather handy.
+ */
+class ArgMerch
+{
+	class<Inventory> giveclass;
+	string tag;
+	string description;
+	string icon;
+	string pic;
+
+	/*
+	 * Convenience function for creating a new bit o' merchandise.
+	 */
+	static ArgMerch Create(class<Inventory> giveclass, string tag, string description, string icon, string pic)
+	{
+		let merch = new('ArgMerch');
+		merch.giveclass   = giveclass;
+		merch.tag         = StringTable.Localize(tag);
+		merch.description = StringTable.Localize(description);
+		merch.icon        = StringTable.Localize(icon);
+		merch.pic         = StringTable.Localize(pic);
+		return merch;
+	}
+}
+
+/*
+ * Weapon Mods. They're pretty cool.
+ * [TODO] a ton of refactoring now that ArgMod is a class.
+ */
+class ArgMod : ArgMerch
+{
+	bool enabled;
+	int ammoUse;
+	ArgCounter cooldown;
+	ArgCounter charge;
+}

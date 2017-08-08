@@ -33,7 +33,7 @@ class ArgPistol : ArgWeapon replaces Pistol
 		PISP A -1;
 		Stop;
 	Ready:
-		PISG A 1 A_WeaponReady;
+		PISG A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 	Select:
 		PISG A 0 Arg_A_PistolReset(false);
@@ -49,7 +49,7 @@ class ArgPistol : ArgWeapon replaces Pistol
 		PISF B 1 { A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH); Arg_A_WeaponOffset(3.5, 9.0, -0.05, 1.00); }
 		PISF B 1 { A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH); Arg_A_WeaponOffset(1.0, 6.0, -0.25      ); }
 		PISG A 1   A_WeaponReady(WRF_NOFIRE | WRF_NOSWITCH);
-		PISG AAAAA 1 A_WeaponReady;
+		PISG AAAAA 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		PISG A 0 A_Refire;
 		Goto Ready;
 	AltFire:

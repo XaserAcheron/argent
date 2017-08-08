@@ -6,8 +6,8 @@
 
 class ArgPlayer : DoomPlayer
 {
-	int modTotal;
-	const MOD_MAX = 12; // [TODO] this better, if possible
+	ArgCommon common;
+	ArgEquipment activeEquipment; // temp.storage location
 
 	Default
 	{
@@ -39,5 +39,57 @@ class ArgPlayer : DoomPlayer
 	Death.Massacre:
 		PLAY W -1;
 		Stop;
+	}
+	
+	/*
+	 * Before the player begins to play, we must first BeginPlay. Poetic.
+	 */
+	override void BeginPlay()
+	{
+		Super.BeginPlay();
+		self.common = ArgCommon.Get();
+	}
+	
+	/*
+	 * Tick-Tock Motherfucker!
+	 */
+	override void Tick()
+	{
+		Super.Tick();
+
+		// recharge equipment
+		ArgEquipment equipment;
+		for(int i = 0; i < common.merch.Size(); i++) {
+			equipment = ArgEquipment(self.FindInventory(common.merch[i].giveclass));
+			if(equipment) {
+				equipment.Arg_Recharge();
+			}
+		}
+	}
+	
+	/*
+	 * Grant a piece of merch to the player. This is done here since Weird Things(tm)
+	 * were happening when trying to gift an inventory item from another item
+	 * (probably some self pointer shenanigans).
+	 */
+	bool Arg_GrantEquipment(class<Inventory> item, int amount = 1)
+	{
+		if(item) {
+			let equipment = ArgEquipment(self.FindInventory(item));
+
+			// make sure we don't gift over the max amount.
+			if(!equipment || equipment.rechargeAmount < equipment.MaxAmount) {
+				GiveInventory(item, amount);
+
+				// find the equipment again just in case it was null before,
+				// then gift one more unit of recharge (up to MaxAmount).
+				equipment = ArgEquipment(self.FindInventory(item));
+				if(equipment) {
+					equipment.rechargeAmount++;
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 }

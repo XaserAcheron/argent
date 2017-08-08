@@ -26,7 +26,7 @@ class ArgChainsaw : ArgWeapon replaces Chainsaw
 		CSAW A -1;
 		Stop;
 	Ready:
-		SAWG AABB 1 A_WeaponReady;
+		SAWG AABB 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 	Select:
 		SAWG A 0 A_Raise;
@@ -67,7 +67,7 @@ class ArgChainsaw : ArgWeapon replaces Chainsaw
 		SAWF D 1 Arg_A_WeaponOffset( 0.0,  8);
 		SAWF C 1 Arg_A_WeaponOffset( 0.0,  0);
 		SAWF BA 1;
-		SAWG AABBAABBAABBAABBAABBAABBAABBAABBAABB 1 A_WeaponReady();
+		SAWG AABBAABBAABBAABBAABBAABBAABBAABBAABB 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		SAWG A 0 Arg_A_SawIdle();
 		Goto Ready;
 	}

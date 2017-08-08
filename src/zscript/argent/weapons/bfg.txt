@@ -58,7 +58,7 @@ class ArgBFG9000 : ArgWeapon replaces BFG9000
 		BFGP A -1;
 		Stop;
 	Ready:
-		BFGG A 1 Bright A_WeaponReady;
+		BFGG A 1 Bright A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 	Select:
 		BFGG A 0 Bright;

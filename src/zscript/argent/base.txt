@@ -240,11 +240,103 @@ enum Arg_TossGibsFlags
 	ARG_TG_SCREAM = 4, // Play scream sound effect after tossing gibs.
 };
 
-/*
- * Class for static common functions.
- */
-class ArgCommon play
+enum Arg_WeaponState // technically a copypasta of some internal non-exposed enums
 {
+	ARG_WF_WEAPONREADY    =    1,
+	ARG_WF_WEAPONBOBBING  =    2,
+	ARG_WF_WEAPONREADYALT =    4,
+	ARG_WF_WEAPONSWITCHOK =    8,
+	ARG_WF_DISABLESWITCH  =   16,
+	ARG_WF_WEAPONRELOADOK =   32,
+	ARG_WF_WEAPONZOOMOK   =   64,
+	ARG_WF_REFIRESWITCHOK =  128,
+	ARG_WF_USER1OK        =  256,
+	ARG_WF_USER2OK        =  512,
+	ARG_WF_USER3OK        = 1024,
+	ARG_WF_USER4OK        = 2048,
+};
+
+/*
+ * Singleton class for global variables; also houses common static functions.
+ */
+class ArgCommon : Thinker
+{
+	Array<ArgMerch> merch;
+	
+	const MERCH_PER_PAGE = 2;
+
+	/*
+	 * Init global variables.
+	 */
+	ArgCommon Init()
+	{
+		// set up the merch array; this lists all the stuff "for sale" in the
+		// mod kit menu that aren't mods -- e.g. backpack, equipment, etc.
+		merch.push(ArgMerch.Create('Backpack'            , '$ARG_TAG_BACKPACK', '$ARG_MERCH_DESC_BACKPACK', '$ARG_MERCH_ICON_BACKPACK', '$ARG_MERCH_PIC_BACKPACK' ));
+		merch.push(ArgMerch.Create('ArgEquipmentGrenade' , '$ARG_TAG_GRENADE' , '$ARG_MERCH_DESC_GRENADE' , '$ARG_MERCH_ICON_GRENADE' , '$ARG_MERCH_PIC_GRENADE'  ));
+//		merch.push(ArgMerch.Create('ArgEquipmentHologram', '$ARG_TAG_HOLOGRAM', '$ARG_MERCH_DESC_HOLOGRAM', '$ARG_MERCH_ICON_HOLOGRAM', '$ARG_MERCH_PIC_HOLOGRAM' ));
+//		merch.push(ArgMerch.Create('ArgEquipmentSiphon'  , '$ARG_TAG_SIPHON'  , '$ARG_MERCH_DESC_SIPHON'  , '$ARG_MERCH_ICON_SIPHON'  , '$ARG_MERCH_PIC_SIPHON'   ));
+		
+		// do some housekeeping n' return
+		ChangeStatNum(STAT_STATIC);
+		return self;
+	}
+	static ArgCommon _Init()
+	{
+		return new("ArgCommon").Init();
+	}
+
+	/*
+	 * Get ArgCommon singleton to access global variables.
+	 */
+	static ArgCommon Get()
+	{
+		ThinkerIterator it = ThinkerIterator.Create("ArgCommon", STAT_STATIC);
+		let p = ArgCommon(it.Next());
+		if (p == null)
+		{
+			p = ArgCommon._Init();
+		}
+		return p;
+	}
+
+	/*
+	 * UI-safe version of Get(). Note that this does not guarantee that the
+	 * object exists on the first tic, since it's dependent on the WorldLoaded
+	 * event being called first. Uggo.
+	 */
+	static clearscope ArgCommon GetUI()
+	{
+		ThinkerIterator it = ThinkerIterator.Create("ArgCommon", STAT_STATIC);
+		let p = ArgCommon(it.Next());
+		return p;
+	}
+	
+	/*
+	 * Non-static function: return the number of pages of merch that exist.
+	 */
+	clearscope int MerchPageCount() {
+		return ceil(1.0 * merch.Size() / MERCH_PER_PAGE);
+	}
+
+	/*
+	 * Non-static function: return the merch item for a particular page.
+	 */
+	clearscope ArgMerch MerchForPage(int page, int pageItem = 1) {
+		// treat pages & items as 1-indexed, since that's how they work elsewhere.
+		int maxPage = MerchPageCount();
+		if(page > 0
+		&& page <= maxPage
+		&& pageItem > 0
+		&& pageItem <= MERCH_PER_PAGE) {
+			int merchIndex = (page-1) * MERCH_PER_PAGE + (pageItem-1);
+			if(merchIndex >= 0 && merchIndex < merch.Size()) {
+				return merch[merchIndex];
+			}
+		}
+		return null;
+	}
+
 	/*
 	 * Convenience function; jumps to XDeath if the Always Gib cvar is set.
 	 */

@@ -1,0 +1,177 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Base Equipment Definitions
+//
+// --------------------------------------------------------------------------
+
+class ArgEquipment : CustomInventory
+{
+	sound pPreSound;
+	sound pProjectileSound;
+	class<Actor> pProjectileType;
+	float pProjectilePitch;
+
+	int rechargeAmount; // max amount of units we can recharge; initially zero.
+	int rechargeDelay;  // duration in tics until we recharge 1 unit.
+	int rechargeTics;   // current recharge tic.
+
+	property PreSound       : pPreSound;
+	property ProjectileSound: pProjectileSound;
+	property ProjectileType : pProjectileType;
+	property ProjectilePitch: pProjectilePitch;
+	property RechargeDelay  : rechargeDelay;
+
+	Default
+	{
+		Scale 0.66;
+		Inventory.PickupMessage "$ARG_GOT_MOD_KIT";
+		Inventory.PickupSound "items/modkit/pickup";
+		Inventory.MaxAmount 1;
+		Inventory.Icon "";
+		
+		ArgEquipment.ProjectileType 'ArgNothing';
+		ArgEquipment.ProjectileSound 'items/equipment/grenade/throw';
+		ArgEquipment.ProjectilePitch -10;
+		ArgEquipment.RechargeDelay -15; // negative means seconds; positive means tics.
+
+		+INVENTORY.UNTOSSABLE
+		+INVENTORY.IGNORESKILL
+		+INVENTORY.KEEPDEPLETED
+		+INVENTORY.FANCYPICKUPSOUND
+		+INVENTORY.INVBAR
+	}
+
+	States
+	{
+	Use:
+		TNT1 A 0 Arg_A_UseEquipment();
+		Stop;
+	}
+	
+	States(Weapon)
+	{
+	UseEquipmentStart:
+		"####" "########" 1 A_WeaponOffset(0.0, 12.0, WOF_KEEPX | WOF_ADD | WOF_INTERPOLATE);
+		"####" A 0 Arg_A_UseEquipmentStart();
+	UseEquipment:
+		EQPG A 1 { A_WeaponOffset(-120,-25); Arg_A_EquipmentPreAction(); }
+		EQPG A 1   A_WeaponOffset(- 90,-20, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(- 60,-15, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(- 40,-10, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(- 20,  0, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(-  5, 10, WOF_INTERPOLATE);
+		EQPG B 1 { A_WeaponOffset(  10, 20, WOF_INTERPOLATE); Arg_A_EquipmentGeneric(); }
+		EQPG B 1   A_WeaponOffset(  20, 35, WOF_INTERPOLATE);
+		EQPG B 1   A_WeaponOffset(  30, 50, WOF_INTERPOLATE);
+		EQPG B 1   A_WeaponOffset(  40, 70, WOF_INTERPOLATE);
+		EQPG B 1   A_WeaponOffset(  50, 90, WOF_INTERPOLATE);
+	UseEquipmentEnd:
+		"####" A 0 Arg_A_UseEquipmentEnd();
+		// [TODO] at some point support a raise animation; right now it isn't
+		//        possible to store & retrieve the sprite graphic generically
+		//        for psprites. :<
+//		"####" "########" 1 A_WeaponOffset(0.0,-12.0, WOF_KEEPX | WOF_ADD | WOF_INTERPOLATE);
+		"####" A 0 ResolveState("Ready"); // resolves to weapon's Ready state
+		Stop;
+	}
+
+	/*
+	 * Use equipment. This sets the player's weapon state to the item-defined
+	 * "UseEquipment" state, which is pretty rad.
+	 */
+	action bool Arg_A_UseEquipment() {
+
+		// Temporarily save a reference to this equipment item in the
+		// player class so we can access it from Weapon states.
+		let argPlayer = ArgPlayer(self);
+		if(argPlayer) {
+			argPlayer.activeEquipment = invoker;
+		}
+
+		// only jump if the player's active weapon is in its ready state.
+		if(player && player.ReadyWeapon && (player.WeaponState & ARG_WF_WEAPONREADY)) {
+			player.SetPsprite(PSP_WEAPON, ResolveState("UseEquipmentStart"));
+
+			return true; // remove from inventory
+		} else {
+			return false; // ...or don't.
+		}
+	}
+
+	/*
+	 * Start equipment PSPrite animation.
+	 */
+	action(Weapon) state Arg_A_UseEquipmentStart() {
+		A_WeaponOffset(0.0, 0.0);
+		return ResolveState("UseEquipment");
+	}
+
+	/*
+	 * End equipment PSPrite animation.
+	 */
+	action(Weapon) void Arg_A_UseEquipmentEnd() {
+		A_WeaponOffset(0.0, 108.0);
+	}
+
+	/*
+	 * Generic pre-action, for grenades and the like.
+	 */
+	action(Weapon) void Arg_A_EquipmentPreAction() {
+		let argPlayer = ArgPlayer(self);
+		if(argPlayer && argPlayer.activeEquipment && argPlayer.activeEquipment.pPreSound) {
+			A_PlaySound(argPlayer.activeEquipment.pPreSound, CHAN_5);
+		}
+	}
+
+	/*
+	 * Generic "Throw Equipment" action, for grenades n' siphons n' such.
+	 */
+	action(Weapon) void Arg_A_EquipmentGeneric() {
+		let argPlayer = ArgPlayer(self);
+		if(argPlayer && argPlayer.activeEquipment) {
+			ArgEquipment equip = argPlayer.activeEquipment;
+			A_PlaySound(equip.pProjectileSound, CHAN_6);
+			A_FireProjectile(equip.pProjectileType, 0, 0, 0, -8, FPF_NOAUTOAIM, equip.pProjectilePitch);
+		}
+	}
+
+	/*
+	 * Jump to the specified state on the player's active equipment item.
+	 * This is necessary since the Weapon needs to access states stored on
+	 * the equipment item and respect overrides, etc.
+	 *
+	 * [This was originally done via a virtual function, but that entered
+	 *  undefined territory land real quick, so 'nope' to that.]
+	 */
+	action(Weapon) state Arg_A_EquipmentState(StateLabel stateName) {
+		let argPlayer = ArgPlayer(self);
+		if(argPlayer && argPlayer.activeEquipment) {
+			return argPlayer.activeEquipment.ResolveState(stateName);
+		}
+		return ResolveState(null);
+	}
+	
+	/*
+	 * Get recharge delay in tics (i.e. convert negative numbers from seconds).
+	 */
+	clearscope int Arg_RechargeDelayTics() {
+		return (self.rechargeDelay < 0) ? (self.rechargeDelay*-35) : self.rechargeDelay;
+	}
+
+	/*
+	 * Recharge inventory. Increases the recharge counter by a tic and
+	 * grants a cool bonus item when it hits the max.
+	 */
+	void Arg_Recharge() {
+		if(self.Amount < self.rechargeAmount) {
+
+			// give one unit of charge and see if we've hit the delay.
+			// if so, gift an actual unit of equipment. Hooray charginess!
+			self.rechargeTics++;
+			if(self.rechargeTics >= self.Arg_RechargeDelayTics()) {
+				self.Amount++;
+				self.rechargeTics = 0;
+			}
+		}
+	}
+}

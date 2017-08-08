@@ -7,6 +7,8 @@
 class ArgModKit : CustomInventory replaces Backpack
 {
 	bool active;
+	int merchPage;
+	ArgCommon common;
 
 	Default
 	{
@@ -15,6 +17,7 @@ class ArgModKit : CustomInventory replaces Backpack
 		Inventory.PickupSound "items/modkit/pickup";
 		Inventory.MaxAmount 999;
 		Inventory.Icon "graphics/hud/equip-icon-modkit.png";
+		Tag "$ARG_TAG_MODKIT";
 
 		+INVENTORY.FANCYPICKUPSOUND
 		+INVENTORY.INVBAR
@@ -29,23 +32,21 @@ class ArgModKit : CustomInventory replaces Backpack
 		TNT1 A 0 Arg_A_UseModKit();
 		Stop;
 	}
+	
+	/*
+	 * Keep a handy reference to ArgCommon before doing anything else.
+	 */
+	override void BeginPlay() {
+		self.common = ArgCommon.Get();
+		Super.BeginPlay();
+	}
 
 	/*
 	 * Mod Kit Interface of Awesome.
 	 */
 	action bool Arg_A_UseModKit()
 	{
-		// First, check if we already have all mods. If so, trade the kit for
-		// a backpack and return.
-		// [TODO] remove this shortcut entirely when Equipment arrives.
-		let player = ArgPlayer(self);
-		if(player && player.modTotal >= player.MOD_MAX) {
-			A_GiveInventory("Backpack", 1);
-			A_TakeInventory("ArgModKit", 1);
-			A_PlaySound("items/modkit/pickup", CHAN_AUTO);
-			return true; // remove the item.
-
-		} else if (invoker.active) {
+		if (invoker.active) {
 			// kit already active. Deactivate it.
 			A_PlaySound("items/modkit/dismiss", CHAN_AUTO);
 			invoker.active = false;
@@ -54,8 +55,70 @@ class ArgModKit : CustomInventory replaces Backpack
 			// kit not yet active. Activate it.
 			A_PlaySound("items/modkit/use", CHAN_AUTO);
 			invoker.active = true;
+			invoker.merchPage = 0; // reset it on open for sanity's sake.
 		}
 		return false; // do not remove if just activating/deactivating the kit.
+	}
+
+	/*
+	 * Cycle forward/backward through the list of merch grantable by the kit.
+	 */
+	action bool Arg_A_CycleModKit()
+	{
+		if(invoker.active) {
+			// increment the merch page by one; or go back to zero if we're
+			// on the last page. Zero is used as the "show mods instead of
+			// merch" value, so we're operating on 1-based indices for merch.
+			int maxPage = invoker.common.MerchPageCount();
+			if(invoker.merchPage < maxPage) {
+				invoker.merchPage++;
+			} else {
+				invoker.merchPage = 0;
+			}
+			return true; // signals the calling weapon to play a sound.
+
+		} else {
+			return false;
+		}
+	}
+
+	/*
+	 * Apply the mod-kit (if applicable ;), granting the specified piece of merch.
+	 *
+	 * Yeah, "Use" vs "Apply" is a bit confusing, but the former term is "Use
+	 * in the Inventory sense, so there you go. ;)
+	 */
+	action bool, bool Arg_A_ApplyModKit(int index, ArgWeapon weapon)
+	{
+		let modWeapon = ArgModWeapon(weapon);
+
+		if(invoker.active && invoker.merchPage > 0) {
+			// Install merch.
+			ArgPlayer argPlayer = ArgPlayer(invoker.owner);
+			ArgMerch merchToGive = invoker.common.MerchForPage(invoker.merchPage, index);
+			if(argPlayer && merchToGive && merchToGive.giveclass) {
+				bool granted = argPlayer.Arg_GrantEquipment(merchToGive.giveclass);
+				invoker.active = !granted;
+				return granted, granted;
+			}
+
+		} else if(invoker.active && modWeapon && !modWeapon.mod[index].enabled) {
+			// Install a mod.
+
+			// "gift" the mod and signal the calling state to jump to the
+			// mod swap animation.
+			modWeapon.mod[index].enabled = true;
+			modWeapon.modSelected = index;
+
+			// dismiss the Mod Kit interface
+			invoker.active = false;
+
+			// signal the calling weapon to consume the kit and
+			// begin a mod swap animation.
+			return true, false;
+
+		}
+		return false, false;
 	}
 
 	/*

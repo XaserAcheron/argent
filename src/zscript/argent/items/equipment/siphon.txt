@@ -1,0 +1,21 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Siphon Grenade
+//
+// --------------------------------------------------------------------------
+
+class ArgEquipmentSiphon : ArgEquipment
+{
+	Default
+	{
+		Inventory.Icon "graphics/hud/equip-icon-siphon.png";
+		Tag "$ARG_TAG_SIPHON";
+
+		ArgEquipment.ProjectileType 'ArgSiphonGrenade';
+	}
+}
+
+class ArgSiphonGrenade : Actor
+{
+	// [TODO] make this, lol
+}

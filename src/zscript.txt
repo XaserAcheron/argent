@@ -1,6 +1,7 @@
 version "2.5"
 
 #include "zscript/argent/base.txt"
+#include "zscript/argent/merch.txt"
 #include "zscript/argent/player.txt"
 #include "zscript/argent/events.txt"
 #include "zscript/argent/statbar.txt"
@@ -32,3 +33,8 @@ version "2.5"
 #include "zscript/argent/weapons/bfg.txt"
 
 #include "zscript/argent/items/powerups.txt"
+
+#include "zscript/argent/items/equipment/base.txt"
+#include "zscript/argent/items/equipment/grenade.txt"
+#include "zscript/argent/items/equipment/hologram.txt"
+#include "zscript/argent/items/equipment/siphon.txt"

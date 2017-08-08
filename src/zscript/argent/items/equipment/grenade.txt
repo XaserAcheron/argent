@@ -1,0 +1,131 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Frag Grenade
+//
+// --------------------------------------------------------------------------
+
+class ArgEquipmentGrenade : ArgEquipment
+{
+	Default
+	{
+		Inventory.MaxAmount 3;
+		Inventory.Icon "graphics/hud/equip-icon-grenade.png";
+		Tag "$ARG_TAG_GRENADE";
+		
+		ArgEquipment.PreSound 'items/equipment/grenade/pin';
+		ArgEquipment.ProjectileType 'ArgFragGrenade';
+	}
+}
+
+class ArgFragGrenade : Actor
+{
+	int fuse;
+	float actorbouncefactor;
+	
+	property ActorBounceFactor: actorbouncefactor;
+
+	const FUSE_TICS   = 45;
+	const SOUND_TICS  = 10;
+	const SPEED_LIMIT = 3.0;
+
+	Default
+	{
+		Projectile;
+		Damage 0;
+		Speed 40;
+		Radius 4;
+		Height 8;
+		Scale 0.66;
+		BounceType 'Hexen';
+		BounceSound 'items/equipment/grenade/bounce';
+		BounceFactor 0.33;
+		WallBounceFactor 0.66;
+		ArgFragGrenade.ActorBounceFactor 0.33;
+
+		// note that this ActorBounceFactor mock-property gets applied on top
+		// of WallBounceFactor/BounceFactor (the former if hitting the side of
+		// an enemy, the latter if hitting the top), due to internal behavior.
+
+		-NOGRAVITY
+		+CANBOUNCEWATER
+		+BOUNCEONACTORS
+		+ALLOWBOUNCEONACTORS // gorrammit zdoom
+	}
+	States
+	{
+	Spawn:
+		EGRT AAAHHHGGGFFFEEEDDDCCCBBB 1 Bright Arg_A_GrenadeMove();
+		Loop;
+	Stopped:
+		EGRT C 1 Bright Arg_A_GrenadeTick();
+		Wait;
+	Death:
+		REXP A 4 Bright {
+			A_Stop();
+			A_NoGravity();
+			A_SetScale(1.5);
+			A_Explode(64 , 160, 1);
+			A_Explode(256, 320, 0, 128);
+			A_PlaySound("items/equipment/grenade/explode", CHAN_VOICE);
+		}
+		REXP B 3 Bright;
+		REXP C 3 Bright A_SetTranslucent(0.7);
+		REXP D 2 Bright A_SetTranslucent(0.6);
+		REXP E 2 Bright A_SetTranslucent(0.5);
+		REXP F 2 Bright A_SetTranslucent(0.4);
+		Stop;
+	}
+	
+	/*
+	 * Collision stuff; implements ActorBounceFactor.
+	 */
+	override bool CanCollideWith(Actor other, bool passive)
+	{
+		if(other != target) { // don't do a thing if "colliding" with the player.
+			self.vel = self.vel * self.actorbouncefactor;
+		}
+		return true;
+	}
+
+	/*
+	 * Grenade "Tick" action. Not actually a Tick() override, since we need
+	 * to do a state jump when the grenade's fuse is out.
+	 */
+	action state Arg_A_GrenadeTick()
+	{
+		let this = ArgFragGrenade(self);
+		if(this) {
+			if(this.fuse >= FUSE_TICS) {
+				return ResolveState("Death");
+			} else if(this.fuse == SOUND_TICS) {
+				A_PlaySound("items/equipment/grenade/arm", CHAN_5);
+			}
+			this.fuse += 1;
+		}
+		return ResolveState(null);
+	}
+
+	/*
+	 * Move the 'nade. Basically just GrenadeTick with a "stop moving" check.
+	 */
+	action state Arg_A_GrenadeMove()
+	{
+		if(self.pos.z - self.floorz <= 4.0 && vel.Length() < SPEED_LIMIT) {
+			return Arg_A_GrenadeStop();
+		} else {
+			return Arg_A_GrenadeTick();
+		}
+	}
+
+	/*
+	 * Stops the grenade and prevents it from ever bouncing again. How sad.
+	 */
+	action state Arg_A_GrenadeStop()
+	{
+		A_Stop();
+		A_ChangeLinkFlags(blockmap: false);
+		bMISSILE = false;
+		bTHRUACTORS = true;
+		return ResolveState("Stopped");
+	}
+}
