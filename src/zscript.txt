@@ -1,6 +1,8 @@
 version "2.5"
 
-#include "zscript/argent/base.txt"
+#include "zscript/argent/arg-common.txt"
+#include "zscript/argent/arg-constants.txt"
+#include "zscript/argent/arg-actors.txt"
 #include "zscript/argent/merch.txt"
 #include "zscript/argent/player.txt"
 #include "zscript/argent/events.txt"
@@ -19,7 +21,8 @@ version "2.5"
 #include "zscript/argent/effects/gibs.txt"
 #include "zscript/argent/effects/teleport.txt"
 
-#include "zscript/argent/weapons/base.txt"
+#include "zscript/argent/weapons/arg-weapon.txt"
+#include "zscript/argent/weapons/arg-mod-weapon.txt"
 #include "zscript/argent/weapons/fist.txt"
 #include "zscript/argent/weapons/chainsaw.txt"
 #include "zscript/argent/weapons/pistol.txt"
@@ -34,7 +37,7 @@ version "2.5"
 
 #include "zscript/argent/items/powerups.txt"
 
-#include "zscript/argent/items/equipment/base.txt"
+#include "zscript/argent/items/equipment/arg-equipment.txt"
 #include "zscript/argent/items/equipment/grenade.txt"
 #include "zscript/argent/items/equipment/hologram.txt"
 #include "zscript/argent/items/equipment/siphon.txt"

@@ -1,0 +1,256 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Base Weapon Definition
+//
+// --------------------------------------------------------------------------
+
+/*
+ * Base weapon class. Contains common functions and properties for all of
+ * ARGENT's weapons, naturally. Non-moddable weapons (e.g. pistol, SSG, BFG)
+ * inherit directly from this class.
+ */
+class ArgWeapon : DoomWeapon
+{
+	bool altSound;
+	
+	Default
+	{
+		Inventory.PickupSound "items/weapon";
+		Weapon.UpSound "weapons/swap";
+		Weapon.BobStyle "InverseSmooth";
+		Weapon.BobSpeed  2.00;
+		Weapon.BobRangeX 0.75;
+		Weapon.BobRangeY 0.50;
+		Weapon.SelectionOrder 9999999;
+		Scale 0.75;
+	
+		+WEAPON.NOALERT
+	}
+	States
+	{
+	Spawn:
+		TNT1 A 1;
+		Stop;
+	Ready:
+		TNT1 A 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		Loop;
+	Select:
+		"####" "#" 0;
+	SelectLoop:
+		"####" "#" 1 Arg_A_Raise();
+		Loop;
+	Deselect:
+	DeselectLoop:
+		"####" "#" 1 Arg_A_Lower();
+		Loop;
+	Fire:
+		TNT1 A 1;
+		Goto Ready;
+	AltFire:
+		"####" "#" 1 A_WeaponReady(WRF_NOFIRE);
+		"####" "#" 0 ResolveState("Ready");
+		Goto Ready;
+	DeadLowered:
+		TNT1 A 1;
+		Loop;
+	Reload:
+		"####" "#" 0 Arg_A_CycleMerch();
+		// intentional fallthrough
+	WeaponIdle:
+		"####" "#" 1 A_WeaponReady();
+		"####" "#" 0 ResolveState("Ready");
+		Goto Ready;
+	WeaponDelay:
+		"####" "########" 1 A_WeaponReady(WRF_NOFIRE);
+		"####" "#" 0 ResolveState("Ready");
+		Goto Ready;
+	}
+
+	/*
+	 * Overridden Fire/Altfire overrides, for convenient merch-apply interception.
+	 */
+	override State GetAtkState(bool hold)
+	{
+		state installState = Arg_TryInstallMerch(1);
+		if(installState) {
+			return installState;
+		} else {
+			return Super.GetAtkState(hold);
+		}
+	}
+	override State GetAltAtkState(bool hold)
+	{
+		state installState = Arg_TryInstallMerch(2);
+		if(installState) {
+			return installState;
+		} else {
+			return Super.GetAltAtkState(hold);
+		}
+	}
+
+	/*
+	 * Double-speed A_Raise/A_Lower, for convenience.
+	 */
+	action void Arg_A_Lower() {
+		A_Lower();
+		A_Lower();
+	}
+	action void Arg_A_Raise() {
+		A_Raise();
+		A_Raise();
+	}
+
+	/*
+	 * A_GunFlash extension, wrapping a whole bunch of cool
+	 * common stuff, like A_WeaponReady, A_PlaySound, and the like.
+	 */
+	enum Arg_A_GunFlashFlags {
+		ARG_GF_NOALERT  = 1, // Don't call A_AlertMonsters.
+		ARG_GF_ALTSOUND = 2, // Alternate firing sound between channels 5 and 6
+		ARG_GF_BOB      = 4, // Continue bobbing when firing (i.e. call A_WeaponReady)
+	}
+	action void Arg_A_GunFlash(statelabel flashstate = null, sound flashsound = "", int flags = 0, double recoil = 0) {
+		A_GunFlash(flashstate);
+		
+		if(!(flags & ARG_GF_NOALERT)) {
+			A_AlertMonsters();
+		}
+		if(flashsound != "") {
+			if(flags & ARG_GF_ALTSOUND) {
+				A_PlaySound(flashsound, invoker.altSound ? CHAN_6 : CHAN_5);
+				invoker.altSound = !invoker.altSound;
+			} else {
+				A_PlaySound(flashsound, CHAN_5);
+			}
+		}
+		if(flags & ARG_GF_BOB) {
+			A_WeaponReady(WRF_NOFIRE | WRF_NOFIRE);
+		}
+		if(recoil > 0) {
+			A_Recoil(recoil);
+		}
+	}
+
+	/*
+	 * Convenient ammo-taker function. Since ARGENT weapons only use a single
+	 * ammo type, just subtract a bit from AmmoType1. Easy-peasy.
+	 */
+	action void Arg_A_TakeAmmo(int amount = 1)
+	{
+		A_TakeInventory(invoker.AmmoType1, amount, TIF_NOTAKEINFINITE);
+	}
+
+	/*
+	 * Manually check if the player has ammo, to circumvent AMMO_OPTIONAL.
+	 */
+	action bool Arg_A_CheckAmmo(int amount = 0)
+	{
+		if(amount == 0) {
+			amount = invoker.AmmoUse1;
+		}
+		if(CountInv(invoker.AmmoType1) < amount) {
+			A_SelectWeapon("None", SWF_SELECTPRIORITY);
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/*
+	 * A certain function that would've been nice to have built-in for ages. ;)
+	 */
+	action state Arg_A_JumpIfNoAmmo(statelabel state = 'Ready', int amount = 1)
+	{
+		return (CountInv(invoker.AmmoType1) < amount) ? ResolveState(state) : ResolveState(null);
+	}
+	
+	/*
+	 * The inverse of the above, for completeness' sake.
+	 */
+	action state Arg_A_JumpIfAmmo(statelabel state = 'Ready', int amount = 1)
+	{
+		return (CountInv(invoker.AmmoType1) >= amount) ? ResolveState(state) : ResolveState(null);
+	}
+	
+	/*
+	 * Synth-fire convenience functions. Comes in both
+	 * check and jump variants. Note that the 'checks' need to be labeled
+	 * with "action" even though they kinda aren't; funky compat stuff.
+	 */
+	action bool Arg_SynthFire   (bool checkAmmo = false) {
+		return (GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK   ) && (!checkAmmo || CountInv(invoker.AmmoType1) > 0);
+	}
+	action bool Arg_SynthAltFire(bool checkAmmo = false) {
+		return (GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK) && (!checkAmmo || CountInv(invoker.AmmoType1) > 0);
+	}
+	action state Arg_A_SynthFire(statelabel label) {
+		return Arg_SynthFire() ? ResolveState(label) : ResolveState(null);
+	}
+	action state Arg_A_SynthAltFire(statelabel label) {
+		return Arg_SynthAltFire() ? ResolveState(label) : ResolveState(null);
+	}
+
+	/*
+	 * Slightly more generic versions of the above.
+	 */
+	action bool Arg_Buttons(int button) {
+		return (GetPlayerInput(INPUT_BUTTONS) & button);
+	}
+	action bool Arg_OldButtons(int button) {
+		return (GetPlayerInput(INPUT_OLDBUTTONS) & button);
+	}
+
+	/*
+	 * Weapon Offset function alias. This does two things mainly:
+	 * - adjusts 'y' by 32 so that (0,0) is actually the origin, and
+	 * - adds a convenient parameter for random jitter, as that's common.
+	 */
+	action void Arg_A_WeaponOffset(double x, double y, double j = 0, double k = 0) {
+		k = (k == 0) ? j : k; // means you can't do x-only jitter, but meh
+		A_WeaponOffset(x + frandom(-j, j), 32.0 + y + frandom(-k, k), WOF_INTERPOLATE);
+	}
+
+	/*
+	 * Cycle through merch items. This is important probably.
+	 */
+	action state Arg_A_CycleMerch() {
+		// make sure we're in the menu first.
+		let modkit = ArgModKit(self.FindInventory("ArgModKit"));
+		if(modkit && modkit.active) {
+			if(!Arg_OldButtons(BT_RELOAD) && modkit.Arg_A_CycleModKit()) {
+				A_PlaySound("items/modkit/cycle", CHAN_AUTO);
+			}
+			return ResolveState("WeaponIdle");
+		} else {
+			return null;
+		}
+	}
+
+	/*
+	 * Attempt to install the specified mod/merch. If already installed (or the
+	 * shop menu isn't opened), no state jump occurs.
+	 *
+	 * This function is called from virtuals, not states, so it is not marked `action`.
+	 */
+	state Arg_TryInstallMerch(int modToInstall) {
+
+		let owner  = self.owner;
+		let modkit = ArgModKit(owner.FindInventory("ArgModKit"));
+		if(owner && modkit) {
+			bool success, isMerch;
+			[success, isMerch] = modkit.Arg_A_ApplyModKit(modToInstall, self);
+			if(success) {
+				// consume the mod kit and play some fun soundage.
+				// [TODO] screen flash effect here.
+				owner.A_TakeInventory("ArgModKit", 1);
+				owner.A_PlaySound("items/modkit/apply", CHAN_AUTO);
+				return isMerch ? ResolveState("WeaponDelay") : ResolveState("ModSwapDown");
+			} else {
+				return null;
+			}
+		} else {
+			// don't do a thing otherwise. continue firing, gents!
+			return null;
+		}
+	}
+}

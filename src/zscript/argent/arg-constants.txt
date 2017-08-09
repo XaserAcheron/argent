@@ -1,0 +1,28 @@
+// --------------------------------------------------------------------------
+//
+// ARGENT: Constants & Enums.
+//
+// --------------------------------------------------------------------------
+
+enum Arg_TossGibsFlags
+{
+	ARG_TG_FALL   = 1, // Call A_NoBlocking after tossing gibs.
+	ARG_TG_SOUND  = 2, // Play gibbing sound effect after tossing gibs.
+	ARG_TG_SCREAM = 4, // Play scream sound effect after tossing gibs.
+};
+
+enum Arg_WeaponState // technically a copypasta of some internal non-exposed enums
+{
+	ARG_WF_WEAPONREADY    =    1,
+	ARG_WF_WEAPONBOBBING  =    2,
+	ARG_WF_WEAPONREADYALT =    4,
+	ARG_WF_WEAPONSWITCHOK =    8,
+	ARG_WF_DISABLESWITCH  =   16,
+	ARG_WF_WEAPONRELOADOK =   32,
+	ARG_WF_WEAPONZOOMOK   =   64,
+	ARG_WF_REFIRESWITCHOK =  128,
+	ARG_WF_USER1OK        =  256,
+	ARG_WF_USER2OK        =  512,
+	ARG_WF_USER3OK        = 1024,
+	ARG_WF_USER4OK        = 2048,
+};
