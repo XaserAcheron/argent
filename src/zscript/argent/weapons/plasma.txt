@@ -236,7 +236,7 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_GunFlash();
 			A_AlertMonsters();
 			A_PlaySound("weapons/plasma/mod2fire", CHAN_6);
-			A_FireProjectile("ArgStunBomb", 0, 0, 0, 0, FPF_AIMATANGLE , 5);
+			A_FireProjectile("ArgStunBomb", 0, 0, 0, 0, FPF_AIMATANGLE, -5);
 			Arg_A_TakeAmmo(invoker.mod2.ammoUse);
 		}
 		PL2G A 1 Arg_A_WeaponOffset( 5.0,  5.0);
