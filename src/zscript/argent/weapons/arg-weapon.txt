@@ -143,9 +143,9 @@ class ArgWeapon : DoomWeapon
 	/*
 	 * Manually check if the player has ammo, to circumvent AMMO_OPTIONAL.
 	 */
-	action bool Arg_A_CheckAmmo(int amount = 0)
+	action bool Arg_A_CheckAmmo(int amount = -1)
 	{
-		if(amount == 0) {
+		if(amount < 0) {
 			amount = invoker.AmmoUse1;
 		}
 		if(CountInv(invoker.AmmoType1) < amount) {

@@ -52,8 +52,8 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			Arg_A_GunFlash();
 			A_FireProjectile("ArgPlasma", 0, 1, 6.0 + frandom(-2.00, 2.00), frandom(-2.00, 2.00));
 			Arg_A_WeaponOffset(0, 0);
-			if(invoker.modSelected == 1) {
-				invoker.mod[1].charge.inc(3);
+			if(invoker.modSelected == invoker.mod1) {
+				invoker.mod1.charge.inc(3);
 				A_PlaySound("weapons/plasma/altfire", CHAN_5);
 				return ResolveState("Mod1FirePrimary");
 			} else {
@@ -105,10 +105,10 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		PL1A GGGFFFEEEDDDBBBCCCDDDEEEFFFGGG 1 A_WeaponReady(WRF_ALLOWRELOAD);
 	Mod1Ready:
 		PL1G D 0 {
-			if(invoker.mod[1].charge.val >=  invoker.mod[1].charge.max       ) { return ResolveState("Mod1ReadyD"); }
-			if(invoker.mod[1].charge.val >= (invoker.mod[1].charge.max/4) * 3) { return ResolveState("Mod1ReadyC"); }
-			if(invoker.mod[1].charge.val >= (invoker.mod[1].charge.max/4) * 2) { return ResolveState("Mod1ReadyB"); }
-			if(invoker.mod[1].charge.val >= (invoker.mod[1].charge.max/4)    ) { return ResolveState("Mod1ReadyA"); }
+			if(invoker.mod1.charge.val >=  invoker.mod1.charge.max       ) { return ResolveState("Mod1ReadyD"); }
+			if(invoker.mod1.charge.val >= (invoker.mod1.charge.max/4) * 3) { return ResolveState("Mod1ReadyC"); }
+			if(invoker.mod1.charge.val >= (invoker.mod1.charge.max/4) * 2) { return ResolveState("Mod1ReadyB"); }
+			if(invoker.mod1.charge.val >= (invoker.mod1.charge.max/4)    ) { return ResolveState("Mod1ReadyA"); }
 			return ResolveState(null);
 		}
 		PL1G A 0;
@@ -130,8 +130,8 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 	Mod1FirePrimary:
 		// extra special animation stuffs for heatblast's primary fire
 		PL1G K 1 Bright {
-			if(invoker.mod[1].charge.val >=  invoker.mod[1].charge.max   ) { return ResolveState("Mod1FirePrimaryB"); }
-			if(invoker.mod[1].charge.val >= (invoker.mod[1].charge.max/4)) { return ResolveState("Mod1FirePrimaryA"); }
+			if(invoker.mod1.charge.val >=  invoker.mod1.charge.max   ) { return ResolveState("Mod1FirePrimaryB"); }
+			if(invoker.mod1.charge.val >= (invoker.mod1.charge.max/4)) { return ResolveState("Mod1FirePrimaryA"); }
 			return ResolveState(null);
 		}
 		PL1G L 1 Bright Arg_A_WeaponOffset(2.50, 1.500, 0.75, 0.250);
@@ -149,7 +149,7 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		Goto Mod1Ready;
 	Mod1Up:
 		PL1G A 1 {
-			if(invoker.mod[1].charge.val >= (invoker.mod[1].charge.max/4)) {
+			if(invoker.mod1.charge.val >= (invoker.mod1.charge.max/4)) {
 				return ResolveState("Mod1Hold");
 			}
 			return ResolveState(null);
@@ -158,9 +158,9 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 	Mod1Hold:
 		PL1A A 1 Bright {
 			Arg_A_GunFlash('Flash', "weapons/plasma/mod1fire");
-			A_Explode(invoker.mod[1].charge.val * 3, 160, XF_NOTMISSILE, 0, 128);
-			A_Blast(BF_NOIMPACTDAMAGE, invoker.mod[1].charge.val * 2, 160, 20, "ArgNothing", "");
-			invoker.mod[1].charge.toMin();
+			A_Explode(invoker.mod1.charge.val * 3, 160, XF_NOTMISSILE, 0, 128);
+			A_Blast(BF_NOIMPACTDAMAGE, invoker.mod1.charge.val * 2, 160, 20, "ArgNothing", "");
+			invoker.mod1.charge.toMin();
 			
 			// cool heatwave fx
 			A_Quake(2, 8, 0, 8, "");
@@ -191,7 +191,7 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 	Mod2Swap:
 		PL2S A 1 {
 			A_PlaySound("weapons/plasma/mod2swap", CHAN_AUTO);
-			invoker.mod[1].charge.toMin();
+			invoker.mod1.charge.toMin();
 		}
 		PL2S B 1 Arg_A_WeaponOffset(  0.0, 0.0);
 		PL2S C 1 Arg_A_WeaponOffset(- 1.0, 0.0);
@@ -218,10 +218,10 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 	Mod2Ready:
 		PL2G A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		PL2G D 1 {
-			if(invoker.mod[2].cooldown.val == 1) {
+			if(invoker.mod2.cooldown.val == 1) {
 				A_PlaySound("weapons/plasma/mod2ready", CHAN_AUTO);
 			}
-			if(invoker.mod[2].cooldown.val >= 1) {
+			if(invoker.mod2.cooldown.val >= 1) {
 				return ResolveState("Mod2Ready");
 			}
 			return ResolveState(null);
@@ -229,7 +229,7 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 		PL2G DEEFFFFFFFFEEDDA 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 	Mod2Up:
-		PL2G A 1 Arg_A_JumpIfAmmo('Mod2Hold', invoker.mod[2].ammoUse);
+		PL2G A 1 Arg_A_JumpIfAmmo('Mod2Hold', invoker.mod2.ammoUse);
 		Goto Mod2Ready;
 	Mod2Hold:
 		PL2G B 1 Bright {
@@ -237,7 +237,7 @@ class ArgPlasmaRifle : ArgModWeapon replaces PlasmaRifle
 			A_AlertMonsters();
 			A_PlaySound("weapons/plasma/mod2fire", CHAN_6);
 			A_FireProjectile("ArgStunBomb", 0, 0, 0, 0, FPF_AIMATANGLE , 5);
-			Arg_A_TakeAmmo(invoker.mod[2].ammoUse);
+			Arg_A_TakeAmmo(invoker.mod2.ammoUse);
 		}
 		PL2G A 1 Arg_A_WeaponOffset( 5.0,  5.0);
 		PL2G G 1 Arg_A_WeaponOffset(12.0, 12.0);

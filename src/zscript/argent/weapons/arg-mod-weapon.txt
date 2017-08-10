@@ -17,8 +17,9 @@ class ArgModWeapon : ArgWeapon
 	/*
 	 * Mod definition & control.
 	 */
-	int modSelected;
-	ArgMod[3] mod; // mod[0] is used as a placeholder for "no mod selected."
+	ArgMod modSelected;
+	ArgMod mod1;
+	ArgMod mod2;
 
 	int    init_mod1_ammoUse; // custom property drivers
 	int    init_mod1_cooldown;
@@ -174,26 +175,25 @@ class ArgModWeapon : ArgWeapon
 	override void BeginPlay()
 	{
 		Super.BeginPlay();
-		mod[0] = new('ArgMod'); // [TODO] remove this awful placeholder :P
-		mod[1] = new('ArgMod');
-		mod[2] = new('ArgMod');
+		mod1 = new('ArgMod');
+		mod2 = new('ArgMod');
 		
 		// Initialize mods from properties
-		mod[1].ammoUse        = init_mod1_ammoUse;
-		mod[1].cooldown.init(0, init_mod1_cooldown, max(init_mod1_cooldown_over, init_mod1_cooldown));
-		mod[1].charge.init  (0, init_mod1_charge  , max(init_mod1_charge_over  , init_mod1_charge  ));
-		mod[1].tag            = StringTable.Localize(init_mod1_tag);
-		mod[1].description    = StringTable.Localize(init_mod1_description);
-		mod[1].icon           = StringTable.Localize(init_mod1_icon);
-		mod[1].pic            = StringTable.Localize(init_mod1_pic);
+		mod1.ammoUse        = init_mod1_ammoUse;
+		mod1.cooldown.init(0, init_mod1_cooldown, max(init_mod1_cooldown_over, init_mod1_cooldown));
+		mod1.charge.init  (0, init_mod1_charge  , max(init_mod1_charge_over  , init_mod1_charge  ));
+		mod1.tag            = StringTable.Localize(init_mod1_tag);
+		mod1.description    = StringTable.Localize(init_mod1_description);
+		mod1.icon           = StringTable.Localize(init_mod1_icon);
+		mod1.pic            = StringTable.Localize(init_mod1_pic);
 
-		mod[2].ammoUse        = init_mod2_ammoUse;
-		mod[2].cooldown.init(0, init_mod2_cooldown, max(init_mod2_cooldown_over, init_mod2_cooldown));
-		mod[2].charge.init  (0, init_mod2_charge  , max(init_mod2_charge_over  , init_mod2_charge  ));
-		mod[2].tag            = StringTable.Localize(init_mod2_tag);
-		mod[2].description    = StringTable.Localize(init_mod2_description);
-		mod[2].icon           = StringTable.Localize(init_mod2_icon);
-		mod[2].pic            = StringTable.Localize(init_mod2_pic);
+		mod2.ammoUse        = init_mod2_ammoUse;
+		mod2.cooldown.init(0, init_mod2_cooldown, max(init_mod2_cooldown_over, init_mod2_cooldown));
+		mod2.charge.init  (0, init_mod2_charge  , max(init_mod2_charge_over  , init_mod2_charge  ));
+		mod2.tag            = StringTable.Localize(init_mod2_tag);
+		mod2.description    = StringTable.Localize(init_mod2_description);
+		mod2.icon           = StringTable.Localize(init_mod2_icon);
+		mod2.pic            = StringTable.Localize(init_mod2_pic);
 		
 		// Set MinSelAmmo1 to 1 for all mod weapons to thwart +AMMO_OPTIONAL;
 		// this is a special value that tells BestWeapon (the "switch to
@@ -218,8 +218,8 @@ class ArgModWeapon : ArgWeapon
 		// Subtract 1 from mod cooldown every tick, no matter
 		// what else happens. Huzzah!
 		let this = ArgModWeapon(self);
-		this.mod[1].cooldown.dec();
-		this.mod[2].cooldown.dec();
+		this.mod1.cooldown.dec();
+		this.mod2.cooldown.dec();
 	}
 
 	/*
@@ -229,10 +229,10 @@ class ArgModWeapon : ArgWeapon
 	action state Arg_A_JumpMod(statelabel mod1label, statelabel mod2label, statelabel mod0label = null, bool checkCooldown = false) {
 		// Jump to either the mod 1 or mod 2 state depending on which exists.
 		// Optionally, check if cooldown is complete first.
-		if(invoker.modSelected == 1 && (!checkCooldown || invoker.mod[1].cooldown.get() == 0)) {
+		if(invoker.modSelected == invoker.mod1 && (!checkCooldown || invoker.mod1.cooldown.get() == 0)) {
 			return ResolveState(mod1label);
 
-		} else if(invoker.modSelected == 2 && (!checkCooldown || invoker.mod[2].cooldown.get() == 0)) {
+		} else if(invoker.modSelected == invoker.mod2 && (!checkCooldown || invoker.mod2.cooldown.get() == 0)) {
 			return ResolveState(mod2label);
 
 		} else {
@@ -279,21 +279,21 @@ class ArgModWeapon : ArgWeapon
 			// Do a mod swap.
 			// determine what to swap to. Hooray goofy extra logic for zero.
 			int modToSelect = 0;
-			if(invoker.modSelected == 1 && invoker.mod[2].enabled) {
+			if(invoker.modSelected == invoker.mod1 && invoker.mod2.enabled) {
 				modToSelect = 2;
-			} else if(invoker.modSelected == 2 && invoker.mod[1].enabled) {
+			} else if(invoker.modSelected == invoker.mod2 && invoker.mod1.enabled) {
 				modToSelect = 1;
-			} else if(invoker.modSelected == 0) {
-				if(invoker.mod[1].enabled) {
+			} else if(!invoker.modSelected) {
+				if(invoker.mod1.enabled) {
 					modToSelect = 1;
-				} else if(invoker.mod[2].enabled) {
+				} else if(invoker.mod2.enabled) {
 					modToSelect = 2;
 				}
 			}
 
 			// if we've successfully done a swap, initiate the animation.
 			if(modToSelect > 0) {
-				invoker.modSelected = modToSelect;
+				invoker.modSelected = (modToSelect == 1) ? invoker.mod1 : invoker.mod2;
 				return ResolveState("ModSwapDown");
 			} else {
 				return ResolveState("WeaponIdle");
@@ -306,8 +306,8 @@ class ArgModWeapon : ArgWeapon
 	 */
 	action void Arg_A_StartModCooldown() {
 		A_ClearReFire();
-		if(invoker.modSelected > 0 && invoker.modSelected <= 2) {
-			invoker.mod[invoker.modSelected].cooldown.toMax();
+		if(invoker.modSelected) {
+			invoker.modSelected.cooldown.toMax();
 		}
 	}
 	
@@ -316,8 +316,8 @@ class ArgModWeapon : ArgWeapon
 	 * Generally done on weapon swap.
 	 */
 	action void Arg_A_ClearModCooldown() {
-		if(invoker.modSelected > 0 && invoker.modSelected <= 2) {
-			invoker.mod[invoker.modSelected].cooldown.toMin();
+		if(invoker.modSelected) {
+			invoker.modSelected.cooldown.toMin();
 		}
 	}
 	

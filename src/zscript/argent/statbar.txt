@@ -243,8 +243,8 @@ class ArgStatusBar : DoomStatusBar
 
 		} else if(modWeapon) {
 			// draw mod panels, allowing for selection and stuff.
-			self.DrawArgentMerchPanel(  0, modWeapon.mod[1], "+attack"   , alpha);
-			self.DrawArgentMerchPanel(320, modWeapon.mod[2], "+altattack", alpha);
+			self.DrawArgentMerchPanel(  0, modWeapon.mod1, "+attack"   , alpha);
+			self.DrawArgentMerchPanel(320, modWeapon.mod2, "+altattack", alpha);
 
 		} else {
 			// weapon isn't moddable; display this onscreen.

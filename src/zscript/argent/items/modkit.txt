@@ -102,21 +102,23 @@ class ArgModKit : CustomInventory replaces Backpack
 				return granted, granted;
 			}
 
-		} else if(invoker.active && modWeapon && !modWeapon.mod[index].enabled) {
-			// Install a mod.
+		} else if(invoker.active && modWeapon) {
+			ArgMod mod = (index == 1) ? modWeapon.mod1 : modWeapon.mod2;
+			if(!mod.enabled) {
+				// Install a mod.
 
-			// "gift" the mod and signal the calling state to jump to the
-			// mod swap animation.
-			modWeapon.mod[index].enabled = true;
-			modWeapon.modSelected = index;
+				// "gift" the mod and signal the calling state to jump to the
+				// mod swap animation.
+				mod.enabled = true;
+				modWeapon.modSelected = mod;
 
-			// dismiss the Mod Kit interface
-			invoker.active = false;
+				// dismiss the Mod Kit interface
+				invoker.active = false;
 
-			// signal the calling weapon to consume the kit and
-			// begin a mod swap animation.
-			return true, false;
-
+				// signal the calling weapon to consume the kit and
+				// begin a mod swap animation.
+				return true, false;
+			}
 		}
 		return false, false;
 	}

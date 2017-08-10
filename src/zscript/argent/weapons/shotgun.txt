@@ -267,7 +267,7 @@ class ArgShotgun : ArgModWeapon replaces Shotgun
 	 */
 	action void Arg_A_FireExplosiveShot() {
 		Arg_A_GunFlash('Flash', "weapons/shotgun/mod2fire");
-		Arg_A_TakeAmmo(invoker.mod[2].ammoUse);
+		Arg_A_TakeAmmo(invoker.mod2.ammoUse);
 		A_FireProjectile("ArgShotgunExplosiveShot", 0, 0, 4,-4, FPF_AIMATANGLE ,-5);
 	}
 }
