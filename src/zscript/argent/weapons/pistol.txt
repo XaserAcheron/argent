@@ -22,7 +22,7 @@ class ArgPistol : ArgWeapon replaces Pistol
 		Tag "$ARG_TAG_PISTOL";
 		Obituary "$ARG_OB_PISTOL";
 		DamageType "ArgPistol";
-		ArgWeapon.Crosshair 20; // [TODO] abstract
+		ArgWeapon.Crosshair ARG_XH_PISTOL_IDLE;
 
 		+WEAPON.NOALERT
 		+WEAPON.NOAUTOFIRE

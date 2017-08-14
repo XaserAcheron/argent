@@ -16,6 +16,7 @@ Sprite GSCPA0, 460, 280
 }
 
 Graphic XHAIRB20,  29, 29 { Offset 14, 14  Patch XHAIRS20, 0, 0 }
+Graphic XHAIRB40,  15, 15 { Offset  6,  6  Patch XHAIRS40, 0, 0 }
 Graphic XHAIRB41, 115, 35 { Offset 57, 17  Patch XHAIRS41, 0, 0 }
 Graphic XHAIRB42, 115, 35 { Offset 57, 17  Patch XHAIRS42, 0, 0 }
 Graphic XHAIRB43, 115, 35 { Offset 57, 17  Patch XHAIRS43, 0, 0 }

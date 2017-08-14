@@ -6,12 +6,6 @@
 
 class ArgHeavyAR : ArgModWeapon replaces Chaingun
 {
-	const HEAVY_CROSSHAIR_ANIM1 = 41;
-	const HEAVY_CROSSHAIR_ANIM2 = 42;
-	const HEAVY_CROSSHAIR_ANIM3 = 43;
-	const HEAVY_CROSSHAIR_ANIM4 = 44;
-	const HEAVY_CROSSHAIR_IDLE  = 45;
-
 	Default {
 		Weapon.SelectionOrder 5;
 		Weapon.AmmoUse 1;
@@ -22,7 +16,7 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 		Tag "$ARG_TAG_HEAVY";
 		Obituary "$ARG_OB_HEAVY";
 		DamageType "ArgHeavyAR";
-
+		ArgWeapon.Crosshair ARG_XH_HEAVY_IDLE;
 
 		ArgModWeapon.Mod1Tag "$ARG_MOD_TAG_HEAVY_1";
 		ArgModWeapon.Mod1Description "$ARG_MOD_DESC_HEAVY_1";
@@ -204,12 +198,12 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 		HSCP A 1 Bright {
 			A_PlaySound("weapons/heavy/mod2up", CHAN_AUTO);
 			A_ZoomFactor(2.0);
-			A_SetCrosshair(HEAVY_CROSSHAIR_ANIM1);
+			A_SetCrosshair(ARG_XH_HEAVY_MOD2_ANIM1);
 		}
-		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM2);
-		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM3);
-		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM4);
-		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_IDLE );
+		HSCP A 1 Bright A_SetCrosshair(ARG_XH_HEAVY_MOD2_ANIM2);
+		HSCP A 1 Bright A_SetCrosshair(ARG_XH_HEAVY_MOD2_ANIM3);
+		HSCP A 1 Bright A_SetCrosshair(ARG_XH_HEAVY_MOD2_ANIM4);
+		HSCP A 1 Bright A_SetCrosshair(ARG_XH_HEAVY_MOD2_IDLE );
 	Mod2Hold:
 		HSCP A 1 Bright Arg_A_SynthFire("Mod2Fire");
 		HSCP A 0 Bright A_Refire();
@@ -218,11 +212,11 @@ class ArgHeavyAR : ArgModWeapon replaces Chaingun
 			A_PlaySound("weapons/heavy/mod2down", CHAN_AUTO);
 			A_ZoomFactor(1.0);
 		}
-		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM4);
-		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM3);
-		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM2);
-		HSCP A 1 Bright A_SetCrosshair(HEAVY_CROSSHAIR_ANIM1);
-		HSCP A 0 Bright A_SetCrosshair(0);
+		HSCP A 1 Bright A_SetCrosshair(ARG_XH_HEAVY_MOD2_ANIM4);
+		HSCP A 1 Bright A_SetCrosshair(ARG_XH_HEAVY_MOD2_ANIM3);
+		HSCP A 1 Bright A_SetCrosshair(ARG_XH_HEAVY_MOD2_ANIM2);
+		HSCP A 1 Bright A_SetCrosshair(ARG_XH_HEAVY_MOD2_ANIM1);
+		HSCP A 0 Bright A_SetCrosshair(invoker.crosshair);
 		Goto Ready;
 	Mod2Fire:
 		HSCP A 1 Bright {

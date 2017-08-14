@@ -26,3 +26,19 @@ enum Arg_WeaponState // technically a copypasta of some internal non-exposed enu
 	ARG_WF_USER3OK        = 1024,
 	ARG_WF_USER4OK        = 2048,
 };
+
+enum Arg_Crosshairs
+{
+	ARG_XH_PISTOL_IDLE      = 20,
+	ARG_XH_HEAVY_IDLE       = 40,
+	ARG_XH_HEAVY_MOD2_ANIM1 = 41,
+	ARG_XH_HEAVY_MOD2_ANIM2 = 42,
+	ARG_XH_HEAVY_MOD2_ANIM3 = 43,
+	ARG_XH_HEAVY_MOD2_ANIM4 = 44,
+	ARG_XH_HEAVY_MOD2_IDLE  = 45,
+	ARG_XH_GAUSS_MOD1_ANIM1 = 74,
+	ARG_XH_GAUSS_MOD1_ANIM2 = 73,
+	ARG_XH_GAUSS_MOD1_ANIM3 = 72,
+	ARG_XH_GAUSS_MOD1_ANIM4 = 71,
+	ARG_XH_GAUSS_MOD1_IDLE  = 70,
+};
