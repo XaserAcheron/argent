@@ -12,7 +12,10 @@
 class ArgWeapon : DoomWeapon
 {
 	bool altSound;
-	
+	int crosshair;
+
+	property Crosshair: crosshair;
+
 	Default
 	{
 		Inventory.PickupSound "items/weapon";
@@ -22,6 +25,7 @@ class ArgWeapon : DoomWeapon
 		Weapon.BobRangeX 0.75;
 		Weapon.BobRangeY 0.50;
 		Weapon.SelectionOrder 9999999;
+		ArgWeapon.Crosshair 0;
 		Scale 0.75;
 	
 		+WEAPON.NOALERT
@@ -37,8 +41,9 @@ class ArgWeapon : DoomWeapon
 	Select:
 		"####" "#" 0;
 	SelectLoop:
+		"####" "#" 0 Arg_A_InitWeapon();
 		"####" "#" 1 Arg_A_Raise();
-		Loop;
+		Wait;
 	Deselect:
 	DeselectLoop:
 		"####" "#" 1 Arg_A_Lower();
@@ -86,6 +91,13 @@ class ArgWeapon : DoomWeapon
 		} else {
 			return Super.GetAltAtkState(hold);
 		}
+	}
+	
+	/*
+	 * Weapon init stuff. Done on weapon raise.
+	 */
+	action void Arg_A_InitWeapon() {
+		A_SetCrosshair(invoker.crosshair);
 	}
 
 	/*
