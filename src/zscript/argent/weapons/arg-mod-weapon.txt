@@ -257,7 +257,14 @@ class ArgModWeapon : ArgWeapon
 	 * to install a mod or do other shiz.
 	 */
 	action state Arg_A_TryAltFire() {
-		if(Arg_A_CheckAmmo(min(invoker.modSelected.ammoUse, 1))) {
+		// special junk: allow mods which take 0 ammo (e.g. plasma heat blast).
+		int altAmmoUse = -1;
+		if(invoker.modSelected) {
+			altAmmoUse = min(invoker.modSelected.ammoUse, 1);
+		}
+
+		// now do the actual junk
+		if(Arg_A_CheckAmmo(altAmmoUse)) {
 			return Arg_A_JumpMod("Mod1Up", "Mod2Up", "DontFire", true);
 		} else {
 			return ResolveState("DontFire");
