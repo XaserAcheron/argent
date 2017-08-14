@@ -19,36 +19,43 @@ class ArgBFG9000 : ArgWeapon replaces BFG9000
 	}
 
 	/*
-	 * Determine ammotype at runtime! Recalculating this every tic isn't the
-	 * most efficient thing in the world, but it does the trick "best" for now.
-	 *
-	 * [XA] Part of the reason for this is that AmmoType1 doesn't seem to be
-	 *      persisted in savegames properly (the other properties seem to work).
-	 *      Need to bugreport this...
+	 * Determine ammotype at runtime! This is recalculated each tic to
+	 * properly handle the case where the ammotype cvar is changed in-game.
+	 * Shouldn't be any real risk of performance degradation for maps
+	 * that don't use Mock2-amounts of BFGs. ;)
 	 */
 	override void Tick()
 	{
 		super.Tick();
 
-		let this = ArgBFG9000(self);
-		if(this && this.owner) {
-			if(GetCvar("arg_bfgammotype")) {
-				// use custom "bfg cells" ammo type.
-				this.AmmoType1 = 'ArgBFGAmmo';
-				this.AmmoUse1  = 1;
-				this.AmmoGive1 = 1;
-				this.ammouse_classic = 1;
-				this.ammouse_modern  = 1;
-			
+		if(GetCvar("arg_bfgammotype")) {
+			// use custom "bfg cells" ammo type.
+			self.AmmoType1 = 'ArgBFGAmmo';
+			self.AmmoUse1  = 1;
+			self.AmmoGive1 = 1;
+			self.ammouse_classic = 1;
+			self.ammouse_modern  = 1;
+		
+		} else {
+			// use regular ol' cells
+			self.AmmoType1 = 'Cell';
+			self.AmmoUse1  = 40;
+			self.AmmoGive1 = 40;
+			self.ammouse_classic = 40;
+			self.ammouse_modern  = 80;
+		}
+
+		// if the item is owned, keep the internal ammo actor reference in sync
+		// with the type. Otherwise, things go south real quick when firing.
+		if(self.owner) {
+			let ammo = Ammo(self.owner.FindInventory(self.AmmoType1));
+			if(ammo) {
+				self.Ammo1 = ammo;
 			} else {
-				// use regular ol' cells
-				this.AmmoType1 = 'Cell';
-				this.AmmoUse1  = 40;
-				this.AmmoGive1 = 40;
-				this.ammouse_classic = 40;
-				this.ammouse_modern  = 80;
+				// explicitly ensure the owner has an instance of the ammo
+				// actor. Yep, we've got to explicitly give zero of the item. :D
+				self.Ammo1 = AddAmmo(self.owner, self.AmmoType1, 0);
 			}
-			this.Ammo1 = Ammo(this.owner.FindInventory(this.ammoType1));
 		}
 	}
 	
