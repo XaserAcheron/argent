@@ -30,6 +30,11 @@ enum Arg_WeaponState // technically a copypasta of some internal non-exposed enu
 enum Arg_Crosshairs
 {
 	ARG_XH_PISTOL_IDLE      = 20,
+	ARG_XH_PISTOL_ANIM1     = 21,
+	ARG_XH_PISTOL_ANIM2     = 22,
+	ARG_XH_PISTOL_ANIM3     = 23,
+	ARG_XH_PISTOL_ANIM4     = 24,
+	ARG_XH_PISTOL_CHARGED   = 25,
 	ARG_XH_HEAVY_IDLE       = 40,
 	ARG_XH_HEAVY_MOD2_ANIM1 = 41,
 	ARG_XH_HEAVY_MOD2_ANIM2 = 42,
