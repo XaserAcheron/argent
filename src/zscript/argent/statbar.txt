@@ -21,8 +21,7 @@ class ArgStatusBar : DoomStatusBar
 	const ARG_MERCH_HEIGHT   = 360;
 	const ARG_MERCH_FADETICS =   7;
 	const ARG_INV_BOXWIDTH   =  32;
-	const ARG_XHAIR_WIDTH    = 320;
-	const ARG_XHAIR_HEIGHT   = 240;
+	const ARG_XHAIR_FACTOR   = 200.;
 
 	int merchTic; // show modscreen menu until gametic == merchTic. for fadeouts, etc.
 
@@ -345,23 +344,23 @@ class ArgStatusBar : DoomStatusBar
 	protected void DrawArgentCrosshairAugment(ArgWeapon weapon, int state, double TicFrac)
 	{
 		double screenWidth  = screen.GetWidth();
-		double screenHeight = screen.GetHeight(); //(state == HUD_StatusBar) ? GetTopOfStatusBar() : screen.GetHeight();
+		double screenHeight = screen.GetHeight();
 		double screenBarTop = (state == HUD_StatusBar) ? (screenHeight - GetTopOfStatusBar()) : 0;
-		double xhscale;
-		Vector2 augscale;
+		double augscale;
 
 		// match the current crosshair scale.
 		if(crosshairscale > 0) {
-
-			xhscale = (crosshairgrow ? (crosshairscale * crosshairsize) : crosshairscale); // * screenWidth / ARG_XHAIR_WIDTH;
-			augscale = (xhscale, xhscale);
-
+			augscale = screenHeight * crosshairscale / ARG_XHAIR_FACTOR;
 		} else {
-			augscale = (1.0, 1.0);
+			augscale = 1.0;
+		}
+		if (crosshairgrow){
+			augscale *= CrosshairSize;
 		}
 
 		// set up a native-resolution drawspace.
 		self.BeginHUD(1.0, false, screenWidth, screenHeight);
+		self.fullscreenoffsets = false;
 
 		// set the draw origin by adjusting the offset
 		Vector2 oldDrawOffset = self.drawOffset;
@@ -369,16 +368,39 @@ class ArgStatusBar : DoomStatusBar
 
 		// draw it; this is done in a weapon virtual so that each
 		// weapon can define its own crosshair augments. Fancy!
-		weapon.Arg_DrawCrosshairAugment(self, state, TicFrac, augscale);
-		
+		weapon.Arg_DrawCrosshairAugment(self, state, TicFrac, (augscale, augscale));
+
 		self.drawOffset = oldDrawOffset;
+	}
 
-		// [TEST] dump some numbers to the screen:
+	/*
+	 * Draw image w/scaled offsets. Just a convenient shortcut for DrawOffsetTexture.
+	 */
+	void DrawOffsetImage(String image, Vector2 pos = (0, 0), int flags = DI_ITEM_TOP | DI_ITEM_LEFT, double Alpha = 1., Vector2 box = (-1, -1), Vector2 scale = (1, 1))
+	{
+		TextureID texture = TexMan.CheckForTexture(image, TexMan.Type_Any);
+		if(texture) {
+			DrawOffsetTexture(texture, pos, flags, Alpha, box, scale);
+		}
+	}
 
-//		DrawString(self.ArgSmallFont, FormatNumber(screenWidth , 8), (0,  0), DI_TEXT_ALIGN_LEFT);
-//		DrawString(self.ArgSmallFont, FormatNumber(screenHeight, 8), (0, 10), DI_TEXT_ALIGN_LEFT);
-//		DrawString(self.ArgSmallFont, FormatNumber(screenBarTop, 8), (0, 20), DI_TEXT_ALIGN_LEFT);
-//		DrawString(self.ArgSmallFont, String.Format("%.3f", xhscale), (0, 30), DI_TEXT_ALIGN_LEFT);
+	/*
+	 * Draw texture w/scaled offsets. This actually makes the resulting image
+	 * position/offsets based on
+	 */
+	void DrawOffsetTexture(TextureID texture, Vector2 pos = (0, 0), int flags = DI_ITEM_TOP | DI_ITEM_LEFT, double Alpha = 1., Vector2 box = (-1, -1), Vector2 scale = (1, 1))
+	{
+		if(texture) {
+			// get scaled offsets for the texture -- as in, scaled relative
+			// to the image, so 1 unit is 1 scaled pixel. Handy stuff.
+			Vector2 offset = TexMan.GetScaledOffset(texture);
+			offset.x *= scale.x;
+			offset.y *= scale.y;
+			pos -= offset;
+
+			// draw it.
+			statusbar.DrawTexture(texture, pos, flags, alpha, box, scale);
+		}
 	}
 
 	/*

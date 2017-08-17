@@ -143,7 +143,7 @@ class ArgPistol : ArgWeapon replaces Pistol
 	 */
 	override void Arg_DrawCrosshairAugment(ArgStatusBar statusbar, int state, double TicFrac, Vector2 scale) {
 		if(charge.val > 0) {
-			statusbar.DrawImage("graphics/xhairs/augments/test-charge.png", (0, 0), statusbar.DI_ITEM_OFFSETS, scale: scale);
+			statusbar.DrawOffsetImage("graphics/xhairs/augments/test-charge.png", scale: scale);
 		}
 	}
 }
