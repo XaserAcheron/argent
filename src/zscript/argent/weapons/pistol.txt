@@ -137,6 +137,15 @@ class ArgPistol : ArgWeapon replaces Pistol
 		A_ClearRefire();
 		invoker.charge.toMin();
 	}
+	
+	/*
+	 * Crosshair augments.
+	 */
+	override void Arg_DrawCrosshairAugment(ArgStatusBar statusbar, int state, double TicFrac, Vector2 scale) {
+		if(charge.val > 0) {
+			statusbar.DrawImage("graphics/xhairs/augments/test-charge.png", (0, 0), statusbar.DI_ITEM_OFFSETS, scale: scale);
+		}
+	}
 }
 
 class ArgPistolPuff : ArgBulletPuff

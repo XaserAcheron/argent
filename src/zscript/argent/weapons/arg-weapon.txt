@@ -265,4 +265,11 @@ class ArgWeapon : DoomWeapon
 			return null;
 		}
 	}
+
+	/*
+	 * Awesome virtual function for drawing weapon crosshair augment.
+	 */
+	ui virtual void Arg_DrawCrosshairAugment(ArgStatusBar statusbar, int state, double TicFrac, Vector2 scale) {
+		// intentional no-op
+	}
 }

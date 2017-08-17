@@ -14,10 +14,15 @@ class ArgStatusBar : DoomStatusBar
 
 	const ARG_HUD_WIDTH      = 480;
 	const ARG_HUD_HEIGHT     = 360;
+	const ARG_SBAR_WIDTH     = 320;
+	const ARG_SBAR_HEIGHT    = 200;
+	const ARG_SBAR_BARTOP    =  32;
 	const ARG_MERCH_WIDTH    = 640;
 	const ARG_MERCH_HEIGHT   = 360;
 	const ARG_MERCH_FADETICS =   7;
 	const ARG_INV_BOXWIDTH   =  32;
+	const ARG_XHAIR_WIDTH    = 320;
+	const ARG_XHAIR_HEIGHT   = 240;
 
 	int merchTic; // show modscreen menu until gametic == merchTic. for fadeouts, etc.
 
@@ -63,14 +68,13 @@ class ArgStatusBar : DoomStatusBar
 		if(useClassicHUD) {
 			Super.Draw(state, TicFrac);
 
-		// ARGENT "Modern" Statsubar -- [TODO] make; for now, just show the classic one.
+		// ARGENT "Modern" Statsubar
 		} else if (state == HUD_StatusBar) {
-			Super.Draw(state, TicFrac);
+			self.DrawArgentStatusBar(TicFrac);
 
 		// ARGENT "Modern" HUD.
 		} else if (state == HUD_Fullscreen) {
-			Super.Draw(HUD_None, TicFrac); // handles crosshair n' whatnot.
-			self.DrawArgentHUD(state, ticFrac);
+			self.DrawArgentHUD(ticFrac);
 		}
 
 		// Draw the mod kit UI if we're currently using the item.
@@ -81,15 +85,36 @@ class ArgStatusBar : DoomStatusBar
 		}
 		if(modkit && gametic <= self.merchTic) {
 			// show the mod UI if it's alive
-			self.DrawArgentMerchUI(state, ticFrac, modkit);
+			self.DrawArgentMerchUI(ticFrac, modkit);
 		}
+
+		// Draw the crosshair augments if we're holding a weapon.
+		ArgWeapon weapon = ArgWeapon(CPlayer.ReadyWeapon);
+		if(weapon) {
+			self.DrawArgentCrosshairAugment(weapon, state, ticFrac);
+		}
+	}
+	
+	/*
+	 * ARGENT "Modern" Status bar.
+	 */
+	protected void DrawArgentStatusBar(double TicFrac)
+	{
+		Super.Draw(HUD_None, TicFrac);
+		self.BeginStatusBar(false, ARG_SBAR_WIDTH, ARG_SBAR_HEIGHT, ARG_SBAR_BARTOP);
+
+		// [TODO] make this; for now, just show the classic bar with some bordering.
+		DrawImage("graphics/hud/STBEXTRA.png", ( 320, 168), DI_ITEM_OFFSETS);
+		DrawImage("graphics/hud/STBEXTRA.png", (-320, 168), DI_ITEM_OFFSETS);
+		self.DrawMainBar(TicFrac);
 	}
 
 	/*
 	 * ARGENT "Modern" HUD.
 	 */
-	protected void DrawArgentHUD(int state, double TicFrac)
+	protected void DrawArgentHUD(double TicFrac)
 	{
+		Super.Draw(HUD_None, TicFrac);
 		self.BeginHUD(1.0, false, ARG_HUD_WIDTH, ARG_HUD_HEIGHT);
 
 		DrawImage("graphics/hud/base-left.png" ,(  24, -62), DI_ITEM_OFFSETS);
@@ -210,7 +235,7 @@ class ArgStatusBar : DoomStatusBar
 	/*
 	 * ARGENT Merch (Mod-Kit) Interface
 	 */
-	protected void DrawArgentMerchUI(int state, double ticFrac, ArgModKit modkit)
+	protected void DrawArgentMerchUI(double ticFrac, ArgModKit modkit)
 	{
 		self.BeginHUD(1.0, false, ARG_MERCH_WIDTH, ARG_MERCH_HEIGHT);
 
@@ -312,6 +337,48 @@ class ArgStatusBar : DoomStatusBar
 		DrawImage("graphics/hud/mod-footer.png" ,(320, 318), DI_ITEM_HCENTER|DI_ITEM_VOFFSET, alpha);
 		DrawString(self.ArgTextFont, text1, (320, 324), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_UNTRANSLATED, alpha);
 		DrawString(self.ArgTextFont, text2, (320, 340), DI_ITEM_HCENTER|DI_TEXT_ALIGN_CENTER, Font.CR_RED         , alpha);
+	}
+
+	/*
+	 * ARGENT crosshair augments; defer processing to the weapon virtual function.
+	 */ 
+	protected void DrawArgentCrosshairAugment(ArgWeapon weapon, int state, double TicFrac)
+	{
+		double screenWidth  = screen.GetWidth();
+		double screenHeight = screen.GetHeight(); //(state == HUD_StatusBar) ? GetTopOfStatusBar() : screen.GetHeight();
+		double screenBarTop = (state == HUD_StatusBar) ? (screenHeight - GetTopOfStatusBar()) : 0;
+		double xhscale;
+		Vector2 augscale;
+
+		// match the current crosshair scale.
+		if(crosshairscale > 0) {
+
+			xhscale = (crosshairgrow ? (crosshairscale * crosshairsize) : crosshairscale); // * screenWidth / ARG_XHAIR_WIDTH;
+			augscale = (xhscale, xhscale);
+
+		} else {
+			augscale = (1.0, 1.0);
+		}
+
+		// set up a native-resolution drawspace.
+		self.BeginHUD(1.0, false, screenWidth, screenHeight);
+
+		// set the draw origin by adjusting the offset
+		Vector2 oldDrawOffset = self.drawOffset;
+		self.drawOffset = (screenwidth/2, (screenHeight-screenBarTop)/2);
+
+		// draw it; this is done in a weapon virtual so that each
+		// weapon can define its own crosshair augments. Fancy!
+		weapon.Arg_DrawCrosshairAugment(self, state, TicFrac, augscale);
+		
+		self.drawOffset = oldDrawOffset;
+
+		// [TEST] dump some numbers to the screen:
+
+//		DrawString(self.ArgSmallFont, FormatNumber(screenWidth , 8), (0,  0), DI_TEXT_ALIGN_LEFT);
+//		DrawString(self.ArgSmallFont, FormatNumber(screenHeight, 8), (0, 10), DI_TEXT_ALIGN_LEFT);
+//		DrawString(self.ArgSmallFont, FormatNumber(screenBarTop, 8), (0, 20), DI_TEXT_ALIGN_LEFT);
+//		DrawString(self.ArgSmallFont, String.Format("%.3f", xhscale), (0, 30), DI_TEXT_ALIGN_LEFT);
 	}
 
 	/*
