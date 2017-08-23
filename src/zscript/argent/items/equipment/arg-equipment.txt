@@ -28,6 +28,7 @@ class ArgEquipment : CustomInventory
 		Inventory.PickupSound "items/modkit/pickup";
 		Inventory.MaxAmount 1;
 		Inventory.Icon "";
+		Inventory.InterHubAmount 999;
 		
 		ArgEquipment.ProjectileType 'ArgNothing';
 		ArgEquipment.ProjectileSound 'items/equipment/grenade/throw';
