@@ -7,6 +7,7 @@
 class ArgPistol : ArgWeapon replaces Pistol
 {	
 	ArgCounter charge;
+	int chargeDecay;
 	
 	override void BeginPlay()
 	{
@@ -65,20 +66,20 @@ class ArgPistol : ArgWeapon replaces Pistol
 		Goto AltDown;
 	AltShoopDaWoop:
 		PISB A 1 Bright Arg_A_PistolAltFire();
-		PISB B 1 Arg_A_WeaponOffset(-19.0,- 1.0);
-		PISB B 1 Arg_A_WeaponOffset(-17.0,  3.0);
-		PISB C 1 Arg_A_WeaponOffset(-13.0,  7.0);
-		PISB C 1 Arg_A_WeaponOffset(- 9.0, 10.0);
-		PISB C 1 Arg_A_WeaponOffset(- 4.0, 16.0);
-		PISB C 1 Arg_A_WeaponOffset(- 2.0, 18.0);
-		PISB B 1 Arg_A_WeaponOffset(- 3.0, 17.0);
-		PISB B 1 Arg_A_WeaponOffset(- 7.0, 14.0);
-		PISB B 1 Arg_A_WeaponOffset(-12.0, 10.0);
-		PISA A 1 Arg_A_WeaponOffset(-16.0,  7.0);
-		PISA A 1 Arg_A_WeaponOffset(-18.0,  3.0);
-		PISA A 1 Arg_A_WeaponOffset(-19.0,  1.0);
-		PISA A 1 Arg_A_WeaponOffset(-19.0,- 1.0);
-		PISA A 4 Arg_A_WeaponOffset(-20.0,- 2.0);
+		PISB B 1 Arg_A_PistolDecay(-19.0,- 1.0);
+		PISB B 1 Arg_A_PistolDecay(-17.0,  3.0);
+		PISB C 1 Arg_A_PistolDecay(-13.0,  7.0);
+		PISB C 1 Arg_A_PistolDecay(- 9.0, 10.0);
+		PISB C 1 Arg_A_PistolDecay(- 4.0, 16.0);
+		PISB C 1 Arg_A_PistolDecay(- 2.0, 18.0);
+		PISB B 1 Arg_A_PistolDecay(- 3.0, 17.0);
+		PISB B 1 Arg_A_PistolDecay(- 7.0, 14.0);
+		PISB B 1 Arg_A_PistolDecay(-12.0, 10.0);
+		PISA A 1 Arg_A_PistolDecay(-16.0,  7.0);
+		PISA A 1 Arg_A_PistolDecay(-18.0,  3.0);
+		PISA A 1 Arg_A_PistolDecay(-19.0,  1.0);
+		PISA A 1 Arg_A_PistolDecay(-19.0,- 1.0);
+		PISA A 4 Arg_A_PistolDecay(-20.0,- 2.0);
 	AltDown:
 		PISA B 1 { Arg_A_WeaponOffset(-18.0,-0.5); A_SetCrosshair(ARG_XH_PISTOL_ANIM4); Arg_A_PistolReset(); }
 		PISA C 1 { Arg_A_WeaponOffset(-16.0,-1.0); A_SetCrosshair(ARG_XH_PISTOL_ANIM3); }
@@ -95,7 +96,8 @@ class ArgPistol : ArgWeapon replaces Pistol
 	/*
 	 * Pistol fire. Simple stuff.
 	 */
-	action void Arg_A_PistolFire() {
+	action void Arg_A_PistolFire()
+	{
 		Arg_A_GunFlash('Flash', "weapons/pistol/fire", ARG_GF_ALTSOUND | ARG_GF_BOB);
 		A_FireBullets(1.5, 1, 1, 5, "ArgPistolPuff");
 	}
@@ -105,7 +107,8 @@ class ArgPistol : ArgWeapon replaces Pistol
 	 * This function is responsible for checking if the fire button
 	 * is pressed (via synthfire) and jumping to the shoot state if so.
 	 */
-	action state Arg_A_PistolCharge() {
+	action state Arg_A_PistolCharge()
+	{
 		invoker.charge.inc();
 		if(!invoker.charge.isMax()) {
 			Arg_A_WeaponOffset(-20, -2, invoker.charge.val * -0.025);
@@ -121,29 +124,45 @@ class ArgPistol : ArgWeapon replaces Pistol
 	/*
 	 * Pistol altfire. Spends all accumulated charge in one big power-shot.
 	 */
-	action void Arg_A_PistolAltFire() {
+	action void Arg_A_PistolAltFire()
+	{
 		Arg_A_GunFlash('Flash', "weapons/pistol/altfire");
 		A_FireBullets(1.5, 1, 1, 2*invoker.charge.get(), "ArgPistolPuff", FBF_NORANDOM);
 		A_StopSound(CHAN_WEAPON);
 	}
 	
 	/*
+	 * Pistol charge decay; used to animate the crosshair augment smoothly.
+	 */
+	action void Arg_A_PistolDecay(float offsetX, float offsetY)
+	{
+		if(invoker.chargeDecay == 0) {
+			invoker.chargeDecay = max(2, invoker.charge.val / 10);
+		}
+		invoker.charge.val -= max(invoker.chargeDecay, 0);
+		Arg_A_WeaponOffset(offsetX, offsetY);
+	}
+
+	/*
 	 * Resets pistol charge state.
 	 */
-	action void Arg_A_PistolReset(bool stopSound = true) {
+	action void Arg_A_PistolReset(bool stopSound = true)
+	{
 		if(stopSound) {
 			A_StopSound(CHAN_WEAPON);
 		}
 		A_ClearRefire();
 		invoker.charge.toMin();
+		invoker.chargeDecay = 0;
 	}
 	
 	/*
 	 * Crosshair augments.
 	 */
-	override void Arg_DrawCrosshairAugment(ArgStatusBar statusbar, int state, double TicFrac, Vector2 scale) {
+	override void Arg_DrawCrosshairAugment(ArgStatusBar statusbar, int state, double TicFrac, Vector2 scale)
+	{
 		if(charge.val > 0) {
-			int chargeLevel = clamp(1, charge.val, charge.max+1);
+			int chargeLevel = clamp(1, charge.val, 50);
 			statusbar.DrawOffsetImage("graphics/xhairs/pistol/charge" .. chargeLevel .. ".png", scale: scale);
 		}
 	}
