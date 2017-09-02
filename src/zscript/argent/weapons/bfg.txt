@@ -339,9 +339,9 @@ class ArgIveGotBallsOfSteel : ArgThatDamnDragonAteMyBalls
 		super.PostBeginPlay();
 
 		// set up default look params
-		self.lookParams.fov = ARG_BFG_ARC_SIZE;
-		self.lookParams.maxdist = 1024;
-		self.lookParams.flags |= LOF_NOSOUNDCHECK;
+		self.lookParams.fov     = ARG_BFG_ZAP_ARC;
+		self.lookParams.maxdist = ARG_BFG_ZAP_DIST;
+		self.lookParams.flags  |= LOF_NOSOUNDCHECK;
 
 		// set up friendliness
 		if(self.target) {
