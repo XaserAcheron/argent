@@ -314,28 +314,74 @@ class ArgBFGSpray : Actor
 
 class ArgIveGotBallsOfSteel : ArgThatDamnDragonAteMyBalls
 {
+	Actor whoFiredMe;
+	LookExParams lookParams;
+
 	Default
 	{
 		Speed 20;
+
+		+FRIENDLY
 	}
 	States
 	{
 	Fly:
-		BFS1 AAAABBBB 1 Bright X_ModernBFGFly();
+		BFS1 AAAABBBB 1 Bright X_ModernBFGZap();
 		Loop;
 	SuperDeath:
 		BFE1 C 4 Bright X_ModernBFGHit();
 		BFE1 DEF 4 Bright;
 		Stop;
 	}
-
-	void X_ModernBFGFly()
+	
+	override void PostBeginPlay()
 	{
-		// go around in an arc and zap things in an n-degree slice,
-		// where n = ARG_BFG_ARC_SIZE n' whatnot. Hooray constants!
-		for(int a = 0; a < 360; a += ARG_BFG_ARC_SIZE) {
-			A_SpawnProjectile("ArgBFGZapper", -8, 0, a-(ARG_BFG_ARC_SIZE/2), CMF_AIMDIRECTION | CMF_TRACKOWNER);
+		super.PostBeginPlay();
+
+		// set up default look params
+		self.lookParams.fov = ARG_BFG_ARC_SIZE;
+		self.lookParams.maxdist = 1024;
+		self.lookParams.flags |= LOF_NOSOUNDCHECK;
+
+		// set up friendliness
+		if(self.target) {
+			self.whoFiredMe = self.target;
+			SetFriendPlayer(self.target.player);
 		}
+	}
+
+	void X_ModernBFGZap()
+	{
+		// go around in a circle and zap things in an n-degree slice.
+		float origAngle = self.angle;
+		for(int a = 0; a < 360; a += lookParams.fov) {
+			self.angle = origAngle + a;
+
+			// temporarily null the target and search for a new one in an arc.
+			// if we've got it, do the zap.
+			// [NOTE] this will not target enemy players. This is OK, frankly.
+			//        if I ever restore this, be sure to re-add $ARG_OB_BFGZAP
+			if(LookForEnemies(false, self.lookParams)) {
+
+				// do a test trace to make sure the person who fired the shot
+				// isn't in the way. That would be slightly unfortunate. ;)
+				FTranslatedLineTarget aimedAt;
+				AimLineAttack(self.AngleTo(self.target), self.lookParams.maxdist, aimedAt);
+				if(aimedAt.linetarget != self.whoFiredMe) {
+					A_CustomRailgun(25
+					,	flags: RGF_SILENT | RGF_NOPIERCING
+					,	aim: 1
+					,	maxdiff: 32
+					,	pufftype: "ArgBFGSprayZ"
+					,	sparsity: 4
+					,	spawnclass: "ArgBFGZapperTrail"
+					,	spawnofs_z: -8
+					);
+				}
+			}
+		}
+		self.target = self.whoFiredMe;
+		self.angle = origAngle;
 		A_SpawnItemEx("ArgBFGTrail", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
 	}
 
@@ -343,49 +389,6 @@ class ArgIveGotBallsOfSteel : ArgThatDamnDragonAteMyBalls
 	{
 		A_BFGSpray("ArgBFGSpray", 20, 40, 360, 1024, 32, 0, BFGF_MISSILEORIGIN);
 		A_RadiusDamageSelf(48, 96, RDSF_BFGDAMAGE, "ArgBFGSpray");
-	}
-}
-
-class ArgBFGZapper : Actor
-{
-	Default
-	{
-		Radius 2;
-		Height 2;
-		Speed 0;
-		MinMissileChance 0;
-		Projectile;
-		RenderStyle 'Add';
-		Obituary "$ARG_OB_BFGZAP";
-		AttackSound "weapons/bfg/zap";
-		MissileHeight 0;
-
-		+NOINTERACTION
-		+ISMONSTER
-		+FRIENDLY
-	}
-	States
-	{
-	Spawn:
-		TNT1 A 1 NoDelay X_ModernBFGLook();
-		Stop;
-	See:
-		TNT1 A 1 X_ModernBFGZap();
-		Goto Death;
-	Death:
-		TNT1 A 0;
-		Stop;
-	}
-
-	void X_ModernBFGLook()
-	{
-		A_LookEx(LOF_NOSOUNDCHECK, 0, 1024, 0, 30, "See");
-	}
-
-	void X_ModernBFGZap()
-	{
-		A_FaceTarget();
-		A_CustomRailgun(25, 0, "", "", RGF_SILENT | RGF_NOPIERCING, 1, 32, "ArgBFGSprayZ", 0, 0, 0, 0, 4, 0, "ArgBFGZapperTrail");
 	}
 }
 
