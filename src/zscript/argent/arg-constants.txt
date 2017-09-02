@@ -26,3 +26,7 @@ enum Arg_WeaponState // technically a copypasta of some internal non-exposed enu
 	ARG_WF_USER3OK        = 1024,
 	ARG_WF_USER4OK        = 2048,
 };
+
+// misc loose constants
+
+const ARG_DEFAULT_STUN_SECONDS = 5;

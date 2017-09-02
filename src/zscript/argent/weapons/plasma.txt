@@ -329,13 +329,13 @@ class ArgStunBomb : ArgPlasma
 		PBOM ABCD 1 Bright;
 		Loop;
 	Death:
-		PBOM E 0 Bright Arg_A_StunBombHit(160);
-		PBOM EE 1 Bright Arg_A_StunBombFX("4444FF", 40);
-		PBOM EF 1 Bright Arg_A_StunBombFX("8888FF", 48);
-		PBOM FF 1 Bright Arg_A_StunBombFX("AAAAFF", 56);
-		PBOM GG 1 Bright Arg_A_StunBombFX("8888FF", 48);
-		PBOM GH 1 Bright Arg_A_StunBombFX("4444FF", 40);
-		PBOM HH 1 Bright Arg_A_StunBombFX("0000FF", 32);
+		PBOM E 0 Bright X_StunBombHit(160);
+		PBOM EE 1 Bright X_StunBombFX("4444FF", 40);
+		PBOM EF 1 Bright X_StunBombFX("8888FF", 48);
+		PBOM FF 1 Bright X_StunBombFX("AAAAFF", 56);
+		PBOM GG 1 Bright X_StunBombFX("8888FF", 48);
+		PBOM GH 1 Bright X_StunBombFX("4444FF", 40);
+		PBOM HH 1 Bright X_StunBombFX("0000FF", 32);
 		PBOM I 3 Bright;
 		Stop;
 	}
@@ -344,7 +344,7 @@ class ArgStunBomb : ArgPlasma
 	 * Stun Bomb effect. Kicks off the magic stun effect by dropping some
 	 * dangerous zappy actors into the fray.
 	 */
-	action void Arg_A_StunBombHit(float stunrad) {
+	void X_StunBombHit(float stunrad) {
 		A_NoGravity();
 
 		// iterate over all monsters within our radius and spawn in
@@ -368,7 +368,7 @@ class ArgStunBomb : ArgPlasma
 	/*
 	 * spiffy zappy FX function
 	 */
-	action void Arg_A_StunBombFX(color col, int range) {
+	void X_StunBombFX(color col, int range) {
 		for (int i = 0; i < 10; i++) {
 			A_CustomRailgun(0, 0, "", col, RGF_SILENT | RGF_FULLBRIGHT | RGF_CENTERZ, 0, 16, "ArgStunBombPuff", 360, 80, range, 1, 0.2, 0.0);
 		}
@@ -398,8 +398,7 @@ class ArgNeuralStunner : Actor
 {
 	Actor stunTarget;
 	int stunCounter;
-	
-	const DEF_STUN_SECONDS = 5;
+	int stunSeconds;
 
 	Default
 	{
@@ -409,11 +408,24 @@ class ArgNeuralStunner : Actor
 	States
 	{
 	Spawn:
-		TNT1 A 35 NoDelay Arg_A_StunEffect;
-		TNT1 A 0 Arg_A_StunCountdown();
+		TNT1 A 35 NoDelay X_StunEffect;
+		TNT1 A 0 X_StunCountdown();
 		Stop;
 	}
-	
+
+	/*
+	 * Initialize the stun timer post-spawn.
+	 */
+	override void PostBeginPlay()
+	{
+		if(self.stunTarget) {
+			self.stunSeconds = self.stunTarget.Stamina;
+		}
+		if(self.stunSeconds == 0) {
+			self.stunSeconds = ARG_DEFAULT_STUN_SECONDS;
+		}
+	}
+
 	/*
 	 * Keep the target stunned every tic by thrusting it
 	 * in its spawn state. Assuming the actor's alive, of course.
@@ -429,43 +441,32 @@ class ArgNeuralStunner : Actor
 			}
 		}
 	}
-	
+
 	/*
 	 * Spawn some zappy stun FX at the target's location.
 	 */
-	action void Arg_A_StunEffect() {
-		let this = ArgNeuralStunner(self);
-
+	void X_StunEffect() {
 		// don't zap dead people; it's rude
-		if(this.stunTarget && this.stunTarget.health > 0) {
-			Vector3 fxPos = this.stunTarget.pos + (0, 0, this.stunTarget.height / 2);
-			if(this.stunTarget.radius <= 28.0) {
+		if(self.stunTarget && self.stunTarget.health > 0) {
+			Vector3 fxPos = self.stunTarget.pos + (0, 0, self.stunTarget.height / 2);
+			if(self.stunTarget.radius <= 28.0) {
 				Spawn("ArgStunEffect", fxPos);
-			} else if (this.stunTarget.radius <= 56.0) {
+			} else if (self.stunTarget.radius <= 56.0) {
 				Spawn("ArgStunEffectLarge", fxPos);
 			} else {
 				Spawn("ArgStunEffectHuge", fxPos);
 			}
 		}
 	}
-	
+
 	/*
-	 * Check to see if we should continue stunning. This is really
+	 * Check to see if we should continue stunning. this is really
 	 * more of a "StunCountUp" function, but whatevs. :P
 	 */
-	action state Arg_A_StunCountdown() {
-		let this = ArgNeuralStunner(self);
-		
-		// snag the stun seconds, using the default in case
-		// the actor doesn't define one of its own.
-		int stunSeconds = this.stunTarget.Stamina;
-		if( stunSeconds == 0 ) {
-			stunSeconds = DEF_STUN_SECONDS;
-		}
-
+	state X_StunCountdown() {
 		// increment first since the 1-second delay occurs BEFORE this function call.
-		this.stunCounter++;
-		if(this.stunTarget && this.stunTarget.health > 0 && stunSeconds > this.stunCounter) {
+		self.stunCounter++;
+		if(self.stunTarget && self.stunTarget.health > 0 && self.stunSeconds > self.stunCounter) {
 			return ResolveState('Spawn');
 		} else {
 			// remove the actor; this goes straight to a Stop directive.
