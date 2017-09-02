@@ -30,3 +30,4 @@ enum Arg_WeaponState // technically a copypasta of some internal non-exposed enu
 // misc loose constants
 
 const ARG_DEFAULT_STUN_SECONDS = 5;
+const ARG_BFG_ARC_SIZE         = 30;
