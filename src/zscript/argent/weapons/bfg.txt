@@ -18,47 +18,6 @@ class ArgBFG9000 : ArgWeapon replaces BFG9000
 		Tag "$ARG_TAG_BFG";
 	}
 
-	/*
-	 * Determine ammotype at runtime! This is recalculated each tic to
-	 * properly handle the case where the ammotype cvar is changed in-game.
-	 * Shouldn't be any real risk of performance degradation for maps
-	 * that don't use Mock2-amounts of BFGs. ;)
-	 */
-	override void Tick()
-	{
-		super.Tick();
-
-		if(GetCvar("arg_bfgammotype")) {
-			// use custom "bfg cells" ammo type.
-			self.AmmoType1 = 'ArgBFGAmmo';
-			self.AmmoUse1  = 1;
-			self.AmmoGive1 = 1;
-			self.ammouse_classic = 1;
-			self.ammouse_modern  = 1;
-		
-		} else {
-			// use regular ol' cells
-			self.AmmoType1 = 'Cell';
-			self.AmmoUse1  = 40;
-			self.AmmoGive1 = 40;
-			self.ammouse_classic = 40;
-			self.ammouse_modern  = 80;
-		}
-
-		// if the item is owned, keep the internal ammo actor reference in sync
-		// with the type. Otherwise, things go south real quick when firing.
-		if(self.owner) {
-			let ammo = Ammo(self.owner.FindInventory(self.AmmoType1));
-			if(ammo) {
-				self.Ammo1 = ammo;
-			} else {
-				// explicitly ensure the owner has an instance of the ammo
-				// actor. Yep, we've got to explicitly give zero of the item. :D
-				self.Ammo1 = AddAmmo(self.owner, self.AmmoType1, 0);
-			}
-		}
-	}
-	
 	States
 	{
 	Spawn:
@@ -124,6 +83,75 @@ class ArgBFG9000 : ArgWeapon replaces BFG9000
 		TNT1 A 2 Bright A_Light( 2);
 		TNT1 A 2 Bright A_Light( 1);
 		Goto LightDone;
+	}
+
+	/*
+	 * Determine ammotype at runtime! This is recalculated each tic it's held to
+	 * properly handle the case where the ammotype cvar is changed in-game.
+	 */
+	override void DoEffect()
+	{
+		super.DoEffect();
+
+		self.X_ResolveAmmoType();
+
+		// if the item is owned, keep the internal ammo actor reference in sync
+		// with the type. Otherwise, things go south real quick when firing.
+		if(self.owner) {
+			let ammo = Ammo(self.owner.FindInventory(self.AmmoType1));
+			if(ammo) {
+				self.Ammo1 = ammo;
+			} else {
+				// explicitly ensure the owner has an instance of the ammo
+				// actor. Yep, we've got to explicitly give zero of the item. :D
+				self.Ammo1 = AddAmmo(self.owner, self.AmmoType1, 0);
+			}
+		}
+	}
+
+	/*
+	 * Resolve the ammo type when picking up a weapon so we can
+	 * the right type of ammo.
+	 */
+	override bool TryPickup(in out Actor toucher)
+	{
+		self.X_ResolveAmmoType();
+		return super.TryPickup(toucher);
+	}
+
+	/*
+	 * Also do this when attaching, just in case the weapon is given
+	 * via a script or somesuch. The actual ammo giving is done in
+	 * Weapon's AttachToOwner override, so this is the last step.
+	 */
+	override void AttachToOwner(Actor other)
+	{
+		if(!self.Ammo1) {
+			self.X_ResolveAmmoType();
+		}
+		super.AttachToOwner(other);
+	}
+
+	/*
+	 * Dynamic ammo type function! Woohoo!
+	 */
+	void X_ResolveAmmoType() {
+		if(GetCvar("arg_bfgammotype")) {
+			// use custom "bfg cells" ammo type.
+			self.AmmoType1 = 'ArgBFGAmmo';
+			self.AmmoUse1  = 1;
+			self.AmmoGive1 = 1;
+			self.ammouse_classic = 1;
+			self.ammouse_modern  = 1;
+		
+		} else {
+			// use regular ol' cells
+			self.AmmoType1 = 'Cell';
+			self.AmmoUse1  = 40;
+			self.AmmoGive1 = 40;
+			self.ammouse_classic = 40;
+			self.ammouse_modern  = 80;
+		}
 	}
 	
 	/*
