@@ -392,10 +392,11 @@ class ArgIveGotBallsOfSteel : ArgThatDamnDragonAteMyBalls
 			if(LookForEnemies(false, self.lookParams)) {
 
 				// do a test trace to make sure the person who fired the shot
-				// isn't in the way. That would be slightly unfortunate. ;)
+				// (or an ally) isn't in the way. That would be slightly
+				// unfortunate. ;)
 				FTranslatedLineTarget aimedAt;
 				AimLineAttack(self.AngleTo(self.target), self.lookParams.maxdist, aimedAt);
-				if(aimedAt.linetarget != self.whoFiredMe) {
+				if(aimedAt.linetarget && aimedAt.linetarget != self.whoFiredMe && !aimedAt.linetarget.isFriend(self.whoFiredMe)) {
 					A_CustomRailgun(25
 					,	flags: RGF_SILENT | RGF_NOPIERCING
 					,	aim: 1
