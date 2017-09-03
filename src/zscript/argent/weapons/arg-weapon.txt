@@ -241,9 +241,12 @@ class ArgWeapon : DoomWeapon
 			[success, isMerch] = modkit.Arg_A_ApplyModKit(modToInstall, self);
 			if(success) {
 				// consume the mod kit and play some fun soundage.
-				// [TODO] screen flash effect here.
 				owner.A_TakeInventory("ArgModKit", 1);
 				owner.A_PlaySound("items/modkit/apply", CHAN_AUTO);
+				let ownerPlayer = ArgPlayer(owner);
+				if(ownerPlayer) {
+					ownerPlayer.X_SetBlend(35, 128, 255, 255, 255);
+				}
 				return isMerch ? ResolveState("WeaponDelay") : ResolveState("ModSwapDown");
 			} else {
 				return null;
