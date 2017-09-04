@@ -245,7 +245,7 @@ class ArgWeapon : DoomWeapon
 				owner.A_PlaySound("items/modkit/apply", CHAN_AUTO);
 				let ownerPlayer = ArgPlayer(owner);
 				if(ownerPlayer) {
-					ownerPlayer.X_SetBlend(35, 128, 255, 255, 255);
+					ownerPlayer.X_SetBlend(35, 80, 255, 255, 255);
 				}
 				return isMerch ? ResolveState("WeaponDelay") : ResolveState("ModSwapDown");
 			} else {
