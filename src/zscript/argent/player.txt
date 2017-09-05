@@ -15,6 +15,7 @@ class ArgPlayer : DoomPlayer
 		Player.StartItem "ArgPistol";
 		Player.StartItem "ArgFist";
 		Player.StartItem "Clip", 50;
+		Player.StartItem "ArgBlender";
 		Player.WeaponSlot 1, 'ArgFist', 'ArgChainsaw';
 		Player.WeaponSlot 2, 'ArgPistol';
 		Player.WeaponSlot 3, 'ArgShotgun', 'ArgSuperShotgun';
@@ -24,7 +25,6 @@ class ArgPlayer : DoomPlayer
 		Player.WeaponSlot 7, 'ArgBFG9000';
 	
 		DamageFactor "ArgPlayerRocket", 0.5;
-		DamageFactor "ArgBFGZapper", 0.0;
 	}
 	States
 	{
@@ -91,5 +91,55 @@ class ArgPlayer : DoomPlayer
 			}
 		}
 		return false;
+	}
+
+	/*
+	 * Do a cool screen blend effect. It's a thing.
+	 */
+	void X_SetBlend(int tics = -1, int a = -1, int r = -1, int g = -1, int b = -1)
+	{
+		ArgBlender blender = ArgBlender(self.FindInventory('ArgBlender'));
+		if(blender) {
+			blender.SetBlend(tics, a, r, g, b);
+		}
+	}
+}
+
+// extra-special actor for scriptable screen flashiness
+
+class ArgBlender : Inventory
+{
+	Color blendColor;
+	int blendTics;
+	int blendUntil;
+	int baseAlpha;
+
+	Default
+	{
+		+Inventory.UNDROPPABLE
+	}
+
+	override void BeginPlay() {
+		self.blendColor = Color(0, 255, 255, 255);
+		self.baseAlpha = 255;
+	}
+
+	override Color GetBlend()
+	{
+		int ticsLeft = max(blendUntil - gametic, 0);
+		self.blendColor.a = (ticsLeft > 0) ? floor(ticsLeft * baseAlpha / blendTics) : 0;
+		return self.blendColor;
+	}
+
+	void SetBlend(int tics = -1, int a = -1, int r = -1, int g = -1, int b = -1)
+	{
+		if (a    >= 0) { self.baseAlpha    = a; }
+		if (r    >= 0) { self.blendColor.r = r; }
+		if (g    >= 0) { self.blendColor.b = g; }
+		if (b    >= 0) { self.blendColor.g = b; }
+		if (tics >= 0) {
+			self.blendTics = tics;
+			self.blendUntil = gametic + tics;
+		}
 	}
 }

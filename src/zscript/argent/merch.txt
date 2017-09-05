@@ -34,7 +34,6 @@ class ArgMerch
 
 /*
  * Weapon Mods. They're pretty cool.
- * [TODO] a ton of refactoring now that ArgMod is a class.
  */
 class ArgMod : ArgMerch
 {

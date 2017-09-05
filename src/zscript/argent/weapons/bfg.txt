@@ -18,47 +18,6 @@ class ArgBFG9000 : ArgWeapon replaces BFG9000
 		Tag "$ARG_TAG_BFG";
 	}
 
-	/*
-	 * Determine ammotype at runtime! This is recalculated each tic to
-	 * properly handle the case where the ammotype cvar is changed in-game.
-	 * Shouldn't be any real risk of performance degradation for maps
-	 * that don't use Mock2-amounts of BFGs. ;)
-	 */
-	override void Tick()
-	{
-		super.Tick();
-
-		if(GetCvar("arg_bfgammotype")) {
-			// use custom "bfg cells" ammo type.
-			self.AmmoType1 = 'ArgBFGAmmo';
-			self.AmmoUse1  = 1;
-			self.AmmoGive1 = 1;
-			self.ammouse_classic = 1;
-			self.ammouse_modern  = 1;
-		
-		} else {
-			// use regular ol' cells
-			self.AmmoType1 = 'Cell';
-			self.AmmoUse1  = 40;
-			self.AmmoGive1 = 40;
-			self.ammouse_classic = 40;
-			self.ammouse_modern  = 80;
-		}
-
-		// if the item is owned, keep the internal ammo actor reference in sync
-		// with the type. Otherwise, things go south real quick when firing.
-		if(self.owner) {
-			let ammo = Ammo(self.owner.FindInventory(self.AmmoType1));
-			if(ammo) {
-				self.Ammo1 = ammo;
-			} else {
-				// explicitly ensure the owner has an instance of the ammo
-				// actor. Yep, we've got to explicitly give zero of the item. :D
-				self.Ammo1 = AddAmmo(self.owner, self.AmmoType1, 0);
-			}
-		}
-	}
-	
 	States
 	{
 	Spawn:
@@ -74,7 +33,7 @@ class ArgBFG9000 : ArgWeapon replaces BFG9000
 		BFGG A 0 Bright;
 		Goto DeselectLoop;
 	Fire:
-		BFGG A 1 Bright Arg_A_ChargeBFG();
+		BFGG A 1 Bright X_ChargeBFG();
 		BFGG B 1 Bright { Arg_A_WeaponOffset(0, 0, 0.1); A_Quake(1, 8, 0, 8, ""); }
 		BFGG C 1 Bright   Arg_A_WeaponOffset(0, 0, 0.1);
 		BFGG D 1 Bright   Arg_A_WeaponOffset(0, 0, 0.2);
@@ -92,7 +51,7 @@ class ArgBFG9000 : ArgWeapon replaces BFG9000
 		BFGG L 1 Bright   Arg_A_WeaponOffset(0, 0, 0.9);
 		BFGF A 1 Bright { Arg_A_WeaponOffset(0, 0, 1.0); A_Quake(3, 3, 0, 8, ""); }
 		BFGF B 1 Bright   Arg_A_WeaponOffset(0, 0, 0.0);
-		BFGF C 0 Bright Arg_A_FireBFG();
+		BFGF C 0 Bright X_FireBFG();
 		BFGF C 1 Bright A_ZoomFactor(0.91, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
 		BFGF D 1 Bright A_ZoomFactor(0.92, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
 		Goto FireEnd;
@@ -125,14 +84,81 @@ class ArgBFG9000 : ArgWeapon replaces BFG9000
 		TNT1 A 2 Bright A_Light( 1);
 		Goto LightDone;
 	}
+
+	/*
+	 * Determine ammotype at runtime! This is recalculated each tic it's held to
+	 * properly handle the case where the ammotype cvar is changed in-game.
+	 */
+	override void DoEffect()
+	{
+		super.DoEffect();
+
+		self.X_ResolveAmmoType();
+
+		// if the item is owned, keep the internal ammo actor reference in sync
+		// with the type. Otherwise, things go south real quick when firing.
+		if(self.owner) {
+			let ammo = Ammo(self.owner.FindInventory(self.AmmoType1));
+			if(ammo) {
+				self.Ammo1 = ammo;
+			} else {
+				// explicitly ensure the owner has an instance of the ammo
+				// actor. Yep, we've got to explicitly give zero of the item. :D
+				self.Ammo1 = AddAmmo(self.owner, self.AmmoType1, 0);
+			}
+		}
+	}
+
+	/*
+	 * Resolve the ammo type when picking up a weapon so we can
+	 * the right type of ammo.
+	 */
+	override bool TryPickup(in out Actor toucher)
+	{
+		self.X_ResolveAmmoType();
+		return super.TryPickup(toucher);
+	}
+
+	/*
+	 * Also do this when attaching, just in case the weapon is given
+	 * via a script or somesuch. The actual ammo giving is done in
+	 * Weapon's AttachToOwner override, so this is the last step.
+	 */
+	override void AttachToOwner(Actor other)
+	{
+		if(!self.Ammo1) {
+			self.X_ResolveAmmoType();
+		}
+		super.AttachToOwner(other);
+	}
+
+	/*
+	 * Dynamic ammo type function! Woohoo!
+	 */
+	void X_ResolveAmmoType() {
+		if(GetCvar("arg_bfgammotype")) {
+			// use custom "bfg cells" ammo type.
+			self.AmmoType1 = 'ArgBFGAmmo';
+			self.AmmoUse1  = 1;
+			self.AmmoGive1 = 1;
+			self.ammouse_classic = 1;
+			self.ammouse_modern  = 1;
+		
+		} else {
+			// use regular ol' cells
+			self.AmmoType1 = 'Cell';
+			self.AmmoUse1  = 40;
+			self.AmmoGive1 = 40;
+			self.ammouse_classic = 40;
+			self.ammouse_modern  = 80;
+		}
+	}
 	
 	/*
 	 * BFG charge sequence n' ammo check. Insert "lazer" meme here.
 	 */
-	action void Arg_A_ChargeBFG() {
+	action void X_ChargeBFG() {
 		// overly complex ammo check function ohno
-		// [TODO] perhaps just get rid of this nonsense and make the
-		//        classic/modern mode switch also get set in BeginPlay.
 		if((GetCvar("arg_classicbfg") == true  && CountInv(invoker.AmmoType1) < invoker.ammouse_classic)
 		 ||(GetCvar("arg_classicbfg") == false && CountInv(invoker.AmmoType1) < invoker.ammouse_modern )) {
 			A_SelectWeapon("None", SWF_SELECTPRIORITY);
@@ -140,11 +166,11 @@ class ArgBFG9000 : ArgWeapon replaces BFG9000
 			A_PlaySound("weapons/bfg/fire", CHAN_AUTO);
 		}
 	}
-	
+
 	/*
 	 * BFG firin' function. Let 'er rip!
 	 */
-	action state Arg_A_FireBFG() {
+	action state X_FireBFG() {
 		A_ZoomFactor(0.90, ZOOM_INSTANT|ZOOM_NOSCALETURNING);
 		if(GetCvar("arg_classicbfg") == true) {
 			A_FireProjectile("ArgThatDamnDragonAteMyBalls", 0, 0);
@@ -175,30 +201,41 @@ class ArgThatDamnDragonAteMyBalls : BFGBall
 	States
 	{
 	Spawn:
-		BFS1 A 0 NoDelay {
-			A_SpawnItemEx("ArgBFGOrbiter1", 0,  00.000, -16.000, 0, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_ORIGINATOR|SXF_SETMASTER);
-			A_SpawnItemEx("ArgBFGOrbiter2", 0, -13.856,  08.000, 0, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_ORIGINATOR|SXF_SETMASTER);
-			A_SpawnItemEx("ArgBFGOrbiter3", 0,  13.856,  08.000, 0, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_ORIGINATOR|SXF_SETMASTER);
-		}
-		BFS1 C 0 Bright { return ResolveState("Fly"); }
+		BFS1 A 0 NoDelay X_SpawnBFGOrbiters();
+		BFS1 C 0 Bright ResolveState("Fly");
 	Fly:
-		BFS1 AAAABBBB 1 Bright A_SpawnItemEx("ArgBFGTrail", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
+		BFS1 AAAABBBB 1 Bright X_BFGTrail();
 		Loop;
 	Death:
-		BFE1 A 2 Bright {
-			for(int i = 0; i < 20; i++) {
-				A_SpawnItemEx("ArgBFGImpactFX", 0, frandom(-10,10), frandom(-10,10), 0, frandom(-4,4), frandom(-4,4), 0, SXF_CLIENTSIDE, 0);
-			}
-			A_SetScale(1.0);
-			A_Quake(2, 5, 0, 384);
-			A_KillChildren("Normal", KILS_KILLMISSILES|KILS_NOMONSTERS);
-		}
+		BFE1 A 2 Bright X_BFGHit();
 		BFE1 BAB 2 Bright;
-		BFE1 C 0 Bright { return ResolveState("SuperDeath"); }
+		BFE1 C 0 Bright ResolveState("SuperDeath");
 	SuperDeath:
 		BFE1 C 4 Bright A_BFGSpray("ArgBFGSpray");
 		BFE1 DEF 4 Bright;
 		Stop;
+	}
+
+	void X_SpawnBFGOrbiters()
+	{
+		A_SpawnItemEx("ArgBFGOrbiter1", 0,  00.000, -16.000, 0, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_ORIGINATOR|SXF_SETMASTER);
+		A_SpawnItemEx("ArgBFGOrbiter2", 0, -13.856,  08.000, 0, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_ORIGINATOR|SXF_SETMASTER);
+		A_SpawnItemEx("ArgBFGOrbiter3", 0,  13.856,  08.000, 0, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_ORIGINATOR|SXF_SETMASTER);
+	}
+	
+	void X_BFGTrail()
+	{
+		A_SpawnItemEx("ArgBFGTrail", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
+	}
+	
+	void X_BFGHit()
+	{
+		for(int i = 0; i < 20; i++) {
+			A_SpawnItemEx("ArgBFGImpactFX", 0, frandom(-10,10), frandom(-10,10), 0, frandom(-4,4), frandom(-4,4), 0, SXF_CLIENTSIDE, 0);
+		}
+		A_SetScale(1.0);
+		A_Quake(2, 5, 0, 384);
+		A_KillChildren("Normal", KILS_KILLMISSILES|KILS_NOMONSTERS);
 	}
 }
 
@@ -218,16 +255,24 @@ class ArgBFGOrbiter1 : ArgTrail
 	States
 	{
 	Spawn:
-		BFS1 AABB 1 Bright NoDelay {
-			A_SpawnItemEx("ArgBFGTrailSmall", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
-			A_Warp(AAPTR_MASTER, 0, 0, 0, 0, WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE);
-			A_Weave(2, 2, 8.0, 8.0);
-		}
+		BFS1 AABB 1 Bright NoDelay X_BFGOrbiterTrail();
 		Loop;
 	Death:
-		TNT1 AAAAAAAA 0 A_SpawnItemEx("ArgBFGTrailSmall", 0, frandom(-5,5), frandom(-5,5), 0, frandom(-2.5,2.5), frandom(-2.5,2.5), 0, SXF_CLIENTSIDE, 0);
+		TNT1 AAAAAAAA 0 X_BFGOrbiterDeathFX();
 		TNT1 A 1;
 		Stop;
+	}
+
+	void X_BFGOrbiterTrail()
+	{
+		A_SpawnItemEx("ArgBFGTrailSmall", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
+		A_Warp(AAPTR_MASTER, 0, 0, 0, 0, WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE);
+		A_Weave(2, 2, 8.0, 8.0);
+	}
+
+	void X_BFGOrbiterDeathFX()
+	{
+		A_SpawnItemEx("ArgBFGTrailSmall", 0, frandom(-5,5), frandom(-5,5), 0, frandom(-2.5,2.5), frandom(-2.5,2.5), 0, SXF_CLIENTSIDE, 0);
 	}
 }
 class ArgBFGOrbiter2 : ArgBFGOrbiter1 { Default { WeaveIndexXY 21; WeaveIndexZ  5; } }
@@ -282,9 +327,14 @@ class ArgBFGSpray : Actor
 	Spawn:
 		BFE2 A 0;
 		BFE2 A 0 A_PlaySound("weapons/bfg/spray");
-		BFE2 AAAAAAAAAAAAAAAA         0        A_SpawnItemEx("ArgBFGTrailSmall", frandom(-10,10), frandom(-10,10), frandom(-10,10), frandom(-2.5,2.5), frandom(-5.0,5.0), frandom(-5.0,5.0), 0, SXF_CLIENTSIDE, 0);
-		BFE2 AAAAAABBBBBBCCCCCCDDDDDD 1 Bright A_SpawnItemEx("ArgBFGTrailSmall", frandom(-10,10), frandom(-10,10), frandom(-10,10), frandom(-2.5,2.5), frandom(-2.5,2.5), frandom(-2.5,2.5), 0, SXF_CLIENTSIDE, 0);
+		BFE2 AAAAAAAAAAAAAAAA         0        X_BFGSprayFX(5.0);
+		BFE2 AAAAAABBBBBBCCCCCCDDDDDD 1 Bright X_BFGSprayFX(2.5);
 		Stop;
+	}
+
+	void X_BFGSprayFX(float spd)
+	{
+		A_SpawnItemEx("ArgBFGTrailSmall", frandom(-10,10), frandom(-10,10), frandom(-10,10), frandom(-2.5,2.5), frandom(-spd,spd), frandom(-spd,spd), 0, SXF_CLIENTSIDE, 0);
 	}
 }
 
@@ -292,71 +342,82 @@ class ArgBFGSpray : Actor
 
 class ArgIveGotBallsOfSteel : ArgThatDamnDragonAteMyBalls
 {
+	Actor whoFiredMe;
+	LookExParams lookParams;
+
 	Default
 	{
 		Speed 20;
-	}
-	States
-	{
-	Fly:
-		BFS1 AAAABBBB 1 Bright {
-			A_SpawnItemEx("ArgBFGTrail", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0, 15, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0, 45, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0, 75, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,105, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,135, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,165, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,195, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,225, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,255, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,285, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,315, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-			A_SpawnProjectile("ArgBFGZapper", -8, 0,345, CMF_AIMDIRECTION | CMF_TRACKOWNER);
-		}
-		Loop;
-	SuperDeath:
-		BFE1 C 4 Bright {
-			A_BFGSpray("ArgBFGSpray", 20, 40, 360, 1024, 32, 0, BFGF_MISSILEORIGIN);
-			A_RadiusDamageSelf(48, 96, RDSF_BFGDAMAGE, "ArgBFGSpray");
-		}
-		BFE1 DEF 4 Bright;
-		Stop;
-	}
-}
 
-class ArgBFGZapper : Actor
-{
-	Default
-	{
-		Radius 2;
-		Height 2;
-		Speed 0;
-		MinMissileChance 0;
-		Projectile;
-		RenderStyle 'Add';
-		Obituary "$ARG_OB_BFGZAP";
-		AttackSound "weapons/bfg/zap";
-		MissileHeight 0;
-
-		+NOINTERACTION
-		+ISMONSTER
 		+FRIENDLY
 	}
 	States
 	{
-	Spawn:
-		TNT1 A 1 NoDelay A_LookEx(LOF_NOSOUNDCHECK, 0, 1024, 0, 30, "See");
+	Fly:
+		BFS1 AAAABBBB 1 Bright X_ModernBFGZap();
+		Loop;
+	SuperDeath:
+		BFE1 C 4 Bright X_ModernBFGHit();
+		BFE1 DEF 4 Bright;
 		Stop;
-	See:
-		TNT1 A 1 {
-			A_FaceTarget();
-			A_CustomRailgun(25, 0, "", "", RGF_SILENT | RGF_NOPIERCING, 1, 32, "ArgBFGSprayZ", 0, 0, 0, 0, 4, 0, "ArgBFGZapperTrail");
+	}
+	
+	override void PostBeginPlay()
+	{
+		super.PostBeginPlay();
+
+		// set up default look params
+		self.lookParams.fov     = ARG_BFG_ZAP_ARC;
+		self.lookParams.maxdist = ARG_BFG_ZAP_DIST;
+		self.lookParams.flags  |= LOF_NOSOUNDCHECK;
+
+		// set up friendliness
+		if(self.target) {
+			self.whoFiredMe = self.target;
+			SetFriendPlayer(self.target.player);
 		}
-		Goto Death;
-	Death:
-		TNT1 A 0;
-		Stop;
+	}
+
+	void X_ModernBFGZap()
+	{
+		// go around in a circle and zap things in an n-degree slice.
+		float origAngle = self.angle;
+		for(int a = 0; a < 360; a += lookParams.fov) {
+			self.angle = origAngle + a;
+
+			// temporarily null the target and search for a new one in an arc.
+			// if we've got it, do the zap.
+			// [NOTE] this will not target enemy players. This is OK, frankly.
+			//        if I ever restore this, be sure to re-add $ARG_OB_BFGZAP
+			if(LookForEnemies(false, self.lookParams)) {
+
+				// do a test trace to make sure the person who fired the shot
+				// (or an ally) isn't in the way. That would be slightly
+				// unfortunate. ;)
+				FTranslatedLineTarget aimedAt;
+				AimLineAttack(self.AngleTo(self.target), self.lookParams.maxdist, aimedAt);
+				if(aimedAt.linetarget && aimedAt.linetarget != self.whoFiredMe && !aimedAt.linetarget.isFriend(self.whoFiredMe)) {
+					A_CustomRailgun(25
+					,	flags: RGF_SILENT | RGF_NOPIERCING
+					,	aim: 1
+					,	maxdiff: 32
+					,	pufftype: "ArgBFGSprayZ"
+					,	sparsity: 4
+					,	spawnclass: "ArgBFGZapperTrail"
+					,	spawnofs_z: -8
+					);
+				}
+			}
+		}
+		self.target = self.whoFiredMe;
+		self.angle = origAngle;
+		A_SpawnItemEx("ArgBFGTrail", frandom(-2,2), frandom(-2,2), frandom(-2,2), 0, 0, 0, 0, SXF_CLIENTSIDE, 0);
+	}
+
+	void X_ModernBFGHit()
+	{
+		A_BFGSpray("ArgBFGSpray", 20, 40, 360, 1024, 32, 0, BFGF_MISSILEORIGIN);
+		A_RadiusDamageSelf(48, 96, RDSF_BFGDAMAGE, "ArgBFGSpray");
 	}
 }
 

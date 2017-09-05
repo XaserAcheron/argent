@@ -47,3 +47,9 @@ enum Arg_Crosshairs
 	ARG_XH_GAUSS_MOD1_ANIM4 = 71,
 	ARG_XH_GAUSS_MOD1_IDLE  = 70,
 };
+
+// misc loose constants
+
+const ARG_DEFAULT_STUN_SECONDS = 5;
+const ARG_BFG_ZAP_ARC          = 30;
+const ARG_BFG_ZAP_DIST         = 1024;
