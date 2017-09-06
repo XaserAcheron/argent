@@ -1,5 +1,49 @@
 # ARGENT Changelog
 
+## [v0.5.2](https://github.com/XaserAcheron/argent/tree/v0.5.2) (2017-09-05)
+[Full Changelog](https://github.com/XaserAcheron/argent/compare/v0.5.1...v0.5.2)
+
+New:
+
+- Make BFG ammo-switching code more efficient [\#93](https://github.com/XaserAcheron/argent/issues/93)
+- Add screen flash when "purchasing" merch via from mod kit [\#92](https://github.com/XaserAcheron/argent/issues/92)
+- Revamp Modern BFG zap code [\#89](https://github.com/XaserAcheron/argent/issues/89)
+- Add tracking indicator to Rocket Lock-on Burst [\#88](https://github.com/XaserAcheron/argent/issues/88)
+
+Fixed:
+
+- Plasma Stun Bomb VM abort [\#94](https://github.com/XaserAcheron/argent/issues/94)
+
+## [v0.5.1](https://github.com/XaserAcheron/argent/tree/v0.5.1) (2017-08-27)
+[Full Changelog](https://github.com/XaserAcheron/argent/compare/v0.5.0...v0.5.1)
+
+Fixed:
+
+- Equipment recharge count resets to 1 on map change [\#91](https://github.com/XaserAcheron/argent/issues/91)
+
+## [v0.5.0](https://github.com/XaserAcheron/argent/tree/v0.5.0) (2017-08-22)
+[Full Changelog](https://github.com/XaserAcheron/argent/compare/v0.4.3...v0.5.0)
+
+New:
+
+- Improve Grenade physics [\#82](https://github.com/XaserAcheron/argent/issues/82)
+- ZScriptify Mod Kit Menu [\#78](https://github.com/XaserAcheron/argent/issues/78)
+- ZScriptify Status Bar [\#77](https://github.com/XaserAcheron/argent/issues/77)
+- Allow backpack purchase in Mod Kit menu [\#65](https://github.com/XaserAcheron/argent/issues/65)
+- Equipment system + Frag Grenade [\#42](https://github.com/XaserAcheron/argent/issues/42)
+- Equipment System [\#85](https://github.com/XaserAcheron/argent/pull/85) ([XaserAcheron](https://github.com/XaserAcheron))
+
+Fixed:
+
+- HUD scaling issues [\#32](https://github.com/XaserAcheron/argent/issues/32)
+- Shotgun Explosive Shot and Plasma Stun Bomb have inverted arcs [\#87](https://github.com/XaserAcheron/argent/issues/87)
+- BFG pickups don't give any Cell ammo [\#81](https://github.com/XaserAcheron/argent/issues/81)
+- Plasma Heat Blast can't fire if out of ammo [\#79](https://github.com/XaserAcheron/argent/issues/79)
+
+Merged:
+
+- Status Bar & Modkit ZScriptification [\#80](https://github.com/XaserAcheron/argent/pull/80) ([XaserAcheron](https://github.com/XaserAcheron))
+
 ## [v0.4.3](https://github.com/XaserAcheron/argent/tree/v0.4.3) (2017-02-06)
 [Full Changelog](https://github.com/XaserAcheron/argent/compare/v0.4.2...v0.4.3)
 
