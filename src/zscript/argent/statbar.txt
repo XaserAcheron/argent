@@ -19,7 +19,7 @@ class ArgStatusBar : DoomStatusBar
 	const ARG_MERCH_FADETICS =   7;
 	const ARG_INV_BOXWIDTH   =  32;
 
-	int merchTic; // show modscreen menu until gametic == merchTic. for fadeouts, etc.
+	int merchTic; // show modscreen menu until level.totaltime == merchTic. for fadeouts, etc.
 
 	/*
 	 * Init Fonts n' stuff.
@@ -77,9 +77,9 @@ class ArgStatusBar : DoomStatusBar
 		let modkit = ArgModKit(CPlayer.mo.FindInventory("ArgModKit"));
 		if(modkit && modkit.active) {
 			// extend the mod UI's lifespan a bit
-			self.merchTic = gametic + ARG_MERCH_FADETICS;
+			self.merchTic = level.totaltime + ARG_MERCH_FADETICS;
 		}
-		if(modkit && gametic <= self.merchTic) {
+		if(modkit && level.totaltime <= self.merchTic) {
 			// show the mod UI if it's alive
 			self.DrawArgentMerchUI(state, ticFrac, modkit);
 		}
@@ -223,8 +223,8 @@ class ArgStatusBar : DoomStatusBar
 		Vector2 oldDrawOffset = self.drawOffset;
 		self.drawOffset = ((vwidth-ARG_MERCH_WIDTH)/2, (vheight-ARG_MERCH_HEIGHT)/2);
 
-		// determine translucency by lerping merchTic-gametic (for fadeout effect)
-		double alpha = clamp(0.0, (self.merchTic - gametic - TicFrac + 1) / double(ARG_MERCH_FADETICS), 1.0);
+		// determine translucency by lerping merchTic-level.totaltime (for fadeout effect)
+		double alpha = clamp(0.0, (self.merchTic - level.totaltime - TicFrac + 1) / double(ARG_MERCH_FADETICS), 1.0);
 
 		// figure out if we've got a moddable weapon; we'll need that later.
 		let modWeapon = ArgModWeapon(CPlayer.ReadyWeapon);

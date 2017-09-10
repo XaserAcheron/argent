@@ -126,7 +126,7 @@ class ArgBlender : Inventory
 
 	override Color GetBlend()
 	{
-		int ticsLeft = max(blendUntil - gametic, 0);
+		int ticsLeft = max(blendUntil - level.totaltime, 0);
 		self.blendColor.a = (ticsLeft > 0) ? floor(ticsLeft * baseAlpha / blendTics) : 0;
 		return self.blendColor;
 	}
@@ -139,7 +139,7 @@ class ArgBlender : Inventory
 		if (b    >= 0) { self.blendColor.g = b; }
 		if (tics >= 0) {
 			self.blendTics = tics;
-			self.blendUntil = gametic + tics;
+			self.blendUntil = level.totaltime + tics;
 		}
 	}
 }
