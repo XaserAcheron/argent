@@ -272,7 +272,59 @@ class ArgWeapon : DoomWeapon
 	/*
 	 * Awesome virtual function for drawing weapon crosshair augment.
 	 */
-	ui virtual void Arg_DrawCrosshairAugment(ArgStatusBar statusbar, int state, double TicFrac, Vector2 scale) {
+	ui virtual void Arg_DrawCrosshairAugment(Vector3 viewPos, double viewAngle, double viewPitch, double viewRoll, double ticFrac)
+	{
 		// intentional no-op
+	}
+
+	/*
+	 * Super-special helper for the above: draw a crosshair overlay, properly scaled.
+	 */
+	ui void Arg_DrawCrosshairOverlay(string image, Vector2 pos = (0, 0))
+	{
+		TextureID texture = TexMan.CheckForTexture(image, TexMan.Type_Any);
+		if(texture) {
+
+			// don't draw if chasecam is on
+			if(self.owner && self.owner.player && (self.owner.player.cheats & CF_CHASECAM)) {
+				return;
+			}
+
+			// get screen offsets
+			int screenWidth = Screen.GetWidth();
+			int screenHeight = Screen.GetHeight();
+			int statbarHeight = 0;
+			double crosshairSize = 1.0;
+
+			let statBar = ArgStatusBar(StatusBar);
+			if(statBar) {
+				statbarHeight = statBar.GetStatusBarHeight();
+				crosshairSize = statBar.crosshairSize;
+			}
+			Vector2 screenOffset = (screenWidth/2, (screenHeight-statbarHeight)/2);
+
+			// get crosshair size; uses same logic as the native crosshair.
+			double texScale = 1.0;
+			if (CrosshairScale > 0.0f) {
+				texScale = screenHeight * CrosshairScale / 200.0;
+			}
+			if (CrosshairGrow) {
+				texScale *= crosshairSize;
+			}
+			int texWidth, texHeight;
+			[texWidth, texHeight] = TexMan.GetSize(texture);
+			int texWidthScaled  = texWidth  * texScale;
+			int texHeightScaled = texHeight * texScale;
+
+			// draw it
+			Screen.DrawTexture(
+				texture
+			,	true
+			,	pos.x + screenOffset.x
+			,	pos.y + screenOffset.y
+			,	DTA_DestWidth , texWidthScaled
+			,	DTA_DestHeight, texHeightScaled
+			);
+		}
 	}
 }

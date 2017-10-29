@@ -36,4 +36,18 @@ class ArgEventHandler : StaticEventHandler
 			}
 		}
 	}
+
+	/*
+	 * These comments are pretty redundant, TBH.
+	 */
+	override void RenderOverlay(RenderEvent e)
+	{
+		// fancy crosshair augments. don't draw 'em if default crosshairs are forced.
+		if(e.camera && e.camera.player && !crosshairforce) {
+			let weap = ArgWeapon(e.camera.player.ReadyWeapon);
+			if(weap) {
+				weap.Arg_DrawCrosshairAugment(e.viewPos, e.viewAngle, e.viewPitch, e.viewRoll, e.fracTic);
+			}
+		}
+	}
 }

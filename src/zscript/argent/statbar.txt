@@ -24,6 +24,8 @@ class ArgStatusBar : DoomStatusBar
 	const ARG_XHAIR_FACTOR   = 200.;
 
 	int merchTic; // show modscreen menu until gametic == merchTic. for fadeouts, etc.
+	
+	int lastDrawState;
 
 	/*
 	 * Init Fonts n' stuff.
@@ -86,12 +88,9 @@ class ArgStatusBar : DoomStatusBar
 			// show the mod UI if it's alive
 			self.DrawArgentMerchUI(ticFrac, modkit);
 		}
-
-		// Draw the crosshair augments if we're holding a weapon.
-		ArgWeapon weapon = ArgWeapon(CPlayer.ReadyWeapon);
-		if(weapon) {
-			self.DrawArgentCrosshairAugment(weapon, state, ticFrac);
-		}
+		
+		// Keep track of the last draw state so we can check it in RenderOverlay.
+		self.lastDrawState = state;
 	}
 	
 	/*
@@ -339,71 +338,6 @@ class ArgStatusBar : DoomStatusBar
 	}
 
 	/*
-	 * ARGENT crosshair augments; defer processing to the weapon virtual function.
-	 */ 
-	protected void DrawArgentCrosshairAugment(ArgWeapon weapon, int state, double TicFrac)
-	{
-		double screenWidth  = screen.GetWidth();
-		double screenHeight = screen.GetHeight();
-		double screenBarTop = (state == HUD_StatusBar) ? (screenHeight - GetTopOfStatusBar()) : 0;
-		double augscale;
-
-		// match the current crosshair scale.
-		if(crosshairscale > 0) {
-			augscale = screenHeight * crosshairscale / ARG_XHAIR_FACTOR;
-		} else {
-			augscale = 1.0;
-		}
-		if (crosshairgrow){
-			augscale *= CrosshairSize;
-		}
-
-		// set up a native-resolution drawspace.
-		self.BeginHUD(1.0, false, screenWidth, screenHeight);
-		self.fullscreenoffsets = false;
-
-		// set the draw origin by adjusting the offset
-		Vector2 oldDrawOffset = self.drawOffset;
-		self.drawOffset = (screenwidth/2, (screenHeight-screenBarTop)/2);
-
-		// draw it; this is done in a weapon virtual so that each
-		// weapon can define its own crosshair augments. Fancy!
-		weapon.Arg_DrawCrosshairAugment(self, state, TicFrac, (augscale, augscale));
-
-		self.drawOffset = oldDrawOffset;
-	}
-
-	/*
-	 * Draw image w/scaled offsets. Just a convenient shortcut for DrawOffsetTexture.
-	 */
-	void DrawOffsetImage(String image, Vector2 pos = (0, 0), int flags = DI_ITEM_TOP | DI_ITEM_LEFT, double Alpha = 1., Vector2 box = (-1, -1), Vector2 scale = (1, 1))
-	{
-		TextureID texture = TexMan.CheckForTexture(image, TexMan.Type_Any);
-		if(texture) {
-			DrawOffsetTexture(texture, pos, flags, Alpha, box, scale);
-		}
-	}
-
-	/*
-	 * Draw texture w/scaled offsets. This actually makes the resulting image
-	 * position/offsets based on
-	 */
-	void DrawOffsetTexture(TextureID texture, Vector2 pos = (0, 0), int flags = DI_ITEM_TOP | DI_ITEM_LEFT, double Alpha = 1., Vector2 box = (-1, -1), Vector2 scale = (1, 1))
-	{
-		if(texture) {
-			// get scaled offsets for the texture -- as in, scaled relative
-			// to the image, so 1 unit is 1 scaled pixel. Handy stuff.
-			Vector2 offset = TexMan.GetScaledOffset(texture);
-			offset.x *= scale.x;
-			offset.y *= scale.y;
-			pos -= offset;
-
-			// draw it.
-			statusbar.DrawTexture(texture, pos, flags, alpha, box, scale);
-		}
-	}
-
-	/*
 	 * Quick function to get a key name from a command.
 	 */
 	protected string GetKeyName(string command)
@@ -411,5 +345,13 @@ class ArgStatusBar : DoomStatusBar
 		int k1, k2;
 		[k1, k2] = Bindings.GetKeysForCommand(command);
 		return KeyBindings.NameKeys(k1, k2);
+	}
+	
+	/*
+	 * Returns height of the status bar, if it's up (zero otherwise).
+	 */
+	int GetStatusBarHeight()
+	{
+		return (lastDrawState == HUD_StatusBar) ? (Screen.GetHeight() - self.GetTopOfStatusBar()) : 0;
 	}
 }

@@ -159,11 +159,11 @@ class ArgPistol : ArgWeapon replaces Pistol
 	/*
 	 * Crosshair augments.
 	 */
-	override void Arg_DrawCrosshairAugment(ArgStatusBar statusbar, int state, double TicFrac, Vector2 scale)
+	override void Arg_DrawCrosshairAugment(Vector3 viewPos, double viewAngle, double viewPitch, double viewRoll, double ticFrac)
 	{
 		if(charge.val > 0) {
 			int chargeLevel = clamp(1, charge.val, 50);
-			statusbar.DrawOffsetImage("graphics/xhairs/pistol/charge" .. chargeLevel .. ".png", scale: scale);
+			Arg_DrawCrosshairOverlay("graphics/xhairs/pistol/charge" .. chargeLevel .. ".png");
 		}
 	}
 }
