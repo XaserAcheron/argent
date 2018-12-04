@@ -502,7 +502,7 @@ class ArgRocketReticle : ArgTrailNoPhysics
 				newReticle.offset = offset;
 				newReticle.frame  = frame;
 				newReticle.movedir = (clamp(-1, -offset.x, 1), clamp(-1, -offset.y, 1));
-				newReticle.moveuntil = gametic + fadetics; // [XA] :|
+				newReticle.moveuntil = level.totaltime + fadetics; // [XA] :|
 			}
 			return newReticle;
 		}
@@ -526,10 +526,10 @@ class ArgRocketReticle : ArgTrailNoPhysics
 	{
 		// Move the reticle a bit if we're in move-mode. We're doing this outside
 		// of Tick() since we don't want to do this while fading either.
-		if(gametic < moveuntil) {
+		if(level.totaltime < moveuntil) {
 			self.offset += self.movedir;
 			self.alpha = min(self.alpha += 0.05, 0.75);
-		} else if (gametic == moveuntil && minions.Size() > 0) {
+		} else if (level.totaltime == moveuntil && minions.Size() > 0) {
 			self.alpha = 1.0;
 			ArgRocketReticleFlash.X_Spawn(self.master, self.tracer, self.pos);
 		}
