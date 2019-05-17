@@ -11,7 +11,12 @@ Email Address           : xaser.88@gmail.com
 GitHub Repo             : https://github.com/XaserAcheron/argent
 Discussion Thread       : https://forum.zdoom.org/viewtopic.php?f=43&t=52363
 
-Description             : [Description Here]
+Description             : ARGENT is the streamlined Doom 4 Mod, bringing
+                          Neccronixis's Doom 4 weapon sprites to life with
+                          an old-school flair. It brings weapon mods,
+                          smooth animations, delicious gibs, and a zillion
+                          options to the table, all without straying too
+                          far from the Classic Doom formula.
 
 Additional Credits to   : Tons of people -- see Credits section below.
 ===========================================================================
@@ -19,7 +24,7 @@ Additional Credits to   : Tons of people -- see Credits section below.
 
 New levels              : No
 Sounds                  : Yes
-Music                   : No
+Music                   : Yes
 Graphics                : Yes
 Dehacked/BEX Patch      : No
 ZScript                 : Hell Yeah
@@ -30,7 +35,7 @@ Other files required    : None
 ===========================================================================
 * Play Information *
 
-Game                    : Doom (All)
+Game                    : Doom, Doom 2, Final Doom
 Map #                   : N/A
 Single Player           : Yes
 Cooperative 2-4 Player  : Yes
@@ -43,7 +48,7 @@ Difficulty Settings     : N/A
 
 Base                    : Code from scratch. Resources by various folk.
 Build Time              : An Infinity and a Half.
-Editor(s) used          : SLADE 3, Paint Shop Pro 7
+Editor(s) used          : SLADE 3, Paint Shop Pro 7, Git
 May Not Run With...     : Old versions of GZDoom. If you get some sort of
                           random startup error, PLEASE upgrade your engine
                           first before posting about it in the thread.
@@ -52,7 +57,117 @@ May Not Run With...     : Old versions of GZDoom. If you get some sort of
 ===========================================================================
 * Gameplay Notes *
 
-[TODO] list n' describe everything
+ARGENT, in a nutshell, is a unique spin on the "Doom 4 in Doom" concept.
+In contrast to the other big kids on the block (D4D & D4T), ARGENT aims
+to be a bit more "old-school". It's got a sweet set of smoothly-animated
+d44m weaponry, but it doesn't introducing a ton of game-changing mechanics.
+
+Some key features:
+- All weapons from Doom-Notfour's campaign, quasi-faithfully translated
+  and balanced for use against Doom's classic bestiary*.
+- Weapon Mods!
+- New powerups! Quad, Haste, and Regen are all toggle-able in the menu.
+- Equipment! Recharging grenades! Siphons/holograms... eventually! :P
+- A custom gib system for maximum "splooshiness"
+- Several tweak options for user customization, including the fabled
+  "monsters always gib" setting.
+- Gallons of polish (or litres if you prefer), particularly in the
+  animation department.
+
+[*...okay, I'll admit it -- you're a bit more powerful than
+the standard Doomguy. But not gamebreakingly so.]
+
+Note that there are a few things that the mod explicitly does NOT feature:
+- Glory Kills
+- 100% new-Doom accuracy
+- Enemy sprites or behavior changes (gibs being the exception)
+- Excessive Randomization
+- Incremental weapon/stat upgrades or currency systems
+- Belching lava
+
+[For the last one, see https://www.youtube.com/watch?v=dbGh9nedu80 --
+this is clearly the most important missing feature ;]
+
+===========================================================================
+* Weapon Mods *
+
+As listed above, weapon mods (in the Doom 4 sense, not just the ZDoom
+sense) are a thing. To get one, pick up a Mod Kit (replaces Backpack)
+and use it from your inventory to bring up the Mod Menu.
+
+This isn't a "menu" in the traditional sense, rather, you navigate
+it by _switching weapons_; it allows you to "purchase" mods for
+whichever weapon you currently have selected (if applicable; the
+SSG and pistol, for instance, have no mods).
+
+Once you've decided on a mod, press Fire to "buy" the left one,
+or Altfire to "buy" the right one; it will attached immediately.
+
+When you have both mods for a weapon, press the "Reload" key (renamed
+to "Switch Weapon Mod" in the ARGENT Options menu) to swap 'em.
+
+When the Mod Menu is open, you can also purchase Equipment
+(e.g. grenades) or a Backpack by pressing the "Switch Weapon Mod"
+key to flip to the other page of the "shop". As before, use Fire or
+Altfire to select one of the two.
+
+Just like in Doom the Fourth itself, equipment "ammo" recharges after a
+set amount of time, and you can "purchase" equipment more than once,
+increasing the maximum amount you can carry (these recharge too, though
+the rate of recharge isn't increased when you buy more). Want to
+rain grenades? Just buy a whole bunch! Nothing could possibly go wrong! ;)
+
+===========================================================================
+* Options *
+
+Check out the "ARGENT Options" menu (accessible from the main menu) for a
+variety of user customizations. Here's a quick overview of the options:
+
+BFG Style:
+   Changes the BFG's behavior. There are two options:
+ - "Classic": Classic Doom's  BFG9000 in all its glory. Works the same.
+ - "Modern" : Emits tracers radially on impact, and zaps enemies with
+              cracklin' green lightning when the projectile is in flight.
+
+BFG Ammo Type:
+ - "Cells": The BFG shares ammunition with the plasma gun. Classic shots
+            use 40 cells; Modern shots use 80 since they're more powerful.
+ - "BFG Cells": The BFG uses its own ammotype, which replaces Cell Packs.
+                BFG Cell pickups will also grant a small amount of Cells.
+
+Monsters Always Gib:
+   Pretty self-explanatory. Give it a try -- you know you want to. ;)
+
+Powerup Toggles:
+   ARGENT inclues three new powerups (Quad Damage, Haste, and Regen),
+   which can optionally replace a few of Doom's existing powerups.
+
+HUD Style:
+ - "Classic": Classic Doom's statusbar & ZDoom's fullscreen HUD. 'Nuff said.
+ - "Modern" : A stylized version of Doom 4's HUD in a cool blue hue.
+
+SSG Sprite Style:
+   Selects between two sets of SSG sprites (both by Neccronixis):
+   the original one used in earlier versions of ARGENT, or the newer,
+   more D44M-accurate one. The weapon behaves identically either way.
+
+Mod Controls:
+   For ease of use, all of ARGENT's new-ish keybinds (and their neighbors)
+   are presented here. This is mostly just a convenience thing, really.
+
+===========================================================================
+* Future Plans *
+
+As a 1.0.0 release, there are still a few not-yet-done-but-planned things
+(presuming the author doesn't get perpetually busy, which is likely), e.g.:
+- Holograms n' Siphons -- Grenades are in, but that's not the end of it.
+- Cool Crosshairs, complete with cooldown meters and all that jazz.
+- Better Haste and Berserk powerups
+- Misc tweaks and bugfixes (of course)
+- An expansion pack featuring reinterpreted versions of the MP-exclusive
+  weapons (e.g. static rifle and company)... with mods!
+
+When will future releases happen? Who knows? :P
 
 ===========================================================================
 * Credits *
