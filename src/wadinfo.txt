@@ -1,1 +1,143 @@
-// [TODO] create a WADINFO using the usual boilerplate.
+===========================================================================
+Primary purpose         : Gameplay Mod
+Advanced engine required: GZDoom 3.1.0+
+===========================================================================
+Title                   : ARGENT
+Filename                : xa-argen_x.x.x.pk3
+Release date            : xx/xx/xxxx
+Version                 : x.x.x
+Author                  : Xaser Acheron
+Email Address           : xaser.88@gmail.com
+GitHub Repo             : https://github.com/XaserAcheron/argent
+Discussion Thread       : https://forum.zdoom.org/viewtopic.php?f=43&t=52363
+
+Description             : [Description Here]
+
+Additional Credits to   : Tons of people -- see Credits section below.
+===========================================================================
+* What is included *
+
+New levels              : No
+Sounds                  : Yes
+Music                   : No
+Graphics                : Yes
+Dehacked/BEX Patch      : No
+ZScript                 : Hell Yeah
+Demos                   : No
+Other                   : Sure
+Other files required    : None
+
+===========================================================================
+* Play Information *
+
+Game                    : Doom (All)
+Map #                   : N/A
+Single Player           : Yes
+Cooperative 2-4 Player  : Yes
+Deathmatch 2-4 Player   : Yes
+Other game styles       : Yes
+Difficulty Settings     : N/A
+
+===========================================================================
+* Construction *
+
+Base                    : Code from scratch. Resources by various folk.
+Build Time              : An Infinity and a Half.
+Editor(s) used          : SLADE 3, Paint Shop Pro 7
+May Not Run With...     : Old versions of GZDoom. If you get some sort of
+                          random startup error, PLEASE upgrade your engine
+                          first before posting about it in the thread.
+                          Sanity is a finite resource.
+
+===========================================================================
+* Gameplay Notes *
+
+[TODO] list n' describe everything
+
+===========================================================================
+* Credits *
+
+Code and Shenanigans:
+ - Xaser (I AM A XASER)
+
+Sprites:
+ - Neccronixis (badass nu-DOOM weapon sprite conversions)
+ - PillowBlaster (powerups n' pickups)
+ - Xaser (gibs, pistol charge, misc edits)
+ - Rogue Entertainment (blood spray)
+ - Amuscaria (plasma stun bomb projectile)
+ - Minigunner (smooth explosion sprites)
+
+Graphics:
+ - Xaser (HUD, ARGENT logo hackup)
+
+Sounds
+ - id software (taken straight from the game, oh no)
+
+Music
+ - Kate Fox (MIDI awesomeness)
+ - Mick Gordon (original composer; no audio directly ripped though)
+
+Testing n' Bugreports
+ - Flyingcomputer
+ - Jimmy
+ - Baratus
+ - ravage
+ - Princess Viscra Maelstrom
+ - zrrion the insect
+ - Atendega (the SSG-meister)
+ - Cyanide
+ - Ragequit
+
+Misc:
+ - some mobile phone background from somewhere I can't seem to locate
+ (titlepic/interpic background) -- if anyone has any info on this one,
+ lemme know!
+
+===========================================================================
+* Copyright / Permissions *
+
+The SOURCE CODE for this mod is under the MIT License (full text below).
+As such, authors MAY use code from this project as a base for modification
+or reuse. Credit is always appreciated as a courtesy, of course.
+
+For everything else, checkout the Credits section above. For "hey can I
+use this resource?" questions, the usual quasi-fair-use excuses apply.
+The Xaser-person will not gripe at you for yoinking misc. resources from
+this mod, but holds no responsibility if anyone else does. :P
+
+You MAY distribute this file, provided you include this text file, with no
+modifications.  You may distribute this file in any electronic format (BBS,
+Diskette, CD, actually-modern methods like the friggin' internet, etc) as
+long as you include this file intact.
+
+===========================================================================
+* MIT License (applies to SOURCE CODE only) *
+
+Copyright (c) 2017 Xaser Acheron
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+===========================================================================
+* Where to get the file that this text file describes *
+
+https://static.angryscience.net/pub/doom/mods/argent/
+http://idgames.doomworld.com
+space wal-mart (always low prices, always in space)
+available in all space states except for space new jersey
