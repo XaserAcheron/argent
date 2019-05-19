@@ -64,6 +64,27 @@ class ArgWeapon : DoomWeapon
 		"####" "########" 1 A_WeaponReady(WRF_NOFIRE);
 		"####" "#" 0 ResolveState("Ready");
 		Goto Ready;
+	UseEquipmentStart:
+		"####" "########" 1 A_WeaponOffset(0.0, 12.0, WOF_KEEPX | WOF_ADD | WOF_INTERPOLATE);
+		"####" A 0 X_UseEquipmentStart();
+	UseEquipmentGeneric:
+		EQPG A 1 { A_WeaponOffset(-120,-25); X_EquipmentPreAction(); }
+		EQPG A 1   A_WeaponOffset(- 90,-20, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(- 60,-15, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(- 40,-10, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(- 20,  0, WOF_INTERPOLATE);
+		EQPG A 1   A_WeaponOffset(-  5, 10, WOF_INTERPOLATE);
+		EQPG B 1 { A_WeaponOffset(  10, 20, WOF_INTERPOLATE); X_EquipmentGeneric(); }
+		EQPG B 1   A_WeaponOffset(  20, 35, WOF_INTERPOLATE);
+		EQPG B 1   A_WeaponOffset(  30, 50, WOF_INTERPOLATE);
+		EQPG B 1   A_WeaponOffset(  40, 70, WOF_INTERPOLATE);
+		EQPG B 1   A_WeaponOffset(  50, 90, WOF_INTERPOLATE);
+	UseEquipmentEnd:
+		"####" A 0 X_UseEquipmentEnd();
+		// [TODO] add support for a raise animation;
+//		"####" "########" 1 A_WeaponOffset(0.0,-12.0, WOF_KEEPX | WOF_ADD | WOF_INTERPOLATE);
+		"####" A 0 ResolveState("Ready"); // resolves to weapon's Ready state
+		Stop;
 	}
 
 	/*
@@ -254,6 +275,47 @@ class ArgWeapon : DoomWeapon
 		} else {
 			// don't do a thing otherwise. continue firing, gents!
 			return null;
+		}
+	}
+
+	/*
+	 * Start equipment animation.
+	 */
+	action state X_UseEquipmentStart() {
+		A_WeaponOffset(0.0, 0.0);
+		let argPlayer = ArgPlayer(self);
+		if(argPlayer && argPlayer.activeEquipment) {
+			return ResolveState(argPlayer.activeEquipment.X_GetUseStateLabel());
+		}
+		return null;
+	}
+
+	/*
+	 * End equipment animation.
+	 */
+	action void X_UseEquipmentEnd() {
+		A_WeaponOffset(0.0, 108.0);
+	}
+
+	/*
+	 * Generic pre-action, for grenades and the like.
+	 */
+	action void X_EquipmentPreAction() {
+		let argPlayer = ArgPlayer(self);
+		if(argPlayer && argPlayer.activeEquipment && argPlayer.activeEquipment.pPreSound) {
+			A_PlaySound(argPlayer.activeEquipment.pPreSound, CHAN_5);
+		}
+	}
+
+	/*
+	 * Generic "Throw Equipment" action, for grenades n' siphons n' such.
+	 */
+	action void X_EquipmentGeneric() {
+		let argPlayer = ArgPlayer(self);
+		if(argPlayer && argPlayer.activeEquipment) {
+			ArgEquipment equip = argPlayer.activeEquipment;
+			A_PlaySound(equip.pProjectileSound, CHAN_6);
+			A_FireProjectile(equip.pProjectileType, 0, 0, 0, -8, FPF_NOAUTOAIM, equip.pProjectilePitch);
 		}
 	}
 }
