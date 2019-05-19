@@ -99,7 +99,7 @@ class ArgChainsaw : ArgWeapon replaces Chainsaw
 		} else {
 			invoker.rev++;
 		}
-		return A_ReFire();
+		A_ReFire();
 	}
 
 	action void Arg_A_SawDown() {
