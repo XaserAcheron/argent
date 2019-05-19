@@ -22,24 +22,20 @@ Where to get
 How to build locally
 ---------------------------
 
-### Prerequisite modules
+### Prerequisites
 
-Despite not actually being a node.js project, this mod uses
-[grunt](http://gruntjs.com/) for its build pipeline because
-it happens to be the tool the Xaser-person had handy.
-
-Make sure the following packages are installed on your machine
-* node.js
-* npm
-
-### Install dependencies
-```
-argent$ npm install
-```
+Install [Python 3](https://www.python.org/downloads/) -- that's it!
 
 ### Build
+
+For a normal build:
 ```
-argent$ grunt build
+argent$ py build.py
+```
+
+For a versioned "distribution" build:
+```
+argent$ py build.py -d
 ```
 
 ### Run
